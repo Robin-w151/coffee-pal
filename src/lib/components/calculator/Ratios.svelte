@@ -38,8 +38,8 @@
       class="chip variant-soft hover:variant-filled"
       on:click={() => handlePresetClick(preset)}
     >
-      <span>{preset.label}</span>
-      <span class="font-bold">{preset.ratio.coffee}:{preset.ratio.water}</span>
+      <span class="font-normal">{preset.label}</span>
+      <span>{preset.ratio.coffee}:{preset.ratio.water}</span>
     </button>
   {/each}
 </div>
