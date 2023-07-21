@@ -3,18 +3,15 @@
   import type { Ratio } from '$lib/models/ratio';
   import Ratios from './Ratios.svelte';
   import Recipe from './Recipe.svelte';
+  import type { Recipe as IRecipe } from '$lib/models/recipe';
+  import presets from '$assets/presets.json';
 
-  let preset: Preset = {
-    label: 'Default',
-    ratio: {
-      coffee: 3,
-      water: 50,
-    },
-    factor: 4,
-  };
+  let preset: Preset = presets[4];
+  let recipe: IRecipe = calculateRecipe(preset);
 
   function handlePresetSelect({ detail: newPreset }: { detail: Preset }): void {
     preset = newPreset;
+    recipe = calculateRecipe(newPreset);
   }
 
   function handleRatioChange({ detail: ratio }: { detail: Ratio }): void {
@@ -23,11 +20,84 @@
       ratio,
       factor: 1,
     };
+    recipe = calculateRecipe(preset);
+  }
+
+  function handleCoffeeChange({ detail: coffee }: { detail: number }): void {
+    const water = calculateWater(coffee, preset.ratio);
+    const output = calculateOutput(coffee, water);
+    recipe = {
+      coffee,
+      water,
+      output,
+    };
+  }
+
+  function handleWaterChange({ detail: water }: { detail: number }): void {
+    const coffee = calculateCoffee(water, preset.ratio);
+    const output = calculateOutput(coffee, water);
+    recipe = {
+      coffee,
+      water,
+      output,
+    };
+  }
+
+  function handleOutputChange({ detail: output }: { detail: number }): void {
+    const water = calculateWaterFromOutput(output, preset.ratio);
+    const coffee = calculateCoffeeFromOutput(output, preset.ratio);
+    recipe = {
+      coffee,
+      water,
+      output,
+    };
+  }
+
+  function calculateWater(coffee: number, ratio: Ratio): number {
+    return sanitize((coffee * ratio.water) / ratio.coffee);
+  }
+
+  function calculateWaterFromOutput(output: number, ratio: Ratio): number {
+    const ratioFactor = ratio.water / ratio.coffee;
+    return sanitize((output / (ratioFactor - 2)) * ratioFactor);
+  }
+
+  function calculateCoffee(water: number, ratio: Ratio): number {
+    return sanitize((water * ratio.coffee) / ratio.water);
+  }
+
+  function calculateCoffeeFromOutput(output: number, ratio: Ratio): number {
+    const ratioFactor = ratio.water / ratio.coffee;
+    return sanitize(output / (ratioFactor - 2));
+  }
+
+  function calculateOutput(coffee: number, water: number): number {
+    return sanitize(water - 2 * coffee);
+  }
+
+  function calculateRecipe(preset: Preset): IRecipe {
+    const coffee = preset.ratio.coffee * preset.factor;
+    const water = preset.ratio.water * preset.factor;
+    const output = calculateOutput(coffee, water);
+    return { coffee, water, output };
+  }
+
+  function sanitize(value?: number | null): number {
+    if (!value || value < 0) {
+      return 0;
+    }
+
+    return parseFloat(value.toFixed(2));
   }
 </script>
 
 <div class="flex flex-col gap-4">
   <Ratios ratio={preset.ratio} on:presetSelect={handlePresetSelect} on:ratioChange={handleRatioChange} />
   <hr />
-  <Recipe {preset} />
+  <Recipe
+    {recipe}
+    on:coffeeChange={handleCoffeeChange}
+    on:waterChange={handleWaterChange}
+    on:outputChange={handleOutputChange}
+  />
 </div>
