@@ -4,12 +4,16 @@
   import '../app.scss';
 
   import { AppBar, AppShell } from '@skeletonlabs/skeleton';
+  import CoffeeBeanIcon from '$lib/components/ui/icons/CoffeeBeanIcon.svelte';
 </script>
 
 <AppShell>
   <svelte:fragment slot="header">
     <AppBar>
-      <h1 class="h1">Coffee Pal</h1>
+      <svelte:fragment slot="lead">
+        <CoffeeBeanIcon />
+      </svelte:fragment>
+      <span class="text-2xl">Coffee Pal</span>
     </AppBar>
   </svelte:fragment>
   <div class="p-4">
