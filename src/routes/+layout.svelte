@@ -3,7 +3,7 @@
   import '@skeletonlabs/skeleton/styles/skeleton.css';
   import '../app.scss';
 
-  import { AppBar, AppShell } from '@skeletonlabs/skeleton';
+  import { AppBar, AppShell, LightSwitch } from '@skeletonlabs/skeleton';
   import CoffeeBeanIcon from '$lib/components/ui/icons/CoffeeBeanIcon.svelte';
 </script>
 
@@ -14,6 +14,9 @@
         <CoffeeBeanIcon />
       </svelte:fragment>
       <span class="text-2xl">Coffee Pal</span>
+      <svelte:fragment slot="trail">
+        <LightSwitch />
+      </svelte:fragment>
     </AppBar>
   </svelte:fragment>
   <div class="p-4">
