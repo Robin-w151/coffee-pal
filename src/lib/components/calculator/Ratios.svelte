@@ -34,7 +34,10 @@
 <h3 class="h3">Ratio</h3>
 <div class="flex flex-wrap gap-2">
   {#each presets as preset}
-    <button class="chip variant-soft hover:variant-filled" on:click={() => handlePresetClick(preset)}>
+    <button
+      class="chip variant-soft hover:variant-filled"
+      on:click={() => handlePresetClick(preset)}
+    >
       <span>{preset.label}</span>
       <span class="font-bold">{preset.ratio.coffee}:{preset.ratio.water}</span>
     </button>
@@ -43,7 +46,13 @@
 <div class="grid grid-cols-[auto_3rem_auto]">
   <label>
     <span>Coffee</span>
-    <input class="input" type="number" on:change={handleCoffeeChange} bind:value={coffee} />
+    <input
+      class="input"
+      type="number"
+      bind:value={coffee}
+      on:change={handleCoffeeChange}
+      on:blur={handleCoffeeChange}
+    />
   </label>
   <div class="flex flex-col">
     <div class="flex-1 max-h-[24px]" />
@@ -51,6 +60,12 @@
   </div>
   <label>
     <span>Water</span>
-    <input class="input" type="number" on:change={handleWaterChange} bind:value={water} />
+    <input
+      class="input"
+      type="number"
+      bind:value={water}
+      on:change={handleWaterChange}
+      on:blur={handleWaterChange}
+    />
   </label>
 </div>

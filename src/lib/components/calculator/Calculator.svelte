@@ -92,7 +92,11 @@
 </script>
 
 <div class="flex flex-col gap-4">
-  <Ratios ratio={preset.ratio} on:presetSelect={handlePresetSelect} on:ratioChange={handleRatioChange} />
+  <Ratios
+    ratio={preset.ratio}
+    on:presetSelect={handlePresetSelect}
+    on:ratioChange={handleRatioChange}
+  />
   <hr />
   <Recipe
     {recipe}

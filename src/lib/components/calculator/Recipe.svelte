@@ -35,14 +35,32 @@
 <form class="flex flex-col gap-4">
   <label>
     <span>Water</span>
-    <input class="input" type="number" bind:value={water} on:change={handleWaterChange} />
+    <input
+      class="input"
+      type="number"
+      bind:value={water}
+      on:change={handleWaterChange}
+      on:blur={handleWaterChange}
+    />
   </label>
   <label>
     <span>Coffee</span>
-    <input class="input" type="number" bind:value={coffee} on:change={handleCoffeeChange} />
+    <input
+      class="input"
+      type="number"
+      bind:value={coffee}
+      on:change={handleCoffeeChange}
+      on:blur={handleCoffeeChange}
+    />
   </label>
   <label>
     <span>Output</span>
-    <input class="input" type="number" bind:value={output} on:change={handleOutputChange} />
+    <input
+      class="input"
+      type="number"
+      bind:value={output}
+      on:change={handleOutputChange}
+      on:blur={handleOutputChange}
+    />
   </label>
 </form>
