@@ -19,9 +19,9 @@
     "label": "Moka Pot",
     "ratio": {
       "coffee": 1,
-      "water": 10
+      "water": 9
     },
-    "factor": 9
+    "factor": 10
   },
   {
     "label": "French Press",
