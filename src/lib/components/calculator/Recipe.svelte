@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { Recipe } from '$lib/models/recipe';
   import { createEventDispatcher } from 'svelte';
+  import Label from '../ui/elements/Label.svelte';
 
   export let recipe: Recipe;
 
@@ -33,8 +34,7 @@
 
 <h3 class="h3">Recipe</h3>
 <form class="flex flex-col gap-4">
-  <label>
-    <span>Water</span>
+  <Label text="Water">
     <input
       class="input"
       type="number"
@@ -42,9 +42,8 @@
       on:change={handleWaterChange}
       on:blur={handleWaterChange}
     />
-  </label>
-  <label>
-    <span>Coffee</span>
+  </Label>
+  <Label text="Coffee">
     <input
       class="input"
       type="number"
@@ -52,9 +51,8 @@
       on:change={handleCoffeeChange}
       on:blur={handleCoffeeChange}
     />
-  </label>
-  <label>
-    <span>Output</span>
+  </Label>
+  <Label text="Output">
     <input
       class="input"
       type="number"
@@ -62,5 +60,5 @@
       on:change={handleOutputChange}
       on:blur={handleOutputChange}
     />
-  </label>
+  </Label>
 </form>

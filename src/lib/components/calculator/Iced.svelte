@@ -1,6 +1,7 @@
 <script lang="ts">
   import { sanitize } from '$lib/utils/math';
   import { RangeSlider } from '@skeletonlabs/skeleton';
+  import Label from '../ui/elements/Label.svelte';
 
   export let water: number;
 
@@ -24,13 +25,11 @@
         <span>{iceRatio} %</span>
       </div>
     </RangeSlider>
-    <label>
-      <span>Brew Water</span>
+    <Label text="Brew Water">
       <input class="input" readonly bind:value={brewWater} />
-    </label>
-    <label>
-      <span>Ice</span>
+    </Label>
+    <Label text="Ice">
       <input class="input" readonly bind:value={ice} />
-    </label>
+    </Label>
   {/if}
 </form>

@@ -3,6 +3,7 @@
   import type { Preset } from '$lib/models/preset';
   import { createEventDispatcher } from 'svelte';
   import presets from '$assets/presets.json';
+  import Label from '../ui/elements/Label.svelte';
 
   export let ratio: Ratio | undefined;
 
@@ -44,8 +45,7 @@
   {/each}
 </div>
 <div class="grid grid-cols-[auto_3rem_auto]">
-  <label>
-    <span>Coffee</span>
+  <Label text="Coffee">
     <input
       class="input"
       type="number"
@@ -53,13 +53,12 @@
       on:change={handleCoffeeChange}
       on:blur={handleCoffeeChange}
     />
-  </label>
+  </Label>
   <div class="flex flex-col">
     <div class="flex-1 max-h-[24px]" />
     <div class="flex-1 flex justify-center items-center">:</div>
   </div>
-  <label>
-    <span>Water</span>
+  <Label text="Water">
     <input
       class="input"
       type="number"
@@ -67,5 +66,5 @@
       on:change={handleWaterChange}
       on:blur={handleWaterChange}
     />
-  </label>
+  </Label>
 </div>
