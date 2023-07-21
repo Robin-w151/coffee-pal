@@ -1,0 +1,58 @@
+[
+  {
+    "label": "Espresso",
+    "ratio": {
+      "coffee": 3,
+      "water": 10
+    },
+    "factor": 6
+  },
+  {
+    "label": "Aeropress",
+    "ratio": {
+      "coffee": 1,
+      "water": 6
+    },
+    "factor": 30
+  },
+  {
+    "label": "Moka Pot",
+    "ratio": {
+      "coffee": 1,
+      "water": 10
+    },
+    "factor": 9
+  },
+  {
+    "label": "French Press",
+    "ratio": {
+      "coffee": 1,
+      "water": 12
+    },
+    "factor": 30
+  },
+  {
+    "label": "V60",
+    "ratio": {
+      "coffee": 3,
+      "water": 50
+    },
+    "factor": 4
+  },
+  {
+    "label": "Chemex",
+    "ratio": {
+      "coffee": 1,
+      "water": 17
+    },
+    "factor": 30
+  },
+  {
+    "label": "Cold Brew",
+    "ratio": {
+      "coffee": 3,
+      "water": 40
+    },
+    "factor": 30
+  }
+]

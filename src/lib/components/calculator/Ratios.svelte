@@ -2,60 +2,11 @@
   import type { Ratio } from '$lib/models/ratio';
   import type { Preset } from '$lib/models/preset';
   import { createEventDispatcher } from 'svelte';
+  import presets from '$assets/presets.json';
 
   export let ratio: Ratio | undefined;
 
   const dispatch = createEventDispatcher();
-  const presets: Array<Preset> = [
-    {
-      label: 'Aeropress',
-      ratio: {
-        coffee: 1,
-        water: 6,
-      },
-      factor: 30,
-    },
-    {
-      label: 'Moka Pot',
-      ratio: {
-        coffee: 1,
-        water: 10,
-      },
-      factor: 9,
-    },
-    {
-      label: 'French Press',
-      ratio: {
-        coffee: 1,
-        water: 12,
-      },
-      factor: 30,
-    },
-    {
-      label: 'V60',
-      ratio: {
-        coffee: 3,
-        water: 50,
-      },
-      factor: 4,
-    },
-    {
-      label: 'Chemex',
-      ratio: {
-        coffee: 1,
-        water: 17,
-      },
-      factor: 30,
-    },
-    {
-      label: 'Cold Brew',
-      ratio: {
-        coffee: 3,
-        water: 40,
-      },
-      factor: 30,
-    },
-  ];
 
   let coffee: number;
   let water: number;
