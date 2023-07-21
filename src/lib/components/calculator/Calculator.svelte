@@ -5,6 +5,8 @@
   import Recipe from './Recipe.svelte';
   import type { Recipe as IRecipe } from '$lib/models/recipe';
   import presets from '$assets/presets.json';
+  import Iced from './Iced.svelte';
+  import { sanitize } from '$lib/utils/math';
 
   let preset: Preset = presets[4];
   let recipe: IRecipe = calculateRecipe(preset);
@@ -81,14 +83,6 @@
     const output = calculateOutput(coffee, water);
     return { coffee, water, output };
   }
-
-  function sanitize(value?: number | null): number {
-    if (!value || value < 0) {
-      return 0;
-    }
-
-    return parseFloat(value.toFixed(2));
-  }
 </script>
 
 <div class="flex flex-col gap-4">
@@ -104,4 +98,6 @@
     on:waterChange={handleWaterChange}
     on:outputChange={handleOutputChange}
   />
+  <hr />
+  <Iced water={recipe.water} />
 </div>
