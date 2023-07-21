@@ -18,7 +18,7 @@
     <span>Iced</span>
   </label>
   {#if iced}
-    <RangeSlider name="ice-ratio" min={30} max={70} bind:value={iceRatio} ticked>
+    <RangeSlider name="ice-ratio" min={30} max={70} bind:value={iceRatio}>
       <div class="flex justify-between items-center">
         <span>Ice Ratio</span>
         <span>{iceRatio} %</span>
