@@ -1,6 +1,6 @@
 <script lang="ts">
   import { sanitize } from '$lib/utils/math';
-  import { RangeSlider } from '@skeletonlabs/skeleton';
+  import { RangeSlider, SlideToggle } from '@skeletonlabs/skeleton';
   import Label from '../ui/elements/Label.svelte';
 
   export let water: number;
@@ -14,10 +14,7 @@
 
 <h3 class="h3">Iced Coffee</h3>
 <form class="flex flex-col gap-4">
-  <label class="flex items-center space-x-2">
-    <input class="checkbox" type="checkbox" bind:checked={iced} />
-    <span>Iced</span>
-  </label>
+  <SlideToggle name="Iced" size="sm" bind:checked={iced}>Iced</SlideToggle>
   {#if iced}
     <RangeSlider name="ice-ratio" min={30} max={70} bind:value={iceRatio}>
       <div class="flex justify-between items-center">
