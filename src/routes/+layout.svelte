@@ -17,6 +17,7 @@
       </svelte:fragment>
       <span class="text-2xl">Coffee Pal</span>
       <div class="flex items-center gap-4" slot="trail">
+        <LightSwitch />
         <a
           class="btn btn-icon variant-soft hover:variant-soft-primary"
           href="https://github.com/Robin-w151/coffee-pal"
@@ -25,7 +26,6 @@
         >
           <Icon data={faGithub} scale={1.5} />
         </a>
-        <LightSwitch />
       </div>
     </AppBar>
   </svelte:fragment>

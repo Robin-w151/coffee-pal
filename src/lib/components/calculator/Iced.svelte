@@ -14,7 +14,9 @@
 
 <h3 class="h3">Iced Coffee</h3>
 <form class="flex flex-col gap-4">
-  <SlideToggle name="Iced" size="sm" bind:checked={iced}>Iced</SlideToggle>
+  <SlideToggle name="Iced" size="sm" active="bg-primary-600 dark:bg-primary-500" bind:checked={iced}
+    >Iced</SlideToggle
+  >
   {#if iced}
     <RangeSlider name="ice-ratio" min={30} max={70} bind:value={iceRatio}>
       <div class="flex justify-between items-center">
