@@ -34,10 +34,10 @@
   {
     "label": "V60",
     "ratio": {
-      "coffee": 3,
-      "water": 50
+      "coffee": 1,
+      "water": 15
     },
-    "factor": 4
+    "factor": 16
   },
   {
     "label": "Chemex",
