@@ -1,6 +1,7 @@
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vite';
 import { SvelteKitPWA } from '@vite-pwa/sveltekit';
+import manifest from './src/assets/manifest';
 
 export default defineConfig({
   define: {
@@ -10,44 +11,7 @@ export default defineConfig({
     sveltekit(),
     SvelteKitPWA({
       strategies: 'injectManifest',
-      manifest: {
-        name: 'Coffee Pal',
-        short_name: 'Coffee Pal',
-        description: 'Collection of tools related to preparing coffee.',
-        categories: ['productivity', 'utilities'],
-        id: '/',
-        start_url: '/',
-        lang: 'en-US',
-        display: 'standalone',
-        theme_color: '#3b3d91',
-        background_color: '#3b3d91',
-        icons: [
-          {
-            src: 'icons/icon192_any.png',
-            sizes: '192x192',
-            type: 'image/png',
-            purpose: 'any',
-          },
-          {
-            src: 'icons/icon192_maskable.png',
-            sizes: '192x192',
-            type: 'image/png',
-            purpose: 'maskable',
-          },
-          {
-            src: 'icons/icon512_any.png',
-            sizes: '512x512',
-            type: 'image/png',
-            purpose: 'any',
-          },
-          {
-            src: 'icons/icon512_maskable.png',
-            sizes: '512x512',
-            type: 'image/png',
-            purpose: 'maskable',
-          },
-        ],
-      },
+      manifest,
       devOptions: {
         enabled: true,
         suppressWarnings: process.env.SUPPRESS_WARNING === 'true',
