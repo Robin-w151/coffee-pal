@@ -1,3 +1,5 @@
+// AppShell overrides
+
 html,
 body {
   @apply h-full overflow-hidden;
@@ -5,4 +7,14 @@ body {
 
 body {
   @apply bg-surface-50-900-token;
+}
+
+// Custom design tokens
+
+.chip-interactive-token {
+  @apply chip variant-soft hover:variant-filled;
+}
+
+.slide-toggle-active-token {
+  @apply bg-surface-600 dark:bg-surface-400;
 }

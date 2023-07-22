@@ -35,10 +35,7 @@
 <h3 class="h3">Ratio</h3>
 <div class="flex flex-wrap gap-2">
   {#each presets as preset}
-    <button
-      class="chip variant-soft hover:variant-filled"
-      on:click={() => handlePresetClick(preset)}
-    >
+    <button class="chip-interactive-token" on:click={() => handlePresetClick(preset)}>
       <span class="font-normal">{preset.label}</span>
       <span>{preset.ratio.coffee}:{preset.ratio.water}</span>
     </button>
