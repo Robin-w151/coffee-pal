@@ -1,6 +1,4 @@
 <script lang="ts">
-  import '@skeletonlabs/skeleton/themes/theme-modern.css';
-  import '@skeletonlabs/skeleton/styles/skeleton.css';
   import '../app.scss';
 
   import { AppBar, AppShell, LightSwitch } from '@skeletonlabs/skeleton';
