@@ -53,7 +53,7 @@
   </Label>
   <div class="flex flex-col">
     <div class="flex-1 max-h-[24px]" />
-    <div class="flex-1 flex justify-center items-center">:</div>
+    <div class="flex-1 flex justify-center items-center font-bold text-2xl">:</div>
   </div>
   <Label text="Water">
     <input
