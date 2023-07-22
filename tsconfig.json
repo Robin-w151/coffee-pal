@@ -14,7 +14,8 @@
       "$lib/*": ["./src/lib/*"],
       "$assets": ["./src/assets"],
       "$assets/*": ["./src/assets/*"]
-    }
+    },
+    "types": ["vite/client", "vite-plugin-pwa/info"]
   }
   // Path aliases are handled by https://kit.svelte.dev/docs/configuration#alias
   //

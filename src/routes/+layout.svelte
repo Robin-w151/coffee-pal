@@ -5,7 +5,15 @@
   import { faMugHot } from '@fortawesome/free-solid-svg-icons';
   import { faGithub } from '@fortawesome/free-brands-svg-icons';
   import { Icon } from 'svelte-awesome';
+
+  import { pwaInfo } from 'virtual:pwa-info';
+
+  $: webManifestLink = pwaInfo ? pwaInfo.webManifest.linkTag : '';
 </script>
+
+<svelte:head>
+  {@html webManifestLink}
+</svelte:head>
 
 <AppShell>
   <svelte:fragment slot="header">
