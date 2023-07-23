@@ -17,7 +17,7 @@
 
 <AppShell>
   <svelte:fragment slot="header">
-    <AppBar padding="px-8 py-4">
+    <AppBar padding="px-8 py-2 md:py-4">
       <svelte:fragment slot="lead">
         <Icon data={faMugHot} scale={1.5} />
       </svelte:fragment>
