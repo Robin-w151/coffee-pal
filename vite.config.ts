@@ -12,6 +12,7 @@ export default defineConfig({
     SvelteKitPWA({
       strategies: 'injectManifest',
       manifest,
+      minify: false,
       devOptions: {
         enabled: true,
         suppressWarnings: process.env.SUPPRESS_WARNING === 'true',

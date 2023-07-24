@@ -1,3 +1,5 @@
+import type { ManifestOptions } from 'vite-plugin-pwa';
+
 export default {
   name: 'Coffee Pal',
   short_name: 'Coffee Pal',
@@ -7,6 +9,7 @@ export default {
   start_url: '/',
   lang: 'en-US',
   display: 'standalone',
+  orientation: 'any',
   theme_color: '#3b3d91',
   background_color: '#3b3d91',
   icons: [
@@ -35,4 +38,6 @@ export default {
       purpose: 'maskable',
     },
   ],
-};
+  screenshots: [],
+  shortcuts: [],
+} satisfies Partial<ManifestOptions>;
