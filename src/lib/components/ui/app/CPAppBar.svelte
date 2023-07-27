@@ -1,20 +1,21 @@
 <script lang="ts">
   import { faGithub } from '@fortawesome/free-brands-svg-icons';
-  import { faBars, faCoffee, faMugHot } from '@fortawesome/free-solid-svg-icons';
-  import { AppBar, LightSwitch, popup, type PopupSettings } from '@skeletonlabs/skeleton';
+  import { faBars, faMugHot } from '@fortawesome/free-solid-svg-icons';
+  import { AppBar, LightSwitch, drawerStore, type DrawerSettings } from '@skeletonlabs/skeleton';
   import { Icon } from 'svelte-awesome';
-  import CpAppMenu from './CPAppMenu.svelte';
 
-  const popupAppMenu: PopupSettings = {
-    event: 'focus-click',
-    target: 'popupAppMenu',
-    placement: 'bottom-start',
-  };
+  function handleMenuClick(): void {
+    const drawerSettings: DrawerSettings = {
+      id: 'app-menu',
+    };
+
+    drawerStore.open(drawerSettings);
+  }
 </script>
 
 <AppBar padding="px-4 py-2 md:py-4" shadow="shadow-xl">
   <svelte:fragment slot="lead">
-    <button class="btn btn-icon hover:variant-soft-primary md:hidden" use:popup={popupAppMenu}>
+    <button class="btn btn-icon hover:variant-soft-primary md:hidden" on:click={handleMenuClick}>
       <Icon data={faBars} scale={1.5} />
     </button>
   </svelte:fragment>
@@ -36,8 +37,3 @@
     </a>
   </div>
 </AppBar>
-
-<div data-popup="popupAppMenu">
-  <CpAppMenu />
-  <div class="arrow variant-filled-surface" />
-</div>
