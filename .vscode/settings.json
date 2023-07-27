@@ -1,3 +1,6 @@
 {
-  "scss.lint.unknownAtRules": "ignore"
+  "scss.lint.unknownAtRules": "ignore",
+  "search.exclude": {
+    "**/node_modules": false
+  }
 }

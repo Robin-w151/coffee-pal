@@ -1,12 +1,13 @@
 <script lang="ts">
   import '../app.scss';
-
-  import { AppBar, AppShell, LightSwitch } from '@skeletonlabs/skeleton';
-  import { faMugHot } from '@fortawesome/free-solid-svg-icons';
-  import { faGithub } from '@fortawesome/free-brands-svg-icons';
-  import { Icon } from 'svelte-awesome';
-
+  import { computePosition, autoUpdate, offset, shift, flip, arrow } from '@floating-ui/dom';
+  import { Modal, storePopup } from '@skeletonlabs/skeleton';
+  import { AppShell } from '@skeletonlabs/skeleton';
   import { pwaInfo } from 'virtual:pwa-info';
+  import CpAppBar from '$lib/components/ui/app/CPAppBar.svelte';
+  import CpAppRail from '$lib/components/ui/app/CPAppRail.svelte';
+
+  storePopup.set({ computePosition, autoUpdate, offset, shift, flip, arrow });
 
   $: webManifestLink = pwaInfo ? pwaInfo.webManifest.linkTag : '';
 </script>
@@ -15,27 +16,18 @@
   {@html webManifestLink}
 </svelte:head>
 
+<Modal />
+
 <AppShell>
   <svelte:fragment slot="header">
-    <AppBar padding="px-8 py-2 md:py-4">
-      <svelte:fragment slot="lead">
-        <Icon data={faMugHot} scale={1.5} />
-      </svelte:fragment>
-      <span class="text-2xl">Coffee Pal</span>
-      <div class="flex items-center gap-4" slot="trail">
-        <LightSwitch />
-        <a
-          class="btn btn-icon variant-soft hover:variant-soft-primary"
-          href="https://github.com/Robin-w151/coffee-pal"
-          target="_blank"
-          rel="noopener"
-        >
-          <Icon data={faGithub} scale={1.5} />
-        </a>
-      </div>
-    </AppBar>
+    <CpAppBar />
   </svelte:fragment>
-  <div class="p-4">
-    <slot />
+  <div class="hidden md:block h-full" slot="sidebarLeft">
+    <CpAppRail />
+  </div>
+  <div class="flex justify-center p-4">
+    <div class="flex flex-col items-center gap-4 w-full max-w-screen-md">
+      <slot />
+    </div>
   </div>
 </AppShell>
