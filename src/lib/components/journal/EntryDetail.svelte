@@ -9,9 +9,12 @@
 
   export let entry: Entry = {
     id: uuid(),
-    title: '',
+    method: '',
     water: 0,
+    waterTemperature: 96,
     coffee: 0,
+    coffeeType: '',
+    grindSettings: '',
     description: '',
     timestamp: DateTime.now().toISO()!,
   };
@@ -19,13 +22,13 @@
 
   const dispatch = createEventDispatcher();
 
-  $: titleInputValid = !!entry.title;
+  $: methodInputValid = !!entry.method;
   $: waterInputValid = isValidInput(entry.water);
   $: coffeeInputValid = isValidInput(entry.coffee);
-  $: formValid = titleInputValid && waterInputValid && coffeeInputValid;
+  $: formValid = methodInputValid && waterInputValid && coffeeInputValid;
 
   function handleSaveClick(): void {
-    dispatch('save', entry);
+    dispatch('save', sanitizeEntry(entry));
   }
 
   function handleDeleteClick(): void {
@@ -39,19 +42,55 @@
   function isValidInput(value: number): boolean {
     return !!value && value > 0;
   }
+
+  function sanitizeEntry(entry: Entry): Entry {
+    const sanitizedEntry: Entry = { ...entry };
+    if (typeof entry.water !== 'number') {
+      sanitizedEntry.water = 0;
+    }
+
+    if (typeof entry.waterTemperature !== 'number') {
+      sanitizedEntry.waterTemperature = undefined;
+    }
+
+    if (typeof entry.coffee !== 'number') {
+      sanitizedEntry.coffee = 0;
+    }
+
+    return sanitizedEntry;
+  }
 </script>
 
 <div class="card p-4 w-full max-w-screen-md space-y-4">
   <h3 class="h3">{edit ? 'Edit' : 'Add'} Entry</h3>
   <Form>
-    <Label text="Title">
-      <input class="input" type="text" placeholder="Title..." bind:value={entry.title} />
+    <Label text="Brew method">
+      <input class="input" type="text" placeholder="Brew method..." bind:value={entry.method} />
     </Label>
-    <Label text="Water">
+    <Label text="Amount of water">
       <input class="input" type="number" bind:value={entry.water} />
     </Label>
-    <Label text="Coffee">
+    <Label text="Amount of coffee">
       <input class="input" type="number" bind:value={entry.coffee} />
+    </Label>
+    <Label text="Type of coffee">
+      <input
+        class="input"
+        type="text"
+        placeholder="Type of coffee..."
+        bind:value={entry.coffeeType}
+      />
+    </Label>
+    <Label text="Water temperature">
+      <input class="input" type="number" bind:value={entry.waterTemperature} />
+    </Label>
+    <Label text="Grind settings">
+      <input
+        class="input"
+        type="text"
+        placeholder="Grind settings..."
+        bind:value={entry.grindSettings}
+      />
     </Label>
     <Label text="Description">
       <textarea

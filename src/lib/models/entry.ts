@@ -1,8 +1,11 @@
 export interface Entry {
   id: string;
-  title: string;
+  method: string;
   water: number;
+  waterTemperature?: number;
   coffee: number;
-  description: string;
+  coffeeType?: string;
+  grindSettings?: string;
+  description?: string;
   timestamp: string;
 }

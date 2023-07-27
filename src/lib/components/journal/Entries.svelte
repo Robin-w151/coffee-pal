@@ -1,11 +1,11 @@
 <script lang="ts">
   import type { Entry } from '$lib/models/entry';
   import { triggerModal } from '$lib/utils/helper';
-  import { faFaceSadCry, faPencil } from '@fortawesome/free-solid-svg-icons';
-  import { Icon } from 'svelte-awesome';
-  import EntryModal from './EntryModal.svelte';
+  import { faFaceSadCry } from '@fortawesome/free-solid-svg-icons';
   import { createEventDispatcher } from 'svelte';
-  import { calculateRatio } from '$lib/utils/math';
+  import { Icon } from 'svelte-awesome';
+  import EntryItem from './EntryItem.svelte';
+  import EntryModal from './EntryModal.svelte';
   import EntryPlaceholder from './EntryPlaceholder.svelte';
 
   export let entries: Array<Entry>;
@@ -13,7 +13,7 @@
 
   const dispatch = createEventDispatcher();
 
-  function handleEditEntry(entry: Entry): void {
+  function handleEditEntry({ detail: entry }: CustomEvent<Entry>): void {
     triggerModal(EntryModal, { props: { entry, edit: true }, response: handleEntryChange });
   }
 
@@ -35,27 +35,7 @@
     <EntryPlaceholder />
   {:else}
     {#each entries as entry (entry.id)}
-      <div class="justify-between">
-        <span class="badge variant-soft-secondary w-16"
-          >{calculateRatio(entry.coffee, entry.water) ?? 'unknown'}</span
-        >
-        <span class="block min-w-0 flex-1">
-          <dt class="overflow-hidden text-ellipsis">
-            <span class="font-bold">{entry.title}</span>
-          </dt>
-          <dd class="overflow-hidden text-ellipsis">
-            <span>{entry.description ? entry.description : 'No description'}</span>
-          </dd>
-        </span>
-        <span class="flex gap-3">
-          <button
-            class="btn btn-icon hover:variant-soft-primary"
-            on:click={() => handleEditEntry(entry)}
-          >
-            <Icon data={faPencil} />
-          </button>
-        </span>
-      </div>
+      <EntryItem {entry} on:edit={handleEditEntry} />
     {:else}
       <p class="flex justify-center items-center gap-2">
         <span class="flex items-center">
