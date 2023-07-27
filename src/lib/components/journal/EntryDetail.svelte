@@ -6,6 +6,8 @@
   import type { Entry } from '$lib/models/entry';
   import { v4 as uuid } from 'uuid';
   import { DateTime } from 'luxon';
+  import { faSave, faTrash } from '@fortawesome/free-solid-svg-icons';
+  import { Icon } from 'svelte-awesome';
 
   export let entry: Entry = {
     id: uuid(),
@@ -61,7 +63,7 @@
   }
 </script>
 
-<div class="card p-4 w-full max-w-screen-md space-y-4">
+<div class="card p-4 w-full max-w-screen-md max-h-full space-y-4 overflow-auto">
   <h3 class="h3">{edit ? 'Edit' : 'Add'} Entry</h3>
   <Form>
     <Label text="Brew method">
@@ -100,17 +102,35 @@
         bind:value={entry.description}
       />
     </Label>
-    <div class="flex justify-between items-center">
-      <span>Ratio: {calculateRatio(entry.coffee, entry.water) ?? 'unknown'}</span>
+    <div class="flex justify-between items-center gap-4">
+      <div class="flex items-center gap-2">
+        <span class="badge variant-soft-secondary h-11 text-base"
+          >Ratio: {calculateRatio(entry.coffee, entry.water) ?? 'unknown'}</span
+        >
+      </div>
       <div class="flex gap-2">
-        <button class="btn variant-soft" type="button" on:click={handleCancelClick}>Cancel</button>
+        <button class="btn variant-soft" type="button" title="Cancel" on:click={handleCancelClick}
+          >Cancel</button
+        >
         {#if edit}
-          <button class="btn variant-soft-error" type="button" on:click={handleDeleteClick}
-            >Delete</button
+          <button
+            class="btn btn-icon variant-soft-error"
+            type="button"
+            title="Delete entry"
+            on:click={handleDeleteClick}
           >
+            <Icon data={faTrash} />
+            <span class="sr-only">Delete entry</span>
+          </button>
         {/if}
-        <button class="btn variant-filled-primary" disabled={!formValid} on:click={handleSaveClick}>
-          Save
+        <button
+          class="btn btn-icon variant-filled-primary"
+          title="Save entry"
+          disabled={!formValid}
+          on:click={handleSaveClick}
+        >
+          <Icon data={faSave} />
+          <span class="sr-only">Save entry</span>
         </button>
       </div>
     </div>
