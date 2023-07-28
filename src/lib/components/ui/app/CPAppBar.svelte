@@ -19,7 +19,7 @@
       <Icon data={faBars} scale={1.5} />
     </button>
   </svelte:fragment>
-  <a class="flex items-center gap-4" href="/">
+  <a class="flex items-center gap-4 w-fit" href="/">
     <span class="hidden md:block">
       <Icon data={faMugHot} scale={1.5} />
     </span>
