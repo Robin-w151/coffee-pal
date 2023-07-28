@@ -65,7 +65,7 @@
 </script>
 
 <div class="card p-4 w-full max-w-screen-md max-h-full overflow-auto">
-  <button class="btn btn-icon variant-soft float-right" on:click={handleCancelClick}>
+  <button class="btn btn-icon hover:variant-soft-primary float-right" on:click={handleCancelClick}>
     <Icon data={faClose} />
   </button>
   <h3 class="h3 mb-4">{edit ? 'Edit' : 'Add'} Entry</h3>
