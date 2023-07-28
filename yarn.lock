@@ -1545,19 +1545,29 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@floating-ui/core@npm:^1.3.1":
-  version: 1.3.1
-  resolution: "@floating-ui/core@npm:1.3.1"
-  checksum: fe3b40fcaec95b0825c01a98330ae75b60c61c395ca012055a32f9c22ab97fde8ce1bd14fce3d242beb9dbe4564c90ce4a7a767851911d4215b9ec7721440e5b
+"@floating-ui/core@npm:^1.4.0":
+  version: 1.4.0
+  resolution: "@floating-ui/core@npm:1.4.0"
+  dependencies:
+    "@floating-ui/utils": ^0.1.0
+  checksum: 8549ad349dab33498d79a3fb558616eb80c2d0301ee7739832e49d51398da6e7fa2b2e4f4088af2c346c011ce2c4a61a2d1348838c6e0119e15e81a827ba00a7
   languageName: node
   linkType: hard
 
-"@floating-ui/dom@npm:^1.4.5":
-  version: 1.4.5
-  resolution: "@floating-ui/dom@npm:1.4.5"
+"@floating-ui/dom@npm:^1.5.0":
+  version: 1.5.0
+  resolution: "@floating-ui/dom@npm:1.5.0"
   dependencies:
-    "@floating-ui/core": ^1.3.1
-  checksum: 8e25c75b9fde158c2314cb30a9e0a9ce97f8eff4d3c892c85d73a5acbd845fe5dd97ae70ef8d43f7db8036df1c75a51cd3e1ac0999196d40363797002c07efb1
+    "@floating-ui/core": ^1.4.0
+    "@floating-ui/utils": ^0.1.0
+  checksum: 61e97e0625279deb2e9fba9d7f85491ce3bfdbaf0adc31f2ee101a82e2879dd62945ee9ea0c83cf82481a711af9a43ccfd31b9ec017718be8b9028ff2a1da5b2
+  languageName: node
+  linkType: hard
+
+"@floating-ui/utils@npm:^0.1.0":
+  version: 0.1.0
+  resolution: "@floating-ui/utils@npm:0.1.0"
+  checksum: 71c865f0c6ab3f0a66355b80ca1b6438ea4bbf3aaa66421fc9bbddea08e814b94a75b25cb9c0cba09fd8775b8952b8e59affecf5db4dc3235849e25b2c011dbe
   languageName: node
   linkType: hard
 
@@ -2619,7 +2629,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "coffee-pal@workspace:."
   dependencies:
-    "@floating-ui/dom": ^1.4.5
+    "@floating-ui/dom": ^1.5.0
     "@fortawesome/free-brands-svg-icons": ^6.4.0
     "@fortawesome/free-regular-svg-icons": ^6.4.0
     "@fortawesome/free-solid-svg-icons": ^6.4.0
@@ -2640,8 +2650,8 @@ __metadata:
     kolorist: ^1.8.0
     luxon: ^3.3.0
     postcss: ^8.4.27
-    prettier: ^2.8.8
-    prettier-plugin-svelte: ^2.10.1
+    prettier: ^3.0.0
+    prettier-plugin-svelte: ^3.0.3
     sass: ^1.64.1
     svelte: ^4.1.1
     svelte-awesome: ^3.2.1
@@ -5093,22 +5103,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier-plugin-svelte@npm:^2.10.1":
-  version: 2.10.1
-  resolution: "prettier-plugin-svelte@npm:2.10.1"
+"prettier-plugin-svelte@npm:^3.0.3":
+  version: 3.0.3
+  resolution: "prettier-plugin-svelte@npm:3.0.3"
   peerDependencies:
-    prettier: ^1.16.4 || ^2.0.0
+    prettier: ^3.0.0
     svelte: ^3.2.0 || ^4.0.0-next.0
-  checksum: 45f7993098d9f4be7b1c8f61ebce0161996bb6030dc4883ec3d6d9cff552f2cfb5da41ba20e01349709e793b83faaad2dfe81789cd7e17a610f0134df2743266
+  checksum: 411e50afabb5925bd73e85d35f989f3ffbd9b96764aebe733ea03f0b0eeb8add5a7452d5c1e68a1dff20b8615f99fa2c92db62f2d8b7d892325bdb587284f46e
   languageName: node
   linkType: hard
 
-"prettier@npm:^2.8.8":
-  version: 2.8.8
-  resolution: "prettier@npm:2.8.8"
+"prettier@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "prettier@npm:3.0.0"
   bin:
-    prettier: bin-prettier.js
-  checksum: b49e409431bf129dd89238d64299ba80717b57ff5a6d1c1a8b1a28b590d998a34e083fa13573bc732bb8d2305becb4c9a4407f8486c81fa7d55100eb08263cf8
+    prettier: bin/prettier.cjs
+  checksum: 6a832876a1552dc58330d2467874e5a0b46b9ccbfc5d3531eb69d15684743e7f83dc9fbd202db6270446deba9c82b79d24383d09924c462b457136a759425e33
   languageName: node
   linkType: hard
 
