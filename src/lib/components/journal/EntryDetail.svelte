@@ -6,15 +6,16 @@
   import type { Entry } from '$lib/models/entry';
   import { v4 as uuid } from 'uuid';
   import { DateTime } from 'luxon';
-  import { faSave, faTrash } from '@fortawesome/free-solid-svg-icons';
+  import { faClose, faSave, faTrash } from '@fortawesome/free-solid-svg-icons';
   import { Icon } from 'svelte-awesome';
+  import ResponsiveButton from '../ui/elements/ResponsiveButton.svelte';
 
-  export let entry: Entry = {
+  export let entry: Partial<Entry> = {
     id: uuid(),
     method: '',
-    water: 0,
-    waterTemperature: 96,
-    coffee: 0,
+    water: undefined,
+    waterTemperature: undefined,
+    coffee: undefined,
     coffeeType: '',
     grindSettings: '',
     description: '',
@@ -41,12 +42,12 @@
     dispatch('cancel');
   }
 
-  function isValidInput(value: number): boolean {
+  function isValidInput(value?: number | null): boolean {
     return !!value && value > 0;
   }
 
-  function sanitizeEntry(entry: Entry): Entry {
-    const sanitizedEntry: Entry = { ...entry };
+  function sanitizeEntry(entry: Partial<Entry>): Entry {
+    const sanitizedEntry = { ...entry };
     if (typeof entry.water !== 'number') {
       sanitizedEntry.water = 0;
     }
@@ -59,38 +60,61 @@
       sanitizedEntry.coffee = 0;
     }
 
-    return sanitizedEntry;
+    return sanitizedEntry as Entry;
   }
 </script>
 
-<div class="card p-4 w-full max-w-screen-md max-h-full space-y-4 overflow-auto">
-  <h3 class="h3">{edit ? 'Edit' : 'Add'} Entry</h3>
+<div class="card p-4 w-full max-w-screen-md max-h-full overflow-auto">
+  <button class="btn btn-icon variant-soft float-right" on:click={handleCancelClick}>
+    <Icon data={faClose} />
+  </button>
+  <h3 class="h3 mb-4">{edit ? 'Edit' : 'Add'} Entry</h3>
   <Form>
-    <Label text="Brew method">
-      <input class="input" type="text" placeholder="Brew method..." bind:value={entry.method} />
+    <Label text="Brew method *">
+      <input
+        class="input"
+        type="text"
+        placeholder="Brew method, e.g. V60"
+        bind:value={entry.method}
+      />
     </Label>
-    <Label text="Amount of water">
-      <input class="input" type="number" bind:value={entry.water} />
+    <Label text="Amount of water *">
+      <input
+        class="input"
+        type="number"
+        placeholder="Amount of water, e.g. 200"
+        bind:value={entry.water}
+      />
     </Label>
-    <Label text="Amount of coffee">
-      <input class="input" type="number" bind:value={entry.coffee} />
+    <Label text="Amount of coffee *">
+      <input
+        class="input"
+        type="number"
+        placeholder="Amount of coffee, e.g. 12"
+        bind:value={entry.coffee}
+      />
     </Label>
     <Label text="Type of coffee">
       <input
         class="input"
         type="text"
-        placeholder="Type of coffee..."
+        placeholder="Type of coffee, e.g. Some coffee brand"
         bind:value={entry.coffeeType}
       />
     </Label>
     <Label text="Water temperature">
-      <input class="input" type="number" bind:value={entry.waterTemperature} />
+      <input
+        class="input"
+        type="number"
+        placeholder="Water temperature, e.g. 96"
+        bind:value={entry.waterTemperature}
+      />
     </Label>
     <Label text="Grind settings">
       <input
         class="input"
         type="text"
-        placeholder="Grind settings..."
+        placeholder="Grind settings, e.g. 24 clicks"
         bind:value={entry.grindSettings}
       />
     </Label>
@@ -104,34 +128,44 @@
     </Label>
     <div class="flex justify-between items-center gap-4">
       <div class="flex items-center gap-2">
-        <span class="badge variant-soft-secondary h-11 text-base"
-          >Ratio: {calculateRatio(entry.coffee, entry.water) ?? 'unknown'}</span
-        >
+        <span class="badge variant-soft-secondary h-11 text-base px-4">
+          <span class="hidden md:inline">Ratio:&nbsp;</span>
+          <span class="!m-0">{calculateRatio(entry.coffee, entry.water) ?? 'unknown'}</span>
+        </span>
       </div>
       <div class="flex gap-2">
-        <button class="btn variant-soft" type="button" title="Cancel" on:click={handleCancelClick}
-          >Cancel</button
+        <ResponsiveButton
+          type="button"
+          label="Cancel"
+          variant="variant-soft"
+          on:click={handleCancelClick}
         >
+          <svelte:fragment slot="icon">
+            <Icon data={faClose} />
+          </svelte:fragment>
+        </ResponsiveButton>
         {#if edit}
-          <button
-            class="btn btn-icon variant-soft-error"
+          <ResponsiveButton
             type="button"
-            title="Delete entry"
+            label="Delete"
+            variant="variant-soft-error"
             on:click={handleDeleteClick}
           >
-            <Icon data={faTrash} />
-            <span class="sr-only">Delete entry</span>
-          </button>
+            <svelte:fragment slot="icon">
+              <Icon data={faTrash} />
+            </svelte:fragment>
+          </ResponsiveButton>
         {/if}
-        <button
-          class="btn btn-icon variant-filled-primary"
-          title="Save entry"
+        <ResponsiveButton
+          label="Save"
           disabled={!formValid}
+          variant="variant-filled-primary"
           on:click={handleSaveClick}
         >
-          <Icon data={faSave} />
-          <span class="sr-only">Save entry</span>
-        </button>
+          <svelte:fragment slot="icon">
+            <Icon data={faSave} />
+          </svelte:fragment>
+        </ResponsiveButton>
       </div>
     </div>
   </Form>
