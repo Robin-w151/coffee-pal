@@ -15,8 +15,6 @@
   title={label}
   on:click
 >
-  <span>
-    <slot name="icon" />
-  </span>
+  <slot name="icon" />
   <span class="hidden md:inline">{label}</span>
 </button>
