@@ -148,7 +148,7 @@
           <ResponsiveButton
             type="button"
             label="Delete"
-            variant="variant-soft-error"
+            variant="variant-filled-error"
             on:click={handleDeleteClick}
           >
             <svelte:fragment slot="icon">
