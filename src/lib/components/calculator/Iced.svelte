@@ -16,8 +16,8 @@
   <SlideToggle name="Iced" size="sm" active="slide-toggle-active-token" bind:checked={iced} />
   <h3 class="h3">Iced Coffee</h3>
 </div>
-<form class="flex flex-col gap-4">
-  {#if iced}
+{#if iced}
+  <form class="flex flex-col gap-4">
     <RangeSlider name="ice-ratio" min={30} max={70} bind:value={iceRatio}>
       <div class="flex justify-between items-center">
         <span>Ice Ratio</span>
@@ -30,5 +30,5 @@
     <Label text="Ice">
       <input class="input" readonly bind:value={ice} />
     </Label>
-  {/if}
-</form>
+  </form>
+{/if}
