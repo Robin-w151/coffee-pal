@@ -64,12 +64,17 @@
   }
 </script>
 
-<div class="card p-4 w-full max-w-screen-md max-h-full overflow-auto">
-  <button class="btn btn-icon hover:variant-soft-primary float-right" on:click={handleCancelClick}>
-    <Icon data={faClose} />
-  </button>
-  <h3 class="h3 mb-4">{edit ? 'Edit' : 'Add'} Entry</h3>
-  <Form>
+<div class="card grid grid-rows-[min-content_1fr] gap-2 w-full max-w-screen-md max-h-full">
+  <div class="flex justify-between items-center px-4 pt-4">
+    <h3 class="h3">{edit ? 'Edit' : 'Add'} Entry</h3>
+    <button
+      class="btn btn-icon hover:variant-soft-primary float-right"
+      on:click={handleCancelClick}
+    >
+      <Icon data={faClose} />
+    </button>
+  </div>
+  <Form class="p-4 h-full overflow-auto">
     <Label text="Brew method *">
       <input
         class="input"
@@ -134,16 +139,6 @@
         </span>
       </div>
       <div class="flex gap-2">
-        <ResponsiveButton
-          type="button"
-          label="Cancel"
-          variant="variant-soft"
-          on:click={handleCancelClick}
-        >
-          <svelte:fragment slot="icon">
-            <Icon data={faClose} />
-          </svelte:fragment>
-        </ResponsiveButton>
         {#if edit}
           <ResponsiveButton
             type="button"

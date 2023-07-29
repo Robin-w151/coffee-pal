@@ -1,3 +1,3 @@
-<form class="flex flex-col gap-4">
+<form class="flex flex-col gap-4 {$$props.class ?? ''}" on:submit|preventDefault>
   <slot />
 </form>
