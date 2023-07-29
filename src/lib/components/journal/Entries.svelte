@@ -37,11 +37,14 @@
     {#each entries as entry (entry.id)}
       <EntryItem {entry} on:edit={handleEditEntry} />
     {:else}
-      <p class="flex justify-center items-center gap-2">
+      <p class="flex justify-center items-center gap-4">
         <span class="flex items-center">
           <Icon data={faFaceSadCry} />
         </span>
-        <span>No entries yet. Start cooking coffee and create your first.</span>
+        <span
+          >Could not find any entries. Get up, start brewing coffee and add your first journal entry
+          today!</span
+        >
       </p>
     {/each}
   {/if}
