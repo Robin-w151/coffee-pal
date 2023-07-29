@@ -64,8 +64,8 @@
   }
 </script>
 
-<div class="card grid grid-rows-[min-content_1fr] gap-2 w-full max-w-screen-md max-h-full">
-  <div class="flex justify-between items-center px-4 pt-4">
+<div class="card grid grid-rows-[min-content_1fr] w-full max-w-screen-md max-h-full">
+  <div class="flex justify-between items-center p-4">
     <h3 class="h3">{edit ? 'Edit' : 'Add'} Entry</h3>
     <button
       class="btn btn-icon hover:variant-soft-primary float-right"
@@ -74,7 +74,7 @@
       <Icon data={faClose} />
     </button>
   </div>
-  <Form class="p-4 h-full overflow-auto">
+  <Form class="px-4 pb-4 h-full overflow-auto">
     <Label text="Brew method *">
       <input
         class="input"
@@ -143,7 +143,7 @@
           <ResponsiveButton
             type="button"
             label="Delete"
-            variant="variant-filled-error"
+            variant="variant-soft-error"
             on:click={handleDeleteClick}
           >
             <svelte:fragment slot="icon">
