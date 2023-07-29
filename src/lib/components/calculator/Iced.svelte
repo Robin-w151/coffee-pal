@@ -20,8 +20,8 @@
   <form class="flex flex-col gap-4">
     <RangeSlider name="ice-ratio" min={30} max={70} bind:value={iceRatio}>
       <div class="flex justify-between items-center">
-        <span>Ice Ratio</span>
-        <span>{iceRatio} %</span>
+        <span class="ml-3">Ice Ratio</span>
+        <span class="mr-3">{iceRatio} %</span>
       </div>
     </RangeSlider>
     <Label text="Brew Water">
