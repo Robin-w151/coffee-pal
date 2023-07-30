@@ -15,7 +15,7 @@
 
 <AppBar padding="px-4 py-2 md:py-4" shadow="shadow-xl">
   <svelte:fragment slot="lead">
-    <button class="btn btn-icon hover:variant-soft-primary md:hidden" on:click={handleMenuClick}>
+    <button class="btn btn-icon hover:variant-soft-secondary md:hidden" on:click={handleMenuClick}>
       <Icon data={faBars} scale={1.5} />
     </button>
   </svelte:fragment>
@@ -28,7 +28,7 @@
   <div class="flex items-center gap-4" slot="trail">
     <LightSwitch />
     <a
-      class="btn btn-icon hover:variant-soft-primary"
+      class="btn btn-icon hover:variant-soft-secondary"
       href="https://github.com/Robin-w151/coffee-pal"
       target="_blank"
       rel="noopener"

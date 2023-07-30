@@ -1,4 +1,4 @@
-@import '@skeletonlabs/skeleton/themes/theme-modern.css';
+@import './theme.scss';
 @import '@skeletonlabs/skeleton/styles/skeleton.css';
 
 // AppShell overrides
@@ -15,7 +15,7 @@ body {
 // Custom design tokens
 
 .chip-interactive-token {
-  @apply chip variant-soft hover:variant-filled;
+  @apply chip variant-soft-secondary hover:variant-filled-primary;
 }
 
 .slide-toggle-active-token {

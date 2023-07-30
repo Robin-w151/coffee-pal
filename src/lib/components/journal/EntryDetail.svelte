@@ -68,7 +68,7 @@
   <div class="flex justify-between items-center p-4">
     <h3 class="h3">{edit ? 'Edit' : 'Add'} Entry</h3>
     <button
-      class="btn btn-icon hover:variant-soft-primary float-right"
+      class="btn btn-icon hover:variant-soft-secondary float-right"
       on:click={handleCancelClick}
     >
       <Icon data={faClose} />
@@ -133,7 +133,7 @@
     </Label>
     <div class="flex justify-between items-center gap-4">
       <div class="flex items-center gap-2">
-        <span class="badge variant-soft-secondary h-11 text-base px-4">
+        <span class="badge variant-soft-tertiary h-11 text-base px-4">
           <span class="hidden md:inline">Ratio:&nbsp;</span>
           <span class="!m-0">{calculateRatio(entry.coffee, entry.water) ?? 'unknown'}</span>
         </span>

@@ -28,7 +28,7 @@
 <section class="flex flex-col gap-4 p-4">
   <div class="flex justify-between items-center">
     <h2 class="h2">Coffee Pal</h2>
-    <button class="btn btn-icon hover:variant-soft-primary" on:click={handleClick}>
+    <button class="btn btn-icon hover:variant-soft-secondary" on:click={handleClick}>
       <Icon data={faClose} />
     </button>
   </div>

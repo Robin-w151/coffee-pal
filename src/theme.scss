@@ -1,0 +1,126 @@
+/* Theme generator: https://www.skeleton.dev/docs/generator */
+/* Color picker: https://www.colorhexa.com/d9a03e */
+
+:root {
+  /* =~= Theme Properties =~= */
+  --theme-font-family-base: system-ui;
+  --theme-font-family-heading: system-ui;
+  --theme-font-color-base: 0 0 0;
+  --theme-font-color-dark: 255 255 255;
+  --theme-rounded-base: 16px;
+  --theme-rounded-container: 16px;
+  --theme-border-base: 2px;
+  /* =~= Theme On-X Colors =~= */
+  --on-primary: 0 0 0;
+  --on-secondary: 255 255 255;
+  --on-tertiary: 0 0 0;
+  --on-success: 0 0 0;
+  --on-warning: 0 0 0;
+  --on-error: 255 255 255;
+  --on-surface: 0 0 0;
+  /* =~= Theme Colors  =~= */
+  /* primary | #d9a03e */
+  --color-primary-50: 249 241 226; /* ⬅ #f9f1e2 */
+  --color-primary-100: 247 236 216; /* ⬅ #f7ecd8 */
+  --color-primary-200: 246 231 207; /* ⬅ #f6e7cf */
+  --color-primary-300: 240 217 178; /* ⬅ #f0d9b2 */
+  --color-primary-400: 228 189 120; /* ⬅ #e4bd78 */
+  --color-primary-500: 217 160 62; /* ⬅ #d9a03e */
+  --color-primary-600: 195 144 56; /* ⬅ #c39038 */
+  --color-primary-700: 163 120 47; /* ⬅ #a3782f */
+  --color-primary-800: 130 96 37; /* ⬅ #826025 */
+  --color-primary-900: 106 78 30; /* ⬅ #6a4e1e */
+  /* secondary | #533ed9 */
+  --color-secondary-50: 229 226 249; /* ⬅ #e5e2f9 */
+  --color-secondary-100: 221 216 247; /* ⬅ #ddd8f7 */
+  --color-secondary-200: 212 207 246; /* ⬅ #d4cff6 */
+  --color-secondary-300: 186 178 240; /* ⬅ #bab2f0 */
+  --color-secondary-400: 135 120 228; /* ⬅ #8778e4 */
+  --color-secondary-500: 83 62 217; /* ⬅ #533ed9 */
+  --color-secondary-600: 75 56 195; /* ⬅ #4b38c3 */
+  --color-secondary-700: 62 47 163; /* ⬅ #3e2fa3 */
+  --color-secondary-800: 50 37 130; /* ⬅ #322582 */
+  --color-secondary-900: 41 30 106; /* ⬅ #291e6a */
+  /* tertiary | #3ec5d9 */
+  --color-tertiary-50: 226 246 249; /* ⬅ #e2f6f9 */
+  --color-tertiary-100: 216 243 247; /* ⬅ #d8f3f7 */
+  --color-tertiary-200: 207 241 246; /* ⬅ #cff1f6 */
+  --color-tertiary-300: 178 232 240; /* ⬅ #b2e8f0 */
+  --color-tertiary-400: 120 214 228; /* ⬅ #78d6e4 */
+  --color-tertiary-500: 62 197 217; /* ⬅ #3ec5d9 */
+  --color-tertiary-600: 56 177 195; /* ⬅ #38b1c3 */
+  --color-tertiary-700: 47 148 163; /* ⬅ #2f94a3 */
+  --color-tertiary-800: 37 118 130; /* ⬅ #257682 */
+  --color-tertiary-900: 30 97 106; /* ⬅ #1e616a */
+  /* success | #5ecc2a */
+  --color-success-50: 231 247 223; /* ⬅ #e7f7df */
+  --color-success-100: 223 245 212; /* ⬅ #dff5d4 */
+  --color-success-200: 215 242 202; /* ⬅ #d7f2ca */
+  --color-success-300: 191 235 170; /* ⬅ #bfebaa */
+  --color-success-400: 142 219 106; /* ⬅ #8edb6a */
+  --color-success-500: 94 204 42; /* ⬅ #5ecc2a */
+  --color-success-600: 85 184 38; /* ⬅ #55b826 */
+  --color-success-700: 71 153 32; /* ⬅ #479920 */
+  --color-success-800: 56 122 25; /* ⬅ #387a19 */
+  --color-success-900: 46 100 21; /* ⬅ #2e6415 */
+  /* warning | #eac713 */
+  --color-warning-50: 252 247 220; /* ⬅ #fcf7dc */
+  --color-warning-100: 251 244 208; /* ⬅ #fbf4d0 */
+  --color-warning-200: 250 241 196; /* ⬅ #faf1c4 */
+  --color-warning-300: 247 233 161; /* ⬅ #f7e9a1 */
+  --color-warning-400: 240 216 90; /* ⬅ #f0d85a */
+  --color-warning-500: 234 199 19; /* ⬅ #eac713 */
+  --color-warning-600: 211 179 17; /* ⬅ #d3b311 */
+  --color-warning-700: 176 149 14; /* ⬅ #b0950e */
+  --color-warning-800: 140 119 11; /* ⬅ #8c770b */
+  --color-warning-900: 115 98 9; /* ⬅ #736209 */
+  /* error | #d4342e */
+  --color-error-50: 249 225 224; /* ⬅ #f9e1e0 */
+  --color-error-100: 246 214 213; /* ⬅ #f6d6d5 */
+  --color-error-200: 244 204 203; /* ⬅ #f4cccb */
+  --color-error-300: 238 174 171; /* ⬅ #eeaeab */
+  --color-error-400: 225 113 109; /* ⬅ #e1716d */
+  --color-error-500: 212 52 46; /* ⬅ #d4342e */
+  --color-error-600: 191 47 41; /* ⬅ #bf2f29 */
+  --color-error-700: 159 39 35; /* ⬅ #9f2723 */
+  --color-error-800: 127 31 28; /* ⬅ #7f1f1c */
+  --color-error-900: 104 25 23; /* ⬅ #681917 */
+  /* surface | #bf7ee5 */
+  --color-surface-50: 245 236 251; /* ⬅ #f5ecfb */
+  --color-surface-100: 242 229 250; /* ⬅ #f2e5fa */
+  --color-surface-200: 239 223 249; /* ⬅ #efdff9 */
+  --color-surface-300: 229 203 245; /* ⬅ #e5cbf5 */
+  --color-surface-400: 210 165 237; /* ⬅ #d2a5ed */
+  --color-surface-500: 191 126 229; /* ⬅ #bf7ee5 */
+  --color-surface-600: 172 113 206; /* ⬅ #ac71ce */
+  --color-surface-700: 143 95 172; /* ⬅ #8f5fac */
+  --color-surface-800: 115 76 137; /* ⬅ #734c89 */
+  --color-surface-900: 94 62 112; /* ⬅ #5e3e70 */
+}
+
+[data-theme='coffee'] h2,
+[data-theme='coffee'] h1,
+[data-theme='coffee'] h3,
+[data-theme='coffee'] h4,
+[data-theme='coffee'] h5,
+[data-theme='coffee'] h6,
+[data-theme='coffee'] a,
+[data-theme='coffee'] button {
+  font-weight: bold;
+}
+
+/* Mesh generator: https://csshero.org/mesher/ */
+// [data-theme='coffee'] {
+//   background-color: hsla(0, 100%, 84%, 1);
+//   background-image: radial-gradient(at 42% 22%, hsla(37, 66%, 54%, 1) 0px, transparent 50%),
+//     radial-gradient(at 42% 75%, hsla(248, 67%, 54%, 1) 0px, transparent 50%),
+//     radial-gradient(at 97% 8%, hsla(187, 67%, 54%, 1) 0px, transparent 50%),
+//     radial-gradient(at 7% 51%, hsla(38, 65%, 90%, 1) 0px, transparent 50%),
+//     radial-gradient(at 4% 94%, hsla(37, 67%, 54%, 1) 0px, transparent 50%),
+//     radial-gradient(at 97% 94%, hsla(37, 67%, 81%, 1) 0px, transparent 50%),
+//     radial-gradient(at 0% 0%, hsla(224, 11%, 92%, 1) 0px, transparent 50%);
+//   background-attachment: fixed;
+//   background-position: center;
+//   background-repeat: no-repeat;
+//   background-size: cover;
+// }

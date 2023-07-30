@@ -27,7 +27,7 @@
 </script>
 
 <button
-  class="btn btn-icon-xl variant-filled-primary fixed z-10 bottom-8 right-8 shadow-xl"
+  class="btn btn-icon btn-icon-xl variant-filled-primary fixed z-10 bottom-8 right-8 shadow-xl"
   on:click={handleAddClick}
 >
   <Icon data={faPlus} scale={1.5} />

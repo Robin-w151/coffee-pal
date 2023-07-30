@@ -25,7 +25,7 @@
 </script>
 
 <div class="justify-between">
-  <span class="badge variant-soft-secondary w-16"
+  <span class="badge variant-soft-tertiary w-16"
     >{calculateRatio(entry.coffee, entry.water) ?? 'unknown'}</span
   >
   <span class="block min-w-0 flex-1">
@@ -37,7 +37,7 @@
     </dd>
   </span>
   <span class="flex gap-3">
-    <button class="btn btn-icon hover:variant-soft-primary" on:click={() => handleEditClick()}>
+    <button class="btn btn-icon hover:variant-soft-secondary" on:click={() => handleEditClick()}>
       <Icon data={faPencil} />
     </button>
   </span>
