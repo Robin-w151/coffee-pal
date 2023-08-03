@@ -10,8 +10,8 @@ export default {
   lang: 'en-US',
   display: 'standalone',
   orientation: 'any',
-  theme_color: '#3b3d91',
-  background_color: '#3b3d91',
+  theme_color: '#081638',
+  background_color: '#081638',
   icons: [
     {
       src: 'icons/icon192_any.png',
