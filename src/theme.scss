@@ -110,17 +110,28 @@
 }
 
 /* Mesh generator: https://csshero.org/mesher/ */
-// [data-theme='coffee'] {
-//   background-color: hsla(0, 100%, 84%, 1);
-//   background-image: radial-gradient(at 42% 22%, hsla(37, 66%, 54%, 1) 0px, transparent 50%),
-//     radial-gradient(at 42% 75%, hsla(248, 67%, 54%, 1) 0px, transparent 50%),
-//     radial-gradient(at 97% 8%, hsla(187, 67%, 54%, 1) 0px, transparent 50%),
-//     radial-gradient(at 7% 51%, hsla(38, 65%, 90%, 1) 0px, transparent 50%),
-//     radial-gradient(at 4% 94%, hsla(37, 67%, 54%, 1) 0px, transparent 50%),
-//     radial-gradient(at 97% 94%, hsla(37, 67%, 81%, 1) 0px, transparent 50%),
-//     radial-gradient(at 0% 0%, hsla(224, 11%, 92%, 1) 0px, transparent 50%);
-//   background-attachment: fixed;
-//   background-position: center;
-//   background-repeat: no-repeat;
-//   background-size: cover;
-// }
+[data-theme='coffee'] {
+  background-color: hsla(224, 20%, 88%, 1);
+  background-image: radial-gradient(at 27% 15%, hsla(182, 96%, 18%, 0.3) 0px, transparent 50%),
+    radial-gradient(at 17% 79%, hsla(16, 75%, 31%, 0.25) 0px, transparent 50%),
+    radial-gradient(at 92% 6%, hsla(24, 85%, 37%, 0.25) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, hsla(128, 72%, 41%, 0.25) 0px, transparent 50%),
+    radial-gradient(at 78% 49%, hsla(289, 96%, 62%, 0.15) 0px, transparent 50%);
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.dark [data-theme='coffee'] {
+  background-color: hsla(223, 73%, 16%, 1);
+  background-image: radial-gradient(at 27% 15%, hsla(182, 96%, 18%, 0.3) 0px, transparent 50%),
+    radial-gradient(at 17% 79%, hsla(16, 75%, 31%, 0.25) 0px, transparent 50%),
+    radial-gradient(at 92% 6%, hsla(24, 85%, 37%, 0.25) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, hsla(128, 72%, 41%, 0.25) 0px, transparent 50%),
+    radial-gradient(at 78% 49%, hsla(289, 96%, 62%, 0.15) 0px, transparent 50%);
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
