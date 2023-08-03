@@ -15,9 +15,13 @@ body {
 // Custom design tokens
 
 .chip-interactive-token {
-  @apply chip variant-soft-secondary hover:variant-filled-primary;
+  @apply chip variant-soft-secondary hover:variant-filled-secondary;
 }
 
 .slide-toggle-active-token {
-  @apply bg-surface-600 dark:bg-surface-400;
+  @apply bg-primary-500 dark:bg-primary-600;
+}
+
+.range-slider-accent-token {
+  @apply accent-primary-500 dark:accent-primary-600;
 }

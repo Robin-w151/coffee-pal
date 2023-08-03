@@ -18,7 +18,13 @@
 </div>
 {#if iced}
   <form class="flex flex-col gap-4">
-    <RangeSlider name="ice-ratio" min={30} max={70} bind:value={iceRatio}>
+    <RangeSlider
+      name="ice-ratio"
+      min={30}
+      max={70}
+      accent="range-slider-accent-token"
+      bind:value={iceRatio}
+    >
       <div class="flex justify-between items-center">
         <span class="ml-3">Ice Ratio</span>
         <span class="mr-3">{iceRatio} %</span>
