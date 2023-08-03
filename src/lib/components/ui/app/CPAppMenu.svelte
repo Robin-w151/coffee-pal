@@ -1,21 +1,9 @@
 <script lang="ts">
   import { page } from '$app/stores';
-  import { faCalculator, faClipboardList, faClose } from '@fortawesome/free-solid-svg-icons';
+  import { routes } from '$lib/config/routes';
+  import { faClose } from '@fortawesome/free-solid-svg-icons';
   import { drawerStore } from '@skeletonlabs/skeleton';
   import { Icon } from 'svelte-awesome';
-
-  const routes = [
-    {
-      href: '/',
-      label: 'Calculator',
-      icon: faCalculator,
-    },
-    {
-      href: '/journal',
-      label: 'Journal',
-      icon: faClipboardList,
-    },
-  ];
 
   function handleClick(): void {
     drawerStore.close();
@@ -37,8 +25,14 @@
     <ul>
       {#each routes as { href, label, icon } (href)}
         <li>
-          <a {href} class={routeActiveClass(href)} on:click={handleClick}>
-            <Icon data={icon} />
+          <a
+            class="!grid grid-cols-[1.25rem_1fr] {routeActiveClass(href)}"
+            {href}
+            on:click={handleClick}
+          >
+            <span class="flex items-center justify-self-center">
+              <Icon data={icon} />
+            </span>
             <span>{label}</span>
           </a>
         </li>

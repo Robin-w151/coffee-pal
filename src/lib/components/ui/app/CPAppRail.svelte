@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { faCalculator, faClipboardList } from '@fortawesome/free-solid-svg-icons';
+  import { page } from '$app/stores';
+  import { routes } from '$lib/config/routes';
   import { AppRail, AppRailAnchor } from '@skeletonlabs/skeleton';
   import { Icon } from 'svelte-awesome';
-  import { page } from '$app/stores';
 </script>
 
 <AppRail
@@ -10,16 +10,12 @@
   hover="bg-primary-hover-token"
   active="bg-primary-active-token"
 >
-  <AppRailAnchor href="/" title="Calculator" selected={$page.url.pathname === '/'}>
-    <svelte:fragment slot="lead">
-      <Icon data={faCalculator} scale={1.5} />
-    </svelte:fragment>
-    <span>Calculator</span>
-  </AppRailAnchor>
-  <AppRailAnchor href="/journal" title="Journal" selected={$page.url.pathname === '/journal'}>
-    <svelte:fragment slot="lead">
-      <Icon data={faClipboardList} scale={1.5} />
-    </svelte:fragment>
-    <span>Journal</span>
-  </AppRailAnchor>
+  {#each routes as { href, label, icon } (href)}
+    <AppRailAnchor {href} title={label} selected={$page.url.pathname === href}>
+      <svelte:fragment slot="lead">
+        <Icon data={icon} scale={1.5} />
+      </svelte:fragment>
+      <span>{label}</span>
+    </AppRailAnchor>
+  {/each}
 </AppRail>
