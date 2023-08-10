@@ -26,8 +26,8 @@
       bind:value={iceRatio}
     >
       <div class="flex justify-between items-center">
-        <span class="ml-3">Ice Ratio</span>
-        <span class="mr-3">{iceRatio} %</span>
+        <span>Ice Ratio</span>
+        <span>{iceRatio} %</span>
       </div>
     </RangeSlider>
     <Label text="Brew Water">

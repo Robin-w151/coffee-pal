@@ -1,13 +1,20 @@
 import { browser } from '$app/environment';
-import type { Entry } from '$lib/models/entry';
-import type { Journal } from '$lib/models/journal';
+import {
+  type Entry,
+  type JournalEntry,
+  type DeletedEntry,
+  isJournalEntry,
+} from '$lib/models/entry';
+import type { Journal, JournalState, JournalSyncResult } from '$lib/models/journal';
 import Dexie, { liveQuery, type Table } from 'dexie';
+import { DateTime } from 'luxon';
 import { writable, type Readable } from 'svelte/store';
 
 export interface JournalStore extends Readable<Journal> {
-  add: (entry: Entry) => void;
-  edit: (entry: Entry) => void;
+  add: (entry: JournalEntry) => void;
+  edit: (entry: JournalEntry) => void;
   remove: (id: string) => void;
+  apply: (syncResult: JournalSyncResult) => void;
 }
 
 const JOURNAL_DB_NAME = 'journal';
@@ -17,31 +24,47 @@ class JournalDb extends Dexie {
 
   constructor() {
     super(JOURNAL_DB_NAME);
-    this.version(1).stores({ entries: 'id, timestamp' });
+    this.version(1).stores({ entries: 'id, createdAt, deletedAt' });
   }
 }
 
-const initialState: Journal = { entries: [], isLoading: true };
-const { subscribe, update } = writable<Journal>(initialState);
+const initialState: JournalState = { entries: [], journalEntries: [], isLoading: true };
+const { subscribe, update } = writable<JournalState>(initialState);
 let journalDb: JournalDb | null = null;
 
 if (browser) {
   const db = (journalDb = new JournalDb());
-  liveQuery(() => db.entries.toCollection().reverse().sortBy('timestamp')).subscribe((entries) => {
-    update((journal) => ({ ...journal, entries, isLoading: false }));
+  liveQuery(() => db.entries.toCollection().reverse().sortBy('createdAt')).subscribe((entries) => {
+    const journalEntries = entries.filter(isJournalEntry);
+    update((journal) => ({ ...journal, entries, journalEntries, isLoading: false }));
   });
 }
 
-function add(entry: Entry): void {
+function add(entry: JournalEntry): void {
+  const now = DateTime.now().toISO()!;
+  entry.createdAt = now;
+  entry.updatedAt = now;
   journalDb?.entries.add(entry, entry.id);
 }
 
-function edit(entry: Entry): void {
+function edit(entry: JournalEntry): void {
+  entry.updatedAt = DateTime.now().toISO()!;
   journalDb?.entries.put(entry, entry.id);
 }
 
 function remove(id: string): void {
-  journalDb?.entries.delete(id);
+  const deletedEntry: DeletedEntry = { id, deletedAt: DateTime.now().toISO()! };
+  journalDb?.entries.put(deletedEntry, id);
+}
+
+function apply(syncResult: JournalSyncResult): void {
+  const { updateEntries, deleteEntries } = syncResult;
+  if (updateEntries.length > 0) {
+    journalDb?.entries.bulkPut(updateEntries);
+  }
+  if (deleteEntries.length > 0) {
+    journalDb?.entries.bulkDelete(deleteEntries.map((entry) => entry.id));
+  }
 }
 
 export const journalStore = {
@@ -49,4 +72,5 @@ export const journalStore = {
   add,
   edit,
   remove,
+  apply,
 };

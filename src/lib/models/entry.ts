@@ -1,4 +1,6 @@
-export interface Entry {
+export type Entry = JournalEntry | DeletedEntry;
+
+export interface JournalEntry {
   id: string;
   method: string;
   water: number;
@@ -7,5 +9,19 @@ export interface Entry {
   coffeeType?: string;
   grindSettings?: string;
   description?: string;
-  timestamp: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface DeletedEntry {
+  id: string;
+  deletedAt: string;
+}
+
+export function isJournalEntry(entry: JournalEntry | DeletedEntry): entry is JournalEntry {
+  return (entry as JournalEntry).createdAt !== undefined;
+}
+
+export function isDeletedEntry(entry: JournalEntry | DeletedEntry): entry is DeletedEntry {
+  return (entry as DeletedEntry).deletedAt !== undefined;
 }

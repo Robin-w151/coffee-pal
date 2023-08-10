@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Entry } from '$lib/models/entry';
+  import type { Entry, JournalEntry } from '$lib/models/entry';
   import { triggerModal } from '$lib/utils/helper';
   import { faPlus } from '@fortawesome/free-solid-svg-icons';
   import Entries from './Entries.svelte';
@@ -11,13 +11,13 @@
     triggerModal(EntryModal, { response: handleEntryAdd });
   }
 
-  function handleEntryAdd(entry: Entry): void {
+  function handleEntryAdd(entry: JournalEntry): void {
     if (entry) {
       journalStore.add(entry);
     }
   }
 
-  function handleEntryChange({ detail: entry }: CustomEvent<Entry>): void {
+  function handleEntryChange({ detail: entry }: CustomEvent<JournalEntry>): void {
     journalStore.edit(entry);
   }
 

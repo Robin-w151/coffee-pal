@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Entry } from '$lib/models/entry';
+  import type { Entry, JournalEntry } from '$lib/models/entry';
   import { triggerModal } from '$lib/utils/helper';
   import { faFaceSadCry } from '@fortawesome/free-solid-svg-icons';
   import { createEventDispatcher } from 'svelte';
@@ -8,7 +8,7 @@
   import EntryModal from './EntryModal.svelte';
   import EntryPlaceholder from './EntryPlaceholder.svelte';
 
-  export let entries: Array<Entry>;
+  export let journalEntries: Array<JournalEntry>;
   export let isLoading = false;
 
   const dispatch = createEventDispatcher();
@@ -34,7 +34,7 @@
     <EntryPlaceholder />
     <EntryPlaceholder />
   {:else}
-    {#each entries as entry (entry.id)}
+    {#each journalEntries as entry (entry.id)}
       <EntryItem {entry} on:edit={handleEditEntry} />
     {:else}
       <p class="flex justify-center items-center gap-4">

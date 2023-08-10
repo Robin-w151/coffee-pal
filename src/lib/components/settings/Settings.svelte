@@ -1,4 +1,7 @@
 <script lang="ts">
+  import Nextcloud from './Nextcloud.svelte';
 </script>
 
-<p>Settings work!</p>
+<div class="flex flex-col gap-4">
+  <Nextcloud />
+</div>
