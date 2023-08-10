@@ -57,6 +57,7 @@
       class="input"
       type="url"
       placeholder="Nextcloud Server URL, e.g. https://example.nextcloud.com"
+      readonly={connected}
       bind:value={url}
     />
   </Label>
