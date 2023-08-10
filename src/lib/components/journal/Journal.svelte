@@ -34,17 +34,19 @@
 </script>
 
 <div class="flex items-end gap-4 fixed z-10 bottom-8 right-8">
-  <button
-    class="btn btn-icon btn-icon-lg variant-filled-primary shadow-xl"
-    on:click={handleSyncClick}
-  >
-    {#if $syncStore.isSynchronizing}
-      <Spinner color="white" />
-    {:else}
-      <Icon data={faRotate} scale={1.25} />
-      <span class="sr-only">Synchronize</span>
-    {/if}
-  </button>
+  {#if $syncStore.connection}
+    <button
+      class="btn btn-icon btn-icon-lg variant-filled-primary shadow-xl"
+      on:click={handleSyncClick}
+    >
+      {#if $syncStore.isSynchronizing}
+        <Spinner color="white" />
+      {:else}
+        <Icon data={faRotate} scale={1.25} />
+        <span class="sr-only">Synchronize</span>
+      {/if}
+    </button>
+  {/if}
   <button
     class="btn btn-icon btn-icon-xl variant-filled-primary shadow-xl"
     on:click={handleAddClick}
