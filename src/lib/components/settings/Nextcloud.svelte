@@ -95,7 +95,7 @@
   <div class="flex justify-end gap-2">
     {#if connected}
       <button
-        class="btn variant-filled-error"
+        class="btn variant-soft-error"
         type="button"
         title="Disconnect Nextcloud Sync"
         on:click={handleDisconnectClick}
@@ -106,6 +106,9 @@
         >Sync</button
       >
     {:else}
+      {#if urlValid}
+        <a class="btn variant-soft-primary" href={url} target="_blank" rel="noopener">Open</a>
+      {/if}
       <button
         class="btn variant-filled-primary"
         title="Enable Sync via Nextcloud"
