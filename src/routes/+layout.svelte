@@ -1,7 +1,7 @@
 <script lang="ts">
-  import CpAppBar from '$lib/components/ui/app/CPAppBar.svelte';
-  import CpAppMenu from '$lib/components/ui/app/CPAppMenu.svelte';
-  import CpAppRail from '$lib/components/ui/app/CPAppRail.svelte';
+  import AppBar from '$lib/components/ui/app/AppBar.svelte';
+  import AppMenu from '$lib/components/ui/app/AppMenu.svelte';
+  import AppRail from '$lib/components/ui/app/AppRail.svelte';
   import { arrow, autoUpdate, computePosition, flip, offset, shift } from '@floating-ui/dom';
   import { AppShell, Drawer, Modal, drawerStore, storePopup } from '@skeletonlabs/skeleton';
   import { pwaInfo } from 'virtual:pwa-info';
@@ -20,16 +20,16 @@
 
 <Drawer>
   {#if $drawerStore.id === 'app-menu'}
-    <CpAppMenu />
+    <AppMenu />
   {/if}
 </Drawer>
 
 <AppShell>
   <svelte:fragment slot="header">
-    <CpAppBar />
+    <AppBar />
   </svelte:fragment>
   <div class="hidden md:block h-full" slot="sidebarLeft">
-    <CpAppRail />
+    <AppRail />
   </div>
   <div class="flex justify-center p-4">
     <div class="flex flex-col items-center gap-4 w-full max-w-screen-md">
