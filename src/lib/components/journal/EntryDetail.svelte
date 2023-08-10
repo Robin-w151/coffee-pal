@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Entry, JournalEntry } from '$lib/models/entry';
+  import type { JournalEntry } from '$lib/models/entry';
   import { calculateRatio } from '$lib/utils/math';
   import { faClose, faSave, faTrash } from '@fortawesome/free-solid-svg-icons';
   import { createEventDispatcher } from 'svelte';
