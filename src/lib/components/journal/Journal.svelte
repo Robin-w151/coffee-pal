@@ -11,17 +11,21 @@
   import EntryModal from './EntryModal.svelte';
 
   function handleAddClick(): void {
-    triggerModal(EntryModal, { response: handleEntryAdd });
+    triggerModal(EntryModal, { response: handleModalEntryAdd });
   }
 
   function handleSyncClick(): void {
     sync();
   }
 
-  function handleEntryAdd(entry: JournalEntry): void {
+  function handleModalEntryAdd(entry: JournalEntry): void {
     if (entry) {
       journalStore.add(entry);
     }
+  }
+
+  function handleEntryAdd({ detail: entry }: CustomEvent<JournalEntry>): void {
+    journalStore.add(entry);
   }
 
   function handleEntryChange({ detail: entry }: CustomEvent<JournalEntry>): void {
@@ -57,5 +61,10 @@
 </div>
 
 <div class="flex flex-col gap-4">
-  <Entries {...$journalStore} on:change={handleEntryChange} on:delete={handleEntryDelete} />
+  <Entries
+    {...$journalStore}
+    on:add={handleEntryAdd}
+    on:change={handleEntryChange}
+    on:delete={handleEntryDelete}
+  />
 </div>

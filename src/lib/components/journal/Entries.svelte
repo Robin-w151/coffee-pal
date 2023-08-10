@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Entry, JournalEntry } from '$lib/models/entry';
+  import { isJournalEntry, type Entry, type JournalEntry } from '$lib/models/entry';
   import { triggerModal } from '$lib/utils/helper';
   import { faFaceSadCry } from '@fortawesome/free-solid-svg-icons';
   import { createEventDispatcher } from 'svelte';
@@ -13,12 +13,22 @@
 
   const dispatch = createEventDispatcher();
 
-  function handleEditEntry({ detail: entry }: CustomEvent<Entry>): void {
+  function handleCopyEntry({ detail: entry }: CustomEvent<JournalEntry>): void {
+    triggerModal(EntryModal, { props: { entry }, response: handleEntryAdd });
+  }
+
+  function handleEditEntry({ detail: entry }: CustomEvent<JournalEntry>): void {
     triggerModal(EntryModal, { props: { entry, edit: true }, response: handleEntryChange });
   }
 
+  function handleEntryAdd(entry: JournalEntry): void {
+    if (entry) {
+      dispatch('add', entry);
+    }
+  }
+
   function handleEntryChange(value: Entry | string): void {
-    if (typeof value === 'object') {
+    if (typeof value === 'object' && isJournalEntry(value)) {
       dispatch('change', value);
     }
 
@@ -35,7 +45,7 @@
     <EntryPlaceholder />
   {:else}
     {#each journalEntries as entry (entry.id)}
-      <EntryItem {entry} on:edit={handleEditEntry} />
+      <EntryItem {entry} on:copy={handleCopyEntry} on:edit={handleEditEntry} />
     {:else}
       <p class="flex justify-center items-center gap-4">
         <span class="flex items-center">

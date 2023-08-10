@@ -1,13 +1,19 @@
 <script lang="ts">
-  import type { Entry, JournalEntry } from '$lib/models/entry';
+  import type { JournalEntry } from '$lib/models/entry';
   import { calculateRatio } from '$lib/utils/math';
-  import { faPencil } from '@fortawesome/free-solid-svg-icons';
+  import { faPencil, faRotateRight } from '@fortawesome/free-solid-svg-icons';
   import { createEventDispatcher } from 'svelte';
   import { Icon } from 'svelte-awesome';
+  import { v4 as uuid } from 'uuid';
 
   export let entry: JournalEntry;
 
   const dispatch = createEventDispatcher();
+
+  function handleCopyClick(): void {
+    const copy = { ...entry, id: uuid() };
+    dispatch('copy', copy);
+  }
 
   function handleEditClick(): void {
     dispatch('edit', entry);
@@ -36,9 +42,14 @@
       <span>{details(entry)}</span>
     </dd>
   </span>
-  <span class="flex gap-3">
-    <button class="btn btn-icon hover:variant-soft-secondary" on:click={() => handleEditClick()}>
+  <span class="flex gap-2">
+    <button class="btn btn-icon hover:variant-soft-secondary" on:click={handleCopyClick}>
+      <Icon data={faRotateRight} />
+      <span class="sr-only">Repeat</span>
+    </button>
+    <button class="btn btn-icon hover:variant-soft-secondary" on:click={handleEditClick}>
       <Icon data={faPencil} />
+      <span class="sr-only">Edit</span>
     </button>
   </span>
 </div>
