@@ -17,6 +17,7 @@
   }
 
   function handleCancel(): void {
+    $modalStore[0].response?.(undefined);
     modalStore.close();
   }
 </script>

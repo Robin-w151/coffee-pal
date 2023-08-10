@@ -8,17 +8,30 @@ import { mergeJournals } from './cloud-sync';
 const SYNC_DIR = 'CoffeePal';
 const SYNC_JOURNAL = 'journal.json';
 
+export interface Login {
+  loginUrl: string;
+  credentials: Promise<Credentials>;
+  abort: () => void;
+}
+
 export class NextcloudLoginClient {
+  private pollInterval: any;
+  private abort = false;
+
   /* https://docs.nextcloud.com/server/latest/developer_manual/client_apis/LoginFlow/index.html#login-flow-v2 */
-  public async login(url: string): Promise<Credentials> {
+  public async login(url: string): Promise<Login> {
     const parsedUrl = new URL(url);
     parsedUrl.pathname = '/index.php/login/v2';
 
     const loginPoll = await this.initiateLogin(parsedUrl.href);
     const credentials = this.setupLoginPoll(loginPoll);
+    const abort = () => (this.abort = true);
 
-    window.open(loginPoll.login, '_blank');
-    return credentials;
+    return {
+      loginUrl: loginPoll.login,
+      credentials,
+      abort,
+    };
   }
 
   private async initiateLogin(url: string): Promise<LoginPoll> {
@@ -33,18 +46,17 @@ export class NextcloudLoginClient {
   private setupLoginPoll(loginPoll: LoginPoll): Promise<Credentials> {
     const start = DateTime.now();
     const hasTimedOut = () => DateTime.now().diff(start, 'minutes').minutes > 10;
-    let pollInterval: any;
 
     return new Promise((resolve, reject) => {
-      pollInterval = setInterval(async () => {
-        if (hasTimedOut()) {
-          clearInterval(pollInterval);
+      this.pollInterval = setInterval(async () => {
+        if (this.abort || hasTimedOut()) {
+          clearInterval(this.pollInterval);
           reject();
         }
 
         const credentials = await this.fetchLoginPoll(loginPoll);
         if (credentials) {
-          clearInterval(pollInterval);
+          clearInterval(this.pollInterval);
           resolve(credentials);
         }
       }, 5000);

@@ -13,11 +13,11 @@ export function triggerModal(ref: any, options?: TriggerModalOptions): void {
     props,
   };
 
-  const newEntryModal: ModalSettings = {
+  const newModal: ModalSettings = {
     type: 'component',
     component: modalComponent,
     response,
   };
 
-  modalStore.trigger(newEntryModal);
+  modalStore.trigger(newModal);
 }

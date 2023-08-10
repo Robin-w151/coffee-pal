@@ -1,22 +1,54 @@
 <script lang="ts">
   import { NextcloudLoginClient } from '$lib/api/nextcloud';
+  import type { Credentials } from '$lib/models/nextcloud';
   import { syncStore } from '$lib/stores/sync';
+  import { triggerModal } from '$lib/utils/helper';
   import { sync } from '$lib/utils/sync';
   import Form from '../ui/elements/Form.svelte';
   import Label from '../ui/elements/Label.svelte';
   import Spinner from '../ui/elements/Spinner.svelte';
+  import NextcloudLoginModal from './NextcloudLoginModal.svelte';
 
   let url = $syncStore.connection?.server.url ?? '';
   let isConnecting = false;
+  let abortLogin: () => void | undefined;
 
   $: urlValid = isUrlValid(url);
   $: connected = !!$syncStore.connection;
   $: showSpinner = isConnecting || $syncStore.isSynchronizing;
 
   async function handleConnectClick(): Promise<void> {
+    abortLogin?.();
+
     isConnecting = true;
     const nextcloudClient = new NextcloudLoginClient();
-    const { loginName, appPassword } = await nextcloudClient.login(url);
+    const { loginUrl, credentials, abort } = await nextcloudClient.login(url);
+    abortLogin = abort;
+
+    handleLoginUrl(loginUrl, abort);
+
+    try {
+      await handleCredentials(credentials);
+    } finally {
+      isConnecting = false;
+    }
+  }
+
+  function handleLoginUrl(loginUrl: string, abort: () => void): void {
+    triggerModal(NextcloudLoginModal, {
+      props: { loginUrl },
+      response: handleLoginCancel.bind(null, abort),
+    });
+  }
+
+  function handleLoginCancel(abort: () => void, response?: boolean): void {
+    if (!response) {
+      abort();
+    }
+  }
+
+  async function handleCredentials(credentials: Promise<Credentials>): Promise<void> {
+    const { loginName, appPassword } = await credentials;
     syncStore.setConnection({
       server: {
         url,
@@ -27,7 +59,6 @@
         password: appPassword,
       },
     });
-    isConnecting = false;
   }
 
   function handleDisconnectClick(): void {
