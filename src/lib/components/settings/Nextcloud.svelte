@@ -2,6 +2,7 @@
   import { NextcloudLoginClient } from '$lib/api/nextcloud';
   import { syncStore } from '$lib/stores/sync';
   import { sync } from '$lib/utils/sync';
+  import Form from '../ui/elements/Form.svelte';
   import Label from '../ui/elements/Label.svelte';
   import Spinner from '../ui/elements/Spinner.svelte';
 
@@ -50,39 +51,37 @@
     <Spinner />
   {/if}
 </div>
-<Label text="Nextcloud Server URL">
-  <input
-    class="input"
-    type="text"
-    placeholder="Nextcloud Server URL, e.g. https://example.nextcloud.com"
-    bind:value={url}
-  />
-</Label>
-<div class="flex justify-end gap-2">
-  {#if connected}
-    <button
-      class="btn variant-soft-error"
-      type="button"
-      title="Disconnect Nextcloud Sync"
-      on:click={handleDisconnectClick}
-    >
-      Disconnect
-    </button>
-    <button
-      class="btn variant-filled-primary"
-      type="button"
-      title="Sync app data"
-      on:click={handleSyncClick}>Sync</button
-    >
-  {:else}
-    <button
-      class="btn variant-filled-primary"
-      type="button"
-      title="Enable Sync via Nextcloud"
-      disabled={!urlValid}
-      on:click={handleConnectClick}
-    >
-      Connect
-    </button>
-  {/if}
-</div>
+<Form>
+  <Label text="Nextcloud Server URL">
+    <input
+      class="input"
+      type="url"
+      placeholder="Nextcloud Server URL, e.g. https://example.nextcloud.com"
+      bind:value={url}
+    />
+  </Label>
+  <div class="flex justify-end gap-2">
+    {#if connected}
+      <button
+        class="btn variant-soft-error"
+        type="button"
+        title="Disconnect Nextcloud Sync"
+        on:click={handleDisconnectClick}
+      >
+        Disconnect
+      </button>
+      <button class="btn variant-filled-primary" title="Sync app data" on:click={handleSyncClick}
+        >Sync</button
+      >
+    {:else}
+      <button
+        class="btn variant-filled-primary"
+        title="Enable Sync via Nextcloud"
+        disabled={!urlValid}
+        on:click={handleConnectClick}
+      >
+        Connect
+      </button>
+    {/if}
+  </div>
+</Form>
