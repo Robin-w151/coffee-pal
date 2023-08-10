@@ -8,6 +8,6 @@
 </svelte:head>
 
 <h2 class="h2">Brewing Journal</h2>
-<PageCard>
+<PageCard class="mb-24">
   <Journal />
 </PageCard>

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Entry } from '$lib/models/entry';
+  import type { Entry, JournalEntry } from '$lib/models/entry';
   import { calculateRatio } from '$lib/utils/math';
   import { faClose, faSave, faTrash } from '@fortawesome/free-solid-svg-icons';
   import { createEventDispatcher } from 'svelte';
@@ -9,7 +9,7 @@
   import Label from '../ui/elements/Label.svelte';
   import ResponsiveButton from '../ui/elements/ResponsiveButton.svelte';
 
-  export let entry: Partial<Entry> = {
+  export let entry: Partial<JournalEntry> = {
     id: uuid(),
     method: '',
     water: undefined,
@@ -46,7 +46,7 @@
     return !!value && value > 0;
   }
 
-  function sanitizeEntry(entry: Partial<Entry>): Entry {
+  function sanitizeEntry(entry: Partial<JournalEntry>): JournalEntry {
     const sanitizedEntry = { ...entry };
     if (typeof entry.water !== 'number') {
       sanitizedEntry.water = 0;
@@ -60,7 +60,11 @@
       sanitizedEntry.coffee = 0;
     }
 
-    return sanitizedEntry as Entry;
+    if (!entry.coffeeType) {
+      sanitizedEntry.coffeeType = undefined;
+    }
+
+    return sanitizedEntry as JournalEntry;
   }
 </script>
 

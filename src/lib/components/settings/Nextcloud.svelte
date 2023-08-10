@@ -1,6 +1,5 @@
 <script lang="ts">
   import { NextcloudLoginClient } from '$lib/api/nextcloud';
-  import { journalStore } from '$lib/stores/journal';
   import { syncStore } from '$lib/stores/sync';
   import { sync } from '$lib/utils/sync';
   import Label from '../ui/elements/Label.svelte';
@@ -34,8 +33,8 @@
     syncStore.removeConnection();
   }
 
-  async function handleSyncClick(): Promise<void> {
-    await sync($syncStore, $journalStore);
+  function handleSyncClick(): void {
+    sync();
   }
 
   function isUrlValid(url: string): boolean {
