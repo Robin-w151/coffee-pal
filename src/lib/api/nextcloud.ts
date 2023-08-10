@@ -1,9 +1,9 @@
 import type { Journal, JournalSyncResult } from '$lib/models/journal';
 import type { Credentials, LoginPoll } from '$lib/models/nextcloud';
 import type { Connection, SyncClient } from '$lib/models/sync';
+import { mergeJournals } from '$lib/utils/sync';
 import { DateTime } from 'luxon';
 import { createClient, type WebDAVClient } from 'webdav';
-import { mergeJournals } from './cloud-sync';
 
 const SYNC_DIR = 'CoffeePal';
 const SYNC_JOURNAL = 'journal.json';
@@ -116,7 +116,7 @@ export class NextcloudSyncClient implements SyncClient {
   }
 
   private async initSyncDir(): Promise<void> {
-    const syncDirExists = await this.client!.exists(this.getSyncDir());
+    const syncDirExists = await this.client.exists(this.getSyncDir());
     if (!syncDirExists) {
       await this.client.createDirectory(this.getSyncDir());
     }

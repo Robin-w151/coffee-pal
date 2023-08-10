@@ -2,7 +2,7 @@
   import { ConicGradient } from '@skeletonlabs/skeleton';
 
   export let width = 'w-6';
-  export let color = 'rgb(var(--color-secondary-500))';
+  export let color = 'rgb(var(--color-primary-500))';
 
   $: stops = conicStops(color);
 
