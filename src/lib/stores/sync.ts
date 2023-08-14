@@ -7,12 +7,11 @@ export interface SyncStore extends Readable<Sync> {
   setConnection: (connection: Connection) => void;
   removeConnection: () => void;
   updateLastSync: () => void;
-  setIsSynchronizing: (isSynchronizing: boolean) => void;
 }
 
 const SYNC_STORE_NAME = 'sync';
 
-const initialState: Sync = { isSynchronizing: false };
+const initialState: Sync = {};
 const { subscribe, update } = localStorageStore<Sync>(SYNC_STORE_NAME, initialState);
 
 function setConnection(connection: Connection): void {
@@ -29,12 +28,7 @@ function updateLastSync(): void {
     connection: sync.connection
       ? { ...sync.connection, lastSync: DateTime.now().toISO()! }
       : undefined,
-    isSynchronizing: false,
   }));
-}
-
-function setIsSynchronizing(isSynchronizing: boolean): void {
-  update((sync) => ({ ...sync, isSynchronizing }));
 }
 
 export const syncStore = {
@@ -42,5 +36,4 @@ export const syncStore = {
   setConnection,
   removeConnection,
   updateLastSync,
-  setIsSynchronizing,
 };

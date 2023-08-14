@@ -3,6 +3,9 @@ import type { Journal, JournalSyncResult } from './journal';
 
 export interface Sync {
   connection?: Connection;
+}
+
+export interface SyncState {
   isSynchronizing: boolean;
 }
 

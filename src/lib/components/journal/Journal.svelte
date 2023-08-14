@@ -9,6 +9,7 @@
   import Spinner from '../ui/elements/Spinner.svelte';
   import Entries from './Entries.svelte';
   import EntryModal from './EntryModal.svelte';
+  import { syncStateStore } from '$lib/stores/syncState';
 
   function handleAddClick(): void {
     triggerModal(EntryModal, { response: handleModalEntryAdd });
@@ -43,7 +44,7 @@
       class="btn btn-icon btn-icon-lg variant-filled-primary shadow-xl"
       on:click={handleSyncClick}
     >
-      {#if $syncStore.isSynchronizing}
+      {#if $syncStateStore.isSynchronizing}
         <Spinner color="white" />
       {:else}
         <Icon data={faRotate} scale={1.25} />

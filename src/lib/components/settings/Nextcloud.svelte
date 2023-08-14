@@ -2,6 +2,7 @@
   import { NextcloudLoginClient } from '$lib/api/nextcloud';
   import type { Credentials } from '$lib/models/nextcloud';
   import { syncStore } from '$lib/stores/sync';
+  import { syncStateStore } from '$lib/stores/syncState';
   import { triggerModal } from '$lib/utils/helper';
   import { sync } from '$lib/utils/sync';
   import Form from '../ui/elements/Form.svelte';
@@ -15,7 +16,7 @@
 
   $: urlValid = isUrlValid(url);
   $: connected = !!$syncStore.connection;
-  $: showSpinner = isConnecting || $syncStore.isSynchronizing;
+  $: showSpinner = isConnecting || $syncStateStore.isSynchronizing;
 
   async function handleConnectClick(): Promise<void> {
     abortLogin?.();

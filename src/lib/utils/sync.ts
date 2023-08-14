@@ -12,13 +12,14 @@ import { syncStore } from '$lib/stores/sync';
 import { DateTime } from 'luxon';
 import { get } from 'svelte/store';
 import { mapToJournal } from './mapper';
+import { syncStateStore } from '$lib/stores/syncState';
 
 export async function sync(): Promise<void> {
   const sync = get(syncStore);
   if (!sync.connection) {
     return;
   }
-  syncStore.setIsSynchronizing(true);
+  syncStateStore.setIsSynchronizing(true);
 
   const journalState = get(journalStore);
   const journal = mapToJournal(journalState);
@@ -27,8 +28,8 @@ export async function sync(): Promise<void> {
     const syncResult = await syncJournal(sync.connection, journal);
     journalStore.apply(syncResult);
     syncStore.updateLastSync();
-  } catch {
-    syncStore.setIsSynchronizing(false);
+  } finally {
+    syncStateStore.setIsSynchronizing(false);
   }
 }
 
