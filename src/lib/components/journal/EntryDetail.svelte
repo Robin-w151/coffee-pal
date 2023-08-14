@@ -34,8 +34,8 @@
     dispatch('save', sanitizeEntry(entry));
   }
 
-  function handleDeleteClick(): void {
-    dispatch('delete', entry.id);
+  function handleRemoveClick(): void {
+    dispatch('remove', entry.id);
   }
 
   function handleCancelClick(): void {
@@ -148,7 +148,7 @@
             type="button"
             label="Delete"
             variant="variant-soft-error"
-            on:click={handleDeleteClick}
+            on:click={handleRemoveClick}
           >
             <svelte:fragment slot="icon">
               <Icon data={faTrash} />

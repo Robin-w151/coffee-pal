@@ -17,7 +17,7 @@
     triggerModal(EntryModal, { props: { entry }, response: handleEntryAdd });
   }
 
-  function handleEditEntry({ detail: entry }: CustomEvent<JournalEntry>): void {
+  function handleUpdateEntry({ detail: entry }: CustomEvent<JournalEntry>): void {
     triggerModal(EntryModal, { props: { entry, edit: true }, response: handleEntryChange });
   }
 
@@ -29,11 +29,11 @@
 
   function handleEntryChange(value: Entry | string): void {
     if (typeof value === 'object' && isJournalEntry(value)) {
-      dispatch('change', value);
+      dispatch('update', value);
     }
 
     if (typeof value === 'string') {
-      dispatch('delete', value);
+      dispatch('remove', value);
     }
   }
 </script>
@@ -45,7 +45,7 @@
     <EntryPlaceholder />
   {:else}
     {#each journalEntries as entry (entry.id)}
-      <EntryItem {entry} on:copy={handleCopyEntry} on:edit={handleEditEntry} />
+      <EntryItem {entry} on:copy={handleCopyEntry} on:update={handleUpdateEntry} />
     {:else}
       <p class="flex justify-center items-center gap-4">
         <span class="flex items-center">

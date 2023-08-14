@@ -29,11 +29,11 @@
     journalStore.add(entry);
   }
 
-  function handleEntryChange({ detail: entry }: CustomEvent<JournalEntry>): void {
-    journalStore.edit(entry);
+  function handleEntryUpdate({ detail: entry }: CustomEvent<JournalEntry>): void {
+    journalStore.update(entry);
   }
 
-  function handleEntryDelete({ detail: id }: CustomEvent<string>): void {
+  function handleEntryRemove({ detail: id }: CustomEvent<string>): void {
     journalStore.remove(id);
   }
 </script>
@@ -65,7 +65,7 @@
   <Entries
     {...$journalStore}
     on:add={handleEntryAdd}
-    on:change={handleEntryChange}
-    on:delete={handleEntryDelete}
+    on:update={handleEntryUpdate}
+    on:remove={handleEntryRemove}
   />
 </div>

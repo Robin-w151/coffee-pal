@@ -15,8 +15,8 @@
     dispatch('copy', copy);
   }
 
-  function handleEditClick(): void {
-    dispatch('edit', entry);
+  function handleUpdateClick(): void {
+    dispatch('update', entry);
   }
 
   function details(entry: JournalEntry): string {
@@ -47,7 +47,7 @@
       <Icon data={faRotateRight} />
       <span class="sr-only">Repeat</span>
     </button>
-    <button class="btn btn-icon hover:variant-soft-secondary" on:click={handleEditClick}>
+    <button class="btn btn-icon hover:variant-soft-secondary" on:click={handleUpdateClick}>
       <Icon data={faPencil} />
       <span class="sr-only">Edit</span>
     </button>

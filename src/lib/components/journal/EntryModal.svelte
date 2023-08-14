@@ -11,7 +11,7 @@
     modalStore.close();
   }
 
-  function handleDelete({ detail: id }: CustomEvent<string>): void {
+  function handleRemove({ detail: id }: CustomEvent<string>): void {
     $modalStore[0].response?.(id);
     modalStore.close();
   }
@@ -26,6 +26,6 @@
   {entry}
   {edit}
   on:save={handleChange}
-  on:delete={handleDelete}
+  on:remove={handleRemove}
   on:cancel={handleCancel}
 />

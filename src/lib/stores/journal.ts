@@ -12,7 +12,7 @@ import { writable, type Readable } from 'svelte/store';
 
 export interface JournalStore extends Readable<Journal> {
   add: (entry: JournalEntry) => void;
-  edit: (entry: JournalEntry) => void;
+  update: (entry: JournalEntry) => void;
   remove: (id: string) => void;
   apply: (syncResult: JournalSyncResult) => void;
 }
@@ -40,24 +40,24 @@ if (browser) {
   });
 }
 
-function add(entry: JournalEntry): void {
+function addEntry(entry: JournalEntry): void {
   const now = DateTime.now().toISO()!;
   entry.createdAt = now;
   entry.updatedAt = now;
   journalDb?.entries.add(entry, entry.id);
 }
 
-function edit(entry: JournalEntry): void {
+function updateEntry(entry: JournalEntry): void {
   entry.updatedAt = DateTime.now().toISO()!;
   journalDb?.entries.put(entry, entry.id);
 }
 
-function remove(id: string): void {
+function removeEntry(id: string): void {
   const deletedEntry: DeletedEntry = { id, deletedAt: DateTime.now().toISO()! };
   journalDb?.entries.put(deletedEntry, id);
 }
 
-function apply(syncResult: JournalSyncResult): void {
+function applySyncResult(syncResult: JournalSyncResult): void {
   const { updateEntries, deleteEntries } = syncResult;
   if (updateEntries.length > 0) {
     journalDb?.entries.bulkPut(updateEntries);
@@ -69,8 +69,8 @@ function apply(syncResult: JournalSyncResult): void {
 
 export const journalStore = {
   subscribe,
-  add,
-  edit,
-  remove,
-  apply,
+  add: addEntry,
+  update: updateEntry,
+  remove: removeEntry,
+  apply: applySyncResult,
 };
