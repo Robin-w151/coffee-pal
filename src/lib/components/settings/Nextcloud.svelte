@@ -107,7 +107,7 @@
         >Sync</button
       >
     {:else}
-      {#if urlValid}
+      {#if url}
         <a class="btn variant-soft-primary" href={url} target="_blank" rel="noopener">Open</a>
       {/if}
       <button
