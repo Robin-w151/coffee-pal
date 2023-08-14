@@ -10,6 +10,7 @@
   import Entries from './Entries.svelte';
   import EntryModal from './EntryModal.svelte';
   import { syncStateStore } from '$lib/stores/syncState';
+  import { triggerInfo } from '$lib/utils/toast';
 
   function handleAddClick(): void {
     triggerModal(EntryModal, { response: handleModalEntryAdd });
@@ -34,6 +35,14 @@
   }
 
   function handleEntryRemove({ detail: id }: CustomEvent<string>): void {
+    triggerInfo('Did you click to fast?', {
+      timeout: 15000,
+      action: {
+        label: 'Undo',
+        response: () => journalStore.undo(id),
+      },
+    });
+
     journalStore.remove(id);
   }
 </script>

@@ -1,19 +1,20 @@
 import { browser } from '$app/environment';
 import {
+  isJournalEntry,
+  type DeletedEntry,
   type Entry,
   type JournalEntry,
-  type DeletedEntry,
-  isJournalEntry,
 } from '$lib/models/entry';
-import type { Journal, JournalState, JournalSyncResult } from '$lib/models/journal';
+import type { JournalState, JournalSyncResult } from '$lib/models/journal';
 import Dexie, { liveQuery, type Table } from 'dexie';
 import { DateTime } from 'luxon';
 import { writable, type Readable } from 'svelte/store';
 
-export interface JournalStore extends Readable<Journal> {
+export interface JournalStore extends Readable<JournalState> {
   add: (entry: JournalEntry) => void;
   update: (entry: JournalEntry) => void;
-  remove: (id: string) => void;
+  remove: (id: string) => Promise<void>;
+  undo: (id: string) => void;
   apply: (syncResult: JournalSyncResult) => void;
 }
 
@@ -29,6 +30,7 @@ class JournalDb extends Dexie {
 }
 
 const initialState: JournalState = { entries: [], journalEntries: [], isLoading: true };
+const removedEntries = new Map<string, JournalEntry>();
 const { subscribe, update } = writable<JournalState>(initialState);
 let journalDb: JournalDb | null = null;
 
@@ -52,9 +54,21 @@ function updateEntry(entry: JournalEntry): void {
   journalDb?.entries.put(entry, entry.id);
 }
 
-function removeEntry(id: string): void {
+async function removeEntry(id: string): Promise<void> {
+  const entry = await journalDb?.entries.get(id);
+  if (isJournalEntry(entry)) {
+    removedEntries.set(id, entry);
+  }
+
   const deletedEntry: DeletedEntry = { id, deletedAt: DateTime.now().toISO()! };
   journalDb?.entries.put(deletedEntry, id);
+}
+
+function undoRemoveEntry(id: string): void {
+  const entry = removedEntries.get(id);
+  if (entry) {
+    journalDb?.entries.put(entry, entry.id);
+  }
 }
 
 function applySyncResult(syncResult: JournalSyncResult): void {
@@ -67,10 +81,11 @@ function applySyncResult(syncResult: JournalSyncResult): void {
   }
 }
 
-export const journalStore = {
+export const journalStore: JournalStore = {
   subscribe,
   add: addEntry,
   update: updateEntry,
   remove: removeEntry,
+  undo: undoRemoveEntry,
   apply: applySyncResult,
 };

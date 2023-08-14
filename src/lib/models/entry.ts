@@ -18,10 +18,10 @@ export interface DeletedEntry {
   deletedAt: string;
 }
 
-export function isJournalEntry(entry: JournalEntry | DeletedEntry): entry is JournalEntry {
-  return (entry as JournalEntry).createdAt !== undefined;
+export function isJournalEntry(entry?: JournalEntry | DeletedEntry | null): entry is JournalEntry {
+  return (entry as JournalEntry)?.createdAt !== undefined;
 }
 
-export function isDeletedEntry(entry: JournalEntry | DeletedEntry): entry is DeletedEntry {
-  return (entry as DeletedEntry).deletedAt !== undefined;
+export function isDeletedEntry(entry?: JournalEntry | DeletedEntry | null): entry is DeletedEntry {
+  return (entry as DeletedEntry)?.deletedAt !== undefined;
 }
