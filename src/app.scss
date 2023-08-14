@@ -12,6 +12,16 @@ body {
   @apply bg-surface-50-900-token;
 }
 
+// Modal overrides
+
+.modal-backdrop {
+  @apply overflow-hidden;
+}
+
+.modal-transition {
+  @apply h-full;
+}
+
 // Custom design tokens
 
 .chip-interactive-token {
