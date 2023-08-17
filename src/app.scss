@@ -35,3 +35,11 @@ body {
 .range-slider-accent-token {
   @apply accent-primary-500 dark:accent-primary-600;
 }
+
+.page-with-actions-token {
+  @apply mb-24;
+}
+
+.page-actions-token {
+  @apply flex items-end gap-4 fixed z-10 bottom-8 right-8;
+}

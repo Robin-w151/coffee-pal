@@ -1,13 +1,13 @@
 <script lang="ts">
-  import Journal from '$lib/components/journal/Journal.svelte';
+  import MyCoffees from '$lib/components/my-coffees/MyCoffees.svelte';
   import PageCard from '$lib/components/ui/elements/PageCard.svelte';
 </script>
 
 <svelte:head>
-  <title>Coffee Pal - Journal</title>
+  <title>Coffee Pal - My Coffees</title>
 </svelte:head>
 
-<h2 class="h2">Brewing Journal</h2>
+<h2 class="h2">My Coffees</h2>
 <PageCard class="page-with-actions-token">
-  <Journal />
+  <MyCoffees />
 </PageCard>

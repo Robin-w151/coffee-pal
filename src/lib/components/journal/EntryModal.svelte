@@ -1,12 +1,12 @@
 <script lang="ts">
-  import type { Entry } from '$lib/models/entry';
   import { modalStore } from '@skeletonlabs/skeleton';
   import EntryDetail from './EntryDetail.svelte';
+  import type { JournalEntry } from '$lib/models/journal';
 
-  export let entry: Entry | undefined = undefined;
+  export let entry: JournalEntry | undefined = undefined;
   export let edit = false;
 
-  function handleChange({ detail: entry }: CustomEvent<Entry>): void {
+  function handleChange({ detail: entry }: CustomEvent<JournalEntry>): void {
     $modalStore[0].response?.(entry);
     modalStore.close();
   }

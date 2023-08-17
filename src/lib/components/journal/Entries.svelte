@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { isJournalEntry, type Entry, type JournalEntry } from '$lib/models/entry';
   import { triggerModal } from '$lib/utils/helper';
   import { faFaceSadCry } from '@fortawesome/free-solid-svg-icons';
   import { createEventDispatcher } from 'svelte';
@@ -7,28 +6,33 @@
   import EntryItem from './EntryItem.svelte';
   import EntryModal from './EntryModal.svelte';
   import EntryPlaceholder from './EntryPlaceholder.svelte';
+  import {
+    isActiveJournalEntry,
+    type ActiveJournalEntry,
+    type JournalEntry,
+  } from '$lib/models/journal';
 
-  export let journalEntries: Array<JournalEntry>;
+  export let activeEntries: Array<ActiveJournalEntry>;
   export let isLoading = false;
 
   const dispatch = createEventDispatcher();
 
-  function handleCopyEntry({ detail: entry }: CustomEvent<JournalEntry>): void {
+  function handleCopyEntry({ detail: entry }: CustomEvent<ActiveJournalEntry>): void {
     triggerModal(EntryModal, { props: { entry }, response: handleEntryAdd });
   }
 
-  function handleUpdateEntry({ detail: entry }: CustomEvent<JournalEntry>): void {
+  function handleUpdateEntry({ detail: entry }: CustomEvent<ActiveJournalEntry>): void {
     triggerModal(EntryModal, { props: { entry, edit: true }, response: handleEntryChange });
   }
 
-  function handleEntryAdd(entry: JournalEntry): void {
+  function handleEntryAdd(entry: ActiveJournalEntry): void {
     if (entry) {
       dispatch('add', entry);
     }
   }
 
-  function handleEntryChange(value: Entry | string): void {
-    if (typeof value === 'object' && isJournalEntry(value)) {
+  function handleEntryChange(value: JournalEntry | string): void {
+    if (typeof value === 'object' && isActiveJournalEntry(value)) {
       dispatch('update', value);
     }
 
@@ -44,7 +48,7 @@
     <EntryPlaceholder />
     <EntryPlaceholder />
   {:else}
-    {#each journalEntries as entry (entry.id)}
+    {#each activeEntries as entry (entry.id)}
       <EntryItem {entry} on:copy={handleCopyEntry} on:update={handleUpdateEntry} />
     {:else}
       <p class="flex justify-center items-center gap-4">

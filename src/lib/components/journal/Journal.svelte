@@ -1,16 +1,16 @@
 <script lang="ts">
-  import type { JournalEntry } from '$lib/models/entry';
+  import type { ActiveJournalEntry } from '$lib/models/journal';
   import { journalStore } from '$lib/stores/journal';
   import { syncStore } from '$lib/stores/sync';
+  import { syncStateStore } from '$lib/stores/syncState';
   import { triggerModal } from '$lib/utils/helper';
   import { sync } from '$lib/utils/sync';
+  import { triggerInfo } from '$lib/utils/toast';
   import { faPlus, faRotate } from '@fortawesome/free-solid-svg-icons';
   import { Icon } from 'svelte-awesome';
   import Spinner from '../ui/elements/Spinner.svelte';
   import Entries from './Entries.svelte';
   import EntryModal from './EntryModal.svelte';
-  import { syncStateStore } from '$lib/stores/syncState';
-  import { triggerInfo } from '$lib/utils/toast';
 
   function handleAddClick(): void {
     triggerModal(EntryModal, { response: handleModalEntryAdd });
@@ -20,17 +20,17 @@
     sync();
   }
 
-  function handleModalEntryAdd(entry: JournalEntry): void {
+  function handleModalEntryAdd(entry: ActiveJournalEntry): void {
     if (entry) {
       journalStore.add(entry);
     }
   }
 
-  function handleEntryAdd({ detail: entry }: CustomEvent<JournalEntry>): void {
+  function handleEntryAdd({ detail: entry }: CustomEvent<ActiveJournalEntry>): void {
     journalStore.add(entry);
   }
 
-  function handleEntryUpdate({ detail: entry }: CustomEvent<JournalEntry>): void {
+  function handleEntryUpdate({ detail: entry }: CustomEvent<ActiveJournalEntry>): void {
     journalStore.update(entry);
   }
 

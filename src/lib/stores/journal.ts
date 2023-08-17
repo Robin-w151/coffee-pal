@@ -1,18 +1,19 @@
 import { browser } from '$app/environment';
 import {
-  isJournalEntry,
-  type DeletedEntry,
-  type Entry,
+  isActiveJournalEntry,
+  type ActiveJournalEntry,
   type JournalEntry,
-} from '$lib/models/entry';
-import type { JournalState, JournalSyncResult } from '$lib/models/journal';
+  type JournalState,
+  type JournalSyncResult,
+  type DeletedJournalEntry,
+} from '$lib/models/journal';
 import Dexie, { liveQuery, type Table } from 'dexie';
 import { DateTime } from 'luxon';
 import { writable, type Readable } from 'svelte/store';
 
 export interface JournalStore extends Readable<JournalState> {
-  add: (entry: JournalEntry) => void;
-  update: (entry: JournalEntry) => void;
+  add: (entry: ActiveJournalEntry) => void;
+  update: (entry: ActiveJournalEntry) => void;
   remove: (id: string) => Promise<void>;
   undo: (id: string) => void;
   apply: (syncResult: JournalSyncResult) => void;
@@ -21,7 +22,7 @@ export interface JournalStore extends Readable<JournalState> {
 const JOURNAL_DB_NAME = 'journal';
 
 class JournalDb extends Dexie {
-  entries!: Table<Entry, string>;
+  entries!: Table<JournalEntry, string>;
 
   constructor() {
     super(JOURNAL_DB_NAME);
@@ -29,38 +30,38 @@ class JournalDb extends Dexie {
   }
 }
 
-const initialState: JournalState = { entries: [], journalEntries: [], isLoading: true };
-const removedEntries = new Map<string, JournalEntry>();
+const initialState: JournalState = { entries: [], activeEntries: [], isLoading: true };
+const removedEntries = new Map<string, ActiveJournalEntry>();
 const { subscribe, update } = writable<JournalState>(initialState);
 let journalDb: JournalDb | null = null;
 
 if (browser) {
   const db = (journalDb = new JournalDb());
   liveQuery(() => db.entries.toCollection().reverse().sortBy('createdAt')).subscribe((entries) => {
-    const journalEntries = entries.filter(isJournalEntry);
-    update((journal) => ({ ...journal, entries, journalEntries, isLoading: false }));
+    const activeEntries = entries.filter(isActiveJournalEntry);
+    update((journal) => ({ ...journal, entries, activeEntries, isLoading: false }));
   });
 }
 
-function addEntry(entry: JournalEntry): void {
+function addEntry(entry: ActiveJournalEntry): void {
   const now = DateTime.now().toISO()!;
   entry.createdAt = now;
   entry.updatedAt = now;
   journalDb?.entries.add(entry, entry.id);
 }
 
-function updateEntry(entry: JournalEntry): void {
+function updateEntry(entry: ActiveJournalEntry): void {
   entry.updatedAt = DateTime.now().toISO()!;
   journalDb?.entries.put(entry, entry.id);
 }
 
 async function removeEntry(id: string): Promise<void> {
   const entry = await journalDb?.entries.get(id);
-  if (isJournalEntry(entry)) {
+  if (isActiveJournalEntry(entry)) {
     removedEntries.set(id, entry);
   }
 
-  const deletedEntry: DeletedEntry = { id, deletedAt: DateTime.now().toISO()! };
+  const deletedEntry: DeletedJournalEntry = { id, deletedAt: DateTime.now().toISO()! };
   journalDb?.entries.put(deletedEntry, id);
 }
 

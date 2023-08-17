@@ -1,18 +1,19 @@
 import { syncJournal } from '$lib/api/sync';
 import {
-  isDeletedEntry,
-  isJournalEntry,
-  type DeletedEntry,
-  type Entry,
+  isActiveJournalEntry,
+  isDeletedJournalEntry,
+  type ActiveJournalEntry,
+  type DeletedJournalEntry,
+  type Journal,
   type JournalEntry,
-} from '$lib/models/entry';
-import type { Journal, JournalSyncMergeResult } from '$lib/models/journal';
+  type JournalSyncMergeResult,
+} from '$lib/models/journal';
 import { journalStore } from '$lib/stores/journal';
 import { syncStore } from '$lib/stores/sync';
+import { syncStateStore } from '$lib/stores/syncState';
 import { DateTime } from 'luxon';
 import { get } from 'svelte/store';
 import { mapToJournal } from './mapper';
-import { syncStateStore } from '$lib/stores/syncState';
 
 export async function sync(): Promise<void> {
   const sync = get(syncStore);
@@ -39,10 +40,10 @@ export function mergeJournals(
 ): JournalSyncMergeResult {
   const entryIds = new Set<string>();
 
-  const localEntries = new Map<string, Entry>();
+  const localEntries = new Map<string, JournalEntry>();
   registerEntries(localJournal.entries, localEntries, entryIds);
 
-  const remoteEntries = new Map<string, Entry>();
+  const remoteEntries = new Map<string, JournalEntry>();
   registerEntries(remoteJournal.entries, remoteEntries, entryIds);
 
   const result: JournalSyncMergeResult = {
@@ -74,8 +75,8 @@ export function mergeJournals(
 }
 
 function registerEntries(
-  entries: Array<Entry>,
-  entryMap: Map<string, Entry>,
+  entries: Array<JournalEntry>,
+  entryMap: Map<string, JournalEntry>,
   entryIds: Set<string>,
 ): void {
   entries.forEach((entry) => {
@@ -86,24 +87,24 @@ function registerEntries(
 
 function handleBothPresent(
   result: JournalSyncMergeResult,
-  localEntry: Entry,
-  remoteEntry: Entry,
+  localEntry: JournalEntry,
+  remoteEntry: JournalEntry,
 ): void {
-  if (isJournalEntry(localEntry) && isJournalEntry(remoteEntry)) {
-    handleBothAreJournalEntries(result, localEntry, remoteEntry);
-  } else if (isDeletedEntry(localEntry) && isDeletedEntry(remoteEntry)) {
-    handleBothAreDeletedEntries(result, localEntry, remoteEntry);
-  } else if (isDeletedEntry(localEntry)) {
+  if (isActiveJournalEntry(localEntry) && isActiveJournalEntry(remoteEntry)) {
+    handleBothAreActiveJournalEntries(result, localEntry, remoteEntry);
+  } else if (isDeletedJournalEntry(localEntry) && isDeletedJournalEntry(remoteEntry)) {
+    handleBothAreDeletedJournalEntries(result, localEntry, remoteEntry);
+  } else if (isDeletedJournalEntry(localEntry)) {
     handleLocalIsDeletedEntry(result, localEntry);
-  } else if (isDeletedEntry(remoteEntry)) {
+  } else if (isDeletedJournalEntry(remoteEntry)) {
     handleRemoteIsDeletedEntry(result, remoteEntry);
   }
 }
 
-function handleBothAreJournalEntries(
+function handleBothAreActiveJournalEntries(
   result: JournalSyncMergeResult,
-  localEntry: JournalEntry,
-  remoteEntry: JournalEntry,
+  localEntry: ActiveJournalEntry,
+  remoteEntry: ActiveJournalEntry,
 ): void {
   const localUpdatedAt = DateTime.fromISO(localEntry.updatedAt);
   const remoteUpdatedAt = DateTime.fromISO(remoteEntry.updatedAt);
@@ -118,10 +119,10 @@ function handleBothAreJournalEntries(
   }
 }
 
-function handleBothAreDeletedEntries(
+function handleBothAreDeletedJournalEntries(
   result: JournalSyncMergeResult,
-  localEntry: DeletedEntry,
-  remoteEntry: DeletedEntry,
+  localEntry: DeletedJournalEntry,
+  remoteEntry: DeletedJournalEntry,
 ): void {
   const localDeletedAt = DateTime.fromISO(localEntry.deletedAt);
   const remoteDeletedAt = DateTime.fromISO(remoteEntry.deletedAt);
@@ -135,7 +136,10 @@ function handleBothAreDeletedEntries(
   }
 }
 
-function handleLocalIsDeletedEntry(result: JournalSyncMergeResult, localEntry: DeletedEntry): void {
+function handleLocalIsDeletedEntry(
+  result: JournalSyncMergeResult,
+  localEntry: DeletedJournalEntry,
+): void {
   result.localChanges.deleteEntries.push(localEntry);
   result.remoteChanges.deleteEntries.push(localEntry);
   result.mergedJournal.entries.push(localEntry);
@@ -143,23 +147,23 @@ function handleLocalIsDeletedEntry(result: JournalSyncMergeResult, localEntry: D
 
 function handleRemoteIsDeletedEntry(
   result: JournalSyncMergeResult,
-  remoteEntry: DeletedEntry,
+  remoteEntry: DeletedJournalEntry,
 ): void {
   result.localChanges.deleteEntries.push(remoteEntry);
   result.mergedJournal.entries.push(remoteEntry);
 }
 
-function handleLocalPresent(result: JournalSyncMergeResult, localEntry: Entry): void {
-  if (isJournalEntry(localEntry)) {
+function handleLocalPresent(result: JournalSyncMergeResult, localEntry: JournalEntry): void {
+  if (isActiveJournalEntry(localEntry)) {
     result.remoteChanges.updateEntries.push(localEntry);
     result.mergedJournal.entries.push(localEntry);
-  } else if (isDeletedEntry(localEntry)) {
+  } else if (isDeletedJournalEntry(localEntry)) {
     result.localChanges.deleteEntries.push(localEntry);
   }
 }
 
-function handleRemotePresent(result: JournalSyncMergeResult, remoteEntry: Entry): void {
-  if (isJournalEntry(remoteEntry)) {
+function handleRemotePresent(result: JournalSyncMergeResult, remoteEntry: JournalEntry): void {
+  if (isActiveJournalEntry(remoteEntry)) {
     result.localChanges.updateEntries.push(remoteEntry);
   }
   result.mergedJournal.entries.push(remoteEntry);

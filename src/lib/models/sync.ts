@@ -31,3 +31,12 @@ export interface SyncClient {
   init: () => Promise<void>;
   syncJournal: (journal: Journal, lastSync?: DateTime) => Promise<JournalSyncResult>;
 }
+
+export interface Syncable {
+  entries: Array<SyncableEntry>;
+}
+
+export type SyncableEntry = { id: string } & (
+  | { createdAt: string; updatedAt: string }
+  | { deletedAt: string }
+);

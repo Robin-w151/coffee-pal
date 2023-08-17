@@ -1,12 +1,12 @@
 <script lang="ts">
-  import type { JournalEntry } from '$lib/models/entry';
+  import type { ActiveJournalEntry } from '$lib/models/journal';
   import { calculateRatio } from '$lib/utils/math';
   import { faPencil, faRotateRight } from '@fortawesome/free-solid-svg-icons';
   import { createEventDispatcher } from 'svelte';
   import { Icon } from 'svelte-awesome';
   import { v4 as uuid } from 'uuid';
 
-  export let entry: JournalEntry;
+  export let entry: ActiveJournalEntry;
 
   const dispatch = createEventDispatcher();
 
@@ -19,7 +19,7 @@
     dispatch('update', entry);
   }
 
-  function details(entry: JournalEntry): string {
+  function details(entry: ActiveJournalEntry): string {
     const { water, coffee, waterTemperature, grindSettings, description } = entry;
     const amountsStr = `${water}g/${coffee}g`;
     const waterTemperatureStr = waterTemperature ? `${waterTemperature} °C` : undefined;

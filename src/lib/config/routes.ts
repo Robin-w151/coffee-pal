@@ -1,4 +1,9 @@
-import { faCalculator, faClipboardList, faGear } from '@fortawesome/free-solid-svg-icons';
+import {
+  faCalculator,
+  faClipboardList,
+  faGear,
+  faSeedling,
+} from '@fortawesome/free-solid-svg-icons';
 
 export const routes = [
   {
@@ -10,6 +15,11 @@ export const routes = [
     href: '/journal',
     label: 'Journal',
     icon: faClipboardList,
+  },
+  {
+    href: '/my-coffees',
+    label: 'My Coffees',
+    icon: faSeedling,
   },
   {
     href: '/settings',

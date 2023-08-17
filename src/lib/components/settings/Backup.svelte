@@ -1,6 +1,5 @@
 <script lang="ts">
   import type { Backup } from '$lib/models/backup';
-  import { isJournalEntry } from '$lib/models/entry';
   import { journalStore } from '$lib/stores/journal';
   import { readJsonFile, writeJsonFile } from '$lib/utils/file';
   import { mapToJournal } from '$lib/utils/mapper';
@@ -11,6 +10,7 @@
   import { DateTime } from 'luxon';
   import { Icon } from 'svelte-awesome';
   import Form from '../ui/elements/Form.svelte';
+  import { isActiveJournalEntry } from '$lib/models/journal';
 
   let files: FileList | undefined;
 
@@ -55,7 +55,7 @@
     }
 
     for (const entry of journal.entries) {
-      if (!isJournalEntry(entry)) {
+      if (!isActiveJournalEntry(entry)) {
         throw new Error('Backup data corrupted!');
       }
     }
