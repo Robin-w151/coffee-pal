@@ -1,8 +1,19 @@
 <script lang="ts">
   import type { Backup } from '$lib/models/backup';
+  import {
+    isActiveJournalEntry,
+    type ActiveJournalEntry,
+    type DeletedJournalEntry,
+  } from '$lib/models/journal';
+  import {
+    isActiveCoffeeEntry,
+    type ActiveCoffeeEntry,
+    type DeletedCoffeeEntry,
+  } from '$lib/models/myCoffees';
   import { journalStore } from '$lib/stores/journal';
+  import { myCoffeesStore } from '$lib/stores/myCoffees';
   import { readJsonFile, writeJsonFile } from '$lib/utils/file';
-  import { mapToJournal } from '$lib/utils/mapper';
+  import { mapToJournal, mapToMyCoffees } from '$lib/utils/mapper';
   import { mergeSyncables } from '$lib/utils/sync';
   import { triggerError, triggerInfo } from '$lib/utils/toast';
   import { faFileArrowUp } from '@fortawesome/free-solid-svg-icons';
@@ -10,14 +21,16 @@
   import { DateTime } from 'luxon';
   import { Icon } from 'svelte-awesome';
   import Form from '../ui/elements/Form.svelte';
-  import { isActiveJournalEntry } from '$lib/models/journal';
 
   let files: FileList | undefined;
 
   $: fileSelected = files?.length && files.length > 0;
 
   function handleExportClick(): void {
-    const backup: Backup = { journal: mapToJournal($journalStore) };
+    const backup: Backup = {
+      journal: mapToJournal($journalStore),
+      myCoffees: mapToMyCoffees($myCoffeesStore),
+    };
     const fileName = `coffee-pal-backup_${DateTime.now().toISO()?.replaceAll(':', '')}.json`;
     writeJsonFile(fileName, backup);
   }
@@ -31,10 +44,22 @@
       const backup = await readJsonFile(files[0]);
       checkValidBackup(backup);
 
-      const { journal } = backup;
+      const { journal, myCoffees } = backup;
+
       if (journal) {
-        const result = mergeSyncables($journalStore, journal);
+        const result = mergeSyncables<ActiveJournalEntry, DeletedJournalEntry>(
+          $journalStore,
+          journal,
+        );
         journalStore.apply(result.localChanges);
+      }
+
+      if (myCoffees) {
+        const result = mergeSyncables<ActiveCoffeeEntry, DeletedCoffeeEntry>(
+          $myCoffeesStore,
+          myCoffees,
+        );
+        myCoffeesStore.apply(result.localChanges);
       }
 
       files = undefined;
@@ -45,18 +70,36 @@
   }
 
   function checkValidBackup(backup: Backup): void {
+    const emptyMessage = 'Backup empty!';
+    const corruptedMessage = 'Backup data corrupted!';
+
     if (!backup) {
-      throw new Error('Backup empty!');
+      throw new Error(emptyMessage);
     }
 
-    const { journal } = backup;
-    if (!journal || !Array.isArray(journal.entries)) {
-      throw new Error('Backup data corrupted!');
+    const { journal, myCoffees } = backup;
+
+    if (journal && !Array.isArray(journal.entries)) {
+      throw new Error(corruptedMessage);
     }
 
-    for (const entry of journal.entries) {
-      if (!isActiveJournalEntry(entry)) {
-        throw new Error('Backup data corrupted!');
+    if (journal) {
+      for (const entry of journal.entries) {
+        if (!isActiveJournalEntry(entry)) {
+          throw new Error(corruptedMessage);
+        }
+      }
+    }
+
+    if (myCoffees && !Array.isArray(myCoffees.entries)) {
+      throw new Error(corruptedMessage);
+    }
+
+    if (myCoffees) {
+      for (const entry of myCoffees.entries) {
+        if (!isActiveCoffeeEntry(entry)) {
+          throw new Error(corruptedMessage);
+        }
       }
     }
   }
