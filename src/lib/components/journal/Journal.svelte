@@ -9,11 +9,11 @@
   import { faPlus, faRotate } from '@fortawesome/free-solid-svg-icons';
   import { Icon } from 'svelte-awesome';
   import Spinner from '../ui/elements/Spinner.svelte';
-  import Entries from './Entries.svelte';
-  import EntryModal from './EntryModal.svelte';
+  import JournalEntries from './JournalEntries.svelte';
+  import JournalEntryModal from './JournalEntryModal.svelte';
 
   function handleAddClick(): void {
-    triggerModal(EntryModal, { response: handleModalEntryAdd });
+    triggerModal(JournalEntryModal, { response: handleModalEntryAdd });
   }
 
   function handleSyncClick(): void {
@@ -71,7 +71,7 @@
 </div>
 
 <div class="flex flex-col gap-4">
-  <Entries
+  <JournalEntries
     {...$journalStore}
     on:add={handleEntryAdd}
     on:update={handleEntryUpdate}
