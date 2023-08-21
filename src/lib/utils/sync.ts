@@ -29,11 +29,21 @@ export async function sync(): Promise<void> {
   const myCoffees = mapToMyCoffees(myCoffeesState);
 
   try {
-    const journalSyncResult = await syncJournal(sync.connection, journal);
-    journalStore.apply(journalSyncResult);
+    const journalSync = syncJournal(sync.connection, journal);
+    const myCoffeesSync = syncMyCoffees(sync.connection, myCoffees);
 
-    const myCoffeesSyncResult = await syncMyCoffees(sync.connection, myCoffees);
-    myCoffeesStore.apply(myCoffeesSyncResult);
+    const [journalSyncResult, myCoffeesSyncResult] = await Promise.allSettled([
+      journalSync,
+      myCoffeesSync,
+    ]);
+
+    if (journalSyncResult.status === 'fulfilled') {
+      journalStore.apply(journalSyncResult.value);
+    }
+
+    if (myCoffeesSyncResult.status === 'fulfilled') {
+      myCoffeesStore.apply(myCoffeesSyncResult.value);
+    }
 
     syncStore.updateLastSync();
   } finally {
