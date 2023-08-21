@@ -131,7 +131,7 @@
         bind:value={entry.coffee}
       />
     </Label>
-    <Label text="Type of coffee">
+    <Label text="Type of coffee" class="relative">
       <input
         class="input autocomplete"
         type="text"
@@ -139,7 +139,7 @@
         bind:value={entry.coffeeType}
         use:popup={popupCoffeeTypeAutocomplete}
       />
-      <div class="card z-10 p-4 max-h-48 overflow-y-auto" data-popup="popupCoffeeTypeAutocomplete">
+      <div class="autocomplete-token" data-popup="popupCoffeeTypeAutocomplete">
         <Autocomplete
           options={coffeeTypeOptions}
           bind:input={entry.coffeeType}

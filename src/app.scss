@@ -24,16 +24,12 @@ body {
 
 // Custom design tokens
 
+.autocomplete-token {
+  @apply card z-10 p-4 w-full max-h-48 bg-surface-200-700-token overflow-y-auto shadow-xl;
+}
+
 .chip-interactive-token {
   @apply chip variant-soft-secondary hover:variant-filled-secondary;
-}
-
-.slide-toggle-active-token {
-  @apply bg-primary-500 dark:bg-primary-600;
-}
-
-.range-slider-accent-token {
-  @apply accent-primary-500 dark:accent-primary-600;
 }
 
 .page-with-actions-token {
@@ -42,4 +38,12 @@ body {
 
 .page-actions-token {
   @apply flex items-end gap-4 fixed z-10 bottom-8 right-8;
+}
+
+.range-slider-accent-token {
+  @apply accent-primary-500 dark:accent-primary-600;
+}
+
+.slide-toggle-active-token {
+  @apply bg-primary-500 dark:bg-primary-600;
 }
