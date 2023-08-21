@@ -74,7 +74,6 @@
   function handleInputKeydown(event: KeyboardEvent): void {
     const { key } = event;
     if (key === 'Escape') {
-      (event.target as HTMLElement)?.blur();
       event.stopPropagation();
     }
   }

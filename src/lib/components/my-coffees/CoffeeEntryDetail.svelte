@@ -8,6 +8,7 @@
   import Form from '../ui/elements/Form.svelte';
   import Label from '../ui/elements/Label.svelte';
   import ResponsiveButton from '../ui/elements/ResponsiveButton.svelte';
+  import { installEventHandler } from '$lib/utils/events';
 
   export let entry: Partial<ActiveCoffeeEntry> = {
     id: uuid(),
@@ -41,7 +42,6 @@
   function handleInputKeydown(event: KeyboardEvent): void {
     const { key } = event;
     if (key === 'Escape') {
-      (event.target as HTMLElement)?.blur();
       event.stopPropagation();
     }
   }
@@ -109,14 +109,22 @@
       />
     </Label>
     <Label text="Aromas">
-      <InputChip
-        name="aromas"
-        placeholder="Aromas, e.g. Nutty, Dried Fruit"
-        padding="px-3 py-2"
-        chips="variant-filled-primary"
-        bind:value={entry.aromas}
-        on:keydown={handleInputKeydown}
-      />
+      <div
+        use:installEventHandler={{
+          selector: 'input',
+          event: 'keydown',
+          handler: handleInputKeydown,
+        }}
+      >
+        <InputChip
+          name="aromas"
+          placeholder="Aromas, e.g. Nutty, Dried Fruit"
+          padding="px-3 py-2"
+          chips="variant-filled-primary"
+          bind:value={entry.aromas}
+          on:keydown={handleInputKeydown}
+        />
+      </div>
     </Label>
     <Label text="Description">
       <textarea
