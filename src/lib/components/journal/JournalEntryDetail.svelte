@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { methodOptions } from '$lib/config/autocomplete';
   import type { ActiveJournalEntry } from '$lib/models/journal';
   import type { MyCoffeesState } from '$lib/models/myCoffees';
   import { myCoffeesStore } from '$lib/stores/myCoffees';
@@ -16,7 +17,6 @@
   import Form from '../ui/elements/Form.svelte';
   import Label from '../ui/elements/Label.svelte';
   import ResponsiveButton from '../ui/elements/ResponsiveButton.svelte';
-  import { methodOptions } from '$lib/config/autocomplete';
 
   export let entry: Partial<ActiveJournalEntry> = {
     id: uuid(),
@@ -69,6 +69,14 @@
 
   function handleCoffeeTypeSelect({ detail }: CustomEvent<AutocompleteOption>): void {
     entry.coffeeType = detail.label;
+  }
+
+  function handleInputKeydown(event: KeyboardEvent): void {
+    const { key } = event;
+    if (key === 'Escape') {
+      (event.target as HTMLElement)?.blur();
+      event.stopPropagation();
+    }
   }
 
   function isValidInput(value?: number | null): boolean {
@@ -124,8 +132,9 @@
         placeholder="Brew method, e.g. V60"
         bind:value={entry.method}
         use:popup={popupMethodAutocomplete}
+        on:keydown={handleInputKeydown}
       />
-      <div class="autocomplete-token" data-popup="popupMethodAutocomplete">
+      <div class="autocomplete-token" tabindex="-1" data-popup="popupMethodAutocomplete">
         <Autocomplete
           options={methodOptions}
           bind:input={entry.method}
@@ -139,6 +148,7 @@
         type="number"
         placeholder="Amount of water, e.g. 200"
         bind:value={entry.water}
+        on:keydown={handleInputKeydown}
       />
     </Label>
     <Label text="Amount of coffee *">
@@ -147,6 +157,7 @@
         type="number"
         placeholder="Amount of coffee, e.g. 12"
         bind:value={entry.coffee}
+        on:keydown={handleInputKeydown}
       />
     </Label>
     <Label text="Type of coffee" class="relative">
@@ -156,8 +167,9 @@
         placeholder="Type of coffee, e.g. Some coffee brand"
         bind:value={entry.coffeeType}
         use:popup={popupCoffeeTypeAutocomplete}
+        on:keydown={handleInputKeydown}
       />
-      <div class="autocomplete-token" data-popup="popupCoffeeTypeAutocomplete">
+      <div class="autocomplete-token" tabindex="-1" data-popup="popupCoffeeTypeAutocomplete">
         <Autocomplete
           options={coffeeTypeOptions}
           bind:input={entry.coffeeType}
@@ -171,6 +183,7 @@
         type="number"
         placeholder="Water temperature, e.g. 96"
         bind:value={entry.waterTemperature}
+        on:keydown={handleInputKeydown}
       />
     </Label>
     <Label text="Grind settings">
@@ -179,6 +192,7 @@
         type="text"
         placeholder="Grind settings, e.g. 24 clicks"
         bind:value={entry.grindSettings}
+        on:keydown={handleInputKeydown}
       />
     </Label>
     <Label text="Description">
@@ -187,6 +201,7 @@
         rows={4}
         placeholder="Description..."
         bind:value={entry.description}
+        on:keydown={handleInputKeydown}
       />
     </Label>
     <div class="flex justify-between items-center gap-4">

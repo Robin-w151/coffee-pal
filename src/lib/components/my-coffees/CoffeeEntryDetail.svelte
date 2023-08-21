@@ -38,6 +38,14 @@
     dispatch('cancel');
   }
 
+  function handleInputKeydown(event: KeyboardEvent): void {
+    const { key } = event;
+    if (key === 'Escape') {
+      (event.target as HTMLElement)?.blur();
+      event.stopPropagation();
+    }
+  }
+
   function sanitizeEntry(entry: Partial<ActiveCoffeeEntry>): ActiveCoffeeEntry {
     const sanitizedEntry = { ...entry };
 
@@ -79,6 +87,7 @@
         type="text"
         placeholder="Name, e.g. Frutos Rojos"
         bind:value={entry.name}
+        on:keydown={handleInputKeydown}
       />
     </Label>
     <Label text="Origin">
@@ -87,6 +96,7 @@
         type="text"
         placeholder="Origin, e.g. Colombia"
         bind:value={entry.origin}
+        on:keydown={handleInputKeydown}
       />
     </Label>
     <Label text="Trader">
@@ -95,6 +105,7 @@
         type="text"
         placeholder="Trader, e.g. Alt Wien"
         bind:value={entry.trader}
+        on:keydown={handleInputKeydown}
       />
     </Label>
     <Label text="Aromas">
@@ -104,6 +115,7 @@
         padding="px-3 py-2"
         chips="variant-filled-primary"
         bind:value={entry.aromas}
+        on:keydown={handleInputKeydown}
       />
     </Label>
     <Label text="Description">
@@ -112,6 +124,7 @@
         rows={4}
         placeholder="Description..."
         bind:value={entry.description}
+        on:keydown={handleInputKeydown}
       />
     </Label>
     <div class="flex justify-end items-center gap-2">
