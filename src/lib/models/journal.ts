@@ -27,17 +27,6 @@ export interface JournalState extends Journal {
   isLoading: boolean;
 }
 
-export interface JournalSyncMergeResult {
-  localChanges: JournalSyncResult;
-  remoteChanges: JournalSyncResult;
-  mergedJournal: Journal;
-}
-
-export interface JournalSyncResult {
-  updateEntries: Array<ActiveJournalEntry>;
-  deleteEntries: Array<DeletedJournalEntry>;
-}
-
 export function isActiveJournalEntry(
   entry?: ActiveJournalEntry | DeletedJournalEntry | null,
 ): entry is ActiveJournalEntry {
