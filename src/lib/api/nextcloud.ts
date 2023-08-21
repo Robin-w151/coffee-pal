@@ -1,12 +1,20 @@
-import type { Journal, JournalSyncResult } from '$lib/models/journal';
 import type { Credentials, LoginPoll } from '$lib/models/nextcloud';
-import type { Connection, SyncClient } from '$lib/models/sync';
-import { mergeJournals } from '$lib/utils/sync';
+import {
+  isActiveSyncableEntry,
+  type ActiveSyncableEntry,
+  type Connection,
+  type DeletedSyncableEntry,
+  type SyncClient,
+  type SyncResult,
+  type Syncable,
+  type SyncableName,
+  isDeletedSyncableEntry,
+} from '$lib/models/sync';
+import { mergeSyncables } from '$lib/utils/sync';
 import { DateTime } from 'luxon';
 import { createClient, type WebDAVClient } from 'webdav';
 
 const SYNC_DIR = 'CoffeePal';
-const SYNC_JOURNAL = 'journal.json';
 
 export interface Login {
   loginUrl: string;
@@ -101,17 +109,26 @@ export class NextcloudSyncClient implements SyncClient {
     await this.initSyncDir();
   }
 
-  public async syncJournal(journal: Journal): Promise<JournalSyncResult> {
-    if (!(await this.existsJournal())) {
-      await this.writeJournal(journal);
-      return { updateEntries: [], deleteEntries: [] };
-    } else {
-      const remoteJournal = await this.readJournal();
-      const { localChanges, remoteChanges, mergedJournal } = mergeJournals(journal, remoteJournal);
+  public async sync<A extends ActiveSyncableEntry, D extends DeletedSyncableEntry>(
+    syncable: Syncable<A | D>,
+    syncableName: SyncableName,
+  ): Promise<SyncResult<A, D>> {
+    if (await this.existsSyncable(syncableName)) {
+      const remoteSyncable = await this.readSyncable<A, D>(syncableName);
+      const {
+        localChanges,
+        remoteChanges,
+        merged: mergedJournal,
+      } = mergeSyncables<A, D>(syncable, remoteSyncable);
       if (this.hasChanges(remoteChanges)) {
-        await this.writeJournal(mergedJournal);
+        await this.writeSyncable(mergedJournal, syncableName);
       }
       return localChanges;
+    } else {
+      const activeEntries = syncable.entries.filter(isActiveSyncableEntry);
+      const deletedEntries = syncable.entries.filter(isDeletedSyncableEntry) as Array<D>;
+      await this.writeSyncable({ ...syncable, entries: activeEntries }, syncableName);
+      return { updateEntries: [], deleteEntries: deletedEntries };
     }
   }
 
@@ -126,32 +143,35 @@ export class NextcloudSyncClient implements SyncClient {
     return `/files/${this.connection.credentials.username}/${SYNC_DIR}`;
   }
 
-  private getSyncFile(filename: string): string {
-    return `${this.getSyncDir()}/${filename}`;
+  private getSyncFile(syncableName: SyncableName): string {
+    return `${this.getSyncDir()}/${syncableName}.json`;
   }
 
-  private getJournalPath(): string {
-    return this.getSyncFile(SYNC_JOURNAL);
-  }
-
-  private async existsJournal(): Promise<boolean> {
-    const path = this.getJournalPath();
+  private existsSyncable(syncableName: SyncableName): Promise<boolean> {
+    const path = this.getSyncFile(syncableName);
     return this.client.exists(path);
   }
 
-  private async readJournal(): Promise<Journal> {
-    const path = this.getJournalPath();
+  private async readSyncable<A extends ActiveSyncableEntry, D extends DeletedSyncableEntry>(
+    syncableName: SyncableName,
+  ): Promise<Syncable<A | D>> {
+    const path = this.getSyncFile(syncableName);
     return JSON.parse((await this.client.getFileContents(path, { format: 'text' })) as string);
   }
 
-  private async writeJournal(journal: Journal): Promise<void> {
-    const path = this.getJournalPath();
-    await this.client.putFileContents(path, JSON.stringify(journal), {
+  private async writeSyncable<A extends ActiveSyncableEntry, D extends DeletedSyncableEntry>(
+    syncable: Syncable<A | D>,
+    syncableName: SyncableName,
+  ): Promise<void> {
+    const path = this.getSyncFile(syncableName);
+    await this.client.putFileContents(path, JSON.stringify(syncable), {
       overwrite: true,
     });
   }
 
-  private hasChanges(syncResult: JournalSyncResult): boolean {
+  private hasChanges<A extends ActiveSyncableEntry, D extends DeletedSyncableEntry>(
+    syncResult: SyncResult<A, D>,
+  ): boolean {
     return syncResult.updateEntries.length > 0 || syncResult.deleteEntries.length > 0;
   }
 }

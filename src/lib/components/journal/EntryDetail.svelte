@@ -76,6 +76,7 @@
       on:click={handleCancelClick}
     >
       <Icon data={faClose} />
+      <span class="sr-only">Close</span>
     </button>
   </div>
   <Form class="px-4 pb-4 h-full overflow-auto">

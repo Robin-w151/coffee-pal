@@ -9,8 +9,8 @@ export interface ActiveCoffeeEntry {
   name: string;
   origin?: string;
   trader?: string;
-  aromas?: Array<string>;
-  description: string;
+  aromas: Array<string>;
+  description?: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -23,4 +23,16 @@ export interface DeletedCoffeeEntry {
 export interface MyCoffeesState extends MyCoffees {
   activeEntries: Array<ActiveCoffeeEntry>;
   isLoading: boolean;
+}
+
+export function isActiveCoffeeEntry(
+  entry?: ActiveCoffeeEntry | DeletedCoffeeEntry | null,
+): entry is ActiveCoffeeEntry {
+  return (entry as ActiveCoffeeEntry)?.createdAt !== undefined;
+}
+
+export function isDeletedCoffeeEntry(
+  entry?: ActiveCoffeeEntry | DeletedCoffeeEntry | null,
+): entry is DeletedCoffeeEntry {
+  return (entry as DeletedCoffeeEntry)?.deletedAt !== undefined;
 }

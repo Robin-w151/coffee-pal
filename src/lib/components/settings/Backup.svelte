@@ -3,7 +3,7 @@
   import { journalStore } from '$lib/stores/journal';
   import { readJsonFile, writeJsonFile } from '$lib/utils/file';
   import { mapToJournal } from '$lib/utils/mapper';
-  import { mergeJournals } from '$lib/utils/sync';
+  import { mergeSyncables } from '$lib/utils/sync';
   import { triggerError, triggerInfo } from '$lib/utils/toast';
   import { faFileArrowUp } from '@fortawesome/free-solid-svg-icons';
   import { FileDropzone } from '@skeletonlabs/skeleton';
@@ -33,7 +33,7 @@
 
       const { journal } = backup;
       if (journal) {
-        const result = mergeJournals($journalStore, journal);
+        const result = mergeSyncables($journalStore, journal);
         journalStore.apply(result.localChanges);
       }
 

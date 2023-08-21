@@ -1,19 +1,19 @@
-import { syncJournal } from '$lib/api/sync';
+import { syncJournal, syncMyCoffees } from '$lib/api/sync';
 import {
-  isActiveJournalEntry,
-  isDeletedJournalEntry,
-  type ActiveJournalEntry,
-  type DeletedJournalEntry,
-  type Journal,
-  type JournalEntry,
-  type JournalSyncMergeResult,
-} from '$lib/models/journal';
+  isActiveSyncableEntry,
+  isDeletedSyncableEntry,
+  type ActiveSyncableEntry,
+  type DeletedSyncableEntry,
+  type SyncMergeResult,
+  type Syncable,
+} from '$lib/models/sync';
 import { journalStore } from '$lib/stores/journal';
 import { syncStore } from '$lib/stores/sync';
 import { syncStateStore } from '$lib/stores/syncState';
 import { DateTime } from 'luxon';
 import { get } from 'svelte/store';
-import { mapToJournal } from './mapper';
+import { mapToJournal, mapToMyCoffees } from './mapper';
+import { myCoffeesStore } from '$lib/stores/myCoffees';
 
 export async function sync(): Promise<void> {
   const sync = get(syncStore);
@@ -25,28 +25,35 @@ export async function sync(): Promise<void> {
   const journalState = get(journalStore);
   const journal = mapToJournal(journalState);
 
+  const myCoffeesState = get(myCoffeesStore);
+  const myCoffees = mapToMyCoffees(myCoffeesState);
+
   try {
-    const syncResult = await syncJournal(sync.connection, journal);
-    journalStore.apply(syncResult);
+    const journalSyncResult = await syncJournal(sync.connection, journal);
+    journalStore.apply(journalSyncResult);
+
+    const myCoffeesSyncResult = await syncMyCoffees(sync.connection, myCoffees);
+    myCoffeesStore.apply(myCoffeesSyncResult);
+
     syncStore.updateLastSync();
   } finally {
     syncStateStore.setIsSynchronizing(false);
   }
 }
 
-export function mergeJournals(
-  localJournal: Journal,
-  remoteJournal: Journal,
-): JournalSyncMergeResult {
+export function mergeSyncables<A extends ActiveSyncableEntry, D extends DeletedSyncableEntry>(
+  local: Syncable<A | D>,
+  remote: Syncable<A | D>,
+): SyncMergeResult<A, D> {
   const entryIds = new Set<string>();
 
-  const localEntries = new Map<string, JournalEntry>();
-  registerEntries(localJournal.entries, localEntries, entryIds);
+  const localEntries = new Map<string, A | D>();
+  registerEntries(local.entries, localEntries, entryIds);
 
-  const remoteEntries = new Map<string, JournalEntry>();
-  registerEntries(remoteJournal.entries, remoteEntries, entryIds);
+  const remoteEntries = new Map<string, A | D>();
+  registerEntries(remote.entries, remoteEntries, entryIds);
 
-  const result: JournalSyncMergeResult = {
+  const result: SyncMergeResult<A, D> = {
     localChanges: {
       updateEntries: [],
       deleteEntries: [],
@@ -55,7 +62,7 @@ export function mergeJournals(
       updateEntries: [],
       deleteEntries: [],
     },
-    mergedJournal: { entries: [] },
+    merged: { entries: [] },
   };
 
   entryIds.forEach((id) => {
@@ -74,9 +81,9 @@ export function mergeJournals(
   return result;
 }
 
-function registerEntries(
-  entries: Array<JournalEntry>,
-  entryMap: Map<string, JournalEntry>,
+function registerEntries<A extends ActiveSyncableEntry, D extends DeletedSyncableEntry>(
+  entries: Array<A | D>,
+  entryMap: Map<string, A | D>,
   entryIds: Set<string>,
 ): void {
   entries.forEach((entry) => {
@@ -85,86 +92,92 @@ function registerEntries(
   });
 }
 
-function handleBothPresent(
-  result: JournalSyncMergeResult,
-  localEntry: JournalEntry,
-  remoteEntry: JournalEntry,
+function handleBothPresent<A extends ActiveSyncableEntry, D extends DeletedSyncableEntry>(
+  result: SyncMergeResult<A, D>,
+  localEntry: A | D,
+  remoteEntry: A | D,
 ): void {
-  if (isActiveJournalEntry(localEntry) && isActiveJournalEntry(remoteEntry)) {
-    handleBothAreActiveJournalEntries(result, localEntry, remoteEntry);
-  } else if (isDeletedJournalEntry(localEntry) && isDeletedJournalEntry(remoteEntry)) {
-    handleBothAreDeletedJournalEntries(result, localEntry, remoteEntry);
-  } else if (isDeletedJournalEntry(localEntry)) {
+  if (isActiveSyncableEntry(localEntry) && isActiveSyncableEntry(remoteEntry)) {
+    handleBothAreActiveEntries(result, localEntry, remoteEntry);
+  } else if (isDeletedSyncableEntry(localEntry) && isDeletedSyncableEntry(remoteEntry)) {
+    handleBothAreDeletedEntries(result, localEntry, remoteEntry);
+  } else if (isDeletedSyncableEntry(localEntry)) {
     handleLocalIsDeletedEntry(result, localEntry);
-  } else if (isDeletedJournalEntry(remoteEntry)) {
+  } else if (isDeletedSyncableEntry(remoteEntry)) {
     handleRemoteIsDeletedEntry(result, remoteEntry);
   }
 }
 
-function handleBothAreActiveJournalEntries(
-  result: JournalSyncMergeResult,
-  localEntry: ActiveJournalEntry,
-  remoteEntry: ActiveJournalEntry,
+function handleBothAreActiveEntries<A extends ActiveSyncableEntry, D extends DeletedSyncableEntry>(
+  result: SyncMergeResult<A, D>,
+  localEntry: A,
+  remoteEntry: A,
 ): void {
   const localUpdatedAt = DateTime.fromISO(localEntry.updatedAt);
   const remoteUpdatedAt = DateTime.fromISO(remoteEntry.updatedAt);
   if (localUpdatedAt > remoteUpdatedAt) {
     result.remoteChanges.updateEntries.push(localEntry);
-    result.mergedJournal.entries.push(localEntry);
+    result.merged.entries.push(localEntry);
   } else if (localUpdatedAt < remoteUpdatedAt) {
     result.localChanges.updateEntries.push(remoteEntry);
-    result.mergedJournal.entries.push(remoteEntry);
+    result.merged.entries.push(remoteEntry);
   } else {
-    result.mergedJournal.entries.push(localEntry);
+    result.merged.entries.push(localEntry);
   }
 }
 
-function handleBothAreDeletedJournalEntries(
-  result: JournalSyncMergeResult,
-  localEntry: DeletedJournalEntry,
-  remoteEntry: DeletedJournalEntry,
+function handleBothAreDeletedEntries<A extends ActiveSyncableEntry, D extends DeletedSyncableEntry>(
+  result: SyncMergeResult<A, D>,
+  localEntry: D,
+  remoteEntry: D,
 ): void {
   const localDeletedAt = DateTime.fromISO(localEntry.deletedAt);
   const remoteDeletedAt = DateTime.fromISO(remoteEntry.deletedAt);
   if (localDeletedAt < remoteDeletedAt) {
     result.localChanges.deleteEntries.push(localEntry);
     result.remoteChanges.deleteEntries.push(localEntry);
-    result.mergedJournal.entries.push(localEntry);
+    result.merged.entries.push(localEntry);
   } else {
     result.localChanges.deleteEntries.push(remoteEntry);
-    result.mergedJournal.entries.push(remoteEntry);
+    result.merged.entries.push(remoteEntry);
   }
 }
 
-function handleLocalIsDeletedEntry(
-  result: JournalSyncMergeResult,
-  localEntry: DeletedJournalEntry,
+function handleLocalIsDeletedEntry<A extends ActiveSyncableEntry, D extends DeletedSyncableEntry>(
+  result: SyncMergeResult<A, D>,
+  localEntry: D,
 ): void {
   result.localChanges.deleteEntries.push(localEntry);
   result.remoteChanges.deleteEntries.push(localEntry);
-  result.mergedJournal.entries.push(localEntry);
+  result.merged.entries.push(localEntry);
 }
 
-function handleRemoteIsDeletedEntry(
-  result: JournalSyncMergeResult,
-  remoteEntry: DeletedJournalEntry,
+function handleRemoteIsDeletedEntry<A extends ActiveSyncableEntry, D extends DeletedSyncableEntry>(
+  result: SyncMergeResult<A, D>,
+  remoteEntry: D,
 ): void {
   result.localChanges.deleteEntries.push(remoteEntry);
-  result.mergedJournal.entries.push(remoteEntry);
+  result.merged.entries.push(remoteEntry);
 }
 
-function handleLocalPresent(result: JournalSyncMergeResult, localEntry: JournalEntry): void {
-  if (isActiveJournalEntry(localEntry)) {
+function handleLocalPresent<A extends ActiveSyncableEntry, D extends DeletedSyncableEntry>(
+  result: SyncMergeResult<A, D>,
+  localEntry: A | D,
+): void {
+  if (isActiveSyncableEntry(localEntry)) {
     result.remoteChanges.updateEntries.push(localEntry);
-    result.mergedJournal.entries.push(localEntry);
-  } else if (isDeletedJournalEntry(localEntry)) {
+    result.merged.entries.push(localEntry);
+  } else if (isDeletedSyncableEntry(localEntry)) {
     result.localChanges.deleteEntries.push(localEntry);
   }
 }
 
-function handleRemotePresent(result: JournalSyncMergeResult, remoteEntry: JournalEntry): void {
-  if (isActiveJournalEntry(remoteEntry)) {
+function handleRemotePresent<A extends ActiveSyncableEntry, D extends DeletedSyncableEntry>(
+  result: SyncMergeResult<A, D>,
+  remoteEntry: A | D,
+): void {
+  if (isActiveSyncableEntry(remoteEntry)) {
     result.localChanges.updateEntries.push(remoteEntry);
   }
-  result.mergedJournal.entries.push(remoteEntry);
+  result.merged.entries.push(remoteEntry);
 }

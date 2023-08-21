@@ -1,15 +1,22 @@
-import type { Journal, JournalSyncResult } from '$lib/models/journal';
-import type { Connection, SyncClient } from '$lib/models/sync';
-import { DateTime } from 'luxon';
+import type { ActiveJournalEntry, DeletedJournalEntry, Journal } from '$lib/models/journal';
+import type { ActiveCoffeeEntry, DeletedCoffeeEntry, MyCoffees } from '$lib/models/myCoffees';
+import type { Connection, SyncClient, SyncResult } from '$lib/models/sync';
 import { NextcloudSyncClient } from './nextcloud';
 
 export async function syncJournal(
   connection: Connection,
   journal: Journal,
-): Promise<JournalSyncResult> {
+): Promise<SyncResult<ActiveJournalEntry, DeletedJournalEntry>> {
   const client = await initSyncClient(connection);
-  const lastSync = connection.lastSync ? DateTime.fromISO(connection.lastSync) : undefined;
-  return await client.syncJournal(journal, lastSync);
+  return await client.sync<ActiveJournalEntry, DeletedJournalEntry>(journal, 'journal');
+}
+
+export async function syncMyCoffees(
+  connection: Connection,
+  myCoffees: MyCoffees,
+): Promise<SyncResult<ActiveCoffeeEntry, DeletedCoffeeEntry>> {
+  const client = await initSyncClient(connection);
+  return await client.sync<ActiveCoffeeEntry, DeletedCoffeeEntry>(myCoffees, 'my-coffees');
 }
 
 async function initSyncClient(connection: Connection): Promise<SyncClient> {

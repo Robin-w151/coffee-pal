@@ -2,11 +2,11 @@ import { browser } from '$app/environment';
 import {
   isActiveJournalEntry,
   type ActiveJournalEntry,
+  type DeletedJournalEntry,
   type JournalEntry,
   type JournalState,
-  type JournalSyncResult,
-  type DeletedJournalEntry,
 } from '$lib/models/journal';
+import type { SyncResult } from '$lib/models/sync';
 import Dexie, { liveQuery, type Table } from 'dexie';
 import { DateTime } from 'luxon';
 import { writable, type Readable } from 'svelte/store';
@@ -16,7 +16,7 @@ export interface JournalStore extends Readable<JournalState> {
   update: (entry: ActiveJournalEntry) => void;
   remove: (id: string) => Promise<void>;
   undo: (id: string) => void;
-  apply: (syncResult: JournalSyncResult) => void;
+  apply: (syncResult: SyncResult<ActiveJournalEntry, DeletedJournalEntry>) => void;
 }
 
 const JOURNAL_DB_NAME = 'journal';
@@ -72,7 +72,7 @@ function undoRemoveEntry(id: string): void {
   }
 }
 
-function applySyncResult(syncResult: JournalSyncResult): void {
+function applySyncResult(syncResult: SyncResult<ActiveJournalEntry, DeletedJournalEntry>): void {
   const { updateEntries, deleteEntries } = syncResult;
   if (updateEntries.length > 0) {
     journalDb?.entries.bulkPut(updateEntries);
