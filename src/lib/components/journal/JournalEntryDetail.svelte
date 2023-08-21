@@ -1,13 +1,21 @@
 <script lang="ts">
+  import type { ActiveJournalEntry } from '$lib/models/journal';
+  import type { MyCoffeesState } from '$lib/models/myCoffees';
+  import { myCoffeesStore } from '$lib/stores/myCoffees';
   import { calculateRatio } from '$lib/utils/math';
   import { faClose, faSave, faTrash } from '@fortawesome/free-solid-svg-icons';
+  import {
+    Autocomplete,
+    popup,
+    type AutocompleteOption,
+    type PopupSettings,
+  } from '@skeletonlabs/skeleton';
   import { createEventDispatcher } from 'svelte';
   import { Icon } from 'svelte-awesome';
   import { v4 as uuid } from 'uuid';
   import Form from '../ui/elements/Form.svelte';
   import Label from '../ui/elements/Label.svelte';
   import ResponsiveButton from '../ui/elements/ResponsiveButton.svelte';
-  import type { ActiveJournalEntry } from '$lib/models/journal';
 
   export let entry: Partial<ActiveJournalEntry> = {
     id: uuid(),
@@ -24,11 +32,18 @@
   export let edit = false;
 
   const dispatch = createEventDispatcher();
+  const popupCoffeeTypeAutocomplete: PopupSettings = {
+    event: 'focus-click',
+    target: 'popupCoffeeTypeAutocomplete',
+    placement: 'bottom-start',
+  };
 
   $: methodInputValid = !!entry.method;
   $: waterInputValid = isValidInput(entry.water);
   $: coffeeInputValid = isValidInput(entry.coffee);
   $: formValid = methodInputValid && waterInputValid && coffeeInputValid;
+
+  $: coffeeTypeOptions = getCoffeeTypeOptions($myCoffeesStore);
 
   function handleSaveClick(): void {
     dispatch('save', sanitizeEntry(entry));
@@ -40,6 +55,10 @@
 
   function handleCancelClick(): void {
     dispatch('cancel');
+  }
+
+  function handleCoffeeTypeSelect({ detail }: CustomEvent<AutocompleteOption>): void {
+    entry.coffeeType = detail.label;
   }
 
   function isValidInput(value?: number | null): boolean {
@@ -65,6 +84,14 @@
     }
 
     return sanitizedEntry as ActiveJournalEntry;
+  }
+
+  function getCoffeeTypeOptions(myCoffees: MyCoffeesState): Array<AutocompleteOption> {
+    return myCoffees.activeEntries.map((entry) => ({
+      label: entry.name,
+      value: entry.name,
+      keywords: [entry.origin, entry.trader, ...entry.aromas],
+    }));
   }
 </script>
 
@@ -106,11 +133,19 @@
     </Label>
     <Label text="Type of coffee">
       <input
-        class="input"
+        class="input autocomplete"
         type="text"
         placeholder="Type of coffee, e.g. Some coffee brand"
         bind:value={entry.coffeeType}
+        use:popup={popupCoffeeTypeAutocomplete}
       />
+      <div class="card z-10 p-4 max-h-48 overflow-y-auto" data-popup="popupCoffeeTypeAutocomplete">
+        <Autocomplete
+          options={coffeeTypeOptions}
+          bind:input={entry.coffeeType}
+          on:selection={handleCoffeeTypeSelect}
+        />
+      </div>
     </Label>
     <Label text="Water temperature">
       <input
