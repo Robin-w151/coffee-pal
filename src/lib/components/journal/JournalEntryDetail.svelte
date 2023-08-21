@@ -16,6 +16,7 @@
   import Form from '../ui/elements/Form.svelte';
   import Label from '../ui/elements/Label.svelte';
   import ResponsiveButton from '../ui/elements/ResponsiveButton.svelte';
+  import { methodOptions } from '$lib/config/autocomplete';
 
   export let entry: Partial<ActiveJournalEntry> = {
     id: uuid(),
@@ -32,10 +33,15 @@
   export let edit = false;
 
   const dispatch = createEventDispatcher();
+  const popupMethodAutocomplete: PopupSettings = {
+    event: 'focus-click',
+    target: 'popupMethodAutocomplete',
+    placement: 'bottom',
+  };
   const popupCoffeeTypeAutocomplete: PopupSettings = {
     event: 'focus-click',
     target: 'popupCoffeeTypeAutocomplete',
-    placement: 'bottom-start',
+    placement: 'bottom',
   };
 
   $: methodInputValid = !!entry.method;
@@ -55,6 +61,10 @@
 
   function handleCancelClick(): void {
     dispatch('cancel');
+  }
+
+  function handleMethodSelect({ detail }: CustomEvent<AutocompleteOption>): void {
+    entry.method = detail.label;
   }
 
   function handleCoffeeTypeSelect({ detail }: CustomEvent<AutocompleteOption>): void {
@@ -107,13 +117,21 @@
     </button>
   </div>
   <Form class="px-4 pb-4 h-full overflow-auto">
-    <Label text="Brew method *">
+    <Label text="Brew method *" class="relative">
       <input
-        class="input"
+        class="input autocomplete"
         type="text"
         placeholder="Brew method, e.g. V60"
         bind:value={entry.method}
+        use:popup={popupMethodAutocomplete}
       />
+      <div class="autocomplete-token" data-popup="popupMethodAutocomplete">
+        <Autocomplete
+          options={methodOptions}
+          bind:input={entry.method}
+          on:selection={handleMethodSelect}
+        />
+      </div>
     </Label>
     <Label text="Amount of water *">
       <input
