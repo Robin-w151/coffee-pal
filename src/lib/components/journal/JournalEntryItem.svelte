@@ -16,7 +16,8 @@
   }
 
   function handleUpdateClick(): void {
-    dispatch('update', entry);
+    const copy = { ...entry };
+    dispatch('update', copy);
   }
 
   function details(entry: ActiveJournalEntry): string {

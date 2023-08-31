@@ -9,7 +9,8 @@
   const dispatch = createEventDispatcher();
 
   function handleUpdateClick(): void {
-    dispatch('update', entry);
+    const copy = { ...entry };
+    dispatch('update', copy);
   }
 </script>
 
