@@ -27,6 +27,13 @@ export interface JournalState extends Journal {
   isLoading: boolean;
 }
 
+export interface JournalSearchState {
+  filter?: string | null;
+  sort?: JournalSort | null;
+}
+
+export type JournalSort = 'asc' | 'desc';
+
 export function isActiveJournalEntry(
   entry?: ActiveJournalEntry | DeletedJournalEntry | null,
 ): entry is ActiveJournalEntry {
@@ -37,4 +44,23 @@ export function isDeletedJournalEntry(
   entry?: ActiveJournalEntry | DeletedJournalEntry | null,
 ): entry is DeletedJournalEntry {
   return (entry as DeletedJournalEntry)?.deletedAt !== undefined;
+}
+
+export function containsString(entry: JournalEntry, filter?: string | null): boolean {
+  if (!filter) {
+    return true;
+  }
+
+  if (!isActiveJournalEntry(entry)) {
+    return false;
+  }
+
+  const regexps = filter
+    .split(' ')
+    .filter((s) => !!s)
+    .map((s) => new RegExp(s, 'i'));
+  const { method, water, waterTemperature, coffee, coffeeType, grindSettings, description } = entry;
+  return [method, water, waterTemperature, coffee, coffeeType, grindSettings, description]
+    .filter((s) => !!s)
+    .some((s) => regexps.some((r) => r.test(s as string)));
 }

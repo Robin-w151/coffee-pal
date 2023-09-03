@@ -1,10 +1,12 @@
 <script lang="ts">
+  import PageCard from '../ui/elements/PageCard.svelte';
   import Backup from './Backup.svelte';
   import Nextcloud from './Nextcloud.svelte';
 </script>
 
-<div class="flex flex-col gap-4">
+<h2 class="h2">Settings</h2>
+<PageCard>
   <Nextcloud />
   <hr />
   <Backup />
-</div>
+</PageCard>

@@ -7,6 +7,7 @@
   import presets from '$assets/presets.json';
   import Iced from './Iced.svelte';
   import { sanitize } from '$lib/utils/math';
+  import PageCard from '../ui/elements/PageCard.svelte';
 
   let preset: Preset = presets[4];
   let recipe: IRecipe = calculateRecipe(preset);
@@ -85,7 +86,8 @@
   }
 </script>
 
-<div class="flex flex-col gap-4">
+<h2 class="h2">Brewing Calculator</h2>
+<PageCard>
   <Ratios
     ratio={preset.ratio}
     on:presetSelect={handlePresetSelect}
@@ -100,4 +102,4 @@
   />
   <hr />
   <Iced water={recipe.water} />
-</div>
+</PageCard>

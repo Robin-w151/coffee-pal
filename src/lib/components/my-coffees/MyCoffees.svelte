@@ -11,6 +11,7 @@
   import Spinner from '../ui/elements/Spinner.svelte';
   import CoffeeEntries from './CoffeeEntries.svelte';
   import CoffeeEntryModal from './CoffeeEntryModal.svelte';
+  import PageCard from '../ui/elements/PageCard.svelte';
 
   function handleAddClick(): void {
     triggerModal(CoffeeEntryModal, { response: handleModalEntryAdd });
@@ -66,6 +67,7 @@
   </button>
 </div>
 
-<div class="flex flex-col gap-4">
+<h2 class="h2">My Coffees</h2>
+<PageCard class="page-with-actions-token">
   <CoffeeEntries {...$myCoffeesStore} on:update={handleEntryUpdate} on:remove={handleEntryRemove} />
-</div>
+</PageCard>
