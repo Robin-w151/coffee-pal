@@ -6,44 +6,19 @@
   import { triggerModal } from '$lib/utils/helper';
   import { sync } from '$lib/utils/sync';
   import { triggerInfo } from '$lib/utils/toast';
-  import {
-    faArrowUpAZ,
-    faArrowUpZA,
-    faPlus,
-    faRotate,
-    faSearch,
-  } from '@fortawesome/free-solid-svg-icons';
-  import { tick } from 'svelte';
+  import { faPlus, faRotate } from '@fortawesome/free-solid-svg-icons';
   import { Icon } from 'svelte-awesome';
   import PageCard from '../ui/elements/PageCard.svelte';
+  import PageSearch from '../ui/elements/PageSearch.svelte';
   import Spinner from '../ui/elements/Spinner.svelte';
-  import { scaleX } from '../ui/transitions/scaleX';
   import JournalEntries from './JournalEntries.svelte';
   import JournalEntryModal from './JournalEntryModal.svelte';
 
-  let searchInput = '';
-  let searchInputRef: HTMLInputElement;
-  let isSearchActive = false;
-
-  $: handleSearchInputChange(searchInput);
-
-  async function handleSearchClick(): Promise<void> {
-    isSearchActive = true;
-    await tick();
-    searchInputRef.focus();
-  }
-
-  function handleSearchInputChange(searchInput: string): void {
+  function handleSearchChange({ detail: searchInput }: CustomEvent<string>): void {
     journalSearchStore.setFilter(searchInput);
   }
 
-  function handleSearchInputBlur(): void {
-    if (!searchInput) {
-      isSearchActive = false;
-    }
-  }
-
-  function handleSortClick(): void {
+  function handleSortToggle(): void {
     journalSearchStore.setSort($journalSearchStore.sort === 'asc' ? 'desc' : 'asc');
   }
 
@@ -105,33 +80,12 @@
   </button>
 </div>
 
-<header class="flex justify-between items-center gap-4 px-2 w-full h-12">
-  <h2 class="h2">Brewing Journal</h2>
-  <div class="grid grid-cols-[auto_max-content] items-center gap-2">
-    {#if isSearchActive}
-      <input
-        class="input variant-ghost-secondary"
-        type="text"
-        placeholder="Search..."
-        bind:value={searchInput}
-        bind:this={searchInputRef}
-        on:blur={handleSearchInputBlur}
-        in:scaleX={{ direction: 'left', duration: 250 }}
-      />
-    {:else}
-      <button class="page-header-button-token" on:click={handleSearchClick}>
-        <Icon data={faSearch} />
-      </button>
-    {/if}
-    <button class="page-header-button-token" on:click={handleSortClick}>
-      {#if $journalSearchStore.sort === 'asc'}
-        <Icon data={faArrowUpAZ} />
-      {:else}
-        <Icon data={faArrowUpZA} />
-      {/if}
-    </button>
-  </div>
-</header>
+<PageSearch
+  title="Brewing Journal"
+  sort={$journalSearchStore.sort}
+  on:searchChange={handleSearchChange}
+  on:sortToggle={handleSortToggle}
+/>
 <PageCard class="page-with-actions-token">
   <JournalEntries
     {...$journalStore}
