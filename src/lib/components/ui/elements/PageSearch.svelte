@@ -17,13 +17,12 @@
   let searchInput = '';
   let searchInputRef: HTMLInputElement;
   let isSearchActive = false;
-  let isSearchInputTransitionFinished = true;
 
   $: handleSearchInputChange(searchInput);
+  $: headerSearchActiveClass = isSearchActive ? 'card flex-col !items-start px-4 py-4 h-auto' : '';
 
   async function handleSearchClick(): Promise<void> {
     isSearchActive = true;
-    isSearchInputTransitionFinished = false;
     await tick();
     searchInputRef.focus();
   }
@@ -38,24 +37,16 @@
     }
   }
 
-  function handleSearchInputOutroEnd(): void {
-    isSearchInputTransitionFinished = true;
-  }
-
   function handleSortClick(): void {
     dispatch('sortToggle');
   }
 </script>
 
-<header class="flex justify-between items-center gap-4 px-2 w-full h-12">
-  <h2 class="h2 {isSearchActive ? 'hidden md:block' : ''}">
+<header class="flex justify-between items-center gap-4 px-2 w-full h-12 {headerSearchActiveClass}">
+  <h2 class="h2">
     {title}
   </h2>
-  <div
-    class="grid grid-cols-[auto_max-content] items-center gap-2 {isSearchActive
-      ? 'w-full md:w-96'
-      : ''}"
-  >
+  <div class="grid grid-cols-[auto_max-content] items-center gap-2" class:w-full={isSearchActive}>
     {#if isSearchActive}
       <input
         class="input"
@@ -64,10 +55,9 @@
         bind:value={searchInput}
         bind:this={searchInputRef}
         on:blur={handleSearchInputBlur}
-        transition:scaleX={{ direction: 'left', duration: 250 }}
-        on:outroend={handleSearchInputOutroEnd}
+        in:scaleX={{ direction: 'left', duration: 250 }}
       />
-    {:else if isSearchInputTransitionFinished}
+    {:else}
       <button
         class="page-header-button-token"
         on:click={handleSearchClick}
