@@ -3,11 +3,11 @@
 </script>
 
 <script lang="ts">
-  import { createEventDispatcher, tick } from 'svelte';
-  import { scaleX } from '../transitions/scaleX';
-  import { fade } from 'svelte/transition';
-  import { Icon } from 'svelte-awesome';
   import { faArrowUpAZ, faArrowUpZA, faSearch } from '@fortawesome/free-solid-svg-icons';
+  import { createEventDispatcher, tick } from 'svelte';
+  import { Icon } from 'svelte-awesome';
+  import { fade } from 'svelte/transition';
+  import { scaleX } from '../transitions/scaleX';
 
   export let title: string;
   export let sort: PageSearchSort | null = 'asc';
@@ -17,22 +17,25 @@
   let searchInput = '';
   let searchInputRef: HTMLInputElement;
   let isSearchActive = false;
+  let isSearchInputTouched = false;
 
   $: handleSearchInputChange(searchInput);
   $: headerSearchActiveClass = isSearchActive ? 'card flex-col !items-start px-4 py-4 h-auto' : '';
 
   async function handleSearchClick(): Promise<void> {
     isSearchActive = true;
+    isSearchInputTouched = false;
     await tick();
     searchInputRef.focus();
   }
 
   function handleSearchInputChange(searchInput: string): void {
+    isSearchInputTouched = true;
     dispatch('searchChange', searchInput);
   }
 
   function handleSearchInputBlur(): void {
-    if (!searchInput) {
+    if (!searchInput && isSearchInputTouched) {
       isSearchActive = false;
     }
   }
@@ -59,14 +62,17 @@
       />
     {:else}
       <button
-        class="page-header-button-token"
+        class="btn btn-icon variant-ghost-secondary"
         on:click={handleSearchClick}
         in:fade={{ duration: 250 }}
       >
         <Icon data={faSearch} />
       </button>
     {/if}
-    <button class="page-header-button-token" on:click={handleSortClick}>
+    <button
+      class="btn btn-icon {isSearchActive ? 'variant-filled-primary' : 'variant-ghost-secondary'}"
+      on:click={handleSortClick}
+    >
       {#if sort === 'asc'}
         <Icon data={faArrowUpAZ} />
       {:else}

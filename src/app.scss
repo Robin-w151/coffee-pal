@@ -40,10 +40,6 @@ body {
   @apply flex items-end gap-4 fixed z-10 bottom-8 right-8;
 }
 
-.page-header-button-token {
-  @apply btn btn-icon variant-ghost-secondary;
-}
-
 .range-slider-accent-token {
   @apply accent-primary-500 dark:accent-primary-600;
 }
