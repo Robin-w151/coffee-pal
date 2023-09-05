@@ -60,7 +60,7 @@ function createJournalSearchStore(): JournalSearchStore {
   return journalMetaStore;
 }
 
-function createJournalStore(journalMetaStore: JournalSearchStore): JournalStore {
+function createJournalStore(journalSearchStore: JournalSearchStore): JournalStore {
   const initialState: JournalState = { entries: [], activeEntries: [], isLoading: true };
   const removedEntries = new Map<string, ActiveJournalEntry>();
   const { subscribe, update } = writable<JournalState>(initialState);
@@ -68,7 +68,7 @@ function createJournalStore(journalMetaStore: JournalSearchStore): JournalStore 
 
   if (browser) {
     const db = (journalDb = new JournalDb());
-    journalMetaStore
+    journalSearchStore
       .pipe(
         switchMap((meta) => {
           return liveQuery(() => {
