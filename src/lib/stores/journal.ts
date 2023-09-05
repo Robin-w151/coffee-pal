@@ -5,9 +5,9 @@ import {
   type ActiveJournalEntry,
   type DeletedJournalEntry,
   type JournalEntry,
-  type JournalState,
   type JournalSearchState,
   type JournalSort,
+  type JournalState,
 } from '$lib/models/journal';
 import type { SyncResult } from '$lib/models/sync';
 import Dexie, { liveQuery, type Collection, type Table } from 'dexie';
@@ -28,6 +28,8 @@ export interface JournalStore extends Readable<JournalState> {
   apply: (syncResult: SyncResult<ActiveJournalEntry, DeletedJournalEntry>) => void;
 }
 
+type JournalCollection = Collection<JournalEntry, string>;
+
 const JOURNAL_DB_NAME = 'journal';
 
 class JournalDb extends Dexie {
@@ -39,8 +41,8 @@ class JournalDb extends Dexie {
   }
 }
 
-export const journalSearchStore: JournalSearchStore = createJournalSearchStore();
-export const journalStore: JournalStore = createJournalStore(journalSearchStore);
+export const journalSearchStore = createJournalSearchStore();
+export const journalStore = createJournalStore(journalSearchStore);
 
 function createJournalSearchStore(): JournalSearchStore {
   const initialState: JournalSearchState = { sort: 'asc' };
@@ -70,16 +72,15 @@ function createJournalStore(journalSearchStore: JournalSearchStore): JournalStor
     const db = (journalDb = new JournalDb());
     journalSearchStore
       .pipe(
-        switchMap((meta) => {
+        switchMap((search) => {
           return liveQuery(() => {
-            const filter = (collection: Collection<JournalEntry, string>) =>
-              collection.filter((entry) => containsString(entry, meta?.filter));
+            const filter = (collection: JournalCollection) =>
+              collection.filter((entry) => containsString(entry, search?.filter));
 
-            const reverse = (collection: Collection<JournalEntry, string>) =>
-              meta?.sort === 'asc' ? collection : collection.reverse();
+            const reverse = (collection: JournalCollection) =>
+              search?.sort === 'asc' ? collection : collection.reverse();
 
-            const sort = (collection: Collection<JournalEntry, string>) =>
-              collection.sortBy('method');
+            const sort = (collection: JournalCollection) => collection.sortBy('method');
 
             return sort(reverse(filter(db.entries.toCollection())));
           });

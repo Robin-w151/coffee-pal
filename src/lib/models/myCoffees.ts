@@ -25,6 +25,13 @@ export interface MyCoffeesState extends MyCoffees {
   isLoading: boolean;
 }
 
+export interface MyCoffeesSearchState {
+  filter?: string | null;
+  sort?: MyCoffeesSort | null;
+}
+
+export type MyCoffeesSort = 'asc' | 'desc';
+
 export function isActiveCoffeeEntry(
   entry?: ActiveCoffeeEntry | DeletedCoffeeEntry | null,
 ): entry is ActiveCoffeeEntry {
@@ -35,4 +42,23 @@ export function isDeletedCoffeeEntry(
   entry?: ActiveCoffeeEntry | DeletedCoffeeEntry | null,
 ): entry is DeletedCoffeeEntry {
   return (entry as DeletedCoffeeEntry)?.deletedAt !== undefined;
+}
+
+export function containsString(entry: CoffeeEntry, filter?: string | null): boolean {
+  if (!filter) {
+    return true;
+  }
+
+  if (!isActiveCoffeeEntry(entry)) {
+    return false;
+  }
+
+  const regexps = filter
+    .split(' ')
+    .filter((s) => !!s)
+    .map((s) => new RegExp(s, 'i'));
+  const { name, origin, trader, aromas, description } = entry;
+  return [name, origin, trader, ...aromas, description]
+    .filter((s) => !!s)
+    .some((s) => regexps.some((r) => r.test(s as string)));
 }

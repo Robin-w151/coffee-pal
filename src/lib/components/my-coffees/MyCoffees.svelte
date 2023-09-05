@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { ActiveCoffeeEntry } from '$lib/models/myCoffees';
-  import { myCoffeesStore } from '$lib/stores/myCoffees';
+  import { myCoffeesSearchStore, myCoffeesStore } from '$lib/stores/myCoffees';
   import { syncStore } from '$lib/stores/sync';
   import { syncStateStore } from '$lib/stores/syncState';
   import { triggerModal } from '$lib/utils/helper';
@@ -12,6 +12,15 @@
   import CoffeeEntries from './CoffeeEntries.svelte';
   import CoffeeEntryModal from './CoffeeEntryModal.svelte';
   import PageCard from '../ui/elements/PageCard.svelte';
+  import PageSearch from '../ui/elements/PageSearch.svelte';
+
+  function handleSearchChange({ detail: searchInput }: CustomEvent<string>): void {
+    myCoffeesSearchStore.setFilter(searchInput);
+  }
+
+  function handleSortToggle(): void {
+    myCoffeesSearchStore.setSort($myCoffeesSearchStore.sort === 'asc' ? 'desc' : 'asc');
+  }
 
   function handleAddClick(): void {
     triggerModal(CoffeeEntryModal, { response: handleModalEntryAdd });
@@ -67,7 +76,12 @@
   </button>
 </div>
 
-<h2 class="h2">My Coffees</h2>
+<PageSearch
+  title="My Coffees"
+  sort={$myCoffeesSearchStore.sort}
+  on:searchChange={handleSearchChange}
+  on:sortToggle={handleSortToggle}
+/>
 <PageCard class="page-with-actions-token">
   <CoffeeEntries {...$myCoffeesStore} on:update={handleEntryUpdate} on:remove={handleEntryRemove} />
 </PageCard>
