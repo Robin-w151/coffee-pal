@@ -12,7 +12,7 @@ import {
 import type { SyncResult } from '$lib/models/sync';
 import Dexie, { liveQuery, type Collection, type Table } from 'dexie';
 import { DateTime } from 'luxon';
-import { BehaviorSubject, Observable, switchMap } from 'rxjs';
+import { BehaviorSubject, switchMap, type Observable } from 'rxjs';
 import { writable, type Readable } from 'svelte/store';
 
 export interface JournalSearchStore extends Observable<JournalSearchState> {
