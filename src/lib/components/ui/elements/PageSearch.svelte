@@ -17,27 +17,18 @@
   let searchInput = '';
   let searchInputRef: HTMLInputElement;
   let isSearchActive = false;
-  let isSearchInputTouched = false;
 
   $: handleSearchInputChange(searchInput);
   $: headerSearchActiveClass = isSearchActive ? 'card flex-col !items-start px-4 py-4 h-auto' : '';
 
   async function handleSearchClick(): Promise<void> {
     isSearchActive = true;
-    isSearchInputTouched = false;
     await tick();
     searchInputRef.focus();
   }
 
   function handleSearchInputChange(searchInput: string): void {
-    isSearchInputTouched = true;
     dispatch('searchChange', searchInput);
-  }
-
-  function handleSearchInputBlur(): void {
-    if (!searchInput && isSearchInputTouched) {
-      isSearchActive = false;
-    }
   }
 
   function handleSortClick(): void {
@@ -57,7 +48,6 @@
         placeholder="Search..."
         bind:value={searchInput}
         bind:this={searchInputRef}
-        on:blur={handleSearchInputBlur}
         in:scaleX={{ direction: 'left', duration: 250 }}
       />
     {:else}
