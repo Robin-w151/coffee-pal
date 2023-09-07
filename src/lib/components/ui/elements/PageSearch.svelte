@@ -19,7 +19,9 @@
   let isSearchActive = false;
 
   $: handleSearchInputChange(searchInput);
-  $: headerSearchActiveClass = isSearchActive ? 'card flex-col !items-start px-4 py-4 h-auto' : '';
+  $: headerSearchActiveClass = isSearchActive
+    ? 'card flex-col !items-start px-4 py-4 h-auto transition ease-out duration-250'
+    : '';
 
   async function handleSearchClick(): Promise<void> {
     isSearchActive = true;
