@@ -3,16 +3,20 @@
   import { journalSearchStore, journalStore } from '$lib/stores/journal';
   import { syncStore } from '$lib/stores/sync';
   import { syncStateStore } from '$lib/stores/syncState';
-  import { triggerModal } from '$lib/utils/helper';
+  import { ModalHelper } from '$lib/utils/modal';
   import { sync } from '$lib/utils/sync';
-  import { triggerInfo } from '$lib/utils/toast';
+  import { ToastHelper } from '$lib/utils/toast';
   import { faPlus, faRotate } from '@fortawesome/free-solid-svg-icons';
+  import { getModalStore, getToastStore } from '@skeletonlabs/skeleton';
   import { Icon } from 'svelte-awesome';
   import PageCard from '../ui/elements/PageCard.svelte';
   import PageSearch from '../ui/elements/PageSearch.svelte';
   import Spinner from '../ui/elements/Spinner.svelte';
   import JournalEntries from './JournalEntries.svelte';
   import JournalEntryModal from './JournalEntryModal.svelte';
+
+  const modalHelper = new ModalHelper(getModalStore());
+  const toastHelper = new ToastHelper(getToastStore());
 
   function handleSearchChange({ detail: searchInput }: CustomEvent<string>): void {
     journalSearchStore.setFilter(searchInput);
@@ -23,7 +27,7 @@
   }
 
   function handleAddClick(): void {
-    triggerModal(JournalEntryModal, { response: handleModalEntryAdd });
+    modalHelper.triggerModal(JournalEntryModal, { response: handleModalEntryAdd });
   }
 
   function handleSyncClick(): void {
@@ -45,7 +49,7 @@
   }
 
   function handleEntryRemove({ detail: id }: CustomEvent<string>): void {
-    triggerInfo('Did you click to fast?', {
+    toastHelper.triggerInfo('Did you click to fast?', {
       timeout: 15000,
       action: {
         label: 'Undo',

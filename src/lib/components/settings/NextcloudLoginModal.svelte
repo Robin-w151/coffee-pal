@@ -1,7 +1,9 @@
 <script lang="ts">
-  import { modalStore } from '@skeletonlabs/skeleton';
+  import { getModalStore } from '@skeletonlabs/skeleton';
 
   export let loginUrl: string;
+
+  const modalStore = getModalStore();
 
   function handleLoginClick(): void {
     $modalStore[0].response?.(true);

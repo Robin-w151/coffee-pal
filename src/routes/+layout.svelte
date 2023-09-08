@@ -3,12 +3,22 @@
   import AppMenu from '$lib/components/ui/app/AppMenu.svelte';
   import AppRail from '$lib/components/ui/app/AppRail.svelte';
   import { arrow, autoUpdate, computePosition, flip, offset, shift } from '@floating-ui/dom';
-  import { AppShell, Drawer, Modal, Toast, drawerStore, storePopup } from '@skeletonlabs/skeleton';
+  import {
+    AppShell,
+    Drawer,
+    Modal,
+    Toast,
+    getDrawerStore,
+    initializeStores,
+    storePopup,
+  } from '@skeletonlabs/skeleton';
   import { pwaInfo } from 'virtual:pwa-info';
   import '../app.scss';
 
+  initializeStores();
   storePopup.set({ computePosition, autoUpdate, offset, shift, flip, arrow });
 
+  const drawerStore = getDrawerStore();
   $: webManifestLink = pwaInfo ? pwaInfo.webManifest.linkTag : '';
 </script>
 

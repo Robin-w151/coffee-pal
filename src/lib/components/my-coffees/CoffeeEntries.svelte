@@ -1,20 +1,25 @@
 <script lang="ts">
   import type { ActiveCoffeeEntry } from '$lib/models/myCoffees';
-  import { triggerModal } from '$lib/utils/helper';
+  import { ModalHelper } from '$lib/utils/modal';
   import { faFaceSadCry } from '@fortawesome/free-solid-svg-icons';
   import { createEventDispatcher } from 'svelte';
   import { Icon } from 'svelte-awesome';
   import CoffeeEntryItem from './CoffeeEntryItem.svelte';
   import CoffeeEntryModal from './CoffeeEntryModal.svelte';
   import CoffeeEntryPlaceholder from './CoffeeEntryPlaceholder.svelte';
+  import { getModalStore } from '@skeletonlabs/skeleton';
 
   export let activeEntries: Array<ActiveCoffeeEntry>;
   export let isLoading = false;
 
   const dispatch = createEventDispatcher();
+  const modalHelper = new ModalHelper(getModalStore());
 
   function handleUpdateEntry({ detail: entry }: CustomEvent<ActiveCoffeeEntry>): void {
-    triggerModal(CoffeeEntryModal, { props: { entry, edit: true }, response: handleEntryChange });
+    modalHelper.triggerModal(CoffeeEntryModal, {
+      props: { entry, edit: true },
+      response: handleEntryChange,
+    });
   }
 
   function handleEntryChange(value: ActiveCoffeeEntry | string): void {

@@ -15,12 +15,14 @@
   import { readJsonFile, writeJsonFile } from '$lib/utils/file';
   import { mapToJournal, mapToMyCoffees } from '$lib/utils/mapper';
   import { mergeSyncables } from '$lib/utils/sync';
-  import { triggerError, triggerInfo } from '$lib/utils/toast';
+  import { ToastHelper } from '$lib/utils/toast';
   import { faFileArrowUp } from '@fortawesome/free-solid-svg-icons';
-  import { FileDropzone } from '@skeletonlabs/skeleton';
+  import { FileDropzone, getToastStore } from '@skeletonlabs/skeleton';
   import { DateTime } from 'luxon';
   import { Icon } from 'svelte-awesome';
   import Form from '../ui/elements/Form.svelte';
+
+  const toastHelper = new ToastHelper(getToastStore());
 
   let files: FileList | undefined;
 
@@ -63,9 +65,11 @@
       }
 
       files = undefined;
-      triggerInfo('Importing backup data was successful');
+      toastHelper.triggerInfo('Importing backup data was successful');
     } catch (error) {
-      triggerError('Importing backup data failed. Make sure you selected the correct file!');
+      toastHelper.triggerError(
+        'Importing backup data failed. Make sure you selected the correct file!',
+      );
     }
   }
 

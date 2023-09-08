@@ -1830,14 +1830,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@skeletonlabs/skeleton@npm:^1.12.0":
-  version: 1.12.0
-  resolution: "@skeletonlabs/skeleton@npm:1.12.0"
+"@skeletonlabs/skeleton@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "@skeletonlabs/skeleton@npm:2.0.0"
   dependencies:
     esm-env: 1.0.0
   peerDependencies:
     svelte: ^3.56.0 || ^4.0.0
-  checksum: 30a034b68721f4e764687cf580b18b30b349c3ea7b9ea5ef8656437a1a6871ed2bc38261c247e4673233638ab0101c1c7d2f27f3c337b250165b114bc7dbed78
+  checksum: 2469707fbfe6f3e58abec787d981914cdf32d9e924befcdb9410ea49e8b563b187ad16e8af4e688670a907a6e062b649fc4bca92078557901db1f746170dbc5f
+  languageName: node
+  linkType: hard
+
+"@skeletonlabs/tw-plugin@npm:^0.1.0":
+  version: 0.1.0
+  resolution: "@skeletonlabs/tw-plugin@npm:0.1.0"
+  peerDependencies:
+    tailwindcss: ">=3.0.0"
+  checksum: b80962f4496255f800fb21ad6fb93dc0fc76e7a5f9173350334f127ad4d46a3a1bda5076a1bce9952d506fe920e67b1e927e5c103ccc76cd845ffc621fb29073
   languageName: node
   linkType: hard
 
@@ -1985,6 +1994,13 @@ __metadata:
   version: 20.4.4
   resolution: "@types/node@npm:20.4.4"
   checksum: 43f3c4a8acc38ae753e15a0e79bae0447d255b3742fa87f8e065d7b9d20ecb0e03d6c5b46c00d5d26f4552160381a00255f49205595a8ee48c2423e00263c930
+  languageName: node
+  linkType: hard
+
+"@types/node@npm:^20.5.9":
+  version: 20.5.9
+  resolution: "@types/node@npm:20.5.9"
+  checksum: 717490e94131722144878b4ca1a963ede1673bb8f2ef78c2f5b50b918df6dc9b35e7f8283e5c2a7a9f137730f7c08dc6228e53d4494a94c9ee16881e6ce6caed
   languageName: node
   linkType: hard
 
@@ -2701,12 +2717,14 @@ __metadata:
     "@fortawesome/free-brands-svg-icons": ^6.4.2
     "@fortawesome/free-regular-svg-icons": ^6.4.2
     "@fortawesome/free-solid-svg-icons": ^6.4.2
-    "@skeletonlabs/skeleton": ^1.12.0
+    "@skeletonlabs/skeleton": ^2.0.0
+    "@skeletonlabs/tw-plugin": ^0.1.0
     "@sveltejs/adapter-auto": ^2.1.0
     "@sveltejs/kit": ^1.24.1
     "@tailwindcss/forms": ^0.5.6
     "@types/file-saver": ^2.0.5
     "@types/luxon": ^3.3.2
+    "@types/node": ^20.5.9
     "@types/uuid": ^9.0.3
     "@typescript-eslint/eslint-plugin": ^6.6.0
     "@typescript-eslint/parser": ^6.6.0
@@ -2734,6 +2752,7 @@ __metadata:
     uuid: ^9.0.0
     vite: ^4.4.9
     vite-plugin-pwa: ^0.16.4
+    vite-plugin-tailwind-purgecss: ^0.1.3
     webdav: ^5.3.0
   languageName: unknown
   linkType: soft
@@ -2776,6 +2795,13 @@ __metadata:
   bin:
     color-support: bin.js
   checksum: 9b7356817670b9a13a26ca5af1c21615463b500783b739b7634a0c2047c16cef4b2865d7576875c31c3cddf9dd621fa19285e628f20198b233a5cfdda6d0793b
+  languageName: node
+  linkType: hard
+
+"commander@npm:^10.0.0":
+  version: 10.0.1
+  resolution: "commander@npm:10.0.1"
+  checksum: 436901d64a818295803c1996cd856621a74f30b9f9e28a588e726b2b1670665bccd7c1a77007ebf328729f0139838a88a19265858a0fa7a8728c4656796db948
   languageName: node
   linkType: hard
 
@@ -3790,6 +3816,19 @@ __metadata:
     once: ^1.3.0
     path-is-absolute: ^1.0.0
   checksum: 29452e97b38fa704dabb1d1045350fb2467cf0277e155aa9ff7077e90ad81d1ea9d53d3ee63bd37c05b09a065e90f16aec4a65f5b8de401d1dac40bc5605d133
+  languageName: node
+  linkType: hard
+
+"glob@npm:^8.0.3":
+  version: 8.1.0
+  resolution: "glob@npm:8.1.0"
+  dependencies:
+    fs.realpath: ^1.0.0
+    inflight: ^1.0.4
+    inherits: 2
+    minimatch: ^5.0.1
+    once: ^1.3.0
+  checksum: 92fbea3221a7d12075f26f0227abac435de868dd0736a17170663783296d0dd8d3d532a5672b4488a439bf5d7fb85cdd07c11185d6cd39184f0385cbdfb86a47
   languageName: node
   linkType: hard
 
@@ -5301,7 +5340,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss-selector-parser@npm:^6.0.11":
+"postcss-selector-parser@npm:^6.0.11, postcss-selector-parser@npm:^6.0.7":
   version: 6.0.13
   resolution: "postcss-selector-parser@npm:6.0.13"
   dependencies:
@@ -5351,7 +5390,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss@npm:^8.4.29":
+"postcss@npm:^8.4.29, postcss@npm:^8.4.4":
   version: 8.4.29
   resolution: "postcss@npm:8.4.29"
   dependencies:
@@ -5416,6 +5455,20 @@ __metadata:
   version: 2.3.0
   resolution: "punycode@npm:2.3.0"
   checksum: 39f760e09a2a3bbfe8f5287cf733ecdad69d6af2fe6f97ca95f24b8921858b91e9ea3c9eeec6e08cede96181b3bb33f95c6ffd8c77e63986508aa2e8159fa200
+  languageName: node
+  linkType: hard
+
+"purgecss@npm:6.0.0-alpha.0":
+  version: 6.0.0-alpha.0
+  resolution: "purgecss@npm:6.0.0-alpha.0"
+  dependencies:
+    commander: ^10.0.0
+    glob: ^8.0.3
+    postcss: ^8.4.4
+    postcss-selector-parser: ^6.0.7
+  bin:
+    purgecss: bin/purgecss.js
+  checksum: 7540a86664276641eff4fe85cbaf2ffbb302f1e85813739ac08e57a96e34c115d2c482fea71bab9967c837abbb4806bf10cf94892ee52e3fd257c0837693521d
   languageName: node
   linkType: hard
 
@@ -6701,6 +6754,18 @@ __metadata:
     workbox-build: ^7.0.0
     workbox-window: ^7.0.0
   checksum: 16810da98ca3d347f2c760024ac2f2ab5d1e61cb7f0157c5f4b75a7e1c8f91442ac304463f1b3e3a5088b4aab4ca464ff8a67f6c996ffdd23e78a2a75c4fc03e
+  languageName: node
+  linkType: hard
+
+"vite-plugin-tailwind-purgecss@npm:^0.1.3":
+  version: 0.1.3
+  resolution: "vite-plugin-tailwind-purgecss@npm:0.1.3"
+  dependencies:
+    estree-walker: ^3.0.3
+    purgecss: 6.0.0-alpha.0
+  peerDependencies:
+    vite: ^4.1.1
+  checksum: 248b5ccad27214862dc1519e501b2a8541d3b5cac6fbda24ff10754c5706464fc603fb8d0da15b0965f3fff0732f0ad3212541f701e6afb70879afaad9bdc4c8
   languageName: node
   linkType: hard
 

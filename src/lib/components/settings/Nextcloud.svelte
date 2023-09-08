@@ -3,12 +3,15 @@
   import type { Credentials } from '$lib/models/nextcloud';
   import { syncStore } from '$lib/stores/sync';
   import { syncStateStore } from '$lib/stores/syncState';
-  import { triggerModal } from '$lib/utils/helper';
+  import { ModalHelper } from '$lib/utils/modal';
   import { sync } from '$lib/utils/sync';
+  import { getModalStore } from '@skeletonlabs/skeleton';
   import Form from '../ui/elements/Form.svelte';
   import Label from '../ui/elements/Label.svelte';
   import Spinner from '../ui/elements/Spinner.svelte';
   import NextcloudLoginModal from './NextcloudLoginModal.svelte';
+
+  const modalHelper = new ModalHelper(getModalStore());
 
   let url = $syncStore.connection?.server.url ?? '';
   let isConnecting = false;
@@ -36,7 +39,7 @@
   }
 
   function handleLoginUrl(loginUrl: string, abort: () => void): void {
-    triggerModal(NextcloudLoginModal, {
+    modalHelper.triggerModal(NextcloudLoginModal, {
       props: { loginUrl },
       response: handleLoginCancel.bind(null, abort),
     });

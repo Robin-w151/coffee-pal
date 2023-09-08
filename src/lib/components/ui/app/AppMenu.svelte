@@ -2,15 +2,17 @@
   import { page } from '$app/stores';
   import { routes } from '$lib/config/routes';
   import { faClose } from '@fortawesome/free-solid-svg-icons';
-  import { drawerStore } from '@skeletonlabs/skeleton';
+  import { getDrawerStore } from '@skeletonlabs/skeleton';
   import { Icon } from 'svelte-awesome';
+
+  const drawerStore = getDrawerStore();
+
+  $: routeActiveClass = (href: string) =>
+    $page.url.pathname === href ? 'bg-primary-active-token' : '';
 
   function handleClick(): void {
     drawerStore.close();
   }
-
-  $: routeActiveClass = (href: string) =>
-    $page.url.pathname === href ? 'bg-primary-active-token' : '';
 </script>
 
 <section class="flex flex-col gap-4 p-4">

@@ -1,8 +1,10 @@
 <script lang="ts">
   import { faGithub } from '@fortawesome/free-brands-svg-icons';
   import { faBars, faMugHot } from '@fortawesome/free-solid-svg-icons';
-  import { AppBar, LightSwitch, drawerStore, type DrawerSettings } from '@skeletonlabs/skeleton';
+  import { AppBar, LightSwitch, getDrawerStore, type DrawerSettings } from '@skeletonlabs/skeleton';
   import { Icon } from 'svelte-awesome';
+
+  const drawerStore = getDrawerStore();
 
   function handleMenuClick(): void {
     const drawerSettings: DrawerSettings = {

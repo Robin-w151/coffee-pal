@@ -1,5 +1,49 @@
-@import './theme.scss';
-@import '@skeletonlabs/skeleton/styles/skeleton.css';
+//@import '@skeletonlabs/skeleton/styles/skeleton.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@tailwind variants;
+
+// Theme overrides
+
+[data-theme='coffee'] h2,
+[data-theme='coffee'] h1,
+[data-theme='coffee'] h3,
+[data-theme='coffee'] h4,
+[data-theme='coffee'] h5,
+[data-theme='coffee'] h6,
+[data-theme='coffee'] a,
+[data-theme='coffee'] button {
+  font-weight: bold;
+}
+
+/* Mesh generator: https://csshero.org/mesher/ */
+[data-theme='coffee'] {
+  background-color: hsla(224, 20%, 88%, 1);
+  background-image: radial-gradient(at 27% 15%, hsla(182, 96%, 18%, 0.3) 0px, transparent 50%),
+    radial-gradient(at 17% 79%, hsla(16, 75%, 31%, 0.25) 0px, transparent 50%),
+    radial-gradient(at 92% 6%, hsla(24, 85%, 37%, 0.25) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, hsla(128, 72%, 41%, 0.25) 0px, transparent 50%),
+    radial-gradient(at 78% 49%, hsla(289, 96%, 62%, 0.15) 0px, transparent 50%);
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.dark [data-theme='coffee'] {
+  background-color: hsla(223, 73%, 16%, 1);
+  background-image: radial-gradient(at 27% 15%, hsla(182, 96%, 18%, 0.3) 0px, transparent 50%),
+    radial-gradient(at 17% 79%, hsla(16, 75%, 31%, 0.25) 0px, transparent 50%),
+    radial-gradient(at 92% 6%, hsla(24, 85%, 37%, 0.25) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, hsla(128, 72%, 41%, 0.25) 0px, transparent 50%),
+    radial-gradient(at 78% 49%, hsla(289, 96%, 62%, 0.15) 0px, transparent 50%);
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
 
 // AppShell overrides
 

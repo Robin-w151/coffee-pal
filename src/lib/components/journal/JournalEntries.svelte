@@ -4,8 +4,9 @@
     type ActiveJournalEntry,
     type JournalEntry,
   } from '$lib/models/journal';
-  import { triggerModal } from '$lib/utils/helper';
+  import { ModalHelper } from '$lib/utils/modal';
   import { faFaceSadCry } from '@fortawesome/free-solid-svg-icons';
+  import { getModalStore } from '@skeletonlabs/skeleton';
   import { createEventDispatcher } from 'svelte';
   import { Icon } from 'svelte-awesome';
   import JournalEntryItem from './JournalEntryItem.svelte';
@@ -16,13 +17,17 @@
   export let isLoading = false;
 
   const dispatch = createEventDispatcher();
+  const modalHelper = new ModalHelper(getModalStore());
 
   function handleCopyEntry({ detail: entry }: CustomEvent<ActiveJournalEntry>): void {
-    triggerModal(JournalEntryModal, { props: { entry }, response: handleEntryAdd });
+    modalHelper.triggerModal(JournalEntryModal, { props: { entry }, response: handleEntryAdd });
   }
 
   function handleUpdateEntry({ detail: entry }: CustomEvent<ActiveJournalEntry>): void {
-    triggerModal(JournalEntryModal, { props: { entry, edit: true }, response: handleEntryChange });
+    modalHelper.triggerModal(JournalEntryModal, {
+      props: { entry, edit: true },
+      response: handleEntryChange,
+    });
   }
 
   function handleEntryAdd(entry: ActiveJournalEntry): void {

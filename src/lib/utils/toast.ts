@@ -1,17 +1,21 @@
-import { toastStore, type ToastSettings } from '@skeletonlabs/skeleton';
+import type { ToastSettings, ToastStore } from '@skeletonlabs/skeleton';
 
-export function triggerInfo(message: string, options?: Partial<ToastSettings>): void {
-  toastStore.trigger({
-    ...options,
-    message,
-    background: 'variant-filled-primary',
-  });
-}
+export class ToastHelper {
+  constructor(private readonly store: ToastStore) {}
 
-export function triggerError(message: string, options?: Partial<ToastSettings>): void {
-  toastStore.trigger({
-    ...options,
-    message,
-    background: 'variant-filled-error',
-  });
+  public triggerInfo(message: string, options?: Partial<ToastSettings>): void {
+    this.store.trigger({
+      ...options,
+      message,
+      background: 'variant-filled-primary',
+    });
+  }
+
+  public triggerError(message: string, options?: Partial<ToastSettings>): void {
+    this.store.trigger({
+      ...options,
+      message,
+      background: 'variant-filled-error',
+    });
+  }
 }

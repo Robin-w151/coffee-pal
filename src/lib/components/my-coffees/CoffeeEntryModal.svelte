@@ -1,10 +1,12 @@
 <script lang="ts">
   import type { ActiveCoffeeEntry } from '$lib/models/myCoffees';
-  import { modalStore } from '@skeletonlabs/skeleton';
+  import { getModalStore } from '@skeletonlabs/skeleton';
   import CoffeeEntryDetail from './CoffeeEntryDetail.svelte';
 
   export let entry: ActiveCoffeeEntry | undefined = undefined;
   export let edit = false;
+
+  const modalStore = getModalStore();
 
   function handleChange({ detail: entry }: CustomEvent<ActiveCoffeeEntry>): void {
     $modalStore[0].response?.(entry);
