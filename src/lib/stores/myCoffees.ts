@@ -9,6 +9,7 @@ import {
   type MyCoffeesState,
 } from '$lib/models/myCoffees';
 import type { SyncResult } from '$lib/models/sync';
+import { buildFuseQuery } from '$lib/utils/fuzzy';
 import Dexie, { liveQuery, type Collection, type Table } from 'dexie';
 import Fuse from 'fuse.js';
 import { DateTime } from 'luxon';
@@ -31,12 +32,12 @@ export interface MyCoffeesStore extends Readable<MyCoffeesState> {
 type MyCoffeesCollection = Collection<CoffeeEntry, string>;
 
 const MY_COFFEES_DB_NAME = 'my-coffees';
-const FUSE_OPTIONS: Fuse.IFuseOptions<CoffeeEntry> = {
+const FUSE_OPTIONS = {
   threshold: 0.4,
   ignoreLocation: true,
   findAllMatches: true,
   keys: ['name', 'origin', 'trader', 'aromas', 'description'],
-};
+} satisfies Fuse.IFuseOptions<CoffeeEntry>;
 
 class MyCoffeesDb extends Dexie {
   entries!: Table<CoffeeEntry, string>;
@@ -140,12 +141,17 @@ function createQuery(db: MyCoffeesDb, search: MyCoffeesSearchState) {
 
     const sort = (collection: MyCoffeesCollection) => collection.sortBy('name');
 
-    const filter = (entries: Array<CoffeeEntry>) => {
-      const fuse = new Fuse(entries, FUSE_OPTIONS);
-      return search.filter ? fuse.search(search.filter).map((result) => result.item) : entries;
-    };
-
     const entries = await sort(reverse(db.entries.toCollection()));
-    return filter(entries);
+    return fuzzyFilter(entries, search.filter);
   });
+}
+
+function fuzzyFilter(entries: Array<CoffeeEntry>, filter?: string | null): Array<CoffeeEntry> {
+  if (filter) {
+    const filterQuery = buildFuseQuery(filter, FUSE_OPTIONS.keys);
+    const fuse = new Fuse(entries, FUSE_OPTIONS);
+    return fuse.search(filterQuery).map((result) => result.item);
+  } else {
+    return entries;
+  }
 }

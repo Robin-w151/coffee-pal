@@ -9,6 +9,7 @@ import {
   type JournalState,
 } from '$lib/models/journal';
 import type { SyncResult } from '$lib/models/sync';
+import { buildFuseQuery } from '$lib/utils/fuzzy';
 import Dexie, {
   liveQuery,
   type Collection,
@@ -36,7 +37,7 @@ export interface JournalStore extends Readable<JournalState> {
 type JournalCollection = Collection<JournalEntry, string>;
 
 const JOURNAL_DB_NAME = 'journal';
-const FUSE_OPTIONS: Fuse.IFuseOptions<JournalEntry> = {
+const FUSE_OPTIONS = {
   threshold: 0.4,
   ignoreLocation: true,
   findAllMatches: true,
@@ -49,7 +50,7 @@ const FUSE_OPTIONS: Fuse.IFuseOptions<JournalEntry> = {
     'grindSettings',
     'description',
   ],
-};
+} satisfies Fuse.IFuseOptions<JournalEntry>;
 
 class JournalDb extends Dexie {
   entries!: Table<JournalEntry, string>;
@@ -151,12 +152,17 @@ function createQuery(db: JournalDb, search: JournalSearchState): DxObservable<Ar
 
     const sort = (collection: JournalCollection) => collection.sortBy('method');
 
-    const filter = (entries: Array<JournalEntry>) => {
-      const fuse = new Fuse(entries, FUSE_OPTIONS);
-      return search.filter ? fuse.search(search.filter).map((result) => result.item) : entries;
-    };
-
     const entries = await sort(reverse(db.entries.toCollection()));
-    return filter(entries);
+    return fuzzyFilter(entries, search.filter);
   });
+}
+
+function fuzzyFilter(entries: Array<JournalEntry>, filter?: string | null): Array<JournalEntry> {
+  if (filter) {
+    const filterQuery = buildFuseQuery(filter, FUSE_OPTIONS.keys);
+    const fuse = new Fuse(entries, FUSE_OPTIONS);
+    return fuse.search(filterQuery).map((result) => result.item);
+  } else {
+    return entries;
+  }
 }
