@@ -14,6 +14,7 @@
   } from '@skeletonlabs/skeleton';
   import { pwaInfo } from 'virtual:pwa-info';
   import '../app.scss';
+  import '$lib/stores/app';
 
   initializeStores();
   storePopup.set({ computePosition, autoUpdate, offset, shift, flip, arrow });

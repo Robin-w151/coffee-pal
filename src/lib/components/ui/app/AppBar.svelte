@@ -29,13 +29,5 @@
   </a>
   <div class="flex items-center gap-4" slot="trail">
     <LightSwitch />
-    <a
-      class="btn btn-icon hover:variant-soft-secondary"
-      href="https://github.com/Robin-w151/coffee-pal"
-      target="_blank"
-      rel="noopener"
-    >
-      <Icon data={faGithub} scale={1.5} />
-    </a>
   </div>
 </AppBar>

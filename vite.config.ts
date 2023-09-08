@@ -6,6 +6,7 @@ import { purgeCss } from 'vite-plugin-tailwind-purgecss';
 
 export default defineConfig({
   define: {
+    'import.meta.env.APP_VERSION': JSON.stringify(process.env.npm_package_version),
     'process.env.NODE_ENV': '"production"',
   },
   plugins: [
