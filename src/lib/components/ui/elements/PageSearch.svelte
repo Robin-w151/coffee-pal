@@ -39,9 +39,7 @@
 </script>
 
 <header class="flex justify-between items-center gap-4 px-2 w-full h-12 {headerSearchActiveClass}">
-  <h2 class="h2">
-    {title}
-  </h2>
+  <h2 class="h2">{title}</h2>
   <div class="grid grid-cols-[auto_max-content] items-center gap-2" class:w-full={isSearchActive}>
     {#if isSearchActive}
       <input

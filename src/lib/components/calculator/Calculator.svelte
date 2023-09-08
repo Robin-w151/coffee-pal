@@ -8,6 +8,7 @@
   import Iced from './Iced.svelte';
   import { sanitize } from '$lib/utils/math';
   import PageCard from '../ui/elements/PageCard.svelte';
+  import PageHeader from '../ui/elements/PageHeader.svelte';
 
   let preset: Preset = presets[4];
   let recipe: IRecipe = calculateRecipe(preset);
@@ -86,7 +87,7 @@
   }
 </script>
 
-<h2 class="h2">Brewing Calculator</h2>
+<PageHeader title="Brewing Calculator" />
 <PageCard>
   <Ratios
     ratio={preset.ratio}
