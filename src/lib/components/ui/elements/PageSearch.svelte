@@ -17,7 +17,7 @@
 
   let searchInput = '';
   let searchInputRef: HTMLInputElement;
-  let isSearchActive = true;
+  let isSearchActive = false;
 
   $: handleSearchInputChange(searchInput);
   $: headerSearchActiveClass = isSearchActive
