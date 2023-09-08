@@ -4,7 +4,9 @@ Coffee Pal is a collection of utilities and helpers useful when preparing coffee
 
 Tools:
 
-- Brewing Calculator
+- Calculator
+- Journal
+- MyCoffees
 
 ## Developer
 
