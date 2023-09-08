@@ -3,11 +3,12 @@
 </script>
 
 <script lang="ts">
-  import { faArrowUpAZ, faArrowUpZA, faSearch } from '@fortawesome/free-solid-svg-icons';
+  import { faArrowUpAZ, faArrowUpZA, faClose, faSearch } from '@fortawesome/free-solid-svg-icons';
   import { createEventDispatcher, tick } from 'svelte';
   import { Icon } from 'svelte-awesome';
   import { fade } from 'svelte/transition';
   import { scaleX } from '../transitions/scaleX';
+  import InputButton from './InputButton.svelte';
 
   export let title: string;
   export let sort: PageSearchSort | null = 'asc';
@@ -16,7 +17,7 @@
 
   let searchInput = '';
   let searchInputRef: HTMLInputElement;
-  let isSearchActive = false;
+  let isSearchActive = true;
 
   $: handleSearchInputChange(searchInput);
   $: headerSearchActiveClass = isSearchActive
@@ -33,6 +34,11 @@
     dispatch('searchChange', searchInput);
   }
 
+  function handleSearchInputClearClick(): void {
+    searchInput = '';
+    searchInputRef.focus();
+  }
+
   function handleSortClick(): void {
     dispatch('sortToggle');
   }
@@ -42,14 +48,19 @@
   <h2 class="h2">{title}</h2>
   <div class="grid grid-cols-[auto_max-content] items-center gap-2" class:w-full={isSearchActive}>
     {#if isSearchActive}
-      <input
-        class="input"
-        type="text"
-        placeholder="Search..."
-        bind:value={searchInput}
-        bind:this={searchInputRef}
-        in:scaleX={{ direction: 'left', duration: 250 }}
-      />
+      <InputButton title="Clear" visible={!!searchInput} on:click={handleSearchInputClearClick}>
+        <input
+          class="input"
+          type="text"
+          placeholder="Search..."
+          bind:value={searchInput}
+          bind:this={searchInputRef}
+          in:scaleX={{ direction: 'left', duration: 250 }}
+        />
+        <svelte:fragment slot="button-content">
+          <Icon data={faClose} />
+        </svelte:fragment>
+      </InputButton>
     {:else}
       <button
         class="btn btn-icon variant-ghost-secondary"
