@@ -32,6 +32,7 @@
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-svelte": "^2.33.0",
     "file-saver": "^2.0.5",
+    "fuse.js": "^6.6.2",
     "kolorist": "^1.8.0",
     "luxon": "^3.4.3",
     "postcss": "^8.4.29",

@@ -1,6 +1,5 @@
 import { browser } from '$app/environment';
 import {
-  containsString,
   isActiveCoffeeEntry,
   type ActiveCoffeeEntry,
   type CoffeeEntry,
@@ -11,6 +10,7 @@ import {
 } from '$lib/models/myCoffees';
 import type { SyncResult } from '$lib/models/sync';
 import Dexie, { liveQuery, type Collection, type Table } from 'dexie';
+import Fuse from 'fuse.js';
 import { DateTime } from 'luxon';
 import { BehaviorSubject, switchMap, type Observable } from 'rxjs';
 import { writable, type Readable } from 'svelte/store';
@@ -31,6 +31,12 @@ export interface MyCoffeesStore extends Readable<MyCoffeesState> {
 type MyCoffeesCollection = Collection<CoffeeEntry, string>;
 
 const MY_COFFEES_DB_NAME = 'my-coffees';
+const FUSE_OPTIONS: Fuse.IFuseOptions<CoffeeEntry> = {
+  threshold: 0.4,
+  ignoreLocation: true,
+  findAllMatches: true,
+  keys: ['name', 'origin', 'trader', 'aromas', 'description'],
+};
 
 class MyCoffeesDb extends Dexie {
   entries!: Table<CoffeeEntry, string>;
@@ -71,21 +77,7 @@ function createMyCoffeesStore(myCoffeesSearchStore: MyCoffeesSearchStore): MyCof
   if (browser) {
     const db = (myCoffeesDb = new MyCoffeesDb());
     myCoffeesSearchStore
-      .pipe(
-        switchMap((search) => {
-          return liveQuery(() => {
-            const filter = (collection: MyCoffeesCollection) =>
-              collection.filter((entry) => containsString(entry, search?.filter));
-
-            const reverse = (collection: MyCoffeesCollection) =>
-              search?.sort === 'asc' ? collection : collection.reverse();
-
-            const sort = (collection: MyCoffeesCollection) => collection.sortBy('name');
-
-            return sort(reverse(filter(db.entries.toCollection())));
-          });
-        }),
-      )
+      .pipe(switchMap((search) => createQuery(db, search)))
       .subscribe((entries) => {
         const activeEntries = entries.filter(isActiveCoffeeEntry);
         update((myCoffees) => ({ ...myCoffees, entries, activeEntries, isLoading: false }));
@@ -139,4 +131,21 @@ function createMyCoffeesStore(myCoffeesSearchStore: MyCoffeesSearchStore): MyCof
     undo: undoRemoveEntry,
     apply: applySyncResult,
   };
+}
+
+function createQuery(db: MyCoffeesDb, search: MyCoffeesSearchState) {
+  return liveQuery(async () => {
+    const reverse = (collection: MyCoffeesCollection) =>
+      search?.sort === 'asc' ? collection : collection.reverse();
+
+    const sort = (collection: MyCoffeesCollection) => collection.sortBy('name');
+
+    const filter = (entries: Array<CoffeeEntry>) => {
+      const fuse = new Fuse(entries, FUSE_OPTIONS);
+      return search.filter ? fuse.search(search.filter).map((result) => result.item) : entries;
+    };
+
+    const entries = await sort(reverse(db.entries.toCollection()));
+    return filter(entries);
+  });
 }

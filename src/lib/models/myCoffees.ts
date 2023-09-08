@@ -43,22 +43,3 @@ export function isDeletedCoffeeEntry(
 ): entry is DeletedCoffeeEntry {
   return (entry as DeletedCoffeeEntry)?.deletedAt !== undefined;
 }
-
-export function containsString(entry: CoffeeEntry, filter?: string | null): boolean {
-  if (!filter) {
-    return true;
-  }
-
-  if (!isActiveCoffeeEntry(entry)) {
-    return false;
-  }
-
-  const regexps = filter
-    .split(' ')
-    .filter((s) => !!s)
-    .map((s) => new RegExp(s, 'i'));
-  const { name, origin, trader, aromas, description } = entry;
-  return [name, origin, trader, ...aromas, description]
-    .filter((s) => !!s)
-    .some((s) => regexps.some((r) => r.test(s as string)));
-}

@@ -1,6 +1,5 @@
 import { browser } from '$app/environment';
 import {
-  containsString,
   isActiveJournalEntry,
   type ActiveJournalEntry,
   type DeletedJournalEntry,
@@ -10,7 +9,13 @@ import {
   type JournalState,
 } from '$lib/models/journal';
 import type { SyncResult } from '$lib/models/sync';
-import Dexie, { liveQuery, type Collection, type Table } from 'dexie';
+import Dexie, {
+  liveQuery,
+  type Collection,
+  type Observable as DxObservable,
+  type Table,
+} from 'dexie';
+import Fuse from 'fuse.js';
 import { DateTime } from 'luxon';
 import { BehaviorSubject, switchMap, type Observable } from 'rxjs';
 import { writable, type Readable } from 'svelte/store';
@@ -31,6 +36,20 @@ export interface JournalStore extends Readable<JournalState> {
 type JournalCollection = Collection<JournalEntry, string>;
 
 const JOURNAL_DB_NAME = 'journal';
+const FUSE_OPTIONS: Fuse.IFuseOptions<JournalEntry> = {
+  threshold: 0.4,
+  ignoreLocation: true,
+  findAllMatches: true,
+  keys: [
+    'method',
+    'water',
+    'waterTemperature',
+    'coffee',
+    'coffeeType',
+    'grindSettings',
+    'description',
+  ],
+};
 
 class JournalDb extends Dexie {
   entries!: Table<JournalEntry, string>;
@@ -70,26 +89,10 @@ function createJournalStore(journalSearchStore: JournalSearchStore): JournalStor
 
   if (browser) {
     const db = (journalDb = new JournalDb());
-    journalSearchStore
-      .pipe(
-        switchMap((search) => {
-          return liveQuery(() => {
-            const filter = (collection: JournalCollection) =>
-              collection.filter((entry) => containsString(entry, search?.filter));
-
-            const reverse = (collection: JournalCollection) =>
-              search?.sort === 'asc' ? collection : collection.reverse();
-
-            const sort = (collection: JournalCollection) => collection.sortBy('method');
-
-            return sort(reverse(filter(db.entries.toCollection())));
-          });
-        }),
-      )
-      .subscribe((entries) => {
-        const activeEntries = entries.filter(isActiveJournalEntry);
-        update((journal) => ({ ...journal, entries, activeEntries, isLoading: false }));
-      });
+    journalSearchStore.pipe(switchMap((search) => createQuery(db, search))).subscribe((entries) => {
+      const activeEntries = entries.filter(isActiveJournalEntry);
+      update((journal) => ({ ...journal, entries, activeEntries, isLoading: false }));
+    });
   }
 
   function addEntry(entry: ActiveJournalEntry): void {
@@ -139,4 +142,21 @@ function createJournalStore(journalSearchStore: JournalSearchStore): JournalStor
     undo: undoRemoveEntry,
     apply: applySyncResult,
   };
+}
+
+function createQuery(db: JournalDb, search: JournalSearchState): DxObservable<Array<JournalEntry>> {
+  return liveQuery(async () => {
+    const reverse = (collection: JournalCollection) =>
+      search?.sort === 'asc' ? collection : collection.reverse();
+
+    const sort = (collection: JournalCollection) => collection.sortBy('method');
+
+    const filter = (entries: Array<JournalEntry>) => {
+      const fuse = new Fuse(entries, FUSE_OPTIONS);
+      return search.filter ? fuse.search(search.filter).map((result) => result.item) : entries;
+    };
+
+    const entries = await sort(reverse(db.entries.toCollection()));
+    return filter(entries);
+  });
 }
