@@ -21,6 +21,9 @@ FROM oven/bun AS deploy-stage
 WORKDIR /app/
 
 COPY --from=build-stage /app/build/ /app/
+RUN chown -R 10000:10000 /app/
+
+USER 10000:10000
 
 EXPOSE 3000
 
