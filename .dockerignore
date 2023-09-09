@@ -1,0 +1,4 @@
+.svelte-kit/
+.vscode/
+.yarn/
+node_modules/
