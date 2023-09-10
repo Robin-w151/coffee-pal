@@ -42,7 +42,19 @@
   function handleSortClick(): void {
     dispatch('sortToggle');
   }
+
+  async function handleKeyDown(event: KeyboardEvent): Promise<void> {
+    const { key, ctrlKey, metaKey } = event;
+    if (key === 'k' && (ctrlKey || metaKey)) {
+      event.preventDefault();
+      isSearchActive = true;
+      await tick();
+      searchInputRef.focus();
+    }
+  }
 </script>
+
+<svelte:window on:keydown={handleKeyDown} />
 
 <header class="flex justify-between items-center gap-4 px-2 w-full h-12 {headerSearchActiveClass}">
   <h2 class="h2">{title}</h2>
