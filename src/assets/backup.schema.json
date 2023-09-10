@@ -1,0 +1,116 @@
+{
+  "$ref": "#/definitions/Backup",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "ActiveJournalEntry": {
+      "additionalProperties": false,
+      "properties": {
+        "coffee": {
+          "type": "number"
+        },
+        "coffeeType": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "grindSettings": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "method": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string"
+        },
+        "water": {
+          "type": "number"
+        },
+        "waterTemperature": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "id",
+        "method",
+        "water",
+        "coffee",
+        "createdAt",
+        "updatedAt"
+      ],
+      "type": "object"
+    },
+    "Backup": {
+      "additionalProperties": false,
+      "properties": {
+        "journal": {
+          "$ref": "#/definitions/Journal"
+        },
+        "myCoffees": {
+          "$ref": "#/definitions/MyCoffees"
+        }
+      },
+      "type": "object"
+    },
+    "DeletedJournalEntry": {
+      "additionalProperties": false,
+      "properties": {
+        "deletedAt": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "deletedAt"
+      ],
+      "type": "object"
+    },
+    "Journal": {
+      "additionalProperties": false,
+      "properties": {
+        "entries": {
+          "items": {
+            "$ref": "#/definitions/JournalEntry"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "entries"
+      ],
+      "type": "object"
+    },
+    "JournalEntry": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/ActiveJournalEntry"
+        },
+        {
+          "$ref": "#/definitions/DeletedJournalEntry"
+        }
+      ]
+    },
+    "MyCoffees": {
+      "additionalProperties": false,
+      "properties": {
+        "entries": {
+          "items": {},
+          "type": "array"
+        }
+      },
+      "required": [
+        "entries"
+      ],
+      "type": "object"
+    }
+  }
+}

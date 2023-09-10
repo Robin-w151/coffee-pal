@@ -12,8 +12,8 @@ export async function readJsonFile(file: File): Promise<any> {
       try {
         const data = JSON.parse(event.target?.result as string);
         resolve(data);
-      } catch (_) {
-        reject();
+      } catch (error) {
+        reject(new Error('Failed to read file!'));
       }
     };
     reader.readAsText(file);

@@ -1,15 +1,7 @@
 <script lang="ts">
-  import type { Backup } from '$lib/models/backup';
-  import {
-    isActiveJournalEntry,
-    type ActiveJournalEntry,
-    type DeletedJournalEntry,
-  } from '$lib/models/journal';
-  import {
-    isActiveCoffeeEntry,
-    type ActiveCoffeeEntry,
-    type DeletedCoffeeEntry,
-  } from '$lib/models/myCoffees';
+  import { isValidBackup, type Backup } from '$lib/models/backup';
+  import type { ActiveJournalEntry, DeletedJournalEntry } from '$lib/models/journal';
+  import type { ActiveCoffeeEntry, DeletedCoffeeEntry } from '$lib/models/myCoffees';
   import { journalStore } from '$lib/stores/journal';
   import { myCoffeesStore } from '$lib/stores/myCoffees';
   import { readJsonFile, writeJsonFile } from '$lib/utils/file';
@@ -43,8 +35,8 @@
     }
 
     try {
-      const backup = await readJsonFile(files[0]);
-      checkValidBackup(backup);
+      const backup = (await readJsonFile(files[0])) as Backup;
+      validateBackup(backup);
 
       const { journal, myCoffees } = backup;
 
@@ -66,45 +58,14 @@
 
       files = undefined;
       toastHelper.triggerInfo('Importing backup data was successful');
-    } catch (error) {
-      toastHelper.triggerError(
-        'Importing backup data failed. Make sure you selected the correct file!',
-      );
+    } catch (error: unknown) {
+      toastHelper.triggerError(`Importing backup data failed. ${(error as Error).message}`);
     }
   }
 
-  function checkValidBackup(backup: Backup): void {
-    const emptyMessage = 'Backup empty!';
-    const corruptedMessage = 'Backup data corrupted!';
-
-    if (!backup) {
-      throw new Error(emptyMessage);
-    }
-
-    const { journal, myCoffees } = backup;
-
-    if (journal && !Array.isArray(journal.entries)) {
-      throw new Error(corruptedMessage);
-    }
-
-    if (journal) {
-      for (const entry of journal.entries) {
-        if (!isActiveJournalEntry(entry)) {
-          throw new Error(corruptedMessage);
-        }
-      }
-    }
-
-    if (myCoffees && !Array.isArray(myCoffees.entries)) {
-      throw new Error(corruptedMessage);
-    }
-
-    if (myCoffees) {
-      for (const entry of myCoffees.entries) {
-        if (!isActiveCoffeeEntry(entry)) {
-          throw new Error(corruptedMessage);
-        }
-      }
+  function validateBackup(backup: Backup): void {
+    if (!isValidBackup(backup)) {
+      throw new Error('Backup data is invalid!');
     }
   }
 </script>
