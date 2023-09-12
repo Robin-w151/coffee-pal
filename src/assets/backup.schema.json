@@ -36,14 +36,7 @@
           "type": "number"
         }
       },
-      "required": [
-        "id",
-        "method",
-        "water",
-        "coffee",
-        "createdAt",
-        "updatedAt"
-      ],
+      "required": ["id", "method", "water", "coffee", "createdAt", "updatedAt"],
       "type": "object"
     },
     "Backup": {
@@ -68,10 +61,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "id",
-        "deletedAt"
-      ],
+      "required": ["id", "deletedAt"],
       "type": "object"
     },
     "Journal": {
@@ -84,9 +74,7 @@
           "type": "array"
         }
       },
-      "required": [
-        "entries"
-      ],
+      "required": ["entries"],
       "type": "object"
     },
     "JournalEntry": {
@@ -107,9 +95,7 @@
           "type": "array"
         }
       },
-      "required": [
-        "entries"
-      ],
+      "required": ["entries"],
       "type": "object"
     }
   }
