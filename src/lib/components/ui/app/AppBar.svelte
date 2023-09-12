@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { faGithub } from '@fortawesome/free-brands-svg-icons';
   import { faBars, faMugHot } from '@fortawesome/free-solid-svg-icons';
   import { AppBar, LightSwitch, getDrawerStore, type DrawerSettings } from '@skeletonlabs/skeleton';
   import { Icon } from 'svelte-awesome';
