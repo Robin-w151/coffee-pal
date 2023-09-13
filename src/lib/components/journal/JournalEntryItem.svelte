@@ -44,11 +44,19 @@
     </dd>
   </span>
   <span class="flex gap-2">
-    <button class="btn btn-icon hover:variant-soft-secondary" on:click={handleCopyClick}>
+    <button
+      class="btn btn-icon hover:variant-soft-secondary"
+      title="Repeat"
+      on:click={handleCopyClick}
+    >
       <Icon data={faRotateRight} />
       <span class="sr-only">Repeat</span>
     </button>
-    <button class="btn btn-icon hover:variant-soft-secondary" on:click={handleUpdateClick}>
+    <button
+      class="btn btn-icon hover:variant-soft-secondary"
+      title="Edit"
+      on:click={handleUpdateClick}
+    >
       <Icon data={faPencil} />
       <span class="sr-only">Edit</span>
     </button>

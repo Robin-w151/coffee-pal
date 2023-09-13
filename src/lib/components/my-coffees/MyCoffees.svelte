@@ -6,12 +6,10 @@
   import { ModalHelper } from '$lib/utils/modal';
   import { sync } from '$lib/utils/sync';
   import { ToastHelper } from '$lib/utils/toast';
-  import { faPlus, faRotate } from '@fortawesome/free-solid-svg-icons';
   import { getModalStore, getToastStore } from '@skeletonlabs/skeleton';
-  import { Icon } from 'svelte-awesome';
+  import PageActions from '../ui/elements/PageActions.svelte';
   import PageCard from '../ui/elements/PageCard.svelte';
   import PageSearch from '../ui/elements/PageSearch.svelte';
-  import Spinner from '../ui/elements/Spinner.svelte';
   import CoffeeEntries from './CoffeeEntries.svelte';
   import CoffeeEntryModal from './CoffeeEntryModal.svelte';
 
@@ -57,29 +55,12 @@
   }
 </script>
 
-<div class="page-actions-token">
-  {#if $syncStore.connection}
-    <button
-      class="btn btn-icon btn-icon-lg variant-filled-primary shadow-xl"
-      on:click={handleSyncClick}
-    >
-      {#if $syncStateStore.isSynchronizing}
-        <Spinner color="white" />
-      {:else}
-        <Icon data={faRotate} scale={1.25} />
-        <span class="sr-only">Synchronize</span>
-      {/if}
-    </button>
-  {/if}
-  <button
-    class="btn btn-icon btn-icon-xl variant-filled-primary shadow-xl"
-    on:click={handleAddClick}
-  >
-    <Icon data={faPlus} scale={1.5} />
-    <span class="sr-only">Add</span>
-  </button>
-</div>
-
+<PageActions
+  isSyncEnabled={!!$syncStore.connection}
+  isSynchronizing={$syncStateStore.isSynchronizing}
+  on:add={handleAddClick}
+  on:synchronize={handleSyncClick}
+/>
 <PageSearch
   title="My Coffees"
   sort={$myCoffeesSearchStore.sort}

@@ -117,6 +117,7 @@
     <h3 class="h3">{edit ? 'Edit' : 'Add'} Entry</h3>
     <button
       class="btn btn-icon hover:variant-soft-secondary float-right"
+      title="Close"
       on:click={handleCancelClick}
     >
       <Icon data={faClose} />

@@ -76,6 +76,7 @@
     {:else}
       <button
         class="btn btn-icon variant-ghost-secondary"
+        title="Search"
         on:click={handleSearchClick}
         in:fade={{ duration: 250 }}
       >
@@ -84,6 +85,7 @@
     {/if}
     <button
       class="btn btn-icon {isSearchActive ? 'variant-filled-primary' : 'variant-ghost-secondary'}"
+      title="Change sort order"
       on:click={handleSortClick}
     >
       {#if sort === 'asc'}
