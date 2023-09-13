@@ -1,22 +1,25 @@
 <script lang="ts">
-  import type { UrlInputChange } from '$lib/models/url-input';
+  import type { Scheme, UrlInputChange } from '$lib/models/url-input';
   import { HOST_REGEXP } from '$lib/utils/regexp';
+  import { faLock, faLockOpen } from '@fortawesome/free-solid-svg-icons';
   import { createEventDispatcher } from 'svelte';
+  import { Icon } from 'svelte-awesome';
 
   export let url: string | undefined = undefined;
   export let placeholder: string | undefined = undefined;
   export let readonly = false;
 
-  const availableSchemes = ['https:', 'http:'];
+  const availableSchemes = ['https:', 'http:'] satisfies Array<Scheme>;
   const dispatch = createEventDispatcher();
 
   let [scheme, host] = getSchemeAndHost(url);
   let inputTouched = false;
 
   $: hostValid = isHostValid(host);
+  $: schemeIcon = scheme === 'https:' ? faLock : faLockOpen;
   $: handleChange(scheme, host);
 
-  function handleChange(scheme: string, host: string): void {
+  function handleChange(scheme: Scheme, host: string): void {
     const change = {
       url: `${scheme}//${host}`,
       scheme,
@@ -35,13 +38,13 @@
     return HOST_REGEXP.test(url);
   }
 
-  function getSchemeAndHost(url?: string | null): [string, string] {
+  function getSchemeAndHost(url?: string | null): [Scheme, string] {
     if (!url) {
       return [availableSchemes[0], ''];
     }
 
     const parsedUrl = new URL(url);
-    return [parsedUrl.protocol, parsedUrl.host];
+    return [parsedUrl.protocol as Scheme, parsedUrl.host];
   }
 </script>
 
@@ -50,7 +53,9 @@
   class:input-error={inputTouched && !hostValid}
 >
   {#if readonly}
-    <div class="input-group-shim">{scheme}//</div>
+    <div class="input-group-shim">
+      <Icon data={schemeIcon} />
+    </div>
   {:else}
     <select bind:value={scheme}>
       {#each availableSchemes as availableScheme}
