@@ -49,10 +49,14 @@
   class="input-group input-group-divider grid-cols-[auto_1fr]"
   class:input-error={inputTouched && !hostValid}
 >
-  <select disabled={readonly} bind:value={scheme}>
-    {#each availableSchemes as availableScheme}
-      <option value={availableScheme}>{availableScheme}//</option>
-    {/each}
-  </select>
+  {#if readonly}
+    <div class="input-group-shim">{scheme}//</div>
+  {:else}
+    <select bind:value={scheme}>
+      {#each availableSchemes as availableScheme}
+        <option value={availableScheme}>{availableScheme}//</option>
+      {/each}
+    </select>
+  {/if}
   <input type="text" {placeholder} {readonly} bind:value={host} on:blur={handleInputBlur} />
 </div>
