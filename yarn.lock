@@ -1837,23 +1837,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@skeletonlabs/skeleton@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "@skeletonlabs/skeleton@npm:2.0.0"
+"@skeletonlabs/skeleton@npm:^2.1.0":
+  version: 2.1.0
+  resolution: "@skeletonlabs/skeleton@npm:2.1.0"
   dependencies:
     esm-env: 1.0.0
   peerDependencies:
     svelte: ^3.56.0 || ^4.0.0
-  checksum: 2469707fbfe6f3e58abec787d981914cdf32d9e924befcdb9410ea49e8b563b187ad16e8af4e688670a907a6e062b649fc4bca92078557901db1f746170dbc5f
+  checksum: 275e00b2f34426bc0c70ed86b5b6243036e81da7e0dfc7fd991957b922a780b13fa6e5b8ed3d23f63730cdc9d09000158874b0609de56d6f46feda86e6c6d552
   languageName: node
   linkType: hard
 
-"@skeletonlabs/tw-plugin@npm:^0.1.0":
-  version: 0.1.0
-  resolution: "@skeletonlabs/tw-plugin@npm:0.1.0"
+"@skeletonlabs/tw-plugin@npm:^0.2.0":
+  version: 0.2.0
+  resolution: "@skeletonlabs/tw-plugin@npm:0.2.0"
   peerDependencies:
     tailwindcss: ">=3.0.0"
-  checksum: b80962f4496255f800fb21ad6fb93dc0fc76e7a5f9173350334f127ad4d46a3a1bda5076a1bce9952d506fe920e67b1e927e5c103ccc76cd845ffc621fb29073
+  checksum: 34050bfbed51d70ca9fbdc8386a9c6ff1af382120120a2e55f7e8c0efad508be92154502328d193c4c4cd6e038f890baab9707ce21e88116b84087f5c75b09ba
   languageName: node
   linkType: hard
 
@@ -1880,9 +1880,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sveltejs/kit@npm:^1.24.1":
-  version: 1.24.1
-  resolution: "@sveltejs/kit@npm:1.24.1"
+"@sveltejs/kit@npm:^1.25.0":
+  version: 1.25.0
+  resolution: "@sveltejs/kit@npm:1.25.0"
   dependencies:
     "@sveltejs/vite-plugin-svelte": ^2.4.1
     "@types/cookie": ^0.5.1
@@ -1902,7 +1902,7 @@ __metadata:
     vite: ^4.0.0
   bin:
     svelte-kit: svelte-kit.js
-  checksum: 55ad8e13894b124e1f74bffa55b1de309197ee2d86510cfc3d0a5c6d9c67a7e00ebbc909f65c9ca136d51336863c5671080e9c083834aeba80d1d263cc30f668
+  checksum: e35821fdf7f57b9e41b87a05bd2685e1b09dec4dcad70de6ab11dea9d6026b6f8bd3ffccae9fabcb4cc98e0ac4664c1bc80879f938a786446ffd7cea2f3b46ae
   languageName: node
   linkType: hard
 
@@ -2725,10 +2725,10 @@ __metadata:
     "@fortawesome/free-brands-svg-icons": ^6.4.2
     "@fortawesome/free-regular-svg-icons": ^6.4.2
     "@fortawesome/free-solid-svg-icons": ^6.4.2
-    "@skeletonlabs/skeleton": ^2.0.0
-    "@skeletonlabs/tw-plugin": ^0.1.0
+    "@skeletonlabs/skeleton": ^2.1.0
+    "@skeletonlabs/tw-plugin": ^0.2.0
     "@sveltejs/adapter-auto": ^2.1.0
-    "@sveltejs/kit": ^1.24.1
+    "@sveltejs/kit": ^1.25.0
     "@tailwindcss/forms": ^0.5.6
     "@types/file-saver": ^2.0.5
     "@types/luxon": ^3.3.2
