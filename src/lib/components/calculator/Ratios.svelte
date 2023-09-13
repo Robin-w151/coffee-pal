@@ -3,7 +3,7 @@
   import type { Preset } from '$lib/models/preset';
   import { createEventDispatcher } from 'svelte';
   import presets from '$assets/presets.json';
-  import Label from '../ui/elements/Label.svelte';
+  import Label from '../ui/elements/form/Label.svelte';
 
   export let ratio: Ratio | undefined;
 

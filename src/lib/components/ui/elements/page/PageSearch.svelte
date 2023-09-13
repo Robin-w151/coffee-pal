@@ -7,8 +7,8 @@
   import { createEventDispatcher, tick } from 'svelte';
   import { Icon } from 'svelte-awesome';
   import { fade } from 'svelte/transition';
-  import { scaleX } from '../transitions/scaleX';
-  import InputButton from './InputButton.svelte';
+  import { scaleX } from '../../transitions/scaleX';
+  import InputButton from '../form/InputButton.svelte';
 
   export let title: string;
   export let sort: PageSearchSort | null = 'asc';

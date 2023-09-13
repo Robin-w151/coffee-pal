@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { Recipe } from '$lib/models/recipe';
   import { createEventDispatcher } from 'svelte';
-  import Label from '../ui/elements/Label.svelte';
+  import Label from '../ui/elements/form/Label.svelte';
 
   export let recipe: Recipe;
 

@@ -7,8 +7,8 @@
   import presets from '$assets/presets.json';
   import Iced from './Iced.svelte';
   import { sanitize } from '$lib/utils/math';
-  import PageCard from '../ui/elements/PageCard.svelte';
-  import PageHeader from '../ui/elements/PageHeader.svelte';
+  import PageCard from '../ui/elements/page/PageCard.svelte';
+  import PageHeader from '../ui/elements/page/PageHeader.svelte';
 
   let preset: Preset = presets[4];
   let recipe: IRecipe = calculateRecipe(preset);

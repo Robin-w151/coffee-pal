@@ -7,9 +7,9 @@
   import { sync } from '$lib/utils/sync';
   import { ToastHelper } from '$lib/utils/toast';
   import { getModalStore, getToastStore } from '@skeletonlabs/skeleton';
-  import PageActions from '../ui/elements/PageActions.svelte';
-  import PageCard from '../ui/elements/PageCard.svelte';
-  import PageSearch from '../ui/elements/PageSearch.svelte';
+  import PageActions from '../ui/elements/page/PageActions.svelte';
+  import PageCard from '../ui/elements/page/PageCard.svelte';
+  import PageSearch from '../ui/elements/page/PageSearch.svelte';
   import JournalEntries from './JournalEntries.svelte';
   import JournalEntryModal from './JournalEntryModal.svelte';
 

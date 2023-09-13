@@ -2,7 +2,7 @@
   import { faPlus, faRotate } from '@fortawesome/free-solid-svg-icons';
   import { createEventDispatcher } from 'svelte';
   import { Icon } from 'svelte-awesome';
-  import Spinner from './Spinner.svelte';
+  import Spinner from '../Spinner.svelte';
 
   export let isSyncEnabled = false;
   export let isSynchronizing = false;

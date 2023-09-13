@@ -1,7 +1,7 @@
 <script lang="ts">
   import { sanitize } from '$lib/utils/math';
   import { RangeSlider, SlideToggle } from '@skeletonlabs/skeleton';
-  import Label from '../ui/elements/Label.svelte';
+  import Label from '../ui/elements/form/Label.svelte';
 
   export let water: number;
 

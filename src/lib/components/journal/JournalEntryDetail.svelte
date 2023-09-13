@@ -14,9 +14,9 @@
   import { createEventDispatcher } from 'svelte';
   import { Icon } from 'svelte-awesome';
   import { v4 as uuid } from 'uuid';
-  import Form from '../ui/elements/Form.svelte';
-  import Label from '../ui/elements/Label.svelte';
-  import ResponsiveButton from '../ui/elements/ResponsiveButton.svelte';
+  import Form from '../ui/elements/form/Form.svelte';
+  import Label from '../ui/elements/form/Label.svelte';
+  import ResponsiveButton from '../ui/elements/form/ResponsiveButton.svelte';
 
   export let entry: Partial<ActiveJournalEntry> = {
     id: uuid(),

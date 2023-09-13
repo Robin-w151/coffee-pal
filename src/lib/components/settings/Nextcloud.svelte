@@ -6,30 +6,37 @@
   import { ModalHelper } from '$lib/utils/modal';
   import { sync } from '$lib/utils/sync';
   import { getModalStore } from '@skeletonlabs/skeleton';
-  import Form from '../ui/elements/Form.svelte';
-  import Label from '../ui/elements/Label.svelte';
   import Spinner from '../ui/elements/Spinner.svelte';
+  import Form from '../ui/elements/form/Form.svelte';
+  import Label from '../ui/elements/form/Label.svelte';
+  import UrlInput from '../ui/elements/form/UrlInput.svelte';
   import NextcloudLoginModal from './NextcloudLoginModal.svelte';
+  import type { UrlInputChange } from '$lib/models/url-input';
 
   const modalHelper = new ModalHelper(getModalStore());
 
-  let url = $syncStore.connection?.server.url ?? '';
+  let url = $syncStore.connection?.server.url;
+  let hostValid = !!url;
   let isConnecting = false;
   let abortLogin: () => void | undefined;
 
-  $: urlValid = isUrlValid(url);
   $: connected = !!$syncStore.connection;
   $: showSpinner = isConnecting || $syncStateStore.isSynchronizing;
+
+  function handleUrlChange({ detail: change }: CustomEvent<UrlInputChange>): void {
+    url = change.url;
+    hostValid = change.hostValid;
+  }
 
   async function handleConnectClick(): Promise<void> {
     abortLogin?.();
 
     isConnecting = true;
     const nextcloudClient = new NextcloudLoginClient();
-    const { loginUrl, credentials, abort } = await nextcloudClient.login(url);
+    const { loginUrl, credentials, abort } = await nextcloudClient.login(url!);
     abortLogin = abort;
 
-    handleLoginUrl(loginUrl, abort);
+    handleLoginStart(loginUrl, abort);
 
     try {
       await handleCredentials(credentials);
@@ -38,7 +45,7 @@
     }
   }
 
-  function handleLoginUrl(loginUrl: string, abort: () => void): void {
+  function handleLoginStart(loginUrl: string, abort: () => void): void {
     modalHelper.triggerModal(NextcloudLoginModal, {
       props: { loginUrl },
       response: handleLoginCancel.bind(null, abort),
@@ -55,7 +62,7 @@
     const { loginName, appPassword } = await credentials;
     syncStore.setConnection({
       server: {
-        url,
+        url: url!,
         provider: 'nextcloud',
       },
       credentials: {
@@ -72,12 +79,6 @@
   function handleSyncClick(): void {
     sync();
   }
-
-  function isUrlValid(url: string): boolean {
-    return /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()!@:%_+.~#?&//=]*)/.test(
-      url,
-    );
-  }
 </script>
 
 <div class="flex justify-between items-center">
@@ -88,18 +89,17 @@
 </div>
 <Form>
   <Label text="Nextcloud Server URL">
-    <input
-      class="input"
-      type="url"
-      placeholder="Nextcloud Server URL, e.g. https://example.nextcloud.com"
+    <UrlInput
+      url={$syncStore.connection?.server.url}
+      placeholder="Nextcloud Server URL, e.g. example.nextcloud.com"
       readonly={connected}
-      bind:value={url}
+      on:change={handleUrlChange}
     />
   </Label>
   <div class="flex justify-end gap-2">
     {#if connected}
       <button
-        class="btn variant-soft-error"
+        class="btn variant-filled-error"
         type="button"
         title="Disconnect Nextcloud Sync"
         on:click={handleDisconnectClick}
@@ -116,7 +116,7 @@
       <button
         class="btn variant-filled-primary"
         title="Enable Sync via Nextcloud"
-        disabled={!urlValid}
+        disabled={!hostValid}
         on:click={handleConnectClick}
       >
         Connect

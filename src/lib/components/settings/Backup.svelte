@@ -12,7 +12,7 @@
   import { FileDropzone, getToastStore } from '@skeletonlabs/skeleton';
   import { DateTime } from 'luxon';
   import { Icon } from 'svelte-awesome';
-  import Form from '../ui/elements/Form.svelte';
+  import Form from '../ui/elements/form/Form.svelte';
 
   const toastHelper = new ToastHelper(getToastStore());
 
@@ -87,7 +87,7 @@
   </FileDropzone>
   <div class="flex justify-end gap-2">
     <button
-      class="btn variant-filled-secondary"
+      class="btn variant-ghost-primary"
       type="button"
       title="Export Data"
       on:click={handleExportClick}>Export</button
