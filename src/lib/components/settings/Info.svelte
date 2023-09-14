@@ -17,7 +17,7 @@
     <li class={itemClass}>
       <span>Version</span>
       <a
-        href="https://github.com/Robin-w151/coffee-pal/commit/{appCommitHash}"
+        href="https://github.com/Robin-w151/coffee-pal/tree/{appCommitHash}"
         target="_blank"
         rel="noopener">{appVersion} ({appCommitHash})</a
       >
