@@ -12,7 +12,7 @@
 </script>
 
 <h3 class="h3">Info</h3>
-<div class="flex justify-between items-end">
+<div class="flex flex-col sm:flex-row justify-between sm:items-end gap-4">
   <ul class="grid grid-cols-[max-content_max-content] gap-x-8 gap-y-2">
     <li class={itemClass}>
       <span>Version</span>
