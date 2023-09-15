@@ -20,8 +20,8 @@
   <form class="flex flex-col gap-4">
     <RangeSlider
       name="ice-ratio"
-      min={30}
-      max={70}
+      min={0}
+      max={100}
       accent="range-slider-accent-token"
       bind:value={iceRatio}
     >
