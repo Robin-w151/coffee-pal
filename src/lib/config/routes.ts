@@ -7,11 +7,6 @@ import {
 
 export const routes = [
   {
-    href: '/',
-    label: 'Calculator',
-    icon: faCalculator,
-  },
-  {
     href: '/journal',
     label: 'Journal',
     icon: faClipboardList,
@@ -22,8 +17,15 @@ export const routes = [
     icon: faSeedling,
   },
   {
+    href: '/calculator',
+    label: 'Calculator',
+    icon: faCalculator,
+  },
+  {
     href: '/settings',
     label: 'Settings',
     icon: faGear,
   },
 ];
+
+export const mainRoute = routes[0];

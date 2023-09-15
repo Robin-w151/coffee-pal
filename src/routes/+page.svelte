@@ -1,9 +1,9 @@
 <script lang="ts">
-  import Calculator from '$lib/components/calculator/Calculator.svelte';
+  import { browser } from '$app/environment';
+  import { goto } from '$app/navigation';
+  import { mainRoute } from '$lib/config/routes';
+
+  if (browser) {
+    goto(mainRoute.href);
+  }
 </script>
-
-<svelte:head>
-  <title>Coffee Pal - Calculator</title>
-</svelte:head>
-
-<Calculator />
