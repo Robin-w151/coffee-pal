@@ -7,7 +7,7 @@ export default {
   description: 'Collection of tools related to preparing coffee.',
   categories: ['productivity', 'utilities'],
   id: '/',
-  start_url: mainRoute.href,
+  start_url: `..${mainRoute.href}`,
   lang: 'en-US',
   display: 'standalone',
   orientation: 'any',
