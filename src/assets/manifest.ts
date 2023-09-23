@@ -1,4 +1,4 @@
-import { mainRoute } from '$lib/config/routes';
+import { mainRoute } from '../lib/config/routes';
 import type { ManifestOptions } from 'vite-plugin-pwa';
 
 export default {
