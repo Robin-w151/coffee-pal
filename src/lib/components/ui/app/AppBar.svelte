@@ -17,8 +17,13 @@
 
 <AppBar padding="px-4 py-2 md:py-4" shadow="shadow-xl">
   <svelte:fragment slot="lead">
-    <button class="btn btn-icon hover:variant-soft-secondary md:hidden" on:click={handleMenuClick}>
+    <button
+      class="btn btn-icon hover:variant-soft-secondary md:hidden"
+      title="App menu"
+      on:click={handleMenuClick}
+    >
       <Icon data={faBars} scale={1.5} />
+      <span class="sr-only">App menu</span>
     </button>
   </svelte:fragment>
   <a class="flex items-center gap-4 w-fit" href={mainRoute.href}>
