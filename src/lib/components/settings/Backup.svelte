@@ -13,10 +13,12 @@
   import { DateTime } from 'luxon';
   import { Icon } from 'svelte-awesome';
   import Form from '../ui/elements/form/Form.svelte';
+  import Spinner from '../ui/elements/Spinner.svelte';
 
   const toastHelper = new ToastHelper(getToastStore());
 
   let files: FileList | undefined;
+  let isImporting = false;
 
   $: fileSelected = files?.length && files.length > 0;
 
@@ -33,6 +35,8 @@
     if (!files?.length) {
       return;
     }
+
+    isImporting = true;
 
     try {
       const backup = (await readJsonFile(files[0])) as Backup;
@@ -60,6 +64,8 @@
       toastHelper.triggerInfo('Importing backup data was successful');
     } catch (error: unknown) {
       toastHelper.triggerError(`Importing backup data failed. ${(error as Error).message}`);
+    } finally {
+      isImporting = false;
     }
   }
 
@@ -70,7 +76,12 @@
   }
 </script>
 
-<h3 class="h3">Backup</h3>
+<div class="flex justify-between items-center">
+  <h3 class="h3">Backup</h3>
+  {#if isImporting}
+    <Spinner />
+  {/if}
+</div>
 <Form>
   <FileDropzone name="import-file-input" accept="application/json" bind:files>
     <svelte:fragment slot="lead">
