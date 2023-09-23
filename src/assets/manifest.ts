@@ -1,3 +1,4 @@
+import { mainRoute } from '$lib/config/routes';
 import type { ManifestOptions } from 'vite-plugin-pwa';
 
 export default {
@@ -6,7 +7,7 @@ export default {
   description: 'Collection of tools related to preparing coffee.',
   categories: ['productivity', 'utilities'],
   id: '/',
-  start_url: '/',
+  start_url: mainRoute.href,
   lang: 'en-US',
   display: 'standalone',
   orientation: 'any',
