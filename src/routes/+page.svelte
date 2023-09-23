@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { browser } from '$app/environment';
-  import { goto } from '$app/navigation';
-  import { mainRoute } from '$lib/config/routes';
-
-  if (browser) {
-    goto(mainRoute.href);
-  }
+  import Journal from '$lib/components/journal/Journal.svelte';
 </script>
+
+<svelte:head>
+  <title>Coffee Pal - Journal</title>
+</svelte:head>
+
+<Journal />

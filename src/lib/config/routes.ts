@@ -7,7 +7,7 @@ import {
 
 export const routes = [
   {
-    href: '/journal',
+    href: '/',
     label: 'Journal',
     icon: faClipboardList,
   },
