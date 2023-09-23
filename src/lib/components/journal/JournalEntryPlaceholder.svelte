@@ -1,6 +1,6 @@
 <div class="justify-between h-16 animate-pulse">
-  <span class="flex items-center">
-    <span class="placeholder w-14" />
+  <span class="hidden sm:flex items-center">
+    <span class="placeholder w-16" />
   </span>
   <span class="flex flex-1 flex-col justify-between min-w-0 h-10">
     <dt>
