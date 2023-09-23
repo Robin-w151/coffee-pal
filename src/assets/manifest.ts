@@ -38,6 +38,28 @@ export default {
       purpose: 'maskable',
     },
   ],
-  screenshots: [],
+  screenshots: [
+    {
+      src: 'screenshots/journal.png',
+      sizes: '750x1334',
+      type: 'image/png',
+      form_factor: 'narrow',
+      label: 'Brewing Journal',
+    },
+    {
+      src: 'screenshots/my-coffees.png',
+      sizes: '750x1334',
+      type: 'image/png',
+      form_factor: 'narrow',
+      label: 'My Coffees',
+    },
+    {
+      src: 'screenshots/calculator.png',
+      sizes: '750x1334',
+      type: 'image/png',
+      form_factor: 'narrow',
+      label: 'Brewing Calculator',
+    },
+  ],
   shortcuts: [],
 } satisfies Partial<ManifestOptions>;
