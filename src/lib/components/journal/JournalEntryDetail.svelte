@@ -142,6 +142,23 @@
         />
       </div>
     </Label>
+    <Label text="Type of coffee" class="relative">
+      <input
+        class="input autocomplete"
+        type="text"
+        placeholder="Type of coffee, e.g. Some coffee brand"
+        bind:value={entry.coffeeType}
+        use:popup={popupCoffeeTypeAutocomplete}
+        on:keydown={handleInputKeydown}
+      />
+      <div class="autocomplete-token" tabindex="-1" data-popup="popupCoffeeTypeAutocomplete">
+        <Autocomplete
+          options={coffeeTypeOptions}
+          bind:input={entry.coffeeType}
+          on:selection={handleCoffeeTypeSelect}
+        />
+      </div>
+    </Label>
     <Label text="Amount of water *">
       <input
         class="input"
@@ -159,23 +176,6 @@
         bind:value={entry.coffee}
         on:keydown={handleInputKeydown}
       />
-    </Label>
-    <Label text="Type of coffee" class="relative">
-      <input
-        class="input autocomplete"
-        type="text"
-        placeholder="Type of coffee, e.g. Some coffee brand"
-        bind:value={entry.coffeeType}
-        use:popup={popupCoffeeTypeAutocomplete}
-        on:keydown={handleInputKeydown}
-      />
-      <div class="autocomplete-token" tabindex="-1" data-popup="popupCoffeeTypeAutocomplete">
-        <Autocomplete
-          options={coffeeTypeOptions}
-          bind:input={entry.coffeeType}
-          on:selection={handleCoffeeTypeSelect}
-        />
-      </div>
     </Label>
     <Label text="Water temperature">
       <input
