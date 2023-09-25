@@ -1,14 +1,16 @@
 <script lang="ts">
   import type { ActiveCoffeeEntry } from '$lib/models/myCoffees';
-  import { faClose, faSave, faTrash } from '@fortawesome/free-solid-svg-icons';
-  import { InputChip } from '@skeletonlabs/skeleton';
+  import { faClose } from '@fortawesome/free-solid-svg-icons';
   import { createEventDispatcher } from 'svelte';
   import { Icon } from 'svelte-awesome';
   import { v4 as uuid } from 'uuid';
+  import Actions from '../ui/elements/form/Actions.svelte';
   import Form from '../ui/elements/form/Form.svelte';
-  import Label from '../ui/elements/form/Label.svelte';
-  import ResponsiveButton from '../ui/elements/form/ResponsiveButton.svelte';
-  import { installEventHandler } from '$lib/utils/events';
+  import Aromas from './detail/Aromas.svelte';
+  import Description from './detail/Description.svelte';
+  import Name from './detail/Name.svelte';
+  import Origin from './detail/Origin.svelte';
+  import Trader from './detail/Trader.svelte';
 
   export let entry: Partial<ActiveCoffeeEntry> = {
     id: uuid(),
@@ -24,26 +26,20 @@
 
   const dispatch = createEventDispatcher();
 
-  $: nameInputValid = !!entry.name;
+  let nameInputValid: boolean;
+
   $: formValid = nameInputValid;
 
-  function handleSaveClick(): void {
+  function handleSave(): void {
     dispatch('save', sanitizeEntry(entry));
   }
 
-  function handleRemoveClick(): void {
+  function handleRemove(): void {
     dispatch('remove', entry.id);
   }
 
   function handleCancelClick(): void {
     dispatch('cancel');
-  }
-
-  function handleInputKeydown(event: KeyboardEvent): void {
-    const { key } = event;
-    if (key === 'Escape') {
-      event.stopPropagation();
-    }
   }
 
   function sanitizeEntry(entry: Partial<ActiveCoffeeEntry>): ActiveCoffeeEntry {
@@ -82,83 +78,13 @@
     </button>
   </div>
   <Form class="px-4 pb-4 h-full overflow-auto">
-    <Label text="Name *">
-      <input
-        class="input"
-        type="text"
-        placeholder="Name, e.g. Frutos Rojos"
-        bind:value={entry.name}
-        on:keydown={handleInputKeydown}
-      />
-    </Label>
-    <Label text="Origin">
-      <input
-        class="input"
-        type="text"
-        placeholder="Origin, e.g. Colombia"
-        bind:value={entry.origin}
-        on:keydown={handleInputKeydown}
-      />
-    </Label>
-    <Label text="Trader">
-      <input
-        class="input"
-        type="text"
-        placeholder="Trader, e.g. Alt Wien"
-        bind:value={entry.trader}
-        on:keydown={handleInputKeydown}
-      />
-    </Label>
-    <Label text="Aromas">
-      <div
-        use:installEventHandler={{
-          selector: 'input',
-          event: 'keydown',
-          handler: handleInputKeydown,
-        }}
-      >
-        <InputChip
-          name="aromas"
-          placeholder="Aromas, e.g. Nutty, Dried Fruit"
-          padding="px-3 py-2"
-          chips="variant-filled-primary"
-          bind:value={entry.aromas}
-          on:keydown={handleInputKeydown}
-        />
-      </div>
-    </Label>
-    <Label text="Description">
-      <textarea
-        class="textarea"
-        rows={4}
-        placeholder="Description..."
-        bind:value={entry.description}
-        on:keydown={handleInputKeydown}
-      />
-    </Label>
+    <Name bind:name={entry.name} bind:valid={nameInputValid} />
+    <Origin bind:origin={entry.origin} />
+    <Trader bind:trader={entry.trader} />
+    <Aromas bind:aromas={entry.aromas} />
+    <Description bind:description={entry.description} />
     <div class="flex justify-end items-center gap-2">
-      {#if edit}
-        <ResponsiveButton
-          type="button"
-          label="Delete"
-          variant="variant-soft-error"
-          on:click={handleRemoveClick}
-        >
-          <svelte:fragment slot="icon">
-            <Icon data={faTrash} />
-          </svelte:fragment>
-        </ResponsiveButton>
-      {/if}
-      <ResponsiveButton
-        label="Save"
-        disabled={!formValid}
-        variant="variant-filled-primary"
-        on:click={handleSaveClick}
-      >
-        <svelte:fragment slot="icon">
-          <Icon data={faSave} />
-        </svelte:fragment>
-      </ResponsiveButton>
+      <Actions {edit} saveDisabled={!formValid} on:save={handleSave} on:remove={handleRemove} />
     </div>
   </Form>
 </div>

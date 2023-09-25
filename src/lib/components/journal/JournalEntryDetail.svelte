@@ -4,8 +4,8 @@
   import { createEventDispatcher } from 'svelte';
   import { Icon } from 'svelte-awesome';
   import { v4 as uuid } from 'uuid';
+  import Actions from '../ui/elements/form/Actions.svelte';
   import Form from '../ui/elements/form/Form.svelte';
-  import Actions from './detail/Actions.svelte';
   import Coffee from './detail/Coffee.svelte';
   import CoffeeType from './detail/CoffeeType.svelte';
   import Description from './detail/Description.svelte';
