@@ -34,7 +34,7 @@
     return myCoffees.activeEntries.map((entry) => ({
       label: entry.name,
       value: entry.name,
-      keywords: [entry.origin, entry.trader, ...entry.aromas],
+      keywords: `${entry.origin},${entry.trader},${entry.aromas.join(',')}`,
     }));
   }
 </script>
