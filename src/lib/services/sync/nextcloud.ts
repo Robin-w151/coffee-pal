@@ -10,7 +10,7 @@ import {
   type SyncableName,
   isDeletedSyncableEntry,
 } from '$lib/models/sync';
-import { mergeSyncables } from '$lib/utils/sync';
+import { merge } from '$lib/services/sync/merge';
 import { DateTime } from 'luxon';
 import { createClient, type WebDAVClient } from 'webdav';
 
@@ -119,7 +119,7 @@ export class NextcloudSyncClient implements SyncClient {
         localChanges,
         remoteChanges,
         merged: mergedJournal,
-      } = mergeSyncables<A, D>(syncable, remoteSyncable);
+      } = merge<A, D>(syncable, remoteSyncable);
       if (this.hasChanges(remoteChanges)) {
         await this.writeSyncable(mergedJournal, syncableName);
       }

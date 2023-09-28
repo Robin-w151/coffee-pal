@@ -3,9 +3,9 @@
   import { myCoffeesSearchStore, myCoffeesStore } from '$lib/stores/myCoffees';
   import { syncStore } from '$lib/stores/sync';
   import { syncStateStore } from '$lib/stores/syncState';
-  import { ModalHelper } from '$lib/utils/modal';
+  import { ModalHelper } from '$lib/utils/ui/modal';
   import { sync } from '$lib/utils/sync';
-  import { ToastHelper } from '$lib/utils/toast';
+  import { ToastHelper } from '$lib/utils/ui/toast';
   import { getModalStore, getToastStore } from '@skeletonlabs/skeleton';
   import PageActions from '../ui/elements/page/PageActions.svelte';
   import PageCard from '../ui/elements/page/PageCard.svelte';

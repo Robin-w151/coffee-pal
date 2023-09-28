@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { NextcloudLoginClient } from '$lib/api/nextcloud';
+  import { NextcloudLoginClient } from '$lib/services/sync/nextcloud';
   import type { Credentials } from '$lib/models/nextcloud';
   import { syncStore } from '$lib/stores/sync';
   import { syncStateStore } from '$lib/stores/syncState';
-  import { ModalHelper } from '$lib/utils/modal';
+  import { ModalHelper } from '$lib/utils/ui/modal';
   import { sync } from '$lib/utils/sync';
   import { getModalStore } from '@skeletonlabs/skeleton';
   import Spinner from '../ui/elements/Spinner.svelte';

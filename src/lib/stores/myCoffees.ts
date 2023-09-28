@@ -9,7 +9,7 @@ import {
   type MyCoffeesState,
 } from '$lib/models/myCoffees';
 import type { SyncResult } from '$lib/models/sync';
-import { buildFuseQuery } from '$lib/utils/fuzzy';
+import { buildFuseQuery } from '$lib/utils/search/fuzzy';
 import Dexie, { liveQuery, type Collection, type Table } from 'dexie';
 import Fuse from 'fuse.js';
 import { DateTime } from 'luxon';

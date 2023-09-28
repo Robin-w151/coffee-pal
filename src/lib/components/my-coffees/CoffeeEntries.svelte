@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { ActiveCoffeeEntry } from '$lib/models/myCoffees';
-  import { ModalHelper } from '$lib/utils/modal';
+  import { ModalHelper } from '$lib/utils/ui/modal';
   import { faFaceSadCry } from '@fortawesome/free-solid-svg-icons';
   import { createEventDispatcher } from 'svelte';
   import { Icon } from 'svelte-awesome';

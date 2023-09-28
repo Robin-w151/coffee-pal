@@ -4,7 +4,7 @@
     type ActiveJournalEntry,
     type JournalEntry,
   } from '$lib/models/journal';
-  import { ModalHelper } from '$lib/utils/modal';
+  import { ModalHelper } from '$lib/utils/ui/modal';
   import { faFaceSadCry } from '@fortawesome/free-solid-svg-icons';
   import { getModalStore } from '@skeletonlabs/skeleton';
   import { createEventDispatcher } from 'svelte';

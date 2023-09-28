@@ -2,18 +2,19 @@
   import { isValidBackup, type Backup } from '$lib/models/backup';
   import type { ActiveJournalEntry, DeletedJournalEntry } from '$lib/models/journal';
   import type { ActiveCoffeeEntry, DeletedCoffeeEntry } from '$lib/models/myCoffees';
+  import { mapToJournal } from '$lib/services/mapper/journal';
+  import { mapToMyCoffees } from '$lib/services/mapper/myCoffees';
+  import { merge } from '$lib/services/sync/merge';
   import { journalStore } from '$lib/stores/journal';
   import { myCoffeesStore } from '$lib/stores/myCoffees';
   import { readJsonFile, writeJsonFile } from '$lib/utils/file';
-  import { mapToJournal, mapToMyCoffees } from '$lib/utils/mapper';
-  import { mergeSyncables } from '$lib/utils/sync';
-  import { ToastHelper } from '$lib/utils/toast';
+  import { ToastHelper } from '$lib/utils/ui/toast';
   import { faFileArrowUp } from '@fortawesome/free-solid-svg-icons';
   import { FileDropzone, getToastStore } from '@skeletonlabs/skeleton';
   import { DateTime } from 'luxon';
   import { Icon } from 'svelte-awesome';
-  import Form from '../ui/elements/form/Form.svelte';
   import Spinner from '../ui/elements/Spinner.svelte';
+  import Form from '../ui/elements/form/Form.svelte';
 
   const toastHelper = new ToastHelper(getToastStore());
 
@@ -45,18 +46,12 @@
       const { journal, myCoffees } = backup;
 
       if (journal) {
-        const result = mergeSyncables<ActiveJournalEntry, DeletedJournalEntry>(
-          $journalStore,
-          journal,
-        );
+        const result = merge<ActiveJournalEntry, DeletedJournalEntry>($journalStore, journal);
         journalStore.apply(result.localChanges);
       }
 
       if (myCoffees) {
-        const result = mergeSyncables<ActiveCoffeeEntry, DeletedCoffeeEntry>(
-          $myCoffeesStore,
-          myCoffees,
-        );
+        const result = merge<ActiveCoffeeEntry, DeletedCoffeeEntry>($myCoffeesStore, myCoffees);
         myCoffeesStore.apply(result.localChanges);
       }
 

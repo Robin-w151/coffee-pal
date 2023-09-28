@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { Scheme, UrlInputChange } from '$lib/models/url-input';
-  import { HOST_REGEXP } from '$lib/utils/regexp';
+  import { HOST_REGEXP } from '$lib/config/regexp';
   import { faLock, faLockOpen } from '@fortawesome/free-solid-svg-icons';
   import { createEventDispatcher } from 'svelte';
   import { Icon } from 'svelte-awesome';

@@ -9,7 +9,7 @@ import {
   type JournalState,
 } from '$lib/models/journal';
 import type { SyncResult } from '$lib/models/sync';
-import { buildFuseQuery } from '$lib/utils/fuzzy';
+import { buildFuseQuery } from '$lib/utils/search/fuzzy';
 import Dexie, {
   liveQuery,
   type Collection,
