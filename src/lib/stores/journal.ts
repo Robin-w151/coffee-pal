@@ -24,6 +24,7 @@ import { writable, type Readable } from 'svelte/store';
 export interface JournalSearchStore extends Observable<JournalSearchState> {
   setFilter: (filter: string) => void;
   setSort: (sort: JournalSort) => void;
+  reset: () => void;
 }
 
 export interface JournalStore extends Readable<JournalState> {
@@ -76,9 +77,14 @@ function createJournalSearchStore(): JournalSearchStore {
     subject.next({ ...subject.value, sort });
   }
 
+  function reset(): void {
+    subject.next(initialState);
+  }
+
   const journalMetaStore = subject as unknown as JournalSearchStore;
   journalMetaStore.setFilter = setFilter;
   journalMetaStore.setSort = setSort;
+  journalMetaStore.reset = reset;
   return journalMetaStore;
 }
 

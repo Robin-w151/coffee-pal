@@ -19,6 +19,7 @@ import { writable, type Readable } from 'svelte/store';
 export interface MyCoffeesSearchStore extends Observable<MyCoffeesSearchState> {
   setFilter: (filter: string) => void;
   setSort: (sort: MyCoffeesSort) => void;
+  reset: () => void;
 }
 
 export interface MyCoffeesStore extends Readable<MyCoffeesState> {
@@ -63,9 +64,14 @@ function createMyCoffeesSearchStore(): MyCoffeesSearchStore {
     subject.next({ ...subject.value, sort });
   }
 
+  function reset(): void {
+    subject.next(initialState);
+  }
+
   const myCoffeesSearchStore = subject as unknown as MyCoffeesSearchStore;
   myCoffeesSearchStore.setFilter = setFilter;
   myCoffeesSearchStore.setSort = setSort;
+  myCoffeesSearchStore.reset = reset;
   return myCoffeesSearchStore;
 }
 

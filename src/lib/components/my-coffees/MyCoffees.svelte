@@ -12,9 +12,14 @@
   import PageSearch from '../ui/elements/page/PageSearch.svelte';
   import CoffeeEntries from './CoffeeEntries.svelte';
   import CoffeeEntryModal from './CoffeeEntryModal.svelte';
+  import { onDestroy } from 'svelte';
 
   const modalHelper = new ModalHelper(getModalStore());
   const toastHelper = new ToastHelper(getToastStore());
+
+  onDestroy(() => {
+    myCoffeesSearchStore.reset();
+  });
 
   function handleSearchChange({ detail: searchInput }: CustomEvent<string>): void {
     myCoffeesSearchStore.setFilter(searchInput);

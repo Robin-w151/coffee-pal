@@ -12,9 +12,14 @@
   import PageSearch from '../ui/elements/page/PageSearch.svelte';
   import JournalEntries from './JournalEntries.svelte';
   import JournalEntryModal from './JournalEntryModal.svelte';
+  import { onDestroy } from 'svelte';
 
   const modalHelper = new ModalHelper(getModalStore());
   const toastHelper = new ToastHelper(getToastStore());
+
+  onDestroy(() => {
+    journalSearchStore.reset();
+  });
 
   function handleSearchChange({ detail: searchInput }: CustomEvent<string>): void {
     journalSearchStore.setFilter(searchInput);
