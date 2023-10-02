@@ -1,16 +1,16 @@
 <script lang="ts">
   import Label from '$lib/components/ui/elements/form/Label.svelte';
   import MeasurementInput from '$lib/components/ui/elements/form/MeasurementInput.svelte';
-  import { TEMPERATURE_UNITS, UNIT_CELSIUS } from '$lib/config/units';
+  import { TEMPERATURE_UNITS } from '$lib/config/units';
   import type { Measurement } from '$lib/models/measurement';
   import { settingsStore } from '$lib/stores/settings';
-  import { getPreferredUnit } from '$lib/utils/units';
+  import { getPreferredTemperatureUnit } from '$lib/utils/units';
 
   export let waterTemperature: number | undefined;
   export let valid = false;
 
   const units = TEMPERATURE_UNITS;
-  const preferredUnit = getPreferredUnit(units, $settingsStore.preferredUnits) ?? UNIT_CELSIUS;
+  const preferredUnit = getPreferredTemperatureUnit($settingsStore.preferredUnits);
   const errorMessages = {
     metric: 'water temperature must be greater than 0',
     imperial: 'water temperature must be greater than 32',
