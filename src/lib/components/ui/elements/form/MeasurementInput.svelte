@@ -26,7 +26,6 @@
   });
 
   function handleValueChange(value?: number): void {
-    console.log('value change');
     measurement.value = round(measurement.unit.conversion.toBase(value));
   }
 
@@ -34,7 +33,6 @@
     if (previousValue === newValue) {
       return;
     }
-    console.log('measurement value change');
     value = round(measurement.unit.conversion.fromBase(newValue));
   }
 
@@ -42,7 +40,6 @@
     if (previousUnit === newUnit) {
       return;
     }
-    console.log('measurement unit change');
     value = round(newUnit.conversion.fromBase(measurement.value));
   }
 </script>
