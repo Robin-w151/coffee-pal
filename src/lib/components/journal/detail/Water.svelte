@@ -1,17 +1,29 @@
 <script lang="ts">
   import Label from '$lib/components/ui/elements/form/Label.svelte';
+  import MeasurementInput from '$lib/components/ui/elements/form/MeasurementInput.svelte';
+  import { UNIT_GRAM, WEIGHT_UNITS } from '$lib/config/units';
+  import type { Measurement } from '$lib/models/measurement';
+  import { settingsStore } from '$lib/stores/settings';
+  import { getPreferredUnit } from '$lib/utils/units';
 
   export let water: number | undefined;
   export let valid = false;
 
+  const units = WEIGHT_UNITS;
+  const preferredUnit = getPreferredUnit(units, $settingsStore.preferredUnits) ?? UNIT_GRAM;
   const errorMessages = {
     required: 'amount of water is required',
-    negative: 'amount of water must not be below 1',
+    negative: 'amount of water must be greater than 0',
   };
 
+  let waterMeasurement: Measurement = {
+    value: water,
+    unit: preferredUnit,
+  };
   let errorMessage: string | undefined;
   let inputTouched = false;
 
+  $: water = waterMeasurement.value;
   $: checkValidity(water);
   $: showError = inputTouched && !valid;
 
@@ -33,7 +45,7 @@
       return;
     }
 
-    if (value < 1) {
+    if (value <= 0) {
       valid = false;
       errorMessage = errorMessages.negative;
       return;
@@ -45,12 +57,11 @@
 </script>
 
 <Label text="Amount of water *" error={showError} {errorMessage}>
-  <input
-    class="input"
-    class:input-error={showError}
-    type="number"
+  <MeasurementInput
+    class={showError ? 'input-error' : ''}
     placeholder="Amount of water, e.g. 200"
-    bind:value={water}
+    {units}
+    bind:measurement={waterMeasurement}
     on:blur={handleInputBlur}
     on:keydown={handleInputKeydown}
   />

@@ -19,9 +19,13 @@ export function sanitize(value?: number | null): number {
     return 0;
   }
 
-  return round(value);
+  return round(value)!;
 }
 
-export function round(value: number, precision = 2): number {
+export function round(value?: number, precision = 2): number | undefined {
+  if (value == null) {
+    return;
+  }
+
   return parseFloat(value.toFixed(precision));
 }

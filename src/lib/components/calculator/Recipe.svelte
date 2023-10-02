@@ -1,62 +1,75 @@
 <script lang="ts">
+  import { UNIT_GRAM, WEIGHT_UNITS } from '$lib/config/units';
+  import type { Measurement } from '$lib/models/measurement';
   import type { Recipe } from '$lib/models/recipe';
+  import { settingsStore } from '$lib/stores/settings';
+  import { getPreferredUnit } from '$lib/utils/units';
   import { createEventDispatcher } from 'svelte';
   import Label from '../ui/elements/form/Label.svelte';
+  import MeasurementInput from '../ui/elements/form/MeasurementInput.svelte';
 
   export let recipe: Recipe;
 
   const dispatch = createEventDispatcher();
+  const units = WEIGHT_UNITS;
+  const preferredUnit = getPreferredUnit(units, $settingsStore.preferredUnits) ?? UNIT_GRAM;
 
-  let coffee = recipe.coffee;
-  let water = recipe.water;
-  let output = recipe.output;
+  let coffeeMeasurement: Measurement = {
+    value: recipe.coffee,
+    unit: preferredUnit,
+  };
+  let waterMeasurement: Measurement = {
+    value: recipe.water,
+    unit: preferredUnit,
+  };
+  let outputMeasurement: Measurement = {
+    value: recipe.output,
+    unit: preferredUnit,
+  };
 
   $: handleRecipeChange(recipe);
 
   function handleRecipeChange(recipe: Recipe): void {
-    coffee = recipe.coffee;
-    water = recipe.water;
-    output = recipe.output;
+    coffeeMeasurement.value = recipe.coffee;
+    waterMeasurement.value = recipe.water;
+    outputMeasurement.value = recipe.output;
   }
 
   function handleCoffeeChange(): void {
-    dispatch('coffeeChange', coffee);
+    dispatch('coffeeChange', coffeeMeasurement.value);
   }
 
   function handleWaterChange(): void {
-    dispatch('waterChange', water);
+    dispatch('waterChange', waterMeasurement.value);
   }
 
   function handleOutputChange(): void {
-    dispatch('outputChange', output);
+    dispatch('outputChange', outputMeasurement.value);
   }
 </script>
 
 <h3 class="h3">Recipe</h3>
 <form class="flex flex-col gap-4">
   <Label text="Water">
-    <input
-      class="input"
-      type="number"
-      bind:value={water}
+    <MeasurementInput
+      {units}
+      bind:measurement={waterMeasurement}
       on:change={handleWaterChange}
       on:blur={handleWaterChange}
     />
   </Label>
   <Label text="Coffee">
-    <input
-      class="input"
-      type="number"
-      bind:value={coffee}
+    <MeasurementInput
+      {units}
+      bind:measurement={coffeeMeasurement}
       on:change={handleCoffeeChange}
       on:blur={handleCoffeeChange}
     />
   </Label>
   <Label text="Output">
-    <input
-      class="input"
-      type="number"
-      bind:value={output}
+    <MeasurementInput
+      {units}
+      bind:measurement={outputMeasurement}
       on:change={handleOutputChange}
       on:blur={handleOutputChange}
     />

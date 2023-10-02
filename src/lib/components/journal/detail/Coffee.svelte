@@ -1,17 +1,29 @@
 <script lang="ts">
   import Label from '$lib/components/ui/elements/form/Label.svelte';
+  import MeasurementInput from '$lib/components/ui/elements/form/MeasurementInput.svelte';
+  import { UNIT_GRAM, WEIGHT_UNITS } from '$lib/config/units';
+  import type { Measurement } from '$lib/models/measurement';
+  import { settingsStore } from '$lib/stores/settings';
+  import { getPreferredUnit } from '$lib/utils/units';
 
   export let coffee: number | undefined;
   export let valid = false;
 
+  const units = WEIGHT_UNITS;
+  const preferredUnit = getPreferredUnit(units, $settingsStore.preferredUnits) ?? UNIT_GRAM;
   const errorMessages = {
     required: 'amount of coffee is required',
-    negative: 'amount of coffee must not be below 1',
+    negative: 'amount of coffee must be greater than 0',
   };
 
+  let coffeeMeasurement: Measurement = {
+    value: coffee,
+    unit: preferredUnit,
+  };
   let errorMessage: string | undefined;
   let inputTouched = false;
 
+  $: coffee = coffeeMeasurement.value;
   $: checkValidity(coffee);
   $: showError = inputTouched && !valid;
 
@@ -33,7 +45,7 @@
       return;
     }
 
-    if (value < 1) {
+    if (value <= 0) {
       valid = false;
       errorMessage = errorMessages.negative;
       return;
@@ -45,12 +57,11 @@
 </script>
 
 <Label text="Amount of coffee *" error={showError} {errorMessage}>
-  <input
-    class="input"
-    class:input-error={showError}
-    type="number"
+  <MeasurementInput
+    class={showError ? 'input-error' : ''}
     placeholder="Amount of coffee, e.g. 12"
-    bind:value={coffee}
+    {units}
+    bind:measurement={coffeeMeasurement}
     on:blur={handleInputBlur}
     on:keydown={handleInputKeydown}
   />

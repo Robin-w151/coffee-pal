@@ -4,6 +4,7 @@
   import Backup from './Backup.svelte';
   import Info from './Info.svelte';
   import Nextcloud from './Nextcloud.svelte';
+  import Units from './Units.svelte';
 </script>
 
 <PageHeader title="Settings" />
@@ -11,6 +12,8 @@
   <Nextcloud />
   <hr />
   <Backup />
+  <hr />
+  <Units />
   <hr />
   <Info />
 </PageCard>

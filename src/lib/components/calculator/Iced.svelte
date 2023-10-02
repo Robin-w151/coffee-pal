@@ -1,15 +1,40 @@
 <script lang="ts">
+  import { UNIT_GRAM, WEIGHT_UNITS } from '$lib/config/units';
+  import type { Measurement } from '$lib/models/measurement';
+  import { settingsStore } from '$lib/stores/settings';
   import { sanitize } from '$lib/utils/math';
+  import { getPreferredUnit } from '$lib/utils/units';
   import { RangeSlider, SlideToggle } from '@skeletonlabs/skeleton';
   import Label from '../ui/elements/form/Label.svelte';
+  import MeasurementInput from '../ui/elements/form/MeasurementInput.svelte';
 
   export let water: number;
+
+  const units = WEIGHT_UNITS;
+  const preferredUnit = getPreferredUnit(units, $settingsStore.preferredUnits) ?? UNIT_GRAM;
 
   let iced: boolean;
   let iceRatio = 40;
 
-  $: brewWater = sanitize((water * (100 - iceRatio)) / 100);
-  $: ice = sanitize((water * iceRatio) / 100);
+  let brewWaterMeasurement: Measurement = {
+    value: getBrewWater(water, iceRatio),
+    unit: preferredUnit,
+  };
+  let iceMeasurement: Measurement = {
+    value: getIce(water, iceRatio),
+    unit: preferredUnit,
+  };
+
+  $: brewWaterMeasurement.value = getBrewWater(water, iceRatio);
+  $: iceMeasurement.value = getIce(water, iceRatio);
+
+  function getBrewWater(water: number, iceRatio: number): number {
+    return sanitize((water * (100 - iceRatio)) / 100);
+  }
+
+  function getIce(water: number, iceRatio: number): number {
+    return sanitize((water * iceRatio) / 100);
+  }
 </script>
 
 <div class="flex items-center gap-2">
@@ -31,10 +56,10 @@
       </div>
     </RangeSlider>
     <Label text="Brew Water">
-      <input class="input" readonly bind:value={brewWater} />
+      <MeasurementInput readonly {units} bind:measurement={brewWaterMeasurement} />
     </Label>
     <Label text="Ice">
-      <input class="input" readonly bind:value={ice} />
+      <MeasurementInput readonly {units} bind:measurement={iceMeasurement} />
     </Label>
   </form>
 {/if}
