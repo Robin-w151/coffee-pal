@@ -3,6 +3,7 @@
   import { faPencil } from '@fortawesome/free-solid-svg-icons';
   import { createEventDispatcher } from 'svelte';
   import { Icon } from 'svelte-awesome';
+  import { slide } from 'svelte/transition';
 
   export let entry: ActiveCoffeeEntry;
 
@@ -14,7 +15,7 @@
   }
 </script>
 
-<div class="justify-between">
+<div class="justify-between" transition:slide={{ duration: 250 }}>
   <span class="block min-w-0 flex-1">
     <dt class="overflow-hidden text-ellipsis">
       <span class="font-bold">{entry.name} - {entry.origin || 'Unknown Origin'}</span>

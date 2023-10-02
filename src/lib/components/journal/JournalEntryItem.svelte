@@ -4,6 +4,7 @@
   import { faPencil, faRotateRight } from '@fortawesome/free-solid-svg-icons';
   import { createEventDispatcher } from 'svelte';
   import { Icon } from 'svelte-awesome';
+  import { slide } from 'svelte/transition';
   import { v4 as uuid } from 'uuid';
 
   export let entry: ActiveJournalEntry;
@@ -33,7 +34,7 @@
   }
 </script>
 
-<div class="justify-between">
+<div class="justify-between" transition:slide={{ duration: 250 }}>
   <span class="max-sm:hidden badge variant-soft-tertiary w-16">{ratio}</span>
   <span class="block min-w-0 flex-1">
     <dt class="overflow-hidden text-ellipsis">
