@@ -59,3 +59,7 @@ export const UNIT_FAHRENHEIT = {
 export const WEIGHT_UNITS: Array<Unit> = [UNIT_GRAM, UNIT_OZ];
 
 export const TEMPERATURE_UNITS: Array<Unit> = [UNIT_CELSIUS, UNIT_FAHRENHEIT];
+
+export const DEFAULT_WEIGHT_UNIT = UNIT_GRAM;
+
+export const DEFAULT_TEMPERATURE_UNIT = UNIT_CELSIUS;

@@ -1,6 +1,8 @@
 <script lang="ts">
   import type { ActiveJournalEntry } from '$lib/models/journal';
-  import { calculateRatio } from '$lib/utils/math';
+  import { settingsStore } from '$lib/stores/settings';
+  import { calculateRatio, round } from '$lib/utils/math';
+  import { getPreferredTemperatureUnit, getPreferredWeightUnit } from '$lib/utils/units';
   import { faPencil, faRotateRight } from '@fortawesome/free-solid-svg-icons';
   import { createEventDispatcher } from 'svelte';
   import { Icon } from 'svelte-awesome';
@@ -10,6 +12,8 @@
   export let entry: ActiveJournalEntry;
 
   const dispatch = createEventDispatcher();
+  const preferredWeightUnit = getPreferredWeightUnit($settingsStore.preferredUnits);
+  const preferredTemperatureUnit = getPreferredTemperatureUnit($settingsStore.preferredUnits);
 
   $: ratio = calculateRatio(entry.coffee, entry.water) ?? 'unknown';
 
@@ -25,8 +29,14 @@
 
   function details(entry: ActiveJournalEntry): string {
     const { water, coffee, waterTemperature, grindSettings, description } = entry;
-    const amountsStr = `${water}g/${coffee}g`;
-    const waterTemperatureStr = waterTemperature ? `${waterTemperature} °C` : undefined;
+    const amountsStr = `${round(preferredWeightUnit.conversion.fromBase(water))}${
+      preferredWeightUnit.label
+    }/${round(preferredWeightUnit.conversion.fromBase(coffee))}${preferredWeightUnit.label}`;
+    const waterTemperatureStr = waterTemperature
+      ? `${round(preferredTemperatureUnit.conversion.fromBase(waterTemperature))} ${
+          preferredTemperatureUnit.label
+        }`
+      : undefined;
 
     return [amountsStr, waterTemperatureStr, grindSettings, description]
       .filter((s) => !!s)
