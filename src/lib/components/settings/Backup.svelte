@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { isValidBackup, type Backup } from '$lib/models/backup';
+  import type { Backup } from '$lib/models/backup';
   import type { ActiveJournalEntry, DeletedJournalEntry } from '$lib/models/journal';
   import type { ActiveCoffeeEntry, DeletedCoffeeEntry } from '$lib/models/myCoffees';
   import { mapToJournal } from '$lib/services/mapper/journal';
@@ -15,6 +15,7 @@
   import { Icon } from 'svelte-awesome';
   import Spinner from '../ui/elements/Spinner.svelte';
   import Form from '../ui/elements/form/Form.svelte';
+  import { isValidBackup } from '$lib/services/validation/backup';
 
   const toastHelper = new ToastHelper(getToastStore());
 
@@ -41,7 +42,7 @@
 
     try {
       const backup = (await readJsonFile(files[0])) as Backup;
-      validateBackup(backup);
+      await validateBackup(backup);
 
       const { journal, myCoffees } = backup;
 
@@ -64,8 +65,8 @@
     }
   }
 
-  function validateBackup(backup: Backup): void {
-    if (!isValidBackup(backup)) {
+  async function validateBackup(backup: Backup): Promise<void> {
+    if (!(await isValidBackup(backup))) {
       throw new Error('Backup data is invalid!');
     }
   }

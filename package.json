@@ -6,6 +6,8 @@
     "dev": "vite dev",
     "build": "vite build",
     "preview": "vite preview",
+    "generate:schema": "yarn generate:schema:backup",
+    "generate:schema:backup": "ts-json-schema-generator --path 'src/lib/models/backup.ts' --type Backup > src/assets/backup.schema.json",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
     "lint": "prettier --check . && eslint .",
