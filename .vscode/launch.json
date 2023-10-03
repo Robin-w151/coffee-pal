@@ -7,7 +7,7 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Coffee Pal",
+      "name": "Dev",
       "cwd": "${workspaceFolder}",
       "runtimeExecutable": "yarn",
       "runtimeArgs": ["dev"]
@@ -15,10 +15,50 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Coffee Pal (bun)",
+      "name": "Dev (bun)",
       "cwd": "${workspaceFolder}",
       "runtimeExecutable": "bun",
       "runtimeArgs": ["--bun", "run", "dev"]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Build",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "yarn",
+      "runtimeArgs": ["build"]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Preview",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "yarn",
+      "runtimeArgs": ["preview"]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Generate schema",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "yarn",
+      "runtimeArgs": ["generate:schema"]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Check",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "yarn",
+      "runtimeArgs": ["check"]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Source Map explorer",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "yarn",
+      "runtimeArgs": ["sme"]
     }
   ]
 }
