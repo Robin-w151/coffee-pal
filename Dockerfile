@@ -1,5 +1,7 @@
 FROM oven/bun AS build-stage
 
+RUN apt update && apt install -yq git
+
 WORKDIR /app/
 
 COPY package.json yarn.lock .npmrc /app/
@@ -9,6 +11,7 @@ RUN bun install
 COPY postcss.config.js svelte.config.js tailwind.config.ts theme.ts tsconfig.json vite.config.ts /app/
 COPY src/ /app/src/
 COPY static/ /app/static/
+COPY .git/ /app/.git/
 
 ENV USE_ADAPTER_BUN=true
 
