@@ -1,6 +1,7 @@
 import type { Credentials, LoginPoll } from '$lib/models/nextcloud';
 import {
   isActiveSyncableEntry,
+  isDeletedSyncableEntry,
   type ActiveSyncableEntry,
   type Connection,
   type DeletedSyncableEntry,
@@ -8,13 +9,14 @@ import {
   type SyncResult,
   type Syncable,
   type SyncableName,
-  isDeletedSyncableEntry,
 } from '$lib/models/sync';
 import { merge } from '$lib/services/sync/merge';
 import { DateTime } from 'luxon';
-import { createClient, type WebDAVClient } from 'webdav';
+import type { WebDAVClient, WebDAVClientOptions } from 'webdav';
 
 const SYNC_DIR = 'CoffeePal';
+
+let createClient: ((remoteURL: string, options?: WebDAVClientOptions) => WebDAVClient) | undefined;
 
 export interface Login {
   loginUrl: string;
@@ -103,6 +105,10 @@ export class NextcloudSyncClient implements SyncClient {
   }
 
   public async init(): Promise<void> {
+    if (!createClient) {
+      createClient = (await import('webdav')).createClient;
+    }
+
     const webdavUrl = new URL(this.connection.server.url);
     webdavUrl.pathname = '/remote.php/dav';
     this.client = createClient(webdavUrl.href, this.connection.credentials);
