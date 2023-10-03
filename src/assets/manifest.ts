@@ -1,4 +1,5 @@
 import type { ManifestOptions } from 'vite-plugin-pwa';
+import { routes } from '../lib/config/routes';
 
 export default {
   name: 'Coffee Pal',
@@ -61,5 +62,8 @@ export default {
       label: 'Brewing Calculator',
     },
   ],
-  shortcuts: [],
+  shortcuts: routes.map(({ href, label }) => ({
+    name: label,
+    url: href,
+  })),
 } satisfies Partial<ManifestOptions>;
