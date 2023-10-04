@@ -2765,6 +2765,7 @@ __metadata:
     "@typescript-eslint/parser": ^6.7.4
     "@vite-pwa/sveltekit": ^0.2.7
     autoprefixer: ^10.4.16
+    comlink: ^4.4.1
     dexie: ^3.2.4
     eslint: ^8.50.0
     eslint-config-prettier: ^9.0.0
@@ -2833,6 +2834,13 @@ __metadata:
   bin:
     color-support: bin.js
   checksum: 9b7356817670b9a13a26ca5af1c21615463b500783b739b7634a0c2047c16cef4b2865d7576875c31c3cddf9dd621fa19285e628f20198b233a5cfdda6d0793b
+  languageName: node
+  linkType: hard
+
+"comlink@npm:^4.4.1":
+  version: 4.4.1
+  resolution: "comlink@npm:4.4.1"
+  checksum: 16d58a8f590087fc45432e31d6c138308dfd4b75b89aec0b7f7bb97ad33d810381bd2b1e608a1fb2cf05979af9cbfcdcaf1715996d5fcf77aeb013b6da3260af
   languageName: node
   linkType: hard
 

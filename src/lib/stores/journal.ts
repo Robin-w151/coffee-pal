@@ -9,13 +9,9 @@ import {
   type JournalState,
 } from '$lib/models/journal';
 import type { SyncResult } from '$lib/models/sync';
+import { sort } from '$lib/services/sort/journal/wrapper';
 import { buildFuseQuery } from '$lib/utils/search/fuzzy';
-import Dexie, {
-  liveQuery,
-  type Collection,
-  type Observable as DxObservable,
-  type Table,
-} from 'dexie';
+import Dexie, { liveQuery, type Observable as DxObservable, type Table } from 'dexie';
 import Fuse from 'fuse.js';
 import { DateTime } from 'luxon';
 import { BehaviorSubject, switchMap, type Observable } from 'rxjs';
@@ -34,8 +30,6 @@ export interface JournalStore extends Readable<JournalState> {
   undo: (id: string) => void;
   apply: (syncResult: SyncResult<ActiveJournalEntry, DeletedJournalEntry>) => void;
 }
-
-type JournalCollection = Collection<JournalEntry, string>;
 
 const JOURNAL_DB_NAME = 'journal';
 const FUSE_OPTIONS = {
@@ -153,12 +147,7 @@ function createJournalStore(journalSearchStore: JournalSearchStore): JournalStor
 
 function createQuery(db: JournalDb, search: JournalSearchState): DxObservable<Array<JournalEntry>> {
   return liveQuery(async () => {
-    const reverse = (collection: JournalCollection) =>
-      search?.sort === 'asc' ? collection : collection.reverse();
-
-    const sort = (collection: JournalCollection) => collection.sortBy('method');
-
-    const entries = await sort(reverse(db.entries.toCollection()));
+    const entries = await sort(await db.entries.toArray());
     return fuzzyFilter(entries, search.filter);
   });
 }
