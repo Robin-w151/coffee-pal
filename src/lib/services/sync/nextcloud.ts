@@ -11,12 +11,13 @@ import {
   type SyncableName,
 } from '$lib/models/sync';
 import { merge } from '$lib/services/sync/merge';
+import { lazyLoad } from '$lib/utils/lazyLoad';
 import { DateTime } from 'luxon';
-import type { WebDAVClient, WebDAVClientOptions } from 'webdav';
+import type { WebDAVClient } from 'webdav';
 
 const SYNC_DIR = 'CoffeePal';
 
-let createClient: ((remoteURL: string, options?: WebDAVClientOptions) => WebDAVClient) | undefined;
+const createClient = lazyLoad(async () => (await import('webdav')).createClient);
 
 export interface Login {
   loginUrl: string;
@@ -105,13 +106,9 @@ export class NextcloudSyncClient implements SyncClient {
   }
 
   public async init(): Promise<void> {
-    if (!createClient) {
-      createClient = (await import('webdav')).createClient;
-    }
-
     const webdavUrl = new URL(this.connection.server.url);
     webdavUrl.pathname = '/remote.php/dav';
-    this.client = createClient(webdavUrl.href, this.connection.credentials);
+    this.client = (await createClient.handle)(webdavUrl.href, this.connection.credentials);
     await this.initSyncDir();
   }
 
