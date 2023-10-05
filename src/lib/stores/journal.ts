@@ -9,7 +9,7 @@ import {
   type JournalState,
 } from '$lib/models/journal';
 import type { SyncResult } from '$lib/models/sync';
-import { sortAndSearch } from '$lib/services/journal/wrapper';
+import { sortOrSearch } from '$lib/services/journal/wrapper';
 import Dexie, { liveQuery, type Observable as DxObservable, type Table } from 'dexie';
 import { DateTime } from 'luxon';
 import { BehaviorSubject, switchMap, type Observable, debounceTime } from 'rxjs';
@@ -136,6 +136,6 @@ function createJournalStore(journalSearchStore: JournalSearchStore): JournalStor
 
 function createQuery(db: JournalDb, search: JournalSearchState): DxObservable<Array<JournalEntry>> {
   return liveQuery(async () => {
-    return await sortAndSearch(await db.entries.toArray(), search);
+    return await sortOrSearch(await db.entries.toArray(), search);
   });
 }

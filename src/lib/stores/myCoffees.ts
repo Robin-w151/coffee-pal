@@ -9,11 +9,10 @@ import {
   type MyCoffeesState,
 } from '$lib/models/myCoffees';
 import type { SyncResult } from '$lib/models/sync';
-import { buildFuseQuery } from '$lib/utils/search/fuzzy';
-import Dexie, { liveQuery, type Collection, type Table } from 'dexie';
-import Fuse from 'fuse.js';
+import { sortOrSearch } from '$lib/services/myCoffees/wrapper';
+import Dexie, { liveQuery, type Observable as DxObservable, type Table } from 'dexie';
 import { DateTime } from 'luxon';
-import { BehaviorSubject, switchMap, type Observable } from 'rxjs';
+import { BehaviorSubject, switchMap, type Observable, debounceTime } from 'rxjs';
 import { writable, type Readable } from 'svelte/store';
 
 export interface MyCoffeesSearchStore extends Observable<MyCoffeesSearchState> {
@@ -30,15 +29,7 @@ export interface MyCoffeesStore extends Readable<MyCoffeesState> {
   apply: (syncResult: SyncResult<ActiveCoffeeEntry, DeletedCoffeeEntry>) => void;
 }
 
-type MyCoffeesCollection = Collection<CoffeeEntry, string>;
-
 const MY_COFFEES_DB_NAME = 'my-coffees';
-const FUSE_OPTIONS = {
-  threshold: 0.4,
-  ignoreLocation: true,
-  findAllMatches: true,
-  keys: ['name', 'origin', 'trader', 'aromas', 'description'],
-} satisfies Fuse.IFuseOptions<CoffeeEntry>;
 
 class MyCoffeesDb extends Dexie {
   entries!: Table<CoffeeEntry, string>;
@@ -84,7 +75,10 @@ function createMyCoffeesStore(myCoffeesSearchStore: MyCoffeesSearchStore): MyCof
   if (browser) {
     const db = (myCoffeesDb = new MyCoffeesDb());
     myCoffeesSearchStore
-      .pipe(switchMap((search) => createQuery(db, search)))
+      .pipe(
+        debounceTime(250),
+        switchMap((search) => createQuery(db, search)),
+      )
       .subscribe((entries) => {
         const activeEntries = entries.filter(isActiveCoffeeEntry);
         update((myCoffees) => ({ ...myCoffees, entries, activeEntries, isLoading: false }));
@@ -140,24 +134,11 @@ function createMyCoffeesStore(myCoffeesSearchStore: MyCoffeesSearchStore): MyCof
   };
 }
 
-function createQuery(db: MyCoffeesDb, search: MyCoffeesSearchState) {
+function createQuery(
+  db: MyCoffeesDb,
+  search: MyCoffeesSearchState,
+): DxObservable<Array<CoffeeEntry>> {
   return liveQuery(async () => {
-    const reverse = (collection: MyCoffeesCollection) =>
-      search?.sort === 'asc' ? collection : collection.reverse();
-
-    const sort = (collection: MyCoffeesCollection) => collection.sortBy('name');
-
-    const entries = await sort(reverse(db.entries.toCollection()));
-    return fuzzyFilter(entries, search.filter);
+    return sortOrSearch(await db.entries.toArray(), search);
   });
-}
-
-function fuzzyFilter(entries: Array<CoffeeEntry>, filter?: string | null): Array<CoffeeEntry> {
-  if (filter) {
-    const filterQuery = buildFuseQuery(filter, FUSE_OPTIONS.keys);
-    const fuse = new Fuse(entries, FUSE_OPTIONS);
-    return fuse.search(filterQuery).map((result) => result.item);
-  } else {
-    return entries;
-  }
 }

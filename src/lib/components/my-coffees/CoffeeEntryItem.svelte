@@ -15,7 +15,7 @@
   }
 </script>
 
-<div class="justify-between" transition:slide={{ duration: 250 }}>
+<div class="justify-between">
   <span class="block min-w-0 flex-1">
     <dt class="overflow-hidden text-ellipsis">
       <span class="font-bold">{entry.name} - {entry.origin || 'Unknown Origin'}</span>
