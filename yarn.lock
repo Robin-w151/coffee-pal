@@ -1955,6 +1955,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/chance@npm:^1.1.4":
+  version: 1.1.4
+  resolution: "@types/chance@npm:1.1.4"
+  checksum: 0ce6a654e6702237800b01ae7889209a98752ed4792d810b5007c27c046972988ac6fcc36063bdc7ede37d3ab1d0fd0a7bb3e405d4566c80debd9e663a90bbb0
+  languageName: node
+  linkType: hard
+
 "@types/cookie@npm:^0.5.1":
   version: 0.5.1
   resolution: "@types/cookie@npm:0.5.1"
@@ -2658,6 +2665,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"canvas-confetti@npm:^1.6.0":
+  version: 1.8.0
+  resolution: "canvas-confetti@npm:1.8.0"
+  checksum: 3913b15a59578c88e283a39e7fb3b198398344833f659a5f50669cae3abb9eaa1cd17e9e67e5882b0cc961864079acc79fa5e672f44dda3709686bc76ab590a6
+  languageName: node
+  linkType: hard
+
 "chalk@npm:^2.0.0":
   version: 2.4.2
   resolution: "chalk@npm:2.4.2"
@@ -2676,6 +2690,13 @@ __metadata:
     ansi-styles: ^4.1.0
     supports-color: ^7.1.0
   checksum: fe75c9d5c76a7a98d45495b91b2172fa3b7a09e0cc9370e5c8feb1c567b85c4288e2b3fded7cfdd7359ac28d6b3844feb8b82b8686842e93d23c827c417e83fc
+  languageName: node
+  linkType: hard
+
+"chance@npm:^1.1.11":
+  version: 1.1.11
+  resolution: "chance@npm:1.1.11"
+  checksum: 2e871fcc76584d274f860f0f25380b6ab547caf0d22d8b043a313be73d5c3db38941373241f83aeba049e7511f752f9746dc722a0f2b0182020d493c4e11da84
   languageName: node
   linkType: hard
 
@@ -2757,6 +2778,7 @@ __metadata:
     "@sveltejs/adapter-auto": ^2.1.0
     "@sveltejs/kit": ^1.25.1
     "@tailwindcss/forms": ^0.5.6
+    "@types/chance": ^1.1.4
     "@types/file-saver": ^2.0.5
     "@types/luxon": ^3.3.2
     "@types/node": ^20.8.2
@@ -2765,6 +2787,7 @@ __metadata:
     "@typescript-eslint/parser": ^6.7.4
     "@vite-pwa/sveltekit": ^0.2.7
     autoprefixer: ^10.4.16
+    chance: ^1.1.11
     comlink: ^4.4.1
     dexie: ^3.2.4
     eslint: ^8.50.0
@@ -2784,6 +2807,7 @@ __metadata:
     svelte-adapter-bun: ^0.5.0
     svelte-awesome: ^3.2.1
     svelte-check: ^3.5.2
+    svelte-legos: ^0.2.2
     tailwindcss: ^3.3.3
     ts-json-schema-generator: ^1.3.0
     tslib: ^2.6.2
@@ -5576,6 +5600,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"prism-svelte@npm:^0.5.0":
+  version: 0.5.0
+  resolution: "prism-svelte@npm:0.5.0"
+  checksum: f2c3c6eafcb04a77a08b0a280d327952d3da2eed326956db41729fcd487ebdf939c86f54955f59ea65002e1c8d4eb60018530276493c4ee33768483f8ca79f21
+  languageName: node
+  linkType: hard
+
+"prismjs@npm:^1.29.0":
+  version: 1.29.0
+  resolution: "prismjs@npm:1.29.0"
+  checksum: 007a8869d4456ff8049dc59404e32d5666a07d99c3b0e30a18bd3b7676dfa07d1daae9d0f407f20983865fd8da56de91d09cb08e6aa61f5bc420a27c0beeaf93
+  languageName: node
+  linkType: hard
+
 "promise-retry@npm:^2.0.1":
   version: 2.0.1
   resolution: "promise-retry@npm:2.0.1"
@@ -6440,6 +6478,19 @@ __metadata:
   peerDependencies:
     svelte: ^3.19.0 || ^4.0.0-next.0
   checksum: bf1179de47100353ef002d96e2b20782420a388cc5a451a1c3564643fde0423ac7b689a4cded728a6dee5e30a80e44089790be4bf5c37189b14704bf8a6efaf6
+  languageName: node
+  linkType: hard
+
+"svelte-legos@npm:^0.2.2":
+  version: 0.2.2
+  resolution: "svelte-legos@npm:0.2.2"
+  dependencies:
+    canvas-confetti: ^1.6.0
+    prism-svelte: ^0.5.0
+    prismjs: ^1.29.0
+  peerDependencies:
+    svelte: ^4.0.0
+  checksum: c3b95c52917ccd7862f9901b58abdff3cf792681b5cd6fce513f4cd0ac7b7a604ef080b83e5053c269724ccadc354367cddd0a2685d3232cdf1d1fe6e8ebaff6
   languageName: node
   linkType: hard
 

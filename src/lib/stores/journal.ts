@@ -9,12 +9,10 @@ import {
   type JournalState,
 } from '$lib/models/journal';
 import type { SyncResult } from '$lib/models/sync';
-import { sort } from '$lib/services/sort/journal/wrapper';
-import { buildFuseQuery } from '$lib/utils/search/fuzzy';
+import { sortAndSearch } from '$lib/services/journal/wrapper';
 import Dexie, { liveQuery, type Observable as DxObservable, type Table } from 'dexie';
-import Fuse from 'fuse.js';
 import { DateTime } from 'luxon';
-import { BehaviorSubject, switchMap, type Observable } from 'rxjs';
+import { BehaviorSubject, switchMap, type Observable, debounceTime } from 'rxjs';
 import { writable, type Readable } from 'svelte/store';
 
 export interface JournalSearchStore extends Observable<JournalSearchState> {
@@ -32,20 +30,6 @@ export interface JournalStore extends Readable<JournalState> {
 }
 
 const JOURNAL_DB_NAME = 'journal';
-const FUSE_OPTIONS = {
-  threshold: 0.4,
-  ignoreLocation: true,
-  findAllMatches: true,
-  keys: [
-    'method',
-    'water',
-    'waterTemperature',
-    'coffee',
-    'coffeeType',
-    'grindSettings',
-    'description',
-  ],
-} satisfies Fuse.IFuseOptions<JournalEntry>;
 
 class JournalDb extends Dexie {
   entries!: Table<JournalEntry, string>;
@@ -90,10 +74,15 @@ function createJournalStore(journalSearchStore: JournalSearchStore): JournalStor
 
   if (browser) {
     const db = (journalDb = new JournalDb());
-    journalSearchStore.pipe(switchMap((search) => createQuery(db, search))).subscribe((entries) => {
-      const activeEntries = entries.filter(isActiveJournalEntry);
-      update((journal) => ({ ...journal, entries, activeEntries, isLoading: false }));
-    });
+    journalSearchStore
+      .pipe(
+        debounceTime(250),
+        switchMap((search) => createQuery(db, search)),
+      )
+      .subscribe((entries) => {
+        const activeEntries = entries.filter(isActiveJournalEntry);
+        update((journal) => ({ ...journal, entries, activeEntries, isLoading: false }));
+      });
   }
 
   function addEntry(entry: ActiveJournalEntry): void {
@@ -147,17 +136,6 @@ function createJournalStore(journalSearchStore: JournalSearchStore): JournalStor
 
 function createQuery(db: JournalDb, search: JournalSearchState): DxObservable<Array<JournalEntry>> {
   return liveQuery(async () => {
-    const entries = await sort(await db.entries.toArray());
-    return fuzzyFilter(entries, search.filter);
+    return await sortAndSearch(await db.entries.toArray(), search);
   });
-}
-
-function fuzzyFilter(entries: Array<JournalEntry>, filter?: string | null): Array<JournalEntry> {
-  if (filter) {
-    const filterQuery = buildFuseQuery(filter, FUSE_OPTIONS.keys);
-    const fuse = new Fuse(entries, FUSE_OPTIONS);
-    return fuse.search(filterQuery).map((result) => result.item);
-  } else {
-    return entries;
-  }
 }

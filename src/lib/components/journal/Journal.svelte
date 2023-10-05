@@ -71,7 +71,7 @@
   on:synchronize={handleSyncClick}
 />
 <PageSearch
-  title="Brewing Journal"
+  title="Brewing Journal ({$journalStore.activeEntries.length})"
   sort={$journalSearchStore.sort}
   on:searchChange={handleSearchChange}
   on:sortToggle={handleSortToggle}
