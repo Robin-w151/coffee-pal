@@ -9,9 +9,11 @@
   import { fade } from 'svelte/transition';
   import { scaleX } from '../../transitions/scaleX';
   import InputButton from '../form/InputButton.svelte';
+  import Spinner from '../Spinner.svelte';
 
   export let title: string;
   export let sort: PageSearchSort | null = 'asc';
+  export let isLoading = false;
 
   const dispatch = createEventDispatcher();
 
@@ -57,7 +59,12 @@
 <svelte:window on:keydown={handleKeyDown} />
 
 <header class="flex justify-between items-center gap-4 px-2 w-full h-12 {headerSearchActiveClass}">
-  <h2 class="h2">{title}</h2>
+  <div class="flex items-center gap-4 w-full">
+    <h2 class="h2">{title}</h2>
+    {#if isSearchActive && isLoading}
+      <Spinner />
+    {/if}
+  </div>
   <div class="grid grid-cols-[auto_max-content] items-center gap-2" class:w-full={isSearchActive}>
     {#if isSearchActive}
       <InputButton title="Clear" visible={!!searchInput} on:click={handleSearchInputClearClick}>

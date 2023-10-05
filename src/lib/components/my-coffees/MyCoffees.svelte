@@ -67,8 +67,9 @@
   on:synchronize={handleSyncClick}
 />
 <PageSearch
-  title="My Coffees ({$myCoffeesStore.activeEntries.length})"
+  title="My Coffees"
   sort={$myCoffeesSearchStore.sort}
+  isLoading={$myCoffeesStore.isLoading}
   on:searchChange={handleSearchChange}
   on:sortToggle={handleSortToggle}
 />

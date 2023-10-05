@@ -12,7 +12,7 @@ import type { SyncResult } from '$lib/models/sync';
 import { sortOrSearch } from '$lib/services/journal/wrapper';
 import Dexie, { liveQuery, type Observable as DxObservable, type Table } from 'dexie';
 import { DateTime } from 'luxon';
-import { BehaviorSubject, switchMap, type Observable, debounceTime } from 'rxjs';
+import { BehaviorSubject, switchMap, type Observable, debounceTime, tap } from 'rxjs';
 import { writable, type Readable } from 'svelte/store';
 
 export interface JournalSearchStore extends Observable<JournalSearchState> {
@@ -76,6 +76,7 @@ function createJournalStore(journalSearchStore: JournalSearchStore): JournalStor
     const db = (journalDb = new JournalDb());
     journalSearchStore
       .pipe(
+        tap(() => update((journal) => ({ ...journal, isLoading: true }))),
         debounceTime(250),
         switchMap((search) => createQuery(db, search)),
       )

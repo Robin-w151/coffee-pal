@@ -65,7 +65,7 @@
 </script>
 
 <dl class="list-dl" use:infiniteScrollAction={{ distance: 500, cb: handleScrollToBottom }}>
-  {#if isLoading}
+  {#if isLoading && (!displayedActiveEntries || displayedActiveEntries.length === 0)}
     <JournalEntryPlaceholder />
     <JournalEntryPlaceholder />
     <JournalEntryPlaceholder />
