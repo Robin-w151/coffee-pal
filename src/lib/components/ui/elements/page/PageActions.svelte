@@ -14,7 +14,9 @@
   }
 
   function handleSyncClick(): void {
-    dispatch('synchronize');
+    if (isSyncEnabled && !isSynchronizing) {
+      dispatch('synchronize');
+    }
   }
 </script>
 
