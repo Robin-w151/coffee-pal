@@ -43,7 +43,7 @@
     <AppRail />
   </div>
   <div class="flex justify-center p-4">
-    <div class="flex flex-col items-center gap-4 w-full max-w-screen-md">
+    <div class="flex flex-col items-center gap-4 w-full max-w-screen-lg">
       <slot />
     </div>
   </div>
