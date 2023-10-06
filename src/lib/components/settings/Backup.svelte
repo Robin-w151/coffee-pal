@@ -2,9 +2,8 @@
   import type { Backup } from '$lib/models/backup';
   import type { ActiveJournalEntry, DeletedJournalEntry } from '$lib/models/journal';
   import type { ActiveCoffeeEntry, DeletedCoffeeEntry } from '$lib/models/myCoffees';
-  import { mapToJournal } from '$lib/services/mapper/journal';
-  import { mapToMyCoffees } from '$lib/services/mapper/myCoffees';
   import { merge } from '$lib/services/sync/merge';
+  import { isValidBackup } from '$lib/services/validation/backup';
   import { journalStore } from '$lib/stores/journal';
   import { myCoffeesStore } from '$lib/stores/myCoffees';
   import { readJsonFile, writeJsonFile } from '$lib/utils/file';
@@ -15,7 +14,6 @@
   import { Icon } from 'svelte-awesome';
   import Spinner from '../ui/elements/Spinner.svelte';
   import Form from '../ui/elements/form/Form.svelte';
-  import { isValidBackup } from '$lib/services/validation/backup';
 
   const toastHelper = new ToastHelper(getToastStore());
 
@@ -24,10 +22,12 @@
 
   $: fileSelected = files?.length && files.length > 0;
 
-  function handleExportClick(): void {
+  async function handleExportClick(): Promise<void> {
+    const journalEntries = await journalStore.loadAll();
+    const coffeeEntries = await myCoffeesStore.loadAll();
     const backup: Backup = {
-      journal: mapToJournal($journalStore),
-      myCoffees: mapToMyCoffees($myCoffeesStore),
+      journal: { entries: journalEntries },
+      myCoffees: { entries: coffeeEntries },
     };
     const fileName = `coffee-pal-backup_${DateTime.now().toISO()?.replaceAll(':', '')}.json`;
     writeJsonFile(fileName, backup);
@@ -47,12 +47,14 @@
       const { journal, myCoffees } = backup;
 
       if (journal) {
-        const result = merge<ActiveJournalEntry, DeletedJournalEntry>($journalStore, journal);
+        const entries = await journalStore.loadAll();
+        const result = merge<ActiveJournalEntry, DeletedJournalEntry>({ entries }, journal);
         journalStore.apply(result.localChanges);
       }
 
       if (myCoffees) {
-        const result = merge<ActiveCoffeeEntry, DeletedCoffeeEntry>($myCoffeesStore, myCoffees);
+        const entries = await myCoffeesStore.loadAll();
+        const result = merge<ActiveCoffeeEntry, DeletedCoffeeEntry>({ entries }, myCoffees);
         myCoffeesStore.apply(result.localChanges);
       }
 

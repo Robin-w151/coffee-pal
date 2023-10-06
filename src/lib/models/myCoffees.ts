@@ -1,3 +1,5 @@
+import type { CachedSearchResult } from './cachedSearch';
+
 export interface MyCoffees {
   entries: Array<any>;
 }
@@ -21,7 +23,8 @@ export interface DeletedCoffeeEntry {
 }
 
 export interface MyCoffeesState extends MyCoffees {
-  activeEntries: Array<ActiveCoffeeEntry>;
+  entries: Array<ActiveCoffeeEntry>;
+  totalEntries: number;
   isLoading: boolean;
 }
 
@@ -31,6 +34,14 @@ export interface MyCoffeesSearchState {
 }
 
 export type MyCoffeesSort = 'asc' | 'desc';
+
+export interface MyCoffeesWorker {
+  sortOrSearch: (
+    entries: Array<ActiveCoffeeEntry>,
+    search: MyCoffeesSearchState,
+  ) => CachedSearchResult<ActiveCoffeeEntry>;
+  loadMore: (index: number, count: number) => Array<ActiveCoffeeEntry>;
+}
 
 export function isActiveCoffeeEntry(
   entry?: ActiveCoffeeEntry | DeletedCoffeeEntry | null,

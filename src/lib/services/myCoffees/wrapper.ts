@@ -1,19 +1,27 @@
 import { browser } from '$app/environment';
-import type { CoffeeEntry, MyCoffeesSearchState } from '$lib/models/myCoffees';
+import type { CachedSearchResult } from '$lib/models/cachedSearch';
+import type { ActiveCoffeeEntry, MyCoffeesSearchState } from '$lib/models/myCoffees';
 import { wrap } from 'comlink';
-import { sortOrSearch as sortOrSearchImpl } from './search';
 
 const worker: any = browser
   ? import('./worker?worker').then((w) => wrap(new w.default()))
   : undefined;
 
 export async function sortOrSearch(
-  entries: Array<CoffeeEntry>,
+  entries: Array<ActiveCoffeeEntry>,
   search: MyCoffeesSearchState,
-): Promise<Array<CoffeeEntry>> {
+): Promise<CachedSearchResult<ActiveCoffeeEntry>> {
   if (browser) {
     return (await worker).sortOrSearch(entries, search);
   } else {
-    return sortOrSearchImpl(entries, search);
+    return { data: [], totalEntries: 0 };
+  }
+}
+
+export async function loadMore(index: number, count: number): Promise<Array<ActiveCoffeeEntry>> {
+  if (browser) {
+    return (await worker).loadMore(index, count);
+  } else {
+    return [];
   }
 }

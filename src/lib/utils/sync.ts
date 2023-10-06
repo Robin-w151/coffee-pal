@@ -1,5 +1,3 @@
-import { mapToJournal } from '$lib/services/mapper/journal';
-import { mapToMyCoffees } from '$lib/services/mapper/myCoffees';
 import { syncJournal, syncMyCoffees } from '$lib/services/sync/sync';
 import { journalStore } from '$lib/stores/journal';
 import { myCoffeesStore } from '$lib/stores/myCoffees';
@@ -14,15 +12,12 @@ export async function sync(): Promise<void> {
   }
   syncStateStore.setIsSynchronizing(true);
 
-  const journalState = get(journalStore);
-  const journal = mapToJournal(journalState);
-
-  const myCoffeesState = get(myCoffeesStore);
-  const myCoffees = mapToMyCoffees(myCoffeesState);
+  const journalEntries = await journalStore.loadAll();
+  const coffeeEntries = await myCoffeesStore.loadAll();
 
   try {
-    const journalSync = syncJournal(sync.connection, journal);
-    const myCoffeesSync = syncMyCoffees(sync.connection, myCoffees);
+    const journalSync = syncJournal(sync.connection, journalEntries);
+    const myCoffeesSync = syncMyCoffees(sync.connection, coffeeEntries);
 
     const [journalSyncResult, myCoffeesSyncResult] = await Promise.allSettled([
       journalSync,

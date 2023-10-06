@@ -31,7 +31,7 @@
   }
 
   function getCoffeeTypeOptions(myCoffees: MyCoffeesState): Array<AutocompleteOption> {
-    return myCoffees.activeEntries.map((entry) => ({
+    return myCoffees.entries.map((entry) => ({
       label: entry.name,
       value: entry.name,
       keywords: `${entry.origin},${entry.trader},${entry.aromas.join(',')}`,

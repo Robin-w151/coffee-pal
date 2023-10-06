@@ -1,4 +1,6 @@
 import { browser } from '$app/environment';
+import { JOURNAL_BATCH_SIZE } from '$lib/config/journal';
+import type { CachedSearchResult } from '$lib/models/cachedSearch';
 import {
   isActiveJournalEntry,
   type ActiveJournalEntry,
@@ -9,11 +11,10 @@ import {
   type JournalState,
 } from '$lib/models/journal';
 import type { SyncResult } from '$lib/models/sync';
-import { sortOrSearch } from '$lib/services/journal/wrapper';
+import { loadMore, sortOrSearch } from '$lib/services/journal/wrapper';
 import Dexie, { liveQuery, type Observable as DxObservable, type Table } from 'dexie';
 import { DateTime } from 'luxon';
-import { BehaviorSubject, switchMap, type Observable, debounceTime, tap } from 'rxjs';
-import { writable, type Readable } from 'svelte/store';
+import { BehaviorSubject, debounceTime, switchMap, tap, type Observable } from 'rxjs';
 
 export interface JournalSearchStore extends Observable<JournalSearchState> {
   setFilter: (filter: string) => void;
@@ -21,7 +22,9 @@ export interface JournalSearchStore extends Observable<JournalSearchState> {
   reset: () => void;
 }
 
-export interface JournalStore extends Readable<JournalState> {
+export interface JournalStore extends Observable<JournalState> {
+  loadAll: () => Promise<Array<JournalEntry>>;
+  loadMore: () => Promise<void>;
   add: (entry: ActiveJournalEntry) => void;
   update: (entry: ActiveJournalEntry) => void;
   remove: (id: string) => Promise<void>;
@@ -67,23 +70,48 @@ function createJournalSearchStore(): JournalSearchStore {
 }
 
 function createJournalStore(journalSearchStore: JournalSearchStore): JournalStore {
-  const initialState: JournalState = { entries: [], activeEntries: [], isLoading: true };
+  const initialState: JournalState = {
+    entries: [],
+    totalEntries: 0,
+    isLoading: true,
+  };
   const removedEntries = new Map<string, ActiveJournalEntry>();
-  const { subscribe, update } = writable<JournalState>(initialState);
+  const subject = new BehaviorSubject<JournalState>(initialState);
   let journalDb: JournalDb | null = null;
 
   if (browser) {
     const db = (journalDb = new JournalDb());
     journalSearchStore
       .pipe(
-        tap(() => update((journal) => ({ ...journal, isLoading: true }))),
+        tap(() => subject.next({ ...subject.value, isLoading: true })),
         debounceTime(250),
         switchMap((search) => createQuery(db, search)),
       )
-      .subscribe((entries) => {
-        const activeEntries = entries.filter(isActiveJournalEntry);
-        update((journal) => ({ ...journal, entries, activeEntries, isLoading: false }));
+      .subscribe((result) => {
+        const { data: entries, totalEntries } = result;
+        subject.next({
+          ...subject.value,
+          entries,
+          totalEntries,
+          isLoading: false,
+        });
       });
+  }
+
+  async function loadAllEntries(): Promise<Array<JournalEntry>> {
+    const entries = await journalDb?.entries.toArray();
+    return entries ?? [];
+  }
+
+  async function loadMoreEntries(): Promise<void> {
+    const { entries, totalEntries } = subject.value;
+    if (entries.length < totalEntries) {
+      const moreEntries = await loadMore(entries.length, JOURNAL_BATCH_SIZE);
+      subject.next({
+        ...subject.value,
+        entries: [...entries, ...moreEntries],
+      });
+    }
   }
 
   function addEntry(entry: ActiveJournalEntry): void {
@@ -125,18 +153,24 @@ function createJournalStore(journalSearchStore: JournalSearchStore): JournalStor
     }
   }
 
-  return {
-    subscribe,
-    add: addEntry,
-    update: updateEntry,
-    remove: removeEntry,
-    undo: undoRemoveEntry,
-    apply: applySyncResult,
-  };
+  const journalStore = subject as unknown as JournalStore;
+  journalStore.loadAll = loadAllEntries;
+  journalStore.loadMore = loadMoreEntries;
+  journalStore.add = addEntry;
+  journalStore.update = updateEntry;
+  journalStore.remove = removeEntry;
+  journalStore.undo = undoRemoveEntry;
+  journalStore.apply = applySyncResult;
+  return journalStore;
 }
 
-function createQuery(db: JournalDb, search: JournalSearchState): DxObservable<Array<JournalEntry>> {
+function createQuery(
+  db: JournalDb,
+  search: JournalSearchState,
+): DxObservable<CachedSearchResult<ActiveJournalEntry>> {
   return liveQuery(async () => {
-    return await sortOrSearch(await db.entries.toArray(), search);
+    const entries = await db.entries.toArray();
+    const activeEntries = entries.filter(isActiveJournalEntry);
+    return await sortOrSearch(activeEntries, search);
   });
 }

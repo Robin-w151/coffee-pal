@@ -1,19 +1,27 @@
 import { browser } from '$app/environment';
-import type { JournalEntry, JournalSearchState } from '$lib/models/journal';
+import type { CachedSearchResult } from '$lib/models/cachedSearch';
+import type { ActiveJournalEntry, JournalSearchState } from '$lib/models/journal';
 import { wrap } from 'comlink';
-import { sortOrSearch as sortOrSearchImpl } from './search';
 
 const worker: any = browser
   ? import('./worker?worker').then((w) => wrap(new w.default()))
   : undefined;
 
 export async function sortOrSearch(
-  entries: Array<JournalEntry>,
+  entries: Array<ActiveJournalEntry>,
   search: JournalSearchState,
-): Promise<Array<JournalEntry>> {
+): Promise<CachedSearchResult<ActiveJournalEntry>> {
   if (browser) {
     return (await worker).sortOrSearch(entries, search);
   } else {
-    return sortOrSearchImpl(entries, search);
+    return { data: [], totalEntries: 0 };
+  }
+}
+
+export async function loadMore(index: number, count: number): Promise<Array<ActiveJournalEntry>> {
+  if (browser) {
+    return (await worker).loadMore(index, count);
+  } else {
+    return [];
   }
 }

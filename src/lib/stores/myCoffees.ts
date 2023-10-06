@@ -1,4 +1,6 @@
 import { browser } from '$app/environment';
+import { MY_COFFEES_BATCH_SIZE } from '$lib/config/myCoffees';
+import type { CachedSearchResult } from '$lib/models/cachedSearch';
 import {
   isActiveCoffeeEntry,
   type ActiveCoffeeEntry,
@@ -9,11 +11,11 @@ import {
   type MyCoffeesState,
 } from '$lib/models/myCoffees';
 import type { SyncResult } from '$lib/models/sync';
-import { sortOrSearch } from '$lib/services/myCoffees/wrapper';
+import { loadMore, sortOrSearch } from '$lib/services/myCoffees/wrapper';
 import Dexie, { liveQuery, type Observable as DxObservable, type Table } from 'dexie';
 import { DateTime } from 'luxon';
-import { BehaviorSubject, switchMap, type Observable, debounceTime, tap } from 'rxjs';
-import { writable, type Readable } from 'svelte/store';
+import { BehaviorSubject, debounceTime, switchMap, tap, type Observable } from 'rxjs';
+import type { Readable } from 'svelte/store';
 
 export interface MyCoffeesSearchStore extends Observable<MyCoffeesSearchState> {
   setFilter: (filter: string) => void;
@@ -22,6 +24,8 @@ export interface MyCoffeesSearchStore extends Observable<MyCoffeesSearchState> {
 }
 
 export interface MyCoffeesStore extends Readable<MyCoffeesState> {
+  loadAll: () => Promise<Array<CoffeeEntry>>;
+  loadMore: () => Promise<void>;
   add: (entry: ActiveCoffeeEntry) => void;
   update: (entry: ActiveCoffeeEntry) => void;
   remove: (id: string) => Promise<void>;
@@ -67,23 +71,39 @@ function createMyCoffeesSearchStore(): MyCoffeesSearchStore {
 }
 
 function createMyCoffeesStore(myCoffeesSearchStore: MyCoffeesSearchStore): MyCoffeesStore {
-  const initialState: MyCoffeesState = { entries: [], activeEntries: [], isLoading: true };
+  const initialState: MyCoffeesState = { entries: [], totalEntries: 0, isLoading: true };
   const removedEntries = new Map<string, ActiveCoffeeEntry>();
-  const { subscribe, update } = writable<MyCoffeesState>(initialState);
+  const subject = new BehaviorSubject<MyCoffeesState>(initialState);
   let myCoffeesDb: MyCoffeesDb | null = null;
 
   if (browser) {
     const db = (myCoffeesDb = new MyCoffeesDb());
     myCoffeesSearchStore
       .pipe(
-        tap(() => update((myCoffees) => ({ ...myCoffees, isLoading: true }))),
+        tap(() => subject.next({ ...subject.value, isLoading: true })),
         debounceTime(250),
         switchMap((search) => createQuery(db, search)),
       )
-      .subscribe((entries) => {
-        const activeEntries = entries.filter(isActiveCoffeeEntry);
-        update((myCoffees) => ({ ...myCoffees, entries, activeEntries, isLoading: false }));
+      .subscribe((result) => {
+        const { data: entries, totalEntries } = result;
+        subject.next({ ...subject.value, entries, totalEntries, isLoading: false });
       });
+  }
+
+  async function loadAllEntries(): Promise<Array<CoffeeEntry>> {
+    const entries = await myCoffeesDb?.entries.toArray();
+    return entries ?? [];
+  }
+
+  async function loadMoreEntries(): Promise<void> {
+    const { entries, totalEntries } = subject.value;
+    if (entries.length < totalEntries) {
+      const moreEntries = await loadMore(entries.length, MY_COFFEES_BATCH_SIZE);
+      subject.next({
+        ...subject.value,
+        entries: [...entries, ...moreEntries],
+      });
+    }
   }
 
   function addEntry(entry: ActiveCoffeeEntry): void {
@@ -125,21 +145,24 @@ function createMyCoffeesStore(myCoffeesSearchStore: MyCoffeesSearchStore): MyCof
     }
   }
 
-  return {
-    subscribe,
-    add: addEntry,
-    update: updateEntry,
-    remove: removeEntry,
-    undo: undoRemoveEntry,
-    apply: applySyncResult,
-  };
+  const myCoffeesStore = subject as unknown as MyCoffeesStore;
+  myCoffeesStore.loadAll = loadAllEntries;
+  myCoffeesStore.loadMore = loadMoreEntries;
+  myCoffeesStore.add = addEntry;
+  myCoffeesStore.update = updateEntry;
+  myCoffeesStore.remove = removeEntry;
+  myCoffeesStore.undo = undoRemoveEntry;
+  myCoffeesStore.apply = applySyncResult;
+  return myCoffeesStore;
 }
 
 function createQuery(
   db: MyCoffeesDb,
   search: MyCoffeesSearchState,
-): DxObservable<Array<CoffeeEntry>> {
+): DxObservable<CachedSearchResult<ActiveCoffeeEntry>> {
   return liveQuery(async () => {
-    return sortOrSearch(await db.entries.toArray(), search);
+    const entries = await db.entries.toArray();
+    const activeEntries = entries.filter(isActiveCoffeeEntry);
+    return sortOrSearch(activeEntries, search);
   });
 }

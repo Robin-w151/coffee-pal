@@ -1,3 +1,5 @@
+import type { CachedSearchResult } from './cachedSearch';
+
 export interface Journal {
   entries: Array<JournalEntry>;
 }
@@ -22,8 +24,9 @@ export interface DeletedJournalEntry {
   deletedAt: string;
 }
 
-export interface JournalState extends Journal {
-  activeEntries: Array<ActiveJournalEntry>;
+export interface JournalState {
+  entries: Array<ActiveJournalEntry>;
+  totalEntries: number;
   isLoading: boolean;
 }
 
@@ -33,6 +36,14 @@ export interface JournalSearchState {
 }
 
 export type JournalSort = 'asc' | 'desc';
+
+export interface JournalWorker {
+  sortOrSearch: (
+    entries: Array<ActiveJournalEntry>,
+    search: JournalSearchState,
+  ) => CachedSearchResult<JournalEntry>;
+  loadMore: (index: number, count: number) => Array<ActiveJournalEntry>;
+}
 
 export function isActiveJournalEntry(
   entry?: ActiveJournalEntry | DeletedJournalEntry | null,

@@ -1,9 +1,4 @@
-import {
-  isDeletedCoffeeEntry,
-  type CoffeeEntry,
-  type MyCoffeesSearchState,
-  type MyCoffeesSort,
-} from '$lib/models/myCoffees';
+import type { ActiveCoffeeEntry, MyCoffeesSearchState, MyCoffeesSort } from '$lib/models/myCoffees';
 import { buildFuseQuery } from '$lib/utils/search/fuzzy';
 import Fuse from 'fuse.js';
 
@@ -12,12 +7,12 @@ const FUSE_OPTIONS = {
   ignoreLocation: true,
   findAllMatches: true,
   keys: ['name', 'origin', 'trader', 'aromas', 'description'],
-} satisfies Fuse.IFuseOptions<CoffeeEntry>;
+} satisfies Fuse.IFuseOptions<ActiveCoffeeEntry>;
 
 export function sortOrSearch(
-  entries: Array<CoffeeEntry>,
+  entries: Array<ActiveCoffeeEntry>,
   searchState: MyCoffeesSearchState,
-): Array<CoffeeEntry> {
+): Array<ActiveCoffeeEntry> {
   if (searchState.filter) {
     return search(entries, searchState.filter);
   } else {
@@ -25,7 +20,10 @@ export function sortOrSearch(
   }
 }
 
-export function search(entries: Array<CoffeeEntry>, filter?: string | null): Array<CoffeeEntry> {
+export function search(
+  entries: Array<ActiveCoffeeEntry>,
+  filter?: string | null,
+): Array<ActiveCoffeeEntry> {
   if (filter) {
     const filterQuery = buildFuseQuery(filter, FUSE_OPTIONS.keys);
     const fuse = new Fuse(entries, FUSE_OPTIONS);
@@ -35,19 +33,15 @@ export function search(entries: Array<CoffeeEntry>, filter?: string | null): Arr
   }
 }
 
-export function sort(entries: Array<CoffeeEntry>, sort: MyCoffeesSort = 'asc'): Array<CoffeeEntry> {
-  const reverse = (entries: Array<CoffeeEntry>) => (sort === 'asc' ? entries : entries.reverse());
+export function sort(
+  entries: Array<ActiveCoffeeEntry>,
+  sort: MyCoffeesSort = 'asc',
+): Array<ActiveCoffeeEntry> {
+  const reverse = (entries: Array<ActiveCoffeeEntry>) =>
+    sort === 'asc' ? entries : entries.reverse();
   return reverse(
-    entries.sort((e1: CoffeeEntry, e2: CoffeeEntry) => {
-      if (isDeletedCoffeeEntry(e1) && isDeletedCoffeeEntry(e2)) {
-        return 0;
-      } else if (isDeletedCoffeeEntry(e1)) {
-        return 1;
-      } else if (isDeletedCoffeeEntry(e2)) {
-        return -1;
-      } else {
-        return `${e1.name}-${e1.origin ?? ''}`.localeCompare(`${e2.name}-${e2.origin ?? ''}`);
-      }
+    entries.sort((e1: ActiveCoffeeEntry, e2: ActiveCoffeeEntry) => {
+      return `${e1.name}-${e1.origin ?? ''}`.localeCompare(`${e2.name}-${e2.origin ?? ''}`);
     }),
   );
 }
