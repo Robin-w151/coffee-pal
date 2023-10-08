@@ -9,10 +9,16 @@ export default {
   id: '/',
   start_url: '/',
   lang: 'en-US',
+  dir: 'ltr',
   display: 'standalone',
+  display_override: ['window-controls-overlay'],
   orientation: 'any',
   theme_color: '#081638',
   background_color: '#dbdee7',
+  handle_links: 'preferred',
+  launch_handler: {
+    client_mode: ['focus-existing', 'auto'],
+  },
   icons: [
     {
       src: 'icons/icon192_any.png',
@@ -67,4 +73,7 @@ export default {
     url: href,
     icons: shortcutIcon ? [shortcutIcon] : undefined,
   })),
+  edge_side_panel: {
+    preferred_width: 660,
+  },
 } satisfies Partial<ManifestOptions>;
