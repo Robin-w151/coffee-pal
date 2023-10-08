@@ -12,7 +12,7 @@ export default {
   display: 'standalone',
   orientation: 'any',
   theme_color: '#081638',
-  background_color: '#081638',
+  background_color: '#dbdee7',
   icons: [
     {
       src: 'icons/icon192_any.png',
