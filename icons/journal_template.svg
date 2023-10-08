@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   height="512"
+   viewBox="0 -512 384 0"
+   version="1.1"
+   id="svg19"
+   sodipodi:docname="journal_template.svg"
+   width="512"
+   inkscape:version="1.2.2 (732a01da63, 2022-12-09)"
+   inkscape:export-filename="..\static\icons\shortcuts\journal96.png"
+   inkscape:export-xdpi="18"
+   inkscape:export-ydpi="18"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+   <defs
+      id="defs23" />
+   <sodipodi:namedview
+      id="namedview21"
+      pagecolor="#ffffff"
+      bordercolor="#666666"
+      borderopacity="1.0"
+      inkscape:showpageshadow="2"
+      inkscape:pageopacity="0.0"
+      inkscape:pagecheckerboard="0"
+      inkscape:deskcolor="#d1d1d1"
+      showgrid="false"
+      inkscape:zoom="0.9983453"
+      inkscape:cx="-71.618507"
+      inkscape:cy="219.36298"
+      inkscape:window-width="1920"
+      inkscape:window-height="1017"
+      inkscape:window-x="-8"
+      inkscape:window-y="-8"
+      inkscape:window-maximized="1"
+      inkscape:current-layer="svg19" />
+   <circle
+      style="fill:#dbdee7;fill-opacity:1;stroke-width:1.20335"
+      id="path2908"
+      cx="256"
+      cy="256"
+      r="204.8" />
+   <path
+      d="m 256,122 c -20.9,0 -38.7,13.34999 -45.25,31.99998 H 192 c -17.65001,0 -32,14.35002 -32,32.00001 v 160 C 160,363.64998 174.34999,378 192,378 h 128 c 17.64999,0 32,-14.35002 32,-32.00001 v -160 C 352,168.35 337.64999,153.99998 320,153.99998 H 301.25 C 294.69999,135.34999 276.89999,122 256,122 Z m 0,31.99998 a 16.000006,16.000006 0 1 1 0,32.00001 16.000006,16.000006 0 1 1 0,-32.00001 z m -60,104.00001 a 12,12 0 1 1 24,0 12,12 0 1 1 -24,0 z m 52,-8.00001 h 64 c 4.39999,0 8,3.60002 8,8.00001 0,4.4 -3.60001,8 -8,8 h -64 c -4.40001,0 -8,-3.6 -8,-8 0,-4.39999 3.59999,-8.00001 8,-8.00001 z M 196,306 a 12,12 0 1 1 24,0 12,12 0 1 1 -24,0 z m 44,0 c 0,-4.40001 3.59999,-8.00001 8,-8.00001 h 64 c 4.39999,0 8,3.6 8,8.00001 0,4.4 -3.60001,7.99999 -8,7.99999 h -64 c -4.40001,0 -8,-3.59999 -8,-7.99999 z"
+      id="path17"
+      style="stroke-width:0.5;fill:#081638;fill-opacity:1" />
+</svg>

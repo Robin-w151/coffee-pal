@@ -62,8 +62,9 @@ export default {
       label: 'Brewing Calculator',
     },
   ],
-  shortcuts: routes.map(({ href, label }) => ({
+  shortcuts: routes.map(({ href, label, shortcutIcon }) => ({
     name: label,
     url: href,
+    icons: shortcutIcon ? [shortcutIcon] : undefined,
   })),
 } satisfies Partial<ManifestOptions>;
