@@ -32,7 +32,4 @@
     </span>
     <span class="text-2xl">Coffee Pal</span>
   </a>
-  <div class="flex items-center gap-4" slot="trail">
-    <LightSwitch />
-  </div>
 </AppBar>

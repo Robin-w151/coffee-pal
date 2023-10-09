@@ -10,6 +10,16 @@
     <link rel="apple-touch-icon" href="/icons/icon192_maskable.png" sizes="192x192" />
     <link rel="apple-touch-icon" href="/icons/icon512_maskable.png" sizes="512x512" />
     %sveltekit.head%
+    <script>
+      const { colorScheme } = JSON.parse(localStorage.getItem('settings') ?? '{}');
+      const prefersDarkColorScheme = window.matchMedia('(prefers-color-scheme: dark)')?.matches;
+      if (
+        colorScheme === 'dark' ||
+        ((!colorScheme || colorScheme === 'system') && prefersDarkColorScheme)
+      ) {
+        document.documentElement.classList.add('dark');
+      }
+    </script>
   </head>
   <body data-sveltekit-preload-data="hover" data-theme="coffee">
     <div style="display: contents" class="h-full overflow-hidden">%sveltekit.body%</div>

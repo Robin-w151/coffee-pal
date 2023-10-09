@@ -9,7 +9,7 @@
 </script>
 
 <h3 class="h3">Units</h3>
-<div class="flex justify-between items-center gap-4">
+<div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
   <span>Preferred units</span>
   <RadioGroup>
     <RadioItem name="radio-preferred-units" value={'metric'} bind:group={preferredUnits}

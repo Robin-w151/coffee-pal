@@ -1,33 +1,23 @@
 <script lang="ts">
-  import type { AppTheme } from '$lib/models/appTheme';
-  import { RadioGroup, RadioItem, modeOsPrefers, modeUserPrefers } from '@skeletonlabs/skeleton';
+  import type { ColorScheme } from '$lib/models/settings';
+  import { settingsStore } from '$lib/stores/settings';
+  import { RadioGroup, RadioItem } from '@skeletonlabs/skeleton';
 
-  let appTheme: AppTheme = getCurrentAppTheme();
+  let colorScheme: ColorScheme = $settingsStore.colorScheme;
 
-  $: handleAppThemeChange(appTheme);
+  $: handleAppThemeChange(colorScheme);
 
-  function handleAppThemeChange(appTheme: AppTheme): void {
-    switch (appTheme) {
-      case 'system':
-        return;
-      case 'light':
-        return;
-      case 'dark':
-        return;
-    }
-  }
-
-  function getCurrentAppTheme(): AppTheme {
-    return $modeOsPrefers ? 'system' : $modeUserPrefers ? 'light' : 'dark';
+  function handleAppThemeChange(colorScheme: ColorScheme): void {
+    settingsStore.setColorScheme(colorScheme);
   }
 </script>
 
 <h3 class="h3">Appearance</h3>
-<div class="flex justify-between items-center gap-4">
-  <span>App Theme</span>
+<div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
+  <span>Color Scheme</span>
   <RadioGroup>
-    <RadioItem name="radio-app-theme" value="system" bind:group={appTheme}>System</RadioItem>
-    <RadioItem name="radio-app-theme" value="light" bind:group={appTheme}>Light</RadioItem>
-    <RadioItem name="radio-app-theme" value="dark" bind:group={appTheme}>Dark</RadioItem>
+    <RadioItem name="radio-app-theme" value="system" bind:group={colorScheme}>System</RadioItem>
+    <RadioItem name="radio-app-theme" value="light" bind:group={colorScheme}>Light</RadioItem>
+    <RadioItem name="radio-app-theme" value="dark" bind:group={colorScheme}>Dark</RadioItem>
   </RadioGroup>
 </div>

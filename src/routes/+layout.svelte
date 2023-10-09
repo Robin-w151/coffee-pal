@@ -2,6 +2,7 @@
   import AppBar from '$lib/components/ui/app/AppBar.svelte';
   import AppMenu from '$lib/components/ui/app/AppMenu.svelte';
   import AppRail from '$lib/components/ui/app/AppRail.svelte';
+  import EnableColorSchemes from '$lib/components/ui/app/EnableColorSchemes.svelte';
   import { arrow, autoUpdate, computePosition, flip, offset, shift } from '@floating-ui/dom';
   import {
     AppShell,
@@ -26,6 +27,8 @@
 <svelte:head>
   {@html webManifestLink}
 </svelte:head>
+
+<EnableColorSchemes />
 
 <Modal />
 <Toast />
