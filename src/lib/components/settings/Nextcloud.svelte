@@ -11,7 +11,7 @@
   import Label from '../ui/elements/form/Label.svelte';
   import UrlInput from '../ui/elements/form/UrlInput.svelte';
   import NextcloudLoginModal from './NextcloudLoginModal.svelte';
-  import type { UrlInputChange } from '$lib/models/url-input';
+  import type { UrlInputChange } from '$lib/models/urlInput';
 
   const modalHelper = new ModalHelper(getModalStore());
 
