@@ -6,6 +6,8 @@ import { precacheAndRoute } from 'workbox-precaching';
 
 declare let self: ServiceWorkerGlobalScope;
 
-if (self.__WB_MANIFEST) {
-  precacheAndRoute(self.__WB_MANIFEST);
+const wbManifest = self.__WB_MANIFEST;
+
+if (wbManifest) {
+  precacheAndRoute(wbManifest);
 }
