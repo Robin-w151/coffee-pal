@@ -16,6 +16,7 @@
   import { pwaInfo } from 'virtual:pwa-info';
   import '../app.scss';
   import '$lib/stores/app';
+  import AppDragHandle from '$lib/components/ui/app/AppDragHandle.svelte';
 
   initializeStores();
   storePopup.set({ computePosition, autoUpdate, offset, shift, flip, arrow });
@@ -40,7 +41,10 @@
 
 <AppShell>
   <svelte:fragment slot="header">
-    <AppBar />
+    <div class="flex">
+      <AppBar />
+      <AppDragHandle />
+    </div>
   </svelte:fragment>
   <div class="hidden md:block h-full" slot="sidebarLeft">
     <AppRail />
