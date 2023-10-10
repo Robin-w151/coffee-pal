@@ -14,3 +14,4 @@ yarn.lock
 /.yarn
 
 /.vercel
+/testdata

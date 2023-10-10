@@ -3,7 +3,6 @@
   import { faPencil } from '@fortawesome/free-solid-svg-icons';
   import { createEventDispatcher } from 'svelte';
   import { Icon } from 'svelte-awesome';
-  import { slide } from 'svelte/transition';
 
   export let entry: ActiveCoffeeEntry;
 

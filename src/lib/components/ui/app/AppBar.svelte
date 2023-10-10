@@ -1,7 +1,7 @@
 <script lang="ts">
   import { mainRoute } from '$lib/config/routes';
   import { faBars, faMugHot } from '@fortawesome/free-solid-svg-icons';
-  import { AppBar, LightSwitch, getDrawerStore, type DrawerSettings } from '@skeletonlabs/skeleton';
+  import { AppBar, getDrawerStore, type DrawerSettings } from '@skeletonlabs/skeleton';
   import { Icon } from 'svelte-awesome';
 
   const drawerStore = getDrawerStore();

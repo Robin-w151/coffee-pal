@@ -12,7 +12,10 @@
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
     "lint": "prettier --check . && eslint .",
     "format": "prettier --write .",
-    "sme": "source-map-explorer .svelte-kit/output/client/**/*.js"
+    "sme": "source-map-explorer .svelte-kit/output/client/**/*.js",
+    "postinstall": "husky install",
+    "prepack": "pinst --disable",
+    "postpack": "pinst --enable"
   },
   "devDependencies": {
     "@exodus/schemasafe": "^1.3.0",
@@ -42,8 +45,10 @@
     "eslint-plugin-svelte": "^2.34.0",
     "file-saver": "^2.0.5",
     "fuse.js": "^6.6.2",
+    "husky": "^8.0.0",
     "kolorist": "^1.8.0",
     "luxon": "^3.4.3",
+    "pinst": "^3.0.0",
     "postcss": "^8.4.31",
     "prettier": "^3.0.3",
     "prettier-plugin-svelte": "^3.0.3",
