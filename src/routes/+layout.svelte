@@ -3,6 +3,7 @@
   import AppMenu from '$lib/components/ui/app/AppMenu.svelte';
   import AppRail from '$lib/components/ui/app/AppRail.svelte';
   import EnableColorSchemes from '$lib/components/ui/app/EnableColorSchemes.svelte';
+  import '$lib/stores/app';
   import { arrow, autoUpdate, computePosition, flip, offset, shift } from '@floating-ui/dom';
   import {
     AppShell,
@@ -15,8 +16,6 @@
   } from '@skeletonlabs/skeleton';
   import { pwaInfo } from 'virtual:pwa-info';
   import '../app.scss';
-  import '$lib/stores/app';
-  import AppDragHandle from '$lib/components/ui/app/AppDragHandle.svelte';
 
   initializeStores();
   storePopup.set({ computePosition, autoUpdate, offset, shift, flip, arrow });
@@ -41,10 +40,7 @@
 
 <AppShell>
   <svelte:fragment slot="header">
-    <div class="flex">
-      <AppBar />
-      <AppDragHandle />
-    </div>
+    <AppBar />
   </svelte:fragment>
   <div class="hidden md:block h-full" slot="sidebarLeft">
     <AppRail />

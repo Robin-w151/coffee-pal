@@ -11,7 +11,6 @@ export default {
   lang: 'en-US',
   dir: 'ltr',
   display: 'standalone',
-  display_override: ['window-controls-overlay'],
   orientation: 'any',
   theme_color: '#081638',
   background_color: '#dbdee7',
