@@ -1880,9 +1880,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sveltejs/kit@npm:^1.25.1":
-  version: 1.25.1
-  resolution: "@sveltejs/kit@npm:1.25.1"
+"@sveltejs/kit@npm:^1.25.2":
+  version: 1.25.2
+  resolution: "@sveltejs/kit@npm:1.25.2"
   dependencies:
     "@sveltejs/vite-plugin-svelte": ^2.4.1
     "@types/cookie": ^0.5.1
@@ -1902,7 +1902,7 @@ __metadata:
     vite: ^4.0.0
   bin:
     svelte-kit: svelte-kit.js
-  checksum: 0700b9daadcd35f7b60c5c11ae2b89c66b0dbed6e2a0867aef735bb279e91fe8fd85d59f7a929ecf03a4959055c819dda5d60c001aabb293d32b868ebec49104
+  checksum: fb8624674224b31cc6fd7e6f1ec5c0009388b999711a19cb9ad3e22c03893d560f66bbc70b478e9ca5078f21c882e79a283a63ffb3c959de77b85eef8770acc0
   languageName: node
   linkType: hard
 
@@ -2778,7 +2778,7 @@ __metadata:
     "@skeletonlabs/skeleton": ^2.2.0
     "@skeletonlabs/tw-plugin": ^0.2.1
     "@sveltejs/adapter-auto": ^2.1.0
-    "@sveltejs/kit": ^1.25.1
+    "@sveltejs/kit": ^1.25.2
     "@tailwindcss/forms": ^0.5.6
     "@types/chance": ^1.1.4
     "@types/file-saver": ^2.0.5
@@ -2797,7 +2797,7 @@ __metadata:
     eslint-plugin-svelte: ^2.34.0
     file-saver: ^2.0.5
     fuse.js: ^6.6.2
-    husky: ^8.0.0
+    husky: ^8.0.3
     kolorist: ^1.8.0
     luxon: ^3.4.3
     pinst: ^3.0.0
@@ -2805,7 +2805,7 @@ __metadata:
     prettier: ^3.0.3
     prettier-plugin-svelte: ^3.0.3
     rxjs: ^7.8.1
-    sass: ^1.69.0
+    sass: ^1.69.1
     source-map-explorer: ^2.5.3
     svelte: ^4.2.1
     svelte-adapter-bun: ^0.5.0
@@ -4154,7 +4154,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"husky@npm:^8.0.0":
+"husky@npm:^8.0.3":
   version: 8.0.3
   resolution: "husky@npm:8.0.3"
   bin:
@@ -6013,16 +6013,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sass@npm:^1.69.0":
-  version: 1.69.0
-  resolution: "sass@npm:1.69.0"
+"sass@npm:^1.69.1":
+  version: 1.69.1
+  resolution: "sass@npm:1.69.1"
   dependencies:
     chokidar: ">=3.0.0 <4.0.0"
     immutable: ^4.0.0
     source-map-js: ">=0.6.2 <2.0.0"
   bin:
     sass: sass.js
-  checksum: eabea31ea3b1dd529c7eff345c8b6468afe6ab8011bd4f95caa2cffb8fb115cc055ea21de425be6197f7ed22516f5652eccb98d315d592ea152ada553f964b8a
+  checksum: e3f0754fc8e1ffc239919cba8d1cc8d89908d596161992c562d0679a6aa1e1c57b0a11846726f9222f96622495a5bfc00461b3f31182e71a54ad91a86dd10a8f
   languageName: node
   linkType: hard
 
