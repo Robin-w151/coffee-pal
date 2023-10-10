@@ -1,15 +1,16 @@
 <script lang="ts">
-  import { installEventStore } from '$lib/stores/app';
+  import { appStore } from '$lib/stores/app';
 
   const appVersion = import.meta.env.APP_VERSION;
   const appCommitHash = import.meta.env.APP_COMMIT_HASH;
   const itemClass = 'grid grid-cols-[subgrid] col-span-2';
 
-  async function handleInstallClick(): Promise<void> {
-    const { outcome } = (await $installEventStore?.prompt()) ?? { outcome: 'dismissed' };
-    if (outcome === 'accepted') {
-      installEventStore.clear();
-    }
+  function handleKeepDataClick(): void {
+    appStore.requestPersistentStorage();
+  }
+
+  function handleInstallClick(): void {
+    appStore.requestAppInstall();
   }
 </script>
 
@@ -29,7 +30,20 @@
       <a href="https://github.com/Robin-w151/coffee-pal" target="_blank" rel="noopener">GitHub</a>
     </li>
   </ul>
-  {#if $installEventStore}
-    <button class="btn variant-filled-primary" on:click={handleInstallClick}>Install App</button>
-  {/if}
+  <div class="flex flex-col sm:flex-row gap-2">
+    <button
+      class="btn variant-ghost-primary"
+      title="Request that data is stored until manual removal"
+      disabled={$appStore.persistentStorage}
+      on:click={handleKeepDataClick}
+      >{$appStore.persistentStorage ? 'Data is persisted' : 'Keep Data'}</button
+    >
+    {#if $appStore.installEvent}
+      <button
+        class="btn variant-filled-primary"
+        title="Install App on the system"
+        on:click={handleInstallClick}>Install App</button
+      >
+    {/if}
+  </div>
 </div>

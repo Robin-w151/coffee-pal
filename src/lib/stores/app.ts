@@ -1,29 +1,45 @@
 import { browser } from '$app/environment';
-import { writable, type Readable } from 'svelte/store';
+import type { App, InstallEvent } from '$lib/models/app';
+import { writable, type Readable, get } from 'svelte/store';
 
-export interface InstallEventStore extends Readable<InstallEvent | null> {
-  clear: () => void;
+export interface AppStore extends Readable<App> {
+  requestPersistentStorage: () => Promise<void>;
+  requestAppInstall: () => Promise<void>;
 }
 
-export interface InstallEvent extends Event {
-  prompt: () => Promise<{ outcome: 'accepted' | 'dismissed' }>;
-}
+export const appStore = createAppStore();
 
-export const installEventStore = createInstallEventStore();
-
-function createInstallEventStore(): InstallEventStore {
-  const { subscribe, set } = writable<InstallEvent | null>(null);
+function createAppStore(): AppStore {
+  const initialState = {} as App;
+  const { subscribe, update } = writable<App>(initialState);
 
   if (browser) {
     window.addEventListener('beforeinstallprompt', (event) => {
       event.preventDefault();
-      set(event as InstallEvent);
+      update((app) => ({ ...app, installEvent: event as InstallEvent }));
     });
+
+    navigator.storage
+      .persisted()
+      .then((persisted) => update((app) => ({ ...app, persistentStorage: persisted })));
   }
 
-  function clear(): void {
-    set(null);
+  async function requestPersistentStorage(): Promise<void> {
+    if (browser) {
+      const persisted = await navigator.storage.persist();
+
+      if (persisted) {
+        update((app) => ({ ...app, persistentStorage: persisted }));
+      }
+    }
   }
 
-  return { subscribe, clear };
+  async function requestAppInstall(): Promise<void> {
+    const { outcome } = (await get(appStore).installEvent?.prompt()) ?? { outcome: 'dismissed' };
+    if (outcome === 'accepted') {
+      update((app) => ({ ...app, installEvent: undefined }));
+    }
+  }
+
+  return { subscribe, requestPersistentStorage, requestAppInstall };
 }
