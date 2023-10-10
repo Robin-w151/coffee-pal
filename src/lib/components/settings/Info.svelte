@@ -5,9 +5,11 @@
   const appCommitHash = import.meta.env.APP_COMMIT_HASH;
   const itemClass = 'grid grid-cols-[subgrid] col-span-2';
 
-  function handleInstallClick(): void {
-    ($installEventStore as any)?.prompt();
-    installEventStore.clear();
+  async function handleInstallClick(): Promise<void> {
+    const { outcome } = (await $installEventStore?.prompt()) ?? { outcome: 'dismissed' };
+    if (outcome === 'accepted') {
+      installEventStore.clear();
+    }
   }
 </script>
 
