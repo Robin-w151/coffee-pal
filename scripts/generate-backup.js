@@ -1,10 +1,7 @@
-import type { Backup } from '$lib/models/backup';
-import type { JournalEntry } from '$lib/models/journal';
 import { Chance } from 'chance';
 import { DateTime } from 'luxon';
 import { v4 as uuid } from 'uuid';
 import { writeFileSync } from 'fs';
-import type { CoffeeEntry } from '$lib/models/myCoffees';
 
 const chance = new Chance();
 
@@ -13,9 +10,9 @@ const backupName = `backup-${DateTime.now().toISO()}.json`;
 
 writeFileSync(backupName, JSON.stringify(backup));
 
-function generateBackup(): Backup {
-  const journalEntries: Array<JournalEntry> = [];
-  const myCoffeesEntries: Array<CoffeeEntry> = [];
+function generateBackup() {
+  const journalEntries = [];
+  const myCoffeesEntries = [];
   for (let i = 0; i < 10000; i++) {
     journalEntries.push(generateJournalEntry());
     myCoffeesEntries.push(generateCoffeeEntry());
@@ -31,7 +28,7 @@ function generateBackup(): Backup {
   };
 }
 
-function generateJournalEntry(): JournalEntry {
+function generateJournalEntry() {
   return {
     id: uuid(),
     method: chance.name(),
@@ -41,12 +38,12 @@ function generateJournalEntry(): JournalEntry {
     coffeeType: chance.name(),
     grindSettings: chance.syllable(),
     description: chance.paragraph(),
-    createdAt: DateTime.now().toISO()!,
-    updatedAt: DateTime.now().toISO()!,
+    createdAt: DateTime.now().toISO(),
+    updatedAt: DateTime.now().toISO(),
   };
 }
 
-function generateCoffeeEntry(): CoffeeEntry {
+function generateCoffeeEntry() {
   return {
     id: uuid(),
     name: chance.name(),
@@ -54,7 +51,7 @@ function generateCoffeeEntry(): CoffeeEntry {
     trader: chance.name(),
     aromas: Array(chance.integer({ min: 2, max: 5 })).map(() => chance.word()),
     description: chance.paragraph(),
-    createdAt: DateTime.now().toISO()!,
-    updatedAt: DateTime.now().toISO()!,
+    createdAt: DateTime.now().toISO(),
+    updatedAt: DateTime.now().toISO(),
   };
 }
