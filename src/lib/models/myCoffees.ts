@@ -1,7 +1,7 @@
 import type { CachedSearchResult } from './cachedSearch';
 
 export interface MyCoffees {
-  entries: Array<any>;
+  entries: Array<CoffeeEntry>;
 }
 
 export type CoffeeEntry = ActiveCoffeeEntry | DeletedCoffeeEntry;
@@ -10,6 +10,7 @@ export interface ActiveCoffeeEntry {
   id: string;
   name: string;
   origin?: string;
+  variety?: string;
   trader?: string;
   aromas: Array<string>;
   description?: string;

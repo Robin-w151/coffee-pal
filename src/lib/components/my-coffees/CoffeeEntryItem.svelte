@@ -12,6 +12,11 @@
     const copy = { ...entry, aromas: [...entry.aromas] };
     dispatch('update', copy);
   }
+
+  function details(entry: ActiveCoffeeEntry): string {
+    const { variety, trader } = entry;
+    return [variety, trader].filter((s) => !!s).join(' | ');
+  }
 </script>
 
 <div class="justify-between">
@@ -20,7 +25,7 @@
       <span class="font-bold">{entry.name} - {entry.origin || 'Unknown Origin'}</span>
     </dt>
     <dd class="overflow-hidden text-ellipsis">
-      <span>{entry.trader || 'Unknown Trader'}</span>
+      <span>{details(entry)}</span>
     </dd>
   </span>
   <span class="flex gap-2">

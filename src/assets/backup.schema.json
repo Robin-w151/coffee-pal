@@ -2,6 +2,43 @@
   "$ref": "#/definitions/Backup",
   "$schema": "http://json-schema.org/draft-07/schema#",
   "definitions": {
+    "ActiveCoffeeEntry": {
+      "additionalProperties": false,
+      "properties": {
+        "aromas": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "origin": {
+          "type": "string"
+        },
+        "trader": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string"
+        },
+        "variety": {
+          "type": "string"
+        }
+      },
+      "required": ["id", "name", "aromas", "createdAt", "updatedAt"],
+      "type": "object"
+    },
     "ActiveJournalEntry": {
       "additionalProperties": false,
       "properties": {
@@ -51,6 +88,29 @@
       },
       "type": "object"
     },
+    "CoffeeEntry": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/ActiveCoffeeEntry"
+        },
+        {
+          "$ref": "#/definitions/DeletedCoffeeEntry"
+        }
+      ]
+    },
+    "DeletedCoffeeEntry": {
+      "additionalProperties": false,
+      "properties": {
+        "deletedAt": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        }
+      },
+      "required": ["id", "deletedAt"],
+      "type": "object"
+    },
     "DeletedJournalEntry": {
       "additionalProperties": false,
       "properties": {
@@ -91,7 +151,9 @@
       "additionalProperties": false,
       "properties": {
         "entries": {
-          "items": {},
+          "items": {
+            "$ref": "#/definitions/CoffeeEntry"
+          },
           "type": "array"
         }
       },

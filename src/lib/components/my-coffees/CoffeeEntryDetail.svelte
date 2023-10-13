@@ -11,6 +11,7 @@
   import Name from './detail/Name.svelte';
   import Origin from './detail/Origin.svelte';
   import Trader from './detail/Trader.svelte';
+  import Variety from './detail/Variety.svelte';
 
   export let entry: Partial<ActiveCoffeeEntry> = {
     id: uuid(),
@@ -49,6 +50,10 @@
       sanitizedEntry.origin = undefined;
     }
 
+    if (!sanitizedEntry.variety) {
+      sanitizedEntry.variety = undefined;
+    }
+
     if (!sanitizedEntry.trader) {
       sanitizedEntry.trader = undefined;
     }
@@ -80,6 +85,7 @@
   <Form class="px-4 pb-4 h-full overflow-auto">
     <Name bind:name={entry.name} bind:valid={nameInputValid} />
     <Origin bind:origin={entry.origin} />
+    <Variety bind:variety={entry.variety} />
     <Trader bind:trader={entry.trader} />
     <Aromas bind:aromas={entry.aromas} />
     <Description bind:description={entry.description} />
