@@ -33,3 +33,6 @@ vite.config.ts.timestamp-*
 !.yarn/cache
 
 .vercel/
+/test-results/
+/playwright-report/
+/playwright/.cache/

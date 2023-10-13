@@ -47,6 +47,14 @@
     {
       "type": "node",
       "request": "launch",
+      "name": "Test",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "yarn",
+      "runtimeArgs": ["test:ui"]
+    },
+    {
+      "type": "node",
+      "request": "launch",
       "name": "Check",
       "cwd": "${workspaceFolder}",
       "runtimeExecutable": "yarn",
