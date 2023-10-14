@@ -38,7 +38,13 @@
 </script>
 
 <div class="flex items-center gap-2">
-  <SlideToggle name="Iced" size="sm" active="slide-toggle-active-token" bind:checked={iced} />
+  <SlideToggle
+    name="iced-coffee"
+    label="Iced Coffee"
+    size="sm"
+    active="slide-toggle-active-token"
+    bind:checked={iced}
+  />
   <h3 class="h3">Iced Coffee</h3>
 </div>
 {#if iced}
@@ -55,10 +61,10 @@
         <span>{iceRatio} %</span>
       </div>
     </RangeSlider>
-    <Label text="Brew Water">
+    <Label text="Amount of brewing water">
       <MeasurementInput readonly {units} bind:measurement={brewWaterMeasurement} />
     </Label>
-    <Label text="Ice">
+    <Label text="Amount of ice">
       <MeasurementInput readonly {units} bind:measurement={iceMeasurement} />
     </Label>
   </form>

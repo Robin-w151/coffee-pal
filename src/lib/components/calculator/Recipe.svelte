@@ -50,7 +50,7 @@
 
 <h3 class="h3">Recipe</h3>
 <form class="flex flex-col gap-4">
-  <Label text="Water">
+  <Label text="Amount of water">
     <MeasurementInput
       {units}
       bind:measurement={waterMeasurement}
@@ -58,7 +58,7 @@
       on:blur={handleWaterChange}
     />
   </Label>
-  <Label text="Coffee">
+  <Label text="Amount of coffee">
     <MeasurementInput
       {units}
       bind:measurement={coffeeMeasurement}
@@ -66,7 +66,7 @@
       on:blur={handleCoffeeChange}
     />
   </Label>
-  <Label text="Output">
+  <Label text="Amount of brewed coffee">
     <MeasurementInput
       {units}
       bind:measurement={outputMeasurement}
