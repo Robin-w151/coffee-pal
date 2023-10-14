@@ -1,0 +1,103 @@
+import type { ActiveCoffeeEntry } from '$lib/models/myCoffees';
+import type { Locator, Page } from '@playwright/test';
+
+export class MyCoffeesPage {
+  constructor(private readonly page: Page) {}
+
+  get coffeeList(): Locator {
+    return this.page.locator('main dl > div');
+  }
+
+  get emptyMessage(): Locator {
+    return this.page.getByText('could not find any coffees');
+  }
+
+  getCoffeeEntry(entry: number): Locator {
+    return this.coffeeList.nth(entry);
+  }
+
+  getCoffeeEntryTitle(entry: Locator | number): Locator {
+    return (typeof entry === 'number' ? this.getCoffeeEntry(entry) : entry).locator('dt');
+  }
+
+  getCoffeeEntryDetail(entry: Locator | number): Locator {
+    return (typeof entry === 'number' ? this.getCoffeeEntry(entry) : entry).locator('dd');
+  }
+
+  async goto(): Promise<void> {
+    await this.page.goto('/my-coffees');
+  }
+
+  async addCoffeeEntry(entry: ActiveCoffeeEntry): Promise<void> {
+    await this.page.evaluate(async (entry) => {
+      return new Promise((resolve, reject) => {
+        const openRequest = window.indexedDB.open('my-coffees');
+        openRequest.onsuccess = (event: any) => {
+          const db = event.target.result as IDBDatabase;
+          const tx = db.transaction(['entries'], 'readwrite');
+          const store = tx.objectStore('entries');
+          store.add(entry);
+          tx.commit();
+
+          tx.oncomplete = () => resolve(void 0);
+          tx.onerror = reject;
+          tx.onabort = reject;
+        };
+        openRequest.onerror = reject;
+      });
+    }, entry);
+  }
+
+  async clickAddButton(): Promise<void> {
+    await this.page.getByRole('button', { name: 'Add new entry' }).click();
+  }
+
+  async clickSaveButton(): Promise<void> {
+    await this.page.getByRole('button', { name: 'Save' }).click();
+  }
+
+  async enterSearch(search: string): Promise<void> {
+    await this.page.getByRole('button', { name: 'Search' }).click();
+    await this.page.getByPlaceholder('Search...').fill(search);
+  }
+
+  async clearSearch(): Promise<void> {
+    await this.page.getByRole('button', { name: 'Clear' }).click();
+  }
+
+  async clickSortButton(): Promise<void> {
+    await this.page.getByRole('button', { name: 'Change sort order' }).click();
+  }
+}
+
+export const testCoffeeEntries: Array<ActiveCoffeeEntry> = [
+  {
+    id: '1bdfaa18-8722-439f-b26b-caa7f67fed00',
+    name: 'Rwanda Kamajumba',
+    origin: 'Kamajumba Estate',
+    variety: 'Red Bourbon',
+    trader: 'Drip Roasters',
+    aromas: ['lemon', 'orange', 'black tea'],
+    createdAt: '2023-08-26T21:29:31.780+02:00',
+    updatedAt: '2023-08-26T21:29:31.780+02:00',
+  },
+  {
+    id: '191ee4a7-a43d-4a43-98e3-9e5861106d86',
+    name: 'Terroir PAN',
+    origin: 'Panama',
+    trader: 'Blasercafe',
+    aromas: ['blueberry', 'caramel', 'floral', 'sweet', 'honey'],
+    createdAt: '2023-08-26T21:26:11.665+02:00',
+    updatedAt: '2023-09-08T15:09:57.359+02:00',
+  },
+  {
+    id: '0f3bb076-7346-44fb-8c1d-d74a8c691441',
+    name: 'Wiedner Mischung',
+    origin: 'Mix',
+    variety: 'Arabica',
+    trader: 'Alt Wien',
+    aromas: ['cocoa', 'caramel', 'walnut', 'black tea', 'nut meg', 'pepper', 'marzipan'],
+    createdAt: '2023-09-14T16:19:42.679+02:00',
+    updatedAt: '2023-09-14T18:30:27.456+02:00',
+  },
+];
