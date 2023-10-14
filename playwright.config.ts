@@ -8,7 +8,7 @@ export default defineConfig({
   fullyParallel: true,
   reporter: 'html',
   use: {
-    baseURL: process.env.TEST_BASE_URL ?? 'http://localhost:4173',
+    baseURL: process.env.TEST_BASE_URL ?? 'http://localhost:5173',
     trace: 'on-first-retry',
   },
   projects: [
@@ -29,11 +29,4 @@ export default defineConfig({
     timeout: 30_000,
   },
   retries: 1,
-  webServer: {
-    command: 'yarn preview',
-    url: 'http://localhost:4173',
-    reuseExistingServer: true,
-    stdout: 'ignore',
-    stderr: 'pipe',
-  },
 });
