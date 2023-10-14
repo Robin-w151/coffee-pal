@@ -3,11 +3,13 @@ import { test as base, expect, type Page } from '@playwright/test';
 import { MyCoffeesPage, testCoffeeEntries } from './pages/myCoffees.page';
 import { CalculatorPage } from './pages/calculator.page';
 import { JournalEntryDetailPage } from './pages/journalEntryDetail.page';
+import { MyCoffeesEntryDetailPage } from './pages/myCoffeesEntryDetail.page';
 
 interface TestFixtures {
   journalPage: JournalPage;
   journalEntryDetailPage: JournalEntryDetailPage;
   myCoffeesPage: MyCoffeesPage;
+  myCoffeesEntryDetailPage: MyCoffeesEntryDetailPage;
   calculatorPage: CalculatorPage;
 }
 
@@ -45,6 +47,10 @@ export const test = base.extend<TestFixtures>({
     );
 
     await use(myCoffeesPage);
+  },
+  myCoffeesEntryDetailPage: async ({ page }, use) => {
+    const myCoffeesEntryDetailPage = new MyCoffeesEntryDetailPage(page);
+    await use(myCoffeesEntryDetailPage);
   },
   calculatorPage: async ({ page }, use) => {
     const calculatorPage = new CalculatorPage(page);

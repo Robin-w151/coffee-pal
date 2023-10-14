@@ -52,10 +52,6 @@ export class MyCoffeesPage {
     await this.page.getByRole('button', { name: 'Add new entry' }).click();
   }
 
-  async clickSaveButton(): Promise<void> {
-    await this.page.getByRole('button', { name: 'Save' }).click();
-  }
-
   async enterSearch(search: string): Promise<void> {
     await this.page.getByRole('button', { name: 'Search' }).click();
     await this.page.getByPlaceholder('Search...').fill(search);
@@ -67,6 +63,16 @@ export class MyCoffeesPage {
 
   async clickSortButton(): Promise<void> {
     await this.page.getByRole('button', { name: 'Change sort order' }).click();
+  }
+
+  async clickUndoButton(): Promise<void> {
+    await this.page.getByRole('button', { name: 'Undo' }).click();
+  }
+
+  async clickJournalEntryEditButton(entry: Locator | number): Promise<void> {
+    return (typeof entry === 'number' ? this.getCoffeeEntry(entry) : entry)
+      .getByTitle('Edit')
+      .click();
   }
 }
 

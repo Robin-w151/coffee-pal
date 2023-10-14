@@ -8,31 +8,31 @@ export class JournalEntryDetailPage {
   }
 
   get methodInput(): Locator {
-    return this.page.getByPlaceholder('brew method');
+    return this.page.getByPlaceholder('Brew method');
   }
 
   get coffeeTypeInput(): Locator {
-    return this.page.getByLabel('type of coffee');
+    return this.page.getByLabel('Type of coffee');
   }
 
   get waterInput(): Locator {
-    return this.page.getByLabel('amount of water');
+    return this.page.getByLabel('Amount of water');
   }
 
   get coffeeInput(): Locator {
-    return this.page.getByLabel('amount of coffee');
+    return this.page.getByLabel('Amount of coffee');
   }
 
   get waterTemperatureInput(): Locator {
-    return this.page.getByLabel('water temperature');
+    return this.page.getByLabel('Water temperature');
   }
 
   get grindSettingsInput(): Locator {
-    return this.page.getByLabel('grind settings');
+    return this.page.getByLabel('Grind settings');
   }
 
   get descriptionInput(): Locator {
-    return this.page.getByLabel('description');
+    return this.page.getByLabel('Description');
   }
 
   async clickSaveButton(): Promise<void> {
