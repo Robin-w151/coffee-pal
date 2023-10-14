@@ -2839,6 +2839,7 @@ __metadata:
     chance: ^1.1.11
     comlink: ^4.4.1
     dexie: ^3.2.4
+    dotenv-flow: ^4.0.0
     eslint: ^8.51.0
     eslint-config-prettier: ^9.0.0
     eslint-plugin-svelte: ^2.34.0
@@ -3158,6 +3159,22 @@ __metadata:
   dependencies:
     esutils: ^2.0.2
   checksum: fd7673ca77fe26cd5cba38d816bc72d641f500f1f9b25b83e8ce28827fe2da7ad583a8da26ab6af85f834138cf8dae9f69b0cd6ab925f52ddab1754db44d99ce
+  languageName: node
+  linkType: hard
+
+"dotenv-flow@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "dotenv-flow@npm:4.0.0"
+  dependencies:
+    dotenv: ^16.0.0
+  checksum: 10e11a814afb1f8420e4c67134ea611774753b0dfd13d4a173c9e44b6a5db429090b8644f6c09c17e81cbf935bf9e9604d78cfdce12ed0219bac6c09c81bc0cf
+  languageName: node
+  linkType: hard
+
+"dotenv@npm:^16.0.0":
+  version: 16.3.1
+  resolution: "dotenv@npm:16.3.1"
+  checksum: 15d75e7279018f4bafd0ee9706593dd14455ddb71b3bcba9c52574460b7ccaf67d5cf8b2c08a5af1a9da6db36c956a04a1192b101ee102a3e0cf8817bbcf3dfd
   languageName: node
   linkType: hard
 

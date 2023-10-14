@@ -1,11 +1,14 @@
 import { defineConfig, devices } from '@playwright/test';
+import dotenv from 'dotenv-flow';
+
+dotenv.config({ silent: true });
 
 export default defineConfig({
   testDir: './tests',
   fullyParallel: true,
   reporter: 'html',
   use: {
-    baseURL: 'http://localhost:5173',
+    baseURL: process.env.TEST_BASE_URL ?? 'http://localhost:4173',
     trace: 'on-first-retry',
   },
   projects: [
@@ -22,4 +25,15 @@ export default defineConfig({
       use: { ...devices['Pixel 5'] },
     },
   ],
+  expect: {
+    timeout: 30_000,
+  },
+  retries: 1,
+  webServer: {
+    command: 'yarn preview',
+    url: 'http://localhost:4173',
+    reuseExistingServer: true,
+    stdout: 'ignore',
+    stderr: 'pipe',
+  },
 });

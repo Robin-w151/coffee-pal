@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "vite dev",
     "build": "vite build",
-    "preview": "vite preview",
+    "preview": "vite build && vite preview",
     "generate:schema": "yarn generate:schema:backup",
     "generate:schema:backup": "ts-json-schema-generator --path 'src/lib/models/backup.ts' --type Backup > src/assets/backup.schema.json",
     "generate:screenshots": "node scripts/generate-screenshots.js",
@@ -44,6 +44,7 @@
     "chance": "^1.1.11",
     "comlink": "^4.4.1",
     "dexie": "^3.2.4",
+    "dotenv-flow": "^4.0.0",
     "eslint": "^8.51.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-svelte": "^2.34.0",
