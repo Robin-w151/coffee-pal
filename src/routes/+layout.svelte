@@ -16,12 +16,17 @@
   } from '@skeletonlabs/skeleton';
   import { pwaInfo } from 'virtual:pwa-info';
   import '../app.scss';
+  import { onMount } from 'svelte';
 
   initializeStores();
   storePopup.set({ computePosition, autoUpdate, offset, shift, flip, arrow });
 
   const drawerStore = getDrawerStore();
   $: webManifestLink = pwaInfo ? pwaInfo.webManifest.linkTag : '';
+
+  onMount(() => {
+    document.documentElement.setAttribute('data-test', 'ready');
+  });
 </script>
 
 <svelte:head>
