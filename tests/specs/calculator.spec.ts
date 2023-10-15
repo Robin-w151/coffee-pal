@@ -39,14 +39,22 @@ test('calculator recipe output amount', async ({ calculatorPage }) => {
   await expect(calculatorPage.coffeeAmountInput).toHaveValue('24');
 });
 
-test('calculator iced', async ({ calculatorPage }) => {
+test('calculator iced toggle', async ({ calculatorPage }) => {
   await calculatorPage.icedCoffeeToggle.check();
 
-  await expect(calculatorPage.brewWaterAmountInput).toHaveValue('144');
-  await expect(calculatorPage.iceAmountInput).toHaveValue('96');
+  await expect(calculatorPage.brewWaterAmountInput).toHaveValue('168');
+  await expect(calculatorPage.iceAmountInput).toHaveValue('72');
 });
 
-test('calculator iced ratio', async ({ calculatorPage }) => {
+test('calculator iced ratio 25%', async ({ calculatorPage }) => {
+  await calculatorPage.icedCoffeeToggle.check();
+  await calculatorPage.iceRatioRange.fill('25');
+
+  await expect(calculatorPage.brewWaterAmountInput).toHaveValue('180');
+  await expect(calculatorPage.iceAmountInput).toHaveValue('60');
+});
+
+test('calculator iced ratio 50%', async ({ calculatorPage }) => {
   await calculatorPage.icedCoffeeToggle.check();
   await calculatorPage.iceRatioRange.fill('50');
 
