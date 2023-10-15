@@ -45,7 +45,7 @@
 
 <div class="justify-between">
   <span class="max-sm:hidden badge variant-soft-tertiary w-16">{ratio}</span>
-  <span class="block min-w-0 flex-1">
+  <span class="block min-w-0 flex-1 max-sm:!ml-0">
     <dt class="overflow-hidden text-ellipsis">
       <span class="font-bold">{entry.method} - {entry.coffeeType || 'Unknown'}</span>
     </dt>
