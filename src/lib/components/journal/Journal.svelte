@@ -39,7 +39,7 @@
   }
 
   function handleModalEntryAdd(value: JournalEntryAction): void {
-    if (value.action === 'save') {
+    if (value?.action === 'save') {
       journalStore.add(value.payload as ActiveJournalEntry);
     }
   }
