@@ -37,6 +37,13 @@ export interface JournalSearchState {
 
 export type JournalSort = 'asc' | 'desc';
 
+export interface JournalEntryAction {
+  action: JournalEntryActionType;
+  payload: JournalEntry | 'string';
+}
+
+export type JournalEntryActionType = 'save' | 'copy' | 'remove';
+
 export interface JournalWorker {
   sortOrSearch: (
     entries: Array<ActiveJournalEntry>,

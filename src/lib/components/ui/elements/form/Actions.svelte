@@ -36,7 +36,7 @@
       </svelte:fragment>
     </ResponsiveButton>
   {/if}
-  {#if allowCopy}
+  {#if edit && allowCopy}
     <ResponsiveButton
       type="button"
       label="Copy"

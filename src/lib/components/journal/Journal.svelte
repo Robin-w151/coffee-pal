@@ -1,19 +1,19 @@
 <script lang="ts">
-  import type { ActiveJournalEntry } from '$lib/models/journal';
+  import type { ActiveJournalEntry, JournalEntryAction } from '$lib/models/journal';
   import { journalSearchStore, journalStore } from '$lib/stores/journal';
   import { syncStore } from '$lib/stores/sync';
   import { syncStateStore } from '$lib/stores/syncState';
-  import { ModalHelper } from '$lib/utils/ui/modal';
   import { sync } from '$lib/utils/sync';
+  import { ModalHelper } from '$lib/utils/ui/modal';
   import { ToastHelper } from '$lib/utils/ui/toast';
   import { getModalStore, getToastStore } from '@skeletonlabs/skeleton';
+  import { onDestroy } from 'svelte';
+  import { v4 as uuid } from 'uuid';
   import PageActions from '../ui/elements/page/PageActions.svelte';
   import PageCard from '../ui/elements/page/PageCard.svelte';
   import PageSearch from '../ui/elements/page/PageSearch.svelte';
   import JournalEntries from './JournalEntries.svelte';
   import JournalEntryModal from './JournalEntryModal.svelte';
-  import { onDestroy } from 'svelte';
-  import { v4 as uuid } from 'uuid';
 
   const modalHelper = new ModalHelper(getModalStore());
   const toastHelper = new ToastHelper(getToastStore());
@@ -38,17 +38,13 @@
     sync();
   }
 
-  function handleModalEntryAdd(entry: ActiveJournalEntry): void {
-    if (entry) {
-      journalStore.add(entry);
+  function handleModalEntryAdd(value: JournalEntryAction): void {
+    if (value.action === 'save') {
+      journalStore.add(value.payload as ActiveJournalEntry);
     }
   }
 
-  function handleEntryAdd({ detail: entry }: CustomEvent<ActiveJournalEntry>): void {
-    journalStore.add(entry);
-  }
-
-  function handleEntryUpdate({ detail: entry }: CustomEvent<ActiveJournalEntry>): void {
+  function handleEntrySave({ detail: entry }: CustomEvent<ActiveJournalEntry>): void {
     journalStore.update(entry);
   }
 
@@ -85,8 +81,7 @@
 <PageCard class="page-with-actions-token">
   <JournalEntries
     {...$journalStore}
-    on:add={handleEntryAdd}
-    on:update={handleEntryUpdate}
+    on:save={handleEntrySave}
     on:copy={handleEntryCopy}
     on:remove={handleEntryRemove}
   />

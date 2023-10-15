@@ -9,7 +9,7 @@
   const modalStore = getModalStore();
 
   function handleSave({ detail: entry }: CustomEvent<ActiveJournalEntry>): void {
-    $modalStore[0].response?.({ action: 'update', payload: entry });
+    $modalStore[0].response?.({ action: 'save', payload: entry });
     modalStore.close();
   }
 

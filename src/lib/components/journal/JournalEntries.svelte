@@ -1,14 +1,5 @@
-<script lang="ts" context="module">
-  interface EntryChange {
-    action: EntryChangeAction;
-    payload: JournalEntry | 'string';
-  }
-
-  type EntryChangeAction = 'update' | 'copy' | 'remove';
-</script>
-
 <script lang="ts">
-  import type { ActiveJournalEntry, JournalEntry } from '$lib/models/journal';
+  import type { ActiveJournalEntry, JournalEntryAction } from '$lib/models/journal';
   import { journalStore } from '$lib/stores/journal';
   import { ModalHelper } from '$lib/utils/ui/modal';
   import { faFaceSadCry } from '@fortawesome/free-solid-svg-icons';
@@ -30,24 +21,14 @@
     journalStore.loadMore();
   }
 
-  function handleCopyEntry({ detail: entry }: CustomEvent<ActiveJournalEntry>): void {
-    modalHelper.triggerModal(JournalEntryModal, { props: { entry }, response: handleEntryAdd });
-  }
-
-  function handleUpdateEntry({ detail: entry }: CustomEvent<ActiveJournalEntry>): void {
+  function handleShowEntry({ detail: entry }: CustomEvent<ActiveJournalEntry>): void {
     modalHelper.triggerModal(JournalEntryModal, {
       props: { entry, edit: true },
       response: handleEntryChange,
     });
   }
 
-  function handleEntryAdd(entry: ActiveJournalEntry): void {
-    if (entry) {
-      dispatch('add', entry);
-    }
-  }
-
-  function handleEntryChange(value: EntryChange): void {
+  function handleEntryChange(value: JournalEntryAction): void {
     console.log(value);
     if (value) {
       dispatch(value.action, value.payload);
@@ -62,7 +43,7 @@
     <JournalEntryPlaceholder />
   {:else}
     {#each entries as entry (entry.id)}
-      <JournalEntryItem {entry} on:copy={handleCopyEntry} on:update={handleUpdateEntry} />
+      <JournalEntryItem {entry} on:update={handleShowEntry} />
     {:else}
       <p class="flex justify-center items-center gap-4">
         <span class="flex items-center">
