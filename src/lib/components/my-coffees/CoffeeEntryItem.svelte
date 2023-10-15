@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { ActiveCoffeeEntry } from '$lib/models/myCoffees';
-  import { faPencil } from '@fortawesome/free-solid-svg-icons';
+  import { faEye } from '@fortawesome/free-solid-svg-icons';
   import { createEventDispatcher } from 'svelte';
   import { Icon } from 'svelte-awesome';
 
@@ -31,11 +31,11 @@
   <span class="flex gap-2">
     <button
       class="btn btn-icon hover:variant-soft-secondary"
-      title="Edit"
+      title="Show"
       on:click={handleUpdateClick}
     >
-      <Icon data={faPencil} />
-      <span class="sr-only">Edit</span>
+      <Icon data={faEye} />
+      <span class="sr-only">Show</span>
     </button>
   </span>
 </div>
