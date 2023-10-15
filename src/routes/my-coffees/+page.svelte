@@ -1,5 +1,5 @@
 <script lang="ts">
-  import MyCoffees from '$lib/components/my-coffees/MyCoffees.svelte';
+  import MyCoffees from '$lib/components/myCoffees/MyCoffees.svelte';
 </script>
 
 <svelte:head>
