@@ -14,7 +14,7 @@
   const preferredUnit = getPreferredWeightUnit($settingsStore.preferredUnits);
 
   let iced: boolean;
-  let iceRatio = 40;
+  let iceRatio = 30;
 
   let brewWaterMeasurement: Measurement = {
     value: getBrewWater(water, iceRatio),
