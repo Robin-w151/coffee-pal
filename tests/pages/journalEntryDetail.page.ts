@@ -39,6 +39,10 @@ export class JournalEntryDetailPage {
     await this.page.getByRole('button', { name: 'Save' }).click();
   }
 
+  async clickCopyButton(): Promise<void> {
+    await this.page.getByRole('button', { name: 'Copy' }).click();
+  }
+
   async clickDeleteButton(): Promise<void> {
     await this.page.getByRole('button', { name: 'Delete' }).click();
   }

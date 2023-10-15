@@ -69,9 +69,9 @@ export class MyCoffeesPage {
     await this.page.getByRole('button', { name: 'Undo' }).click();
   }
 
-  async clickJournalEntryEditButton(entry: Locator | number): Promise<void> {
+  async clickJournalEntryShowButton(entry: Locator | number): Promise<void> {
     return (typeof entry === 'number' ? this.getCoffeeEntry(entry) : entry)
-      .getByTitle('Edit')
+      .getByTitle('Show')
       .click();
   }
 }

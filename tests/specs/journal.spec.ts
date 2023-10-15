@@ -59,7 +59,7 @@ test('journal entry add', async ({ journalPage, journalEntryDetailPage }) => {
 });
 
 test('journal entry edit', async ({ journalPage, journalEntryDetailPage }) => {
-  await journalPage.clickJournalEntryEditButton(0);
+  await journalPage.clickJournalEntryShowButton(0);
   await journalEntryDetailPage.methodInput.fill('Aeropress Clear');
   await journalEntryDetailPage.clickSaveButton();
 
@@ -67,24 +67,24 @@ test('journal entry edit', async ({ journalPage, journalEntryDetailPage }) => {
 });
 
 test('journal entry delete', async ({ journalPage, journalEntryDetailPage }) => {
-  await journalPage.clickJournalEntryEditButton(0);
+  await journalPage.clickJournalEntryShowButton(0);
   await journalEntryDetailPage.clickDeleteButton();
 
   await expect(journalPage.journalList).toHaveCount(2);
 });
 
 test('journal entry delete undo', async ({ journalPage, journalEntryDetailPage }) => {
-  await journalPage.clickJournalEntryEditButton(0);
+  await journalPage.clickJournalEntryShowButton(0);
   await journalEntryDetailPage.clickDeleteButton();
   await journalPage.clickUndoButton();
 
   await expect(journalPage.journalList).toHaveCount(3);
 });
 
-test('journal entry repeat', async ({ journalPage, journalEntryDetailPage }) => {
-  await journalPage.clickJournalEntryRepeatButton(0);
+test('journal entry copy', async ({ journalPage, journalEntryDetailPage }) => {
+  await journalPage.clickJournalEntryShowButton(0);
   await journalEntryDetailPage.methodInput.fill('Aeropress Clear');
-  await journalEntryDetailPage.clickSaveButton();
+  await journalEntryDetailPage.clickCopyButton();
 
   await expect(journalPage.journalList).toHaveCount(4);
 });

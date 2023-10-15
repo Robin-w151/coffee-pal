@@ -64,7 +64,7 @@ test('my-coffees entry add', async ({ myCoffeesPage, myCoffeesEntryDetailPage })
 });
 
 test('my-coffees entry edit', async ({ myCoffeesPage, myCoffeesEntryDetailPage }) => {
-  await myCoffeesPage.clickJournalEntryEditButton(1);
+  await myCoffeesPage.clickJournalEntryShowButton(1);
   await myCoffeesEntryDetailPage.traderInput.fill('Rösterei');
   await myCoffeesEntryDetailPage.clickSaveButton();
 
@@ -72,14 +72,14 @@ test('my-coffees entry edit', async ({ myCoffeesPage, myCoffeesEntryDetailPage }
 });
 
 test('my-coffees entry delete', async ({ myCoffeesPage, myCoffeesEntryDetailPage }) => {
-  await myCoffeesPage.clickJournalEntryEditButton(2);
+  await myCoffeesPage.clickJournalEntryShowButton(2);
   await myCoffeesEntryDetailPage.clickDeleteButton();
 
   await expect(myCoffeesPage.coffeeList).toHaveCount(2);
 });
 
 test('my-coffees entry delete undo', async ({ myCoffeesPage, myCoffeesEntryDetailPage }) => {
-  await myCoffeesPage.clickJournalEntryEditButton(2);
+  await myCoffeesPage.clickJournalEntryShowButton(2);
   await myCoffeesEntryDetailPage.clickDeleteButton();
   await myCoffeesPage.clickUndoButton();
 

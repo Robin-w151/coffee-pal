@@ -69,15 +69,9 @@ export class JournalPage {
     await this.page.getByRole('button', { name: 'Undo' }).click();
   }
 
-  async clickJournalEntryRepeatButton(entry: Locator | number): Promise<void> {
-    await (typeof entry === 'number' ? this.getJournalEntry(entry) : entry)
-      .getByTitle('Repeat')
-      .click();
-  }
-
-  async clickJournalEntryEditButton(entry: Locator | number): Promise<void> {
+  async clickJournalEntryShowButton(entry: Locator | number): Promise<void> {
     return (typeof entry === 'number' ? this.getJournalEntry(entry) : entry)
-      .getByTitle('Edit')
+      .getByTitle('Show')
       .click();
   }
 }
