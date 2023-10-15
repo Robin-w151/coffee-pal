@@ -29,7 +29,6 @@
   }
 
   function handleEntryChange(value: JournalEntryAction): void {
-    console.log(value);
     if (value) {
       dispatch(value.action, value.payload);
     }
