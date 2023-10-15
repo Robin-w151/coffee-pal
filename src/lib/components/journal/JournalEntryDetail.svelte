@@ -42,6 +42,10 @@
     dispatch('save', sanitizeEntry(entry));
   }
 
+  function handleCopy(): void {
+    dispatch('copy', sanitizeEntry(entry));
+  }
+
   function handleRemove(): void {
     dispatch('remove', entry.id);
   }
@@ -97,7 +101,14 @@
     <Description bind:description={entry.description} />
     <div class="flex justify-between items-center gap-4">
       <Ratio coffee={entry.coffee} water={entry.water} />
-      <Actions {edit} saveDisabled={!formValid} on:save={handleSave} on:remove={handleRemove} />
+      <Actions
+        {edit}
+        {formValid}
+        allowCopy
+        on:save={handleSave}
+        on:copy={handleCopy}
+        on:remove={handleRemove}
+      />
     </div>
   </Form>
 </div>

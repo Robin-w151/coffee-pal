@@ -3,10 +3,9 @@
   import { settingsStore } from '$lib/stores/settings';
   import { calculateRatio, round } from '$lib/utils/math';
   import { getPreferredTemperatureUnit, getPreferredWeightUnit } from '$lib/utils/units';
-  import { faPencil, faRotateRight } from '@fortawesome/free-solid-svg-icons';
+  import { faEye } from '@fortawesome/free-solid-svg-icons';
   import { createEventDispatcher } from 'svelte';
   import { Icon } from 'svelte-awesome';
-  import { v4 as uuid } from 'uuid';
 
   export let entry: ActiveJournalEntry;
 
@@ -15,11 +14,6 @@
   const preferredTemperatureUnit = getPreferredTemperatureUnit($settingsStore.preferredUnits);
 
   $: ratio = calculateRatio(entry.coffee, entry.water) ?? 'unknown';
-
-  function handleCopyClick(): void {
-    const copy = { ...entry, id: uuid() };
-    dispatch('copy', copy);
-  }
 
   function handleUpdateClick(): void {
     const copy = { ...entry };
@@ -57,19 +51,11 @@
   <span class="flex gap-2">
     <button
       class="btn btn-icon hover:variant-soft-secondary"
-      title="Repeat"
-      on:click={handleCopyClick}
-    >
-      <Icon data={faRotateRight} />
-      <span class="sr-only">Repeat</span>
-    </button>
-    <button
-      class="btn btn-icon hover:variant-soft-secondary"
-      title="Edit"
+      title="Show"
       on:click={handleUpdateClick}
     >
-      <Icon data={faPencil} />
-      <span class="sr-only">Edit</span>
+      <Icon data={faEye} />
+      <span class="sr-only">Show</span>
     </button>
   </span>
 </div>

@@ -90,7 +90,7 @@
     <Aromas bind:aromas={entry.aromas} />
     <Description bind:description={entry.description} />
     <div class="flex justify-end items-center gap-2">
-      <Actions {edit} saveDisabled={!formValid} on:save={handleSave} on:remove={handleRemove} />
+      <Actions {edit} {formValid} on:save={handleSave} on:remove={handleRemove} />
     </div>
   </Form>
 </div>

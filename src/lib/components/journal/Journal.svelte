@@ -13,6 +13,7 @@
   import JournalEntries from './JournalEntries.svelte';
   import JournalEntryModal from './JournalEntryModal.svelte';
   import { onDestroy } from 'svelte';
+  import { v4 as uuid } from 'uuid';
 
   const modalHelper = new ModalHelper(getModalStore());
   const toastHelper = new ToastHelper(getToastStore());
@@ -51,6 +52,10 @@
     journalStore.update(entry);
   }
 
+  function handleEntryCopy({ detail: entry }: CustomEvent<ActiveJournalEntry>): void {
+    journalStore.add({ ...entry, id: uuid() });
+  }
+
   function handleEntryRemove({ detail: id }: CustomEvent<string>): void {
     toastHelper.triggerInfo('Did you click to fast?', {
       timeout: 15000,
@@ -82,6 +87,7 @@
     {...$journalStore}
     on:add={handleEntryAdd}
     on:update={handleEntryUpdate}
+    on:copy={handleEntryCopy}
     on:remove={handleEntryRemove}
   />
 </PageCard>

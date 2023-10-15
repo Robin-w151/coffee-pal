@@ -8,13 +8,18 @@
 
   const modalStore = getModalStore();
 
-  function handleChange({ detail: entry }: CustomEvent<ActiveJournalEntry>): void {
-    $modalStore[0].response?.(entry);
+  function handleSave({ detail: entry }: CustomEvent<ActiveJournalEntry>): void {
+    $modalStore[0].response?.({ action: 'update', payload: entry });
+    modalStore.close();
+  }
+
+  function handleCopy({ detail: entry }: CustomEvent<ActiveJournalEntry>): void {
+    $modalStore[0].response?.({ action: 'copy', payload: entry });
     modalStore.close();
   }
 
   function handleRemove({ detail: id }: CustomEvent<string>): void {
-    $modalStore[0].response?.(id);
+    $modalStore[0].response?.({ action: 'remove', payload: id });
     modalStore.close();
   }
 
@@ -27,7 +32,8 @@
 <JournalEntryDetail
   {entry}
   {edit}
-  on:save={handleChange}
+  on:save={handleSave}
+  on:copy={handleCopy}
   on:remove={handleRemove}
   on:cancel={handleCancel}
 />

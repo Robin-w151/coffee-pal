@@ -1,9 +1,14 @@
+<script lang="ts" context="module">
+  interface EntryChange {
+    action: EntryChangeAction;
+    payload: JournalEntry | 'string';
+  }
+
+  type EntryChangeAction = 'update' | 'copy' | 'remove';
+</script>
+
 <script lang="ts">
-  import {
-    isActiveJournalEntry,
-    type ActiveJournalEntry,
-    type JournalEntry,
-  } from '$lib/models/journal';
+  import type { ActiveJournalEntry, JournalEntry } from '$lib/models/journal';
   import { journalStore } from '$lib/stores/journal';
   import { ModalHelper } from '$lib/utils/ui/modal';
   import { faFaceSadCry } from '@fortawesome/free-solid-svg-icons';
@@ -42,13 +47,10 @@
     }
   }
 
-  function handleEntryChange(value: JournalEntry | string): void {
-    if (typeof value === 'object' && isActiveJournalEntry(value)) {
-      dispatch('update', value);
-    }
-
-    if (typeof value === 'string') {
-      dispatch('remove', value);
+  function handleEntryChange(value: EntryChange): void {
+    console.log(value);
+    if (value) {
+      dispatch(value.action, value.payload);
     }
   }
 </script>
