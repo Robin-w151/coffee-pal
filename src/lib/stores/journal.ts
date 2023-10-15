@@ -144,13 +144,23 @@ function createJournalStore(journalSearchStore: JournalSearchStore): JournalStor
   }
 
   function applySyncResult(syncResult: SyncResult<ActiveJournalEntry, DeletedJournalEntry>): void {
+    if (!journalDb) {
+      return;
+    }
+
     const { updateEntries, deleteEntries } = syncResult;
-    if (updateEntries.length > 0) {
-      journalDb?.entries.bulkPut(updateEntries);
+    if (updateEntries.length === 0 && deleteEntries.length === 0) {
+      return;
     }
-    if (deleteEntries.length > 0) {
-      journalDb?.entries.bulkDelete(deleteEntries.map((entry) => entry.id));
-    }
+
+    journalDb.transaction('readwrite', journalDb.entries, async () => {
+      if (updateEntries.length > 0) {
+        journalDb?.entries.bulkPut(updateEntries);
+      }
+      if (deleteEntries.length > 0) {
+        journalDb?.entries.bulkDelete(deleteEntries.map((entry) => entry.id));
+      }
+    });
   }
 
   const journalStore = subject as unknown as JournalStore;

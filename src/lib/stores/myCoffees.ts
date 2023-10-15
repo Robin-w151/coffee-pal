@@ -136,13 +136,23 @@ function createMyCoffeesStore(myCoffeesSearchStore: MyCoffeesSearchStore): MyCof
   }
 
   function applySyncResult(syncResult: SyncResult<ActiveCoffeeEntry, DeletedCoffeeEntry>): void {
+    if (!myCoffeesDb) {
+      return;
+    }
+
     const { updateEntries, deleteEntries } = syncResult;
-    if (updateEntries.length > 0) {
-      myCoffeesDb?.entries.bulkPut(updateEntries);
+    if (updateEntries.length === 0 && deleteEntries.length === 0) {
+      return;
     }
-    if (deleteEntries.length > 0) {
-      myCoffeesDb?.entries.bulkDelete(deleteEntries.map((entry) => entry.id));
-    }
+
+    myCoffeesDb.transaction('readwrite', myCoffeesDb.entries, async () => {
+      if (updateEntries.length > 0) {
+        myCoffeesDb?.entries.bulkPut(updateEntries);
+      }
+      if (deleteEntries.length > 0) {
+        myCoffeesDb?.entries.bulkDelete(deleteEntries.map((entry) => entry.id));
+      }
+    });
   }
 
   const myCoffeesStore = subject as unknown as MyCoffeesStore;
