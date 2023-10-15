@@ -38,4 +38,8 @@ export class MyCoffeesEntryDetailPage {
   async clickDeleteButton(): Promise<void> {
     await this.page.getByRole('button', { name: 'Delete' }).click();
   }
+
+  async clickCloseButton(): Promise<void> {
+    await this.page.getByRole('button', { name: 'Close' }).click();
+  }
 }

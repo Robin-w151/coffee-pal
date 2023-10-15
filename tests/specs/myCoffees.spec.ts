@@ -71,6 +71,14 @@ test('my-coffees entry edit', async ({ myCoffeesPage, myCoffeesEntryDetailPage }
   await expect(myCoffeesPage.getCoffeeEntryDetail(1)).toHaveText('Rösterei');
 });
 
+test('my-coffees entry edit cancel', async ({ myCoffeesPage, myCoffeesEntryDetailPage }) => {
+  await myCoffeesPage.clickJournalEntryShowButton(1);
+  await myCoffeesEntryDetailPage.traderInput.fill('');
+  await myCoffeesEntryDetailPage.clickCloseButton();
+
+  await expect(myCoffeesPage.getCoffeeEntryDetail(1)).toHaveText('Blasercafe');
+});
+
 test('my-coffees entry delete', async ({ myCoffeesPage, myCoffeesEntryDetailPage }) => {
   await myCoffeesPage.clickJournalEntryShowButton(2);
   await myCoffeesEntryDetailPage.clickDeleteButton();

@@ -66,6 +66,14 @@ test('journal entry edit', async ({ journalPage, journalEntryDetailPage }) => {
   await expect(journalPage.getJournalEntryTitle(0)).toHaveText('Aeropress Clear - Terroir PAN');
 });
 
+test('journal entry edit cancel', async ({ journalPage, journalEntryDetailPage }) => {
+  await journalPage.clickJournalEntryShowButton(1);
+  await journalEntryDetailPage.methodInput.fill('');
+  await journalEntryDetailPage.clickCancelButton();
+
+  await expect(journalPage.getJournalEntryTitle(1)).toHaveText('PuckPuck - Äthiopien Chelbesa');
+});
+
 test('journal entry delete', async ({ journalPage, journalEntryDetailPage }) => {
   await journalPage.clickJournalEntryShowButton(0);
   await journalEntryDetailPage.clickDeleteButton();
