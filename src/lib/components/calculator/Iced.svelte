@@ -7,6 +7,7 @@
   import { RangeSlider, SlideToggle } from '@skeletonlabs/skeleton';
   import Label from '../ui/elements/form/Label.svelte';
   import MeasurementInput from '../ui/elements/form/MeasurementInput.svelte';
+  import Form from '../ui/elements/form/Form.svelte';
 
   export let water: number;
 
@@ -48,7 +49,7 @@
   <h3 class="h3">Iced Coffee</h3>
 </div>
 {#if iced}
-  <form class="flex flex-col gap-4">
+  <Form>
     <RangeSlider
       name="ice-ratio"
       min={0}
@@ -67,5 +68,5 @@
     <Label text="Amount of ice">
       <MeasurementInput readonly {units} bind:measurement={iceMeasurement} />
     </Label>
-  </form>
+  </Form>
 {/if}

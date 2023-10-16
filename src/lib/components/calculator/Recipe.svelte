@@ -7,6 +7,7 @@
   import { createEventDispatcher } from 'svelte';
   import Label from '../ui/elements/form/Label.svelte';
   import MeasurementInput from '../ui/elements/form/MeasurementInput.svelte';
+  import Form from '../ui/elements/form/Form.svelte';
 
   export let recipe: Recipe;
 
@@ -49,7 +50,7 @@
 </script>
 
 <h3 class="h3">Recipe</h3>
-<form class="flex flex-col gap-4">
+<Form>
   <Label text="Amount of water">
     <MeasurementInput
       {units}
@@ -74,4 +75,4 @@
       on:blur={handleOutputChange}
     />
   </Label>
-</form>
+</Form>

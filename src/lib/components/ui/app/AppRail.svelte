@@ -11,11 +11,11 @@
   active="bg-primary-active-token"
 >
   {#each routes as { href, label, icon } (href)}
-    <AppRailAnchor {href} title={label} selected={$page.url.pathname === href}>
+    <AppRailAnchor {href} title={label} selected={$page.url.pathname === href} regionLabel="px-1">
       <svelte:fragment slot="lead">
         <Icon data={icon} scale={1.5} />
       </svelte:fragment>
-      <span>{label}</span>
+      <span class="break-words">{label}</span>
     </AppRailAnchor>
   {/each}
 </AppRail>

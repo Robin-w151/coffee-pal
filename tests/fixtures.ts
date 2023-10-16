@@ -4,6 +4,7 @@ import { MyCoffeesPage, testCoffeeEntries } from './pages/myCoffees.page';
 import { CalculatorPage } from './pages/calculator.page';
 import { JournalEntryDetailPage } from './pages/journalEntryDetail.page';
 import { MyCoffeesEntryDetailPage } from './pages/myCoffeesEntryDetail.page';
+import { DripCounterPage } from './pages/dripCounter.page';
 
 interface TestFixtures {
   journalPage: JournalPage;
@@ -11,6 +12,7 @@ interface TestFixtures {
   myCoffeesPage: MyCoffeesPage;
   myCoffeesEntryDetailPage: MyCoffeesEntryDetailPage;
   calculatorPage: CalculatorPage;
+  dripCounterPage: DripCounterPage;
 }
 
 export const test = base.extend<TestFixtures>({
@@ -58,6 +60,13 @@ export const test = base.extend<TestFixtures>({
     await waitForTestReady(page);
 
     await use(calculatorPage);
+  },
+  dripCounterPage: async ({ page }, use) => {
+    const dripCounterPage = new DripCounterPage(page);
+    await dripCounterPage.goto();
+    await waitForTestReady(page);
+
+    await use(dripCounterPage);
   },
 });
 
