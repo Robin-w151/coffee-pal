@@ -88,6 +88,7 @@ async function captureApp() {
   await captureJournal();
   await captureMyCoffees();
   await captureCalculator();
+  await captureDripCounter();
 }
 
 async function captureJournal() {
@@ -115,6 +116,11 @@ async function captureMyCoffees() {
 async function captureCalculator() {
   await page.goto(`${baseUrl}/calculator`);
   await page.screenshot({ path: `screenshots/${category}/calculator.png` });
+}
+
+async function captureDripCounter() {
+  await page.goto(`${baseUrl}/drip-counter`);
+  await page.screenshot({ path: `screenshots/${category}/drip-counter.png` });
 }
 
 async function addJournalEntry(

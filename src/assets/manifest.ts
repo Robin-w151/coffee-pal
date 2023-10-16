@@ -81,6 +81,13 @@ export default {
       label: 'Brewing Calculator',
     },
     {
+      src: 'screenshots/desktop/drip-counter.png',
+      sizes: '1400x800',
+      type: 'image/png',
+      form_factor: 'wide',
+      label: 'Drip Counter',
+    },
+    {
       src: 'screenshots/mobile/journal-overview.png',
       sizes: '412x915',
       type: 'image/png',
@@ -114,6 +121,13 @@ export default {
       type: 'image/png',
       form_factor: 'narrow',
       label: 'Brewing Calculator',
+    },
+    {
+      src: 'screenshots/mobile/drip-counter.png',
+      sizes: '412x915',
+      type: 'image/png',
+      form_factor: 'narrow',
+      label: 'Drip Counter',
     },
   ],
   shortcuts: routes.map(({ href, label, shortcutIcon }) => ({
