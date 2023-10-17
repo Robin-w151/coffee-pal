@@ -106,8 +106,8 @@ async function captureMyCoffees() {
   await page.goto(`${baseUrl}/my-coffees`);
   await expect(page.getByText('could not find any coffees')).toBeVisible();
 
-  for (let i = 0; i < testCoffeeEntries.length; i++) {
-    await addCoffeeEntry(testCoffeeEntries[i], i === 0);
+  for (const entry of testCoffeeEntries) {
+    await addCoffeeEntry(entry);
   }
 
   await page.screenshot({ path: `screenshots/${category}/my-coffees-overview.png` });
@@ -153,10 +153,7 @@ async function addJournalEntry(
   await page.waitForTimeout(250);
 }
 
-async function addCoffeeEntry(
-  { name, origin, trader, aromas, description } = {},
-  takeScreenshot = false,
-) {
+async function addCoffeeEntry({ name, origin, trader, aromas, description } = {}) {
   await clickAddButton();
   await expect(page.getByText('add entry')).toBeVisible();
 
@@ -171,11 +168,6 @@ async function addCoffeeEntry(
   }
 
   await page.getByLabel('description').fill(description);
-
-  await page.waitForTimeout(250);
-  if (takeScreenshot) {
-    await page.screenshot({ path: `screenshots/${category}/my-coffees-add-entry.png` });
-  }
 
   await clickSaveButton();
   await page.waitForTimeout(250);

@@ -67,13 +67,6 @@ export default {
       label: 'My Coffees',
     },
     {
-      src: 'screenshots/desktop/my-coffees-add-entry.png',
-      sizes: '1400x800',
-      type: 'image/png',
-      form_factor: 'wide',
-      label: 'My Coffees New Entry',
-    },
-    {
       src: 'screenshots/desktop/calculator.png',
       sizes: '1400x800',
       type: 'image/png',
@@ -107,13 +100,6 @@ export default {
       type: 'image/png',
       form_factor: 'narrow',
       label: 'My Coffees',
-    },
-    {
-      src: 'screenshots/mobile/my-coffees-add-entry.png',
-      sizes: '412x915',
-      type: 'image/png',
-      form_factor: 'narrow',
-      label: 'My Coffees New Entry',
     },
     {
       src: 'screenshots/mobile/calculator.png',
