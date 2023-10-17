@@ -35,8 +35,9 @@
 
 <Card>
   <h3 class="h3">Ratio</h3>
-  <Label class="flex-1" text="Suggestions">
-    <div class="flex flex-wrap content-start gap-2 flex-1">
+  <div class="flex flex-col items-start gap-1 flex-1">
+    <span>Suggestions</span>
+    <div class="flex flex-wrap gap-2">
       {#each presets as preset}
         <button class="chip-interactive-token" on:click={() => handlePresetClick(preset)}>
           <span class="font-normal">{preset.label}</span>
@@ -44,7 +45,7 @@
         </button>
       {/each}
     </div>
-  </Label>
+  </div>
   <div class="grid grid-cols-[auto_3rem_auto]">
     <Label text="Coffee">
       <input
