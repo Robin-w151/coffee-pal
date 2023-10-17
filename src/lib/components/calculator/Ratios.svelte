@@ -35,14 +35,16 @@
 
 <Card>
   <h3 class="h3">Ratio</h3>
-  <div class="flex flex-wrap gap-2">
-    {#each presets as preset}
-      <button class="chip-interactive-token" on:click={() => handlePresetClick(preset)}>
-        <span class="font-normal">{preset.label}</span>
-        <span>{preset.ratio.coffee}:{preset.ratio.water}</span>
-      </button>
-    {/each}
-  </div>
+  <Label class="flex-1" text="Suggestions">
+    <div class="flex flex-wrap content-start gap-2 flex-1">
+      {#each presets as preset}
+        <button class="chip-interactive-token" on:click={() => handlePresetClick(preset)}>
+          <span class="font-normal">{preset.label}</span>
+          <span>{preset.ratio.coffee}:{preset.ratio.water}</span>
+        </button>
+      {/each}
+    </div>
+  </Label>
   <div class="grid grid-cols-[auto_3rem_auto]">
     <Label text="Coffee">
       <input
