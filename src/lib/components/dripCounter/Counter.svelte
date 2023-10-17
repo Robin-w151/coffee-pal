@@ -34,14 +34,14 @@
 
 <Card>
   <h3 class="h3">Counter</h3>
-  <div class="flex flex-col gap-4 text-lg">
+  <div class="flex flex-col gap-4">
     {#if timestamps.length > 0}
       <span>{dropsPerMinute} drops/min</span>
     {:else}
       <span>Tap to start counting</span>
     {/if}
     <button
-      class="btn btn-xl variant-filled-primary h-36"
+      class="btn btn-xl variant-ghost-primary h-36"
       title="Tap to count drop rate"
       on:click={handleCountClick}>Tap</button
     >
