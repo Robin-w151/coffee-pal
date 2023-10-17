@@ -116,7 +116,7 @@ export default {
       label: 'Drip Counter',
     },
   ],
-  shortcuts: routes.map(({ href, label, shortcutIcon }) => ({
+  shortcuts: routes.slice(0, 4).map(({ href, label, shortcutIcon }) => ({
     name: label,
     url: href,
     icons: shortcutIcon ? [shortcutIcon] : undefined,
