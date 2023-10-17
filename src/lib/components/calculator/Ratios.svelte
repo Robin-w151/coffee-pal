@@ -4,6 +4,7 @@
   import { createEventDispatcher } from 'svelte';
   import presets from '$assets/presets.json';
   import Label from '../ui/elements/form/Label.svelte';
+  import Card from '../ui/elements/Card.svelte';
 
   export let ratio: Ratio | undefined;
 
@@ -32,36 +33,38 @@
   }
 </script>
 
-<h3 class="h3">Ratio</h3>
-<div class="flex flex-wrap gap-2">
-  {#each presets as preset}
-    <button class="chip-interactive-token" on:click={() => handlePresetClick(preset)}>
-      <span class="font-normal">{preset.label}</span>
-      <span>{preset.ratio.coffee}:{preset.ratio.water}</span>
-    </button>
-  {/each}
-</div>
-<div class="grid grid-cols-[auto_3rem_auto]">
-  <Label text="Coffee">
-    <input
-      class="input"
-      type="number"
-      bind:value={coffee}
-      on:change={handleCoffeeChange}
-      on:blur={handleCoffeeChange}
-    />
-  </Label>
-  <div class="flex flex-col">
-    <div class="flex-1 max-h-[24px]" />
-    <div class="flex-1 flex justify-center items-center font-bold text-2xl">:</div>
+<Card>
+  <h3 class="h3">Ratio</h3>
+  <div class="flex flex-wrap gap-2">
+    {#each presets as preset}
+      <button class="chip-interactive-token" on:click={() => handlePresetClick(preset)}>
+        <span class="font-normal">{preset.label}</span>
+        <span>{preset.ratio.coffee}:{preset.ratio.water}</span>
+      </button>
+    {/each}
   </div>
-  <Label text="Water">
-    <input
-      class="input"
-      type="number"
-      bind:value={water}
-      on:change={handleWaterChange}
-      on:blur={handleWaterChange}
-    />
-  </Label>
-</div>
+  <div class="grid grid-cols-[auto_3rem_auto]">
+    <Label text="Coffee">
+      <input
+        class="input"
+        type="number"
+        bind:value={coffee}
+        on:change={handleCoffeeChange}
+        on:blur={handleCoffeeChange}
+      />
+    </Label>
+    <div class="flex flex-col">
+      <div class="flex-1 max-h-[24px]" />
+      <div class="flex-1 flex justify-center items-center font-bold text-2xl">:</div>
+    </div>
+    <Label text="Water">
+      <input
+        class="input"
+        type="number"
+        bind:value={water}
+        on:change={handleWaterChange}
+        on:blur={handleWaterChange}
+      />
+    </Label>
+  </div>
+</Card>

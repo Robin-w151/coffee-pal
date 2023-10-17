@@ -88,19 +88,19 @@
 </script>
 
 <PageHeader title="Brewing Calculator" />
-<PageCard>
+<PageCard display="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-4">
   <Ratios
     ratio={preset.ratio}
     on:presetSelect={handlePresetSelect}
     on:ratioChange={handleRatioChange}
   />
-  <hr />
+  <hr class="md:divider-vertical md:h-full" />
   <Recipe
     {recipe}
     on:coffeeChange={handleCoffeeChange}
     on:waterChange={handleWaterChange}
     on:outputChange={handleOutputChange}
   />
-  <hr />
-  <Iced water={recipe.water} />
+  <hr class="md:col-span-3" />
+  <Iced class="md:col-span-3" water={recipe.water} />
 </PageCard>

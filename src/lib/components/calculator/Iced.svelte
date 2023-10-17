@@ -8,6 +8,7 @@
   import Label from '../ui/elements/form/Label.svelte';
   import MeasurementInput from '../ui/elements/form/MeasurementInput.svelte';
   import Form from '../ui/elements/form/Form.svelte';
+  import Card from '../ui/elements/Card.svelte';
 
   export let water: number;
 
@@ -38,35 +39,37 @@
   }
 </script>
 
-<div class="flex items-center gap-2">
-  <SlideToggle
-    name="iced-coffee"
-    label="Iced Coffee"
-    size="sm"
-    active="slide-toggle-active-token"
-    bind:checked={iced}
-  />
-  <h3 class="h3">Iced Coffee</h3>
-</div>
-{#if iced}
-  <Form>
-    <RangeSlider
-      name="ice-ratio"
-      min={0}
-      max={100}
-      accent="range-slider-accent-token"
-      bind:value={iceRatio}
-    >
-      <div class="flex justify-between items-center">
-        <span>Ice Ratio</span>
-        <span>{iceRatio} %</span>
-      </div>
-    </RangeSlider>
-    <Label text="Amount of brewing water">
-      <MeasurementInput readonly {units} bind:measurement={brewWaterMeasurement} />
-    </Label>
-    <Label text="Amount of ice">
-      <MeasurementInput readonly {units} bind:measurement={iceMeasurement} />
-    </Label>
-  </Form>
-{/if}
+<Card class={$$props.class ?? ''}>
+  <div class="flex items-center gap-2">
+    <SlideToggle
+      name="iced-coffee"
+      label="Iced Coffee"
+      size="sm"
+      active="slide-toggle-active-token"
+      bind:checked={iced}
+    />
+    <h3 class="h3">Iced Coffee</h3>
+  </div>
+  {#if iced}
+    <Form>
+      <RangeSlider
+        name="ice-ratio"
+        min={0}
+        max={100}
+        accent="range-slider-accent-token"
+        bind:value={iceRatio}
+      >
+        <div class="flex justify-between items-center">
+          <span>Ice Ratio</span>
+          <span>{iceRatio} %</span>
+        </div>
+      </RangeSlider>
+      <Label text="Amount of brewing water">
+        <MeasurementInput readonly {units} bind:measurement={brewWaterMeasurement} />
+      </Label>
+      <Label text="Amount of ice">
+        <MeasurementInput readonly {units} bind:measurement={iceMeasurement} />
+      </Label>
+    </Form>
+  {/if}
+</Card>

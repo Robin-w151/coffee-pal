@@ -1,5 +1,6 @@
 <script lang="ts">
   import { round } from '$lib/utils/math';
+  import Card from '../ui/elements/Card.svelte';
 
   export let dropsPerMinute = 0;
 
@@ -31,19 +32,21 @@
   }
 </script>
 
-<h3 class="h3">Counter</h3>
-<div class="flex flex-col gap-4 text-lg">
-  {#if timestamps.length > 0}
-    <span>{dropsPerMinute} drops/min</span>
-  {:else}
-    <span>Tap to start counting</span>
-  {/if}
-  <button
-    class="btn btn-xl variant-filled-primary h-36"
-    title="Tap to count drop rate"
-    on:click={handleCountClick}>Tap</button
-  >
-  <button class="btn variant-ghost-secondary" title="Reset counter" on:click={handleResetClick}
-    >Reset</button
-  >
-</div>
+<Card>
+  <h3 class="h3">Counter</h3>
+  <div class="flex flex-col gap-4 text-lg">
+    {#if timestamps.length > 0}
+      <span>{dropsPerMinute} drops/min</span>
+    {:else}
+      <span>Tap to start counting</span>
+    {/if}
+    <button
+      class="btn btn-xl variant-filled-primary h-36"
+      title="Tap to count drop rate"
+      on:click={handleCountClick}>Tap</button
+    >
+    <button class="btn variant-ghost-secondary" title="Reset counter" on:click={handleResetClick}
+      >Reset</button
+    >
+  </div>
+</Card>

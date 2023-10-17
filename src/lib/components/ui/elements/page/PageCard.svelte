@@ -1,3 +1,8 @@
-<div class="card flex flex-col gap-4 p-4 w-full {$$props.class ?? ''}">
+<script lang="ts">
+  export let display = 'flex flex-col gap-4';
+  export let padding = 'p-4';
+</script>
+
+<div class="card {display} {padding} w-full {$$props.class ?? ''}">
   <slot />
 </div>

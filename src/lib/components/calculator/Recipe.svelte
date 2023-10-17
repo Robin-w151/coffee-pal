@@ -8,6 +8,7 @@
   import Label from '../ui/elements/form/Label.svelte';
   import MeasurementInput from '../ui/elements/form/MeasurementInput.svelte';
   import Form from '../ui/elements/form/Form.svelte';
+  import Card from '../ui/elements/Card.svelte';
 
   export let recipe: Recipe;
 
@@ -49,30 +50,32 @@
   }
 </script>
 
-<h3 class="h3">Recipe</h3>
-<Form>
-  <Label text="Amount of water">
-    <MeasurementInput
-      {units}
-      bind:measurement={waterMeasurement}
-      on:change={handleWaterChange}
-      on:blur={handleWaterChange}
-    />
-  </Label>
-  <Label text="Amount of coffee">
-    <MeasurementInput
-      {units}
-      bind:measurement={coffeeMeasurement}
-      on:change={handleCoffeeChange}
-      on:blur={handleCoffeeChange}
-    />
-  </Label>
-  <Label text="Amount of brewed coffee">
-    <MeasurementInput
-      {units}
-      bind:measurement={outputMeasurement}
-      on:change={handleOutputChange}
-      on:blur={handleOutputChange}
-    />
-  </Label>
-</Form>
+<Card>
+  <h3 class="h3">Recipe</h3>
+  <Form>
+    <Label text="Amount of water">
+      <MeasurementInput
+        {units}
+        bind:measurement={waterMeasurement}
+        on:change={handleWaterChange}
+        on:blur={handleWaterChange}
+      />
+    </Label>
+    <Label text="Amount of coffee">
+      <MeasurementInput
+        {units}
+        bind:measurement={coffeeMeasurement}
+        on:change={handleCoffeeChange}
+        on:blur={handleCoffeeChange}
+      />
+    </Label>
+    <Label text="Amount of brewed coffee">
+      <MeasurementInput
+        {units}
+        bind:measurement={outputMeasurement}
+        on:change={handleOutputChange}
+        on:blur={handleOutputChange}
+      />
+    </Label>
+  </Form>
+</Card>

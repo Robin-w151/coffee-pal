@@ -8,8 +8,8 @@
 </script>
 
 <PageHeader title="Drip Counter" />
-<PageCard>
+<PageCard display="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-4">
   <Counter bind:dropsPerMinute />
-  <hr />
+  <hr class="md:divider-vertical md:h-full" />
   <Estimation {dropsPerMinute} />
 </PageCard>

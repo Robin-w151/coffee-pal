@@ -4,6 +4,7 @@
   import { settingsStore } from '$lib/stores/settings';
   import { round } from '$lib/utils/math';
   import { getPreferredWeightUnit } from '$lib/utils/units';
+  import Card from '../ui/elements/Card.svelte';
   import Form from '../ui/elements/form/Form.svelte';
   import Label from '../ui/elements/form/Label.svelte';
   import MeasurementInput from '../ui/elements/form/MeasurementInput.svelte';
@@ -33,10 +34,12 @@
   }
 </script>
 
-<h3 class="h3">Estimation</h3>
-<Form>
-  <Label text="Amount of water">
-    <MeasurementInput {units} bind:measurement={waterMeasurement} />
-  </Label>
-  <span>Estimated time: {totalTimeEstimate}</span>
-</Form>
+<Card>
+  <h3 class="h3">Estimation</h3>
+  <Form>
+    <Label text="Amount of water">
+      <MeasurementInput {units} bind:measurement={waterMeasurement} />
+    </Label>
+    <span>Estimated time: {totalTimeEstimate}</span>
+  </Form>
+</Card>
