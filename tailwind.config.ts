@@ -1,5 +1,6 @@
 import { skeleton } from '@skeletonlabs/tw-plugin';
 import forms from '@tailwindcss/forms';
+import containerQueries from '@tailwindcss/container-queries';
 import { join } from 'path';
 import type { Config } from 'tailwindcss/types/config';
 import { coffeeTheme } from './theme';
@@ -20,5 +21,6 @@ export default {
         custom: [coffeeTheme],
       },
     }),
+    containerQueries,
   ],
 } satisfies Config;

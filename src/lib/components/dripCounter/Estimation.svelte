@@ -3,6 +3,7 @@
   import type { Measurement } from '$lib/models/measurement';
   import { settingsStore } from '$lib/stores/settings';
   import { round } from '$lib/utils/math';
+  import { clsx } from '$lib/utils/ui/clsx';
   import { getPreferredWeightUnit } from '$lib/utils/units';
   import Card from '../ui/elements/Card.svelte';
   import Form from '../ui/elements/form/Form.svelte';
@@ -10,6 +11,7 @@
   import MeasurementInput from '../ui/elements/form/MeasurementInput.svelte';
 
   export let dropsPerMinute: number;
+  export let isWithinRange = false;
 
   const units = WEIGHT_UNITS;
   const preferredUnit = getPreferredWeightUnit($settingsStore.preferredUnits);
@@ -22,13 +24,31 @@
 
   $: targetTime = calculateTime(waterMeasurement.value, targetDropsPerMinute);
   $: estimatedTime = calculateTime(waterMeasurement.value, dropsPerMinute);
+  $: {
+    isWithinRange = Math.abs(dropsPerMinute - targetDropsPerMinute) < 5;
+  }
 
-  function calculateTime(water?: number | null, dropsPerMinute?: number | null): string {
+  $: estimatedTimeVariantClass = clsx(
+    dropsPerMinute && isWithinRange && 'variant-filled-primary',
+    dropsPerMinute && !isWithinRange && 'variant-filled-warning',
+  );
+
+  function calculateTime(
+    water?: number | null,
+    dropsPerMinute?: number | null,
+  ): number | undefined {
     if (water == null || !dropsPerMinute) {
+      return;
+    }
+
+    return round(water / (dropsPerMinute * 0.05), 0);
+  }
+
+  function formatTime(timeInMinutes?: number): string {
+    if (timeInMinutes == null) {
       return 'Unknown';
     }
 
-    const timeInMinutes = round(water / (dropsPerMinute * 0.05), 0)!;
     const timeInHours = Math.floor(timeInMinutes / 60);
     const restTimeInMinutes = timeInMinutes % 60;
 
@@ -36,8 +56,16 @@
   }
 </script>
 
-<Card>
+<Card class="@container">
   <h3 class="h3">Estimation</h3>
+  <div class="flex flex-col @md:flex-row justify-between gap-4">
+    <span class="badge variant-filled {estimatedTimeVariantClass} px-4 py-2 text-base"
+      >Estimated time: {formatTime(estimatedTime)}</span
+    >
+    <span class="badge variant-filled px-4 py-2 text-base"
+      >Target time: {formatTime(targetTime)}</span
+    >
+  </div>
   <Form>
     <Label text="Amount of water">
       <MeasurementInput {units} bind:measurement={waterMeasurement} />
@@ -52,7 +80,5 @@
         <div class="input-group-shim">dpm</div>
       </div>
     </Label>
-    <span>Target time: {targetTime}</span>
-    <span>Estimated time: {estimatedTime}</span>
   </Form>
 </Card>
