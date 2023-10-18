@@ -11,8 +11,6 @@
 
   export let dropsPerMinute: number;
 
-  $: totalTimeEstimate = calculateTotalTime(waterMeasurement.value, dropsPerMinute);
-
   const units = WEIGHT_UNITS;
   const preferredUnit = getPreferredWeightUnit($settingsStore.preferredUnits);
 
@@ -20,8 +18,12 @@
     value: 500,
     unit: preferredUnit,
   };
+  let targetDropsPerMinute = 60;
 
-  function calculateTotalTime(water?: number | null, dropsPerMinute?: number | null): string {
+  $: targetTime = calculateTime(waterMeasurement.value, targetDropsPerMinute);
+  $: estimatedTime = calculateTime(waterMeasurement.value, dropsPerMinute);
+
+  function calculateTime(water?: number | null, dropsPerMinute?: number | null): string {
     if (water == null || !dropsPerMinute) {
       return 'Unknown';
     }
@@ -40,6 +42,17 @@
     <Label text="Amount of water">
       <MeasurementInput {units} bind:measurement={waterMeasurement} />
     </Label>
-    <span>Estimated time: {totalTimeEstimate}</span>
+    <Label text="Target drip rate">
+      <div class="input-group input-group-divider grid-cols-[1fr_auto]">
+        <input
+          type="number"
+          placeholder="Target drip rate, e.g. 60dpm"
+          bind:value={targetDropsPerMinute}
+        />
+        <div class="input-group-shim">dpm</div>
+      </div>
+    </Label>
+    <span>Target time: {targetTime}</span>
+    <span>Estimated time: {estimatedTime}</span>
   </Form>
 </Card>
