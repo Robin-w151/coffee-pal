@@ -120,6 +120,12 @@ async function captureCalculator() {
 
 async function captureDripCounter() {
   await page.goto(`${baseUrl}/drip-counter`);
+
+  for (const timeout of [0, 1000]) {
+    await page.waitForTimeout(timeout);
+    await page.getByRole('button', { name: 'Tap' }).click();
+  }
+
   await page.screenshot({ path: `screenshots/${category}/drip-counter.png` });
 }
 
