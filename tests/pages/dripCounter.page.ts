@@ -15,6 +15,18 @@ export class DripCounterPage {
     return this.page.getByText('Estimated time:');
   }
 
+  get targetTime(): Locator {
+    return this.page.getByText('Target time:');
+  }
+
+  get waterAmountInput(): Locator {
+    return this.page.getByLabel('Amount of water');
+  }
+
+  get dripRateInput(): Locator {
+    return this.page.getByLabel('Target drip rate');
+  }
+
   async goto(): Promise<void> {
     await this.page.goto('/drip-counter');
   }

@@ -37,6 +37,13 @@ test('drip counter estimation', async ({ page, dripCounterPage }) => {
   );
 });
 
+test('drip counter target time', async ({ dripCounterPage }) => {
+  await dripCounterPage.waterAmountInput.fill('100');
+  await dripCounterPage.dripRateInput.fill('20');
+
+  await expect(dripCounterPage.targetTime).toHaveText('Target time: 1h 40m');
+});
+
 export function round(value: number, precision = 0): number {
   return parseFloat(value.toFixed(precision));
 }
