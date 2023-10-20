@@ -25,10 +25,11 @@
   $: targetTime = calculateTime(waterMeasurement.value, targetDropsPerMinute);
   $: estimatedTime = calculateTime(waterMeasurement.value, dropsPerMinute);
   $: {
-    isWithinRange = Math.abs(dropsPerMinute - targetDropsPerMinute) < 5;
+    isWithinRange = Math.abs(dropsPerMinute - targetDropsPerMinute) < 10;
   }
 
   $: estimatedTimeVariantClass = clsx(
+    !dropsPerMinute && 'variant-ghost-tertiary',
     dropsPerMinute && isWithinRange && 'variant-filled-primary',
     dropsPerMinute && !isWithinRange && 'variant-filled-warning',
   );
@@ -59,10 +60,10 @@
 <Card class="@container">
   <h3 class="h3">Estimation</h3>
   <div class="flex flex-col @md:flex-row justify-between gap-4">
-    <span class="badge variant-filled {estimatedTimeVariantClass} px-4 py-2 text-base"
+    <span class="badge {estimatedTimeVariantClass} px-4 py-2 text-base"
       >Estimated time: {formatTime(estimatedTime)}</span
     >
-    <span class="badge variant-filled px-4 py-2 text-base"
+    <span class="badge variant-ghost-primary px-4 py-2 text-base"
       >Target time: {formatTime(targetTime)}</span
     >
   </div>
