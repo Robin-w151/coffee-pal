@@ -35,5 +35,5 @@ export default defineConfig({
 });
 
 function getCommitHash(): string {
-  return execSync('git rev-parse --short=10 HEAD').toString().trim();
+  return execSync('git rev-parse --short=7 HEAD').toString().trim();
 }
