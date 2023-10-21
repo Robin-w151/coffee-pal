@@ -28,24 +28,23 @@ export class MyCoffeesPage {
     await this.page.goto('/my-coffees');
   }
 
-  async addCoffeeEntry(entry: ActiveCoffeeEntry): Promise<void> {
-    await this.page.evaluate(async (entry) => {
+  async addCoffeeEntry(entries: Array<ActiveCoffeeEntry>): Promise<void> {
+    await this.page.evaluate(async (entries) => {
       return new Promise((resolve, reject) => {
         const openRequest = window.indexedDB.open('my-coffees');
         openRequest.onsuccess = (event: any) => {
           const db = event.target.result as IDBDatabase;
           const tx = db.transaction(['entries'], 'readwrite');
-          const store = tx.objectStore('entries');
-          store.add(entry);
-          tx.commit();
+          entries.forEach((entry) => tx.objectStore('entries').add(entry));
 
-          tx.oncomplete = () => resolve(void 0);
+          tx.commit();
+          tx.oncomplete = resolve;
           tx.onerror = reject;
           tx.onabort = reject;
         };
         openRequest.onerror = reject;
       });
-    }, entry);
+    }, entries);
   }
 
   async clickAddButton(): Promise<void> {

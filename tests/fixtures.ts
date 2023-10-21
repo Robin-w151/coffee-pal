@@ -21,10 +21,7 @@ export const test = base.extend<TestFixtures>({
     await journalPage.goto();
     await expect(journalPage.emptyMessage).toBeVisible();
 
-    for (const entry of testJournalEntries) {
-      await journalPage.addJournalEntry(entry);
-    }
-
+    await journalPage.addJournalEntries(testJournalEntries);
     await journalPage.goto();
     await expect(journalPage.getJournalEntryTitle(0)).toHaveText('Aeropress - Terroir PAN');
 
@@ -39,10 +36,7 @@ export const test = base.extend<TestFixtures>({
     await myCoffeesPage.goto();
     await expect(myCoffeesPage.emptyMessage).toBeVisible();
 
-    for (const entry of testCoffeeEntries) {
-      await myCoffeesPage.addCoffeeEntry(entry);
-    }
-
+    await myCoffeesPage.addCoffeeEntry(testCoffeeEntries);
     await myCoffeesPage.goto();
     await expect(myCoffeesPage.getCoffeeEntryTitle(0)).toHaveText(
       'Rwanda Kamajumba - Kamajumba Estate',

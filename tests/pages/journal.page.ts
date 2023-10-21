@@ -28,24 +28,24 @@ export class JournalPage {
     await this.page.goto('/');
   }
 
-  async addJournalEntry(entry: ActiveJournalEntry): Promise<void> {
-    await this.page.evaluate(async (entry) => {
+  async addJournalEntries(entries: Array<ActiveJournalEntry>): Promise<void> {
+    await this.page.evaluate(async (entries) => {
       return new Promise((resolve, reject) => {
+        console.log(entries);
         const openRequest = window.indexedDB.open('journal');
         openRequest.onsuccess = (event: any) => {
           const db = event.target.result as IDBDatabase;
           const tx = db.transaction(['entries'], 'readwrite');
-          const store = tx.objectStore('entries');
-          store.add(entry);
-          tx.commit();
+          entries.forEach((entry) => tx.objectStore('entries').add(entry));
 
-          tx.oncomplete = () => resolve(void 0);
+          tx.commit();
+          tx.oncomplete = resolve;
           tx.onerror = reject;
           tx.onabort = reject;
         };
         openRequest.onerror = reject;
       });
-    }, entry);
+    }, entries);
   }
 
   async clickAddButton(): Promise<void> {
