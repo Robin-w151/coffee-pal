@@ -32,6 +32,14 @@
     "factor": 30
   },
   {
+    "label": "PuckPuck",
+    "ratio": {
+      "coffee": 19,
+      "water": 250
+    },
+    "factor": 2
+  },
+  {
     "label": "V60",
     "ratio": {
       "coffee": 1,

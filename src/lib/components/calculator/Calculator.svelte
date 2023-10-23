@@ -10,7 +10,7 @@
   import PageCard from '../ui/elements/page/PageCard.svelte';
   import PageHeader from '../ui/elements/page/PageHeader.svelte';
 
-  let preset: Preset = presets[4];
+  let preset: Preset = presets.find((p) => p.label === 'V60') ?? presets[0];
   let recipe: IRecipe = calculateRecipe(preset);
 
   function handlePresetSelect({ detail: newPreset }: { detail: Preset }): void {
