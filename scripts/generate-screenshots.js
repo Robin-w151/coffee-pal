@@ -99,7 +99,7 @@ async function captureJournal() {
     await addJournalEntry(testJournalEntries[i], i === 0);
   }
 
-  await page.screenshot({ path: `screenshots/${category}/journal-overview.png` });
+  await takeScreenshot('journal-overview');
 }
 
 async function captureMyCoffees() {
@@ -110,12 +110,12 @@ async function captureMyCoffees() {
     await addCoffeeEntry(entry);
   }
 
-  await page.screenshot({ path: `screenshots/${category}/my-coffees-overview.png` });
+  await takeScreenshot('my-coffees-overview');
 }
 
 async function captureCalculator() {
   await page.goto(`${baseUrl}/calculator`);
-  await page.screenshot({ path: `screenshots/${category}/calculator.png` });
+  await takeScreenshot('calculator');
 }
 
 async function captureDripCounter() {
@@ -126,12 +126,12 @@ async function captureDripCounter() {
     await page.getByRole('button', { name: 'Tap' }).click();
   }
 
-  await page.screenshot({ path: `screenshots/${category}/drip-counter.png` });
+  await takeScreenshot('drip-counter');
 }
 
 async function addJournalEntry(
   { method, water, waterTemperature, coffee, coffeeType, grindSettings, description } = {},
-  takeScreenshot = false,
+  screenshot = false,
 ) {
   await clickAddButton();
   await expect(page.getByText('add entry')).toBeVisible();
@@ -151,8 +151,8 @@ async function addJournalEntry(
   await page.getByLabel('description').fill(description);
 
   await page.waitForTimeout(250);
-  if (takeScreenshot) {
-    await page.screenshot({ path: `screenshots/${category}/journal-add-entry.png` });
+  if (screenshot) {
+    await takeScreenshot('journal-add-entry');
   }
 
   await clickSaveButton();
@@ -185,4 +185,8 @@ async function clickAddButton() {
 
 async function clickSaveButton() {
   await page.getByTitle('save').click();
+}
+
+async function takeScreenshot(name) {
+  await page.screenshot({ path: `screenshots/${category}/${name}.png` });
 }
