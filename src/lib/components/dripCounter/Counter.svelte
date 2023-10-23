@@ -10,7 +10,7 @@
 
   $: calculateDripRate(timestamps);
   $: dropsPerMinuteVariantClass = clsx(
-    !dropsPerMinute && 'variant-ghost-tertiary',
+    !dropsPerMinute && 'variant-soft-tertiary',
     dropsPerMinute && isWithinRange && 'variant-filled-primary',
     dropsPerMinute && !isWithinRange && 'variant-filled-warning',
   );
