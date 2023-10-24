@@ -5,61 +5,71 @@
   import { syncStateStore } from '$lib/stores/syncState';
   import { ModalHelper } from '$lib/utils/ui/modal';
   import { sync } from '$lib/utils/sync';
-  import { getModalStore } from '@skeletonlabs/skeleton';
+  import { getModalStore, getToastStore } from '@skeletonlabs/skeleton';
   import Spinner from '../ui/elements/Spinner.svelte';
   import Form from '../ui/elements/form/Form.svelte';
   import Label from '../ui/elements/form/Label.svelte';
   import UrlInput from '../ui/elements/form/UrlInput.svelte';
   import NextcloudLoginModal from './NextcloudLoginModal.svelte';
   import type { UrlInputChange } from '$lib/models/urlInput';
+  import { Subscription, catchError, finalize, of, tap } from 'rxjs';
+  import { onDestroy } from 'svelte';
+  import { ToastHelper } from '$lib/utils/ui/toast';
 
   const modalHelper = new ModalHelper(getModalStore());
+  const toastHelper = new ToastHelper(getToastStore());
 
   let url = $syncStore.connection?.server.url;
   let hostValid = !!url;
   let isConnecting = false;
-  let abortLogin: () => void | undefined;
+  let pollSubscription: Subscription | undefined;
 
   $: connected = !!$syncStore.connection;
   $: showSpinner = isConnecting || $syncStateStore.isSynchronizing;
+
+  onDestroy(() => {
+    pollSubscription?.unsubscribe();
+  });
 
   function handleUrlChange({ detail: change }: CustomEvent<UrlInputChange>): void {
     url = change.url;
     hostValid = change.hostValid;
   }
 
-  async function handleConnectClick(): Promise<void> {
-    abortLogin?.();
-
+  function handleConnectClick(): void {
+    pollSubscription?.unsubscribe();
     isConnecting = true;
-    const nextcloudClient = new NextcloudLoginClient();
-    const { loginUrl, credentials, abort } = await nextcloudClient.login(url!);
-    abortLogin = abort;
 
-    handleLoginStart(loginUrl, abort);
+    const nextcloudLoginClient = new NextcloudLoginClient();
+    const credentials = nextcloudLoginClient.login(url!, handleLoginStart);
 
-    try {
-      await handleCredentials(credentials);
-    } finally {
-      isConnecting = false;
-    }
+    pollSubscription = credentials
+      .pipe(
+        tap(handleCredentials),
+        catchError((error: unknown) => {
+          toastHelper.triggerError(`Login failed! ${(error as Error).message}`);
+          return of();
+        }),
+        finalize(() => (isConnecting = false)),
+      )
+      .subscribe();
   }
 
-  function handleLoginStart(loginUrl: string, abort: () => void): void {
+  function handleLoginStart(loginUrl: string): void {
     modalHelper.triggerModal(NextcloudLoginModal, {
       props: { loginUrl },
-      response: handleLoginCancel.bind(null, abort),
+      response: handleLoginCancel,
     });
   }
 
-  function handleLoginCancel(abort: () => void, response?: boolean): void {
+  function handleLoginCancel(response?: boolean): void {
     if (!response) {
-      abort();
+      pollSubscription?.unsubscribe();
     }
   }
 
-  async function handleCredentials(credentials: Promise<Credentials>): Promise<void> {
-    const { loginName, appPassword } = await credentials;
+  function handleCredentials(credentials: Credentials): void {
+    const { loginName, appPassword } = credentials;
     syncStore.setConnection({
       server: {
         url: url!,

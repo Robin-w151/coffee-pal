@@ -12,83 +12,74 @@ import {
 } from '$lib/models/sync';
 import { merge } from '$lib/services/sync/merge';
 import { lazyLoad } from '$lib/utils/lazyLoad';
-import { DateTime } from 'luxon';
+import { isPresent } from '$lib/utils/observables';
+import {
+  catchError,
+  filter,
+  first,
+  interval,
+  of,
+  switchMap,
+  tap,
+  throwError,
+  timeout,
+  type Observable,
+} from 'rxjs';
+import { fromFetch } from 'rxjs/fetch';
 import type { WebDAVClient } from 'webdav';
 
 const SYNC_DIR = 'CoffeePal';
 
 const createClient = lazyLoad(async () => (await import('webdav')).createClient);
 
-export interface Login {
-  loginUrl: string;
-  credentials: Promise<Credentials>;
-  abort: () => void;
-}
-
 export class NextcloudLoginClient {
-  private pollInterval: any;
-  private abort = false;
-
   /* https://docs.nextcloud.com/server/latest/developer_manual/client_apis/LoginFlow/index.html#login-flow-v2 */
-  public async login(url: string): Promise<Login> {
+  public login(url: string, urlHandler: (loginUrl: string) => void): Observable<Credentials> {
     const parsedUrl = new URL(url);
     parsedUrl.pathname = '/index.php/login/v2';
 
-    const loginPoll = await this.initiateLogin(parsedUrl.href);
-    const credentials = this.setupLoginPoll(loginPoll);
-    const abort = () => (this.abort = true);
-
-    return {
-      loginUrl: loginPoll.login,
-      credentials,
-      abort,
-    };
+    return this.initiateLogin(parsedUrl.href).pipe(
+      tap((loginPoll) => urlHandler(loginPoll.login)),
+      switchMap((loginPoll) => this.setupLoginPoll(loginPoll)),
+    );
   }
 
-  private async initiateLogin(url: string): Promise<LoginPoll> {
-    const response = await fetch(url, { method: 'POST' });
-    if (!response.ok) {
-      throw new Error(`Failed to initiale login at nextcloud server url='${url}'!`);
-    }
-
-    return response.json();
-  }
-
-  private setupLoginPoll(loginPoll: LoginPoll): Promise<Credentials> {
-    const start = DateTime.now();
-    const hasTimedOut = () => DateTime.now().diff(start, 'minutes').minutes > 10;
-
-    return new Promise((resolve, reject) => {
-      this.pollInterval = setInterval(async () => {
-        if (this.abort || hasTimedOut()) {
-          clearInterval(this.pollInterval);
-          reject();
+  private initiateLogin(url: string): Observable<LoginPoll> {
+    return fromFetch(url, { method: 'POST' }).pipe(
+      switchMap((response) => {
+        if (response.ok) {
+          return response.json();
         }
 
-        const credentials = await this.fetchLoginPoll(loginPoll);
-        if (credentials) {
-          clearInterval(this.pollInterval);
-          resolve(credentials);
-        }
-      }, 5000);
-    });
+        return throwError(() => new Error('Cannot retrieve login instructions.'));
+      }),
+    );
   }
 
-  private async fetchLoginPoll(loginPoll: LoginPoll): Promise<Credentials | null> {
-    try {
-      const { endpoint, token } = loginPoll.poll;
-      const body = new URLSearchParams();
-      body.append('token', token);
+  private setupLoginPoll(loginPoll: LoginPoll): Observable<Credentials> {
+    return interval(5000).pipe(
+      switchMap(() => this.fetchLoginPoll(loginPoll)),
+      filter(isPresent),
+      first(),
+      timeout(600_000),
+    );
+  }
 
-      const response = await fetch(endpoint, { method: 'POST', body });
-      if (!response.ok) {
-        return null;
-      }
+  private fetchLoginPoll(loginPoll: LoginPoll): Observable<Credentials | null> {
+    const { endpoint, token } = loginPoll.poll;
+    const body = new URLSearchParams();
+    body.append('token', token);
 
-      return response.json();
-    } catch (_) {
-      return null;
-    }
+    return fromFetch(endpoint, { method: 'POST', body }).pipe(
+      switchMap((response) => {
+        if (response.ok) {
+          return response.json();
+        }
+
+        return of(null);
+      }),
+      catchError(() => of(null)),
+    );
   }
 }
 
