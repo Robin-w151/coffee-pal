@@ -1,7 +1,9 @@
 import { chromium } from 'playwright';
 import { expect } from '@playwright/test';
+import { join } from 'path';
 
-const baseUrl = 'https://coffee-pal.vercel.app';
+const baseUrl = process.env.BASE_URL ?? 'https://coffee-pal.vercel.app';
+const screenshotsDir = process.env.SCREENSHOTS_DIR ?? 'screenshots';
 const testJournalEntries = [
   {
     method: 'Aeropress',
@@ -79,6 +81,8 @@ async function generateScreenshots() {
   const desktopContext = await browser.newContext({ viewport: { width: 1400, height: 800 } });
   page = await desktopContext.newPage();
   category = 'desktop';
+  await page.goto(`${baseUrl}/settings`);
+  await page.getByText('Dark').click();
   await captureApp();
 
   await browser.close();
@@ -188,5 +192,5 @@ async function clickSaveButton() {
 }
 
 async function takeScreenshot(name) {
-  await page.screenshot({ path: `screenshots/${category}/${name}.png` });
+  await page.screenshot({ path: join(screenshotsDir, `${category}/${name}.jpeg`) });
 }
