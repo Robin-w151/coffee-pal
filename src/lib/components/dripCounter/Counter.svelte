@@ -39,10 +39,10 @@
   }
 </script>
 
-<Card>
+<Card class="@container">
   <h3 class="h3">Counter</h3>
   <div class="flex flex-col gap-4">
-    <span class="badge {dropsPerMinuteVariantClass} self-start px-4 py-2 text-base">
+    <span class="badge {dropsPerMinuteVariantClass} @md:self-start px-4 py-2 text-base">
       {#if timestamps.length > 0}
         {dropsPerMinute} drops/min
       {:else}
@@ -50,7 +50,7 @@
       {/if}
     </span>
     <button
-      class="btn btn-xl variant-ghost-primary h-36"
+      class="btn btn-xl variant-ghost-primary h-40 @md:h-32"
       title="Tap to count drop rate"
       on:click={handleCountClick}>Tap</button
     >
