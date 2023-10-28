@@ -4,7 +4,7 @@ export class JournalEntryDetailPage {
   constructor(private readonly page: Page) {}
 
   get header(): Locator {
-    return this.page.getByRole('heading', { name: 'Entry' });
+    return this.page.getByRole('heading', { name: 'Journal Entry' });
   }
 
   get methodInput(): Locator {
