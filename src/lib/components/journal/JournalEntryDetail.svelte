@@ -78,7 +78,7 @@
 
 <div class="card grid grid-rows-[min-content_1fr] w-full max-w-screen-md max-h-full">
   <div class="flex justify-between items-center p-4">
-    <h3 class="h3">{edit ? 'Edit' : 'Add'} Entry</h3>
+    <h3 class="h3">Journal Entry</h3>
     <button
       class="btn btn-icon hover:variant-soft-secondary float-right"
       title="Close"
