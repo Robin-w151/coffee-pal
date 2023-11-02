@@ -1,6 +1,6 @@
 {
   "name": "coffee-pal",
-  "version": "0.10.10",
+  "version": "0.10.11",
   "license": "MIT",
   "scripts": {
     "dev": "vite dev",
