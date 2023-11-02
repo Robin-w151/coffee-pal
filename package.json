@@ -79,5 +79,5 @@
     "webdav": "^5.3.0"
   },
   "type": "module",
-  "packageManager": "yarn@4.0.0"
+  "packageManager": "yarn@4.0.1"
 }
