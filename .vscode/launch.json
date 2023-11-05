@@ -9,7 +9,7 @@
       "request": "launch",
       "name": "Dev",
       "cwd": "${workspaceFolder}",
-      "runtimeExecutable": "yarn",
+      "runtimeExecutable": "pnpm",
       "runtimeArgs": ["dev"]
     },
     {
@@ -25,7 +25,7 @@
       "request": "launch",
       "name": "Build",
       "cwd": "${workspaceFolder}",
-      "runtimeExecutable": "yarn",
+      "runtimeExecutable": "pnpm",
       "runtimeArgs": ["build"]
     },
     {
@@ -33,7 +33,7 @@
       "request": "launch",
       "name": "Preview",
       "cwd": "${workspaceFolder}",
-      "runtimeExecutable": "yarn",
+      "runtimeExecutable": "pnpm",
       "runtimeArgs": ["preview"]
     },
     {
@@ -41,7 +41,7 @@
       "request": "launch",
       "name": "Generate schema",
       "cwd": "${workspaceFolder}",
-      "runtimeExecutable": "yarn",
+      "runtimeExecutable": "pnpm",
       "runtimeArgs": ["generate:schema"]
     },
     {
@@ -49,7 +49,7 @@
       "request": "launch",
       "name": "Test",
       "cwd": "${workspaceFolder}",
-      "runtimeExecutable": "yarn",
+      "runtimeExecutable": "pnpm",
       "runtimeArgs": ["test:ui"]
     },
     {
@@ -57,7 +57,7 @@
       "request": "launch",
       "name": "Check",
       "cwd": "${workspaceFolder}",
-      "runtimeExecutable": "yarn",
+      "runtimeExecutable": "pnpm",
       "runtimeArgs": ["check"]
     },
     {
@@ -65,7 +65,7 @@
       "request": "launch",
       "name": "Source Map explorer",
       "cwd": "${workspaceFolder}",
-      "runtimeExecutable": "yarn",
+      "runtimeExecutable": "pnpm",
       "runtimeArgs": ["sme"]
     }
   ]
