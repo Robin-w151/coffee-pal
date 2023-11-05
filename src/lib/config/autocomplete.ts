@@ -9,17 +9,17 @@ export const methodOptions: Array<AutocompleteOption> = [
   {
     label: 'V60',
     value: 'v60',
-    keywords: 'filter,hario',
+    keywords: 'filter,drip,infusion,hario',
   },
   {
     label: 'V60 Switch',
     value: 'v60 switch',
-    keywords: 'filter,hario,immersion',
+    keywords: 'filter,drip,infusion,hario,immersion',
   },
   {
     label: 'Chemex',
     value: 'chemex',
-    keywords: 'filter',
+    keywords: 'filter,drip,infusion',
   },
   {
     label: 'French Press',
@@ -39,6 +39,11 @@ export const methodOptions: Array<AutocompleteOption> = [
   {
     label: 'Cold Drip',
     value: 'cold drip',
-    keywords: 'filter,cold extraction',
+    keywords: 'filter,drip,infusion,cold extraction',
   },
-];
+  {
+    label: 'Orea',
+    value: 'orea',
+    keywords: 'filter,orea,drip,infusion',
+  },
+].sort((a, b) => a.label.localeCompare(b.label));
