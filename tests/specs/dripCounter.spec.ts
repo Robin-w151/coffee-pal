@@ -1,7 +1,7 @@
 import { expect } from '@playwright/test';
 import { test } from '../fixtures';
 
-test('drip counter 3 taps', async ({ page, dripCounterPage }) => {
+test('3 taps', async ({ page, dripCounterPage }) => {
   for (const timeout of [0, 1000, 2000]) {
     await page.waitForTimeout(timeout);
     await dripCounterPage.clickTapButton();
@@ -10,14 +10,14 @@ test('drip counter 3 taps', async ({ page, dripCounterPage }) => {
   await expect(dripCounterPage.dropsPerMinute).toHaveText(/^[23]\d drops\/min$/i);
 });
 
-test('drip counter reset', async ({ dripCounterPage }) => {
+test('reset', async ({ dripCounterPage }) => {
   await dripCounterPage.clickTapButton();
   await dripCounterPage.clickResetButton();
 
   await expect(dripCounterPage.startMessage).toBeVisible();
 });
 
-test('drip counter estimation', async ({ page, dripCounterPage }) => {
+test('estimation', async ({ page, dripCounterPage }) => {
   for (const timeout of [0, 100, 1000]) {
     await page.waitForTimeout(timeout);
     await dripCounterPage.clickTapButton();
@@ -37,7 +37,7 @@ test('drip counter estimation', async ({ page, dripCounterPage }) => {
   );
 });
 
-test('drip counter target time', async ({ dripCounterPage }) => {
+test('target time', async ({ dripCounterPage }) => {
   await dripCounterPage.waterAmountInput.fill('100');
   await dripCounterPage.dripRateInput.fill('20');
 

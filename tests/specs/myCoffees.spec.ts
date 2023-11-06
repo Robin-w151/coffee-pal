@@ -1,11 +1,11 @@
 import { expect } from '@playwright/test';
 import { test } from '../fixtures';
 
-test('my-coffees list', async ({ myCoffeesPage }) => {
+test('list', async ({ myCoffeesPage }) => {
   await expect(myCoffeesPage.coffeeList).toHaveCount(3);
 });
 
-test('my-coffees entry item', async ({ myCoffeesPage }) => {
+test('entry item', async ({ myCoffeesPage }) => {
   const firstEntry = myCoffeesPage.getCoffeeEntry(0);
   await expect(myCoffeesPage.getCoffeeEntryTitle(firstEntry)).toHaveText(
     'Rwanda Kamajumba - Kamajumba Estate',
@@ -15,13 +15,13 @@ test('my-coffees entry item', async ({ myCoffeesPage }) => {
   );
 });
 
-test('my-coffees search', async ({ myCoffeesPage }) => {
+test('search', async ({ myCoffeesPage }) => {
   await myCoffeesPage.enterSearch('Terroir PAN');
   await expect(myCoffeesPage.coffeeList).toHaveCount(1);
   await expect(myCoffeesPage.getCoffeeEntryTitle(0)).toHaveText('Terroir PAN - Panama');
 });
 
-test('my-coffees search clear', async ({ myCoffeesPage }) => {
+test('search clear', async ({ myCoffeesPage }) => {
   await myCoffeesPage.enterSearch('Terroir PAN');
   await expect(myCoffeesPage.coffeeList).toHaveCount(1);
 
@@ -29,7 +29,7 @@ test('my-coffees search clear', async ({ myCoffeesPage }) => {
   await expect(myCoffeesPage.coffeeList).toHaveCount(3);
 });
 
-test('my-coffees sort', async ({ myCoffeesPage }) => {
+test('sort', async ({ myCoffeesPage }) => {
   await expect(myCoffeesPage.getCoffeeEntryTitle(0)).toHaveText(
     'Rwanda Kamajumba - Kamajumba Estate',
   );
@@ -39,7 +39,7 @@ test('my-coffees sort', async ({ myCoffeesPage }) => {
   await expect(myCoffeesPage.getCoffeeEntryTitle(0)).toHaveText('Wiedner Mischung - Mix');
 });
 
-test('my-coffees entry add', async ({ myCoffeesPage, myCoffeesEntryDetailPage }) => {
+test('entry add', async ({ myCoffeesPage, myCoffeesEntryDetailPage }) => {
   await myCoffeesPage.clickAddButton();
   await expect(myCoffeesEntryDetailPage.header).toBeVisible();
 
@@ -63,7 +63,7 @@ test('my-coffees entry add', async ({ myCoffeesPage, myCoffeesEntryDetailPage })
   await expect(myCoffeesPage.getCoffeeEntryDetail(entry)).toHaveText('Arabica | Tovolea');
 });
 
-test('my-coffees entry edit', async ({ myCoffeesPage, myCoffeesEntryDetailPage }) => {
+test('entry edit', async ({ myCoffeesPage, myCoffeesEntryDetailPage }) => {
   await myCoffeesPage.clickJournalEntryShowButton(1);
   await myCoffeesEntryDetailPage.traderInput.fill('Rösterei');
   await myCoffeesEntryDetailPage.clickSaveButton();
@@ -71,7 +71,7 @@ test('my-coffees entry edit', async ({ myCoffeesPage, myCoffeesEntryDetailPage }
   await expect(myCoffeesPage.getCoffeeEntryDetail(1)).toHaveText('Rösterei');
 });
 
-test('my-coffees entry edit cancel', async ({ myCoffeesPage, myCoffeesEntryDetailPage }) => {
+test('entry edit cancel', async ({ myCoffeesPage, myCoffeesEntryDetailPage }) => {
   await myCoffeesPage.clickJournalEntryShowButton(1);
   await myCoffeesEntryDetailPage.traderInput.fill('');
   await myCoffeesEntryDetailPage.clickCloseButton();
@@ -79,14 +79,14 @@ test('my-coffees entry edit cancel', async ({ myCoffeesPage, myCoffeesEntryDetai
   await expect(myCoffeesPage.getCoffeeEntryDetail(1)).toHaveText('Blasercafe');
 });
 
-test('my-coffees entry delete', async ({ myCoffeesPage, myCoffeesEntryDetailPage }) => {
+test('entry delete', async ({ myCoffeesPage, myCoffeesEntryDetailPage }) => {
   await myCoffeesPage.clickJournalEntryShowButton(2);
   await myCoffeesEntryDetailPage.clickDeleteButton();
 
   await expect(myCoffeesPage.coffeeList).toHaveCount(2);
 });
 
-test('my-coffees entry delete undo', async ({ myCoffeesPage, myCoffeesEntryDetailPage }) => {
+test('entry delete undo', async ({ myCoffeesPage, myCoffeesEntryDetailPage }) => {
   await myCoffeesPage.clickJournalEntryShowButton(2);
   await myCoffeesEntryDetailPage.clickDeleteButton();
   await myCoffeesPage.clickUndoButton();
