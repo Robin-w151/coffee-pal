@@ -11,6 +11,10 @@ export class CalculatorPage {
     return this.page.getByLabel('Water', { exact: true });
   }
 
+  get fixedRatioToggle(): Locator {
+    return this.page.getByLabel('Fixed Ratio').locator('label');
+  }
+
   get waterAmountInput(): Locator {
     return this.page.getByLabel('Amount of water');
   }
@@ -37,6 +41,10 @@ export class CalculatorPage {
 
   get iceAmountInput(): Locator {
     return this.page.getByLabel('Amount of ice');
+  }
+
+  getPreset(name: string): Locator {
+    return this.page.getByRole('button', { name });
   }
 
   async goto(): Promise<void> {
