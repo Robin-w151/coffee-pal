@@ -12,10 +12,12 @@
 
   let preset: Preset = presets.find((p) => p.label === 'V60') ?? presets[0];
   let recipe: IRecipe = calculateRecipe(preset);
+  let fixedRatio = true;
 
   function handlePresetSelect({ detail: newPreset }: { detail: Preset }): void {
     preset = newPreset;
     recipe = calculateRecipe(newPreset);
+    fixedRatio = true;
   }
 
   function handleRatioChange({ detail: ratio }: { detail: Ratio }): void {
@@ -25,36 +27,65 @@
       factor: 1,
     };
     recipe = calculateRecipe(preset);
+    fixedRatio = true;
   }
 
   function handleCoffeeChange({ detail: coffee }: { detail: number }): void {
-    const water = calculateWater(coffee, preset.ratio);
-    const output = calculateOutput(coffee, water);
-    recipe = {
-      coffee,
-      water,
-      output,
-    };
+    if (fixedRatio) {
+      const water = calculateWater(coffee, preset.ratio);
+      const output = calculateOutput(coffee, water);
+      recipe = {
+        coffee,
+        water,
+        output,
+      };
+    } else {
+      preset = calculatePreset(coffee, recipe.water);
+      recipe = {
+        ...recipe,
+        coffee,
+        output: calculateOutput(coffee, recipe.water),
+      };
+    }
   }
 
   function handleWaterChange({ detail: water }: { detail: number }): void {
-    const coffee = calculateCoffee(water, preset.ratio);
-    const output = calculateOutput(coffee, water);
-    recipe = {
-      coffee,
-      water,
-      output,
-    };
+    if (fixedRatio) {
+      const coffee = calculateCoffee(water, preset.ratio);
+      const output = calculateOutput(coffee, water);
+      recipe = {
+        coffee,
+        water,
+        output,
+      };
+    } else {
+      preset = calculatePreset(recipe.coffee, water);
+      recipe = {
+        ...recipe,
+        water,
+        output: calculateOutput(recipe.coffee, water),
+      };
+    }
   }
 
   function handleOutputChange({ detail: output }: { detail: number }): void {
-    const water = calculateWaterFromOutput(output, preset.ratio);
-    const coffee = calculateCoffeeFromOutput(output, preset.ratio);
-    recipe = {
-      coffee,
-      water,
-      output,
-    };
+    if (fixedRatio) {
+      const water = calculateWaterFromOutput(output, preset.ratio);
+      const coffee = calculateCoffeeFromOutput(output, preset.ratio);
+      recipe = {
+        coffee,
+        water,
+        output,
+      };
+    } else {
+      const water = calculateWaterFromCoffeeAndOutput(recipe.coffee, output);
+      preset = calculatePreset(recipe.coffee, water);
+      recipe = {
+        ...recipe,
+        water,
+        output,
+      };
+    }
   }
 
   function calculateWater(coffee: number, ratio: Ratio): number {
@@ -64,6 +95,10 @@
   function calculateWaterFromOutput(output: number, ratio: Ratio): number {
     const ratioFactor = ratio.water / ratio.coffee;
     return sanitize((output / (ratioFactor - 2)) * ratioFactor);
+  }
+
+  function calculateWaterFromCoffeeAndOutput(coffee: number, output: number): number {
+    return sanitize(output + coffee * 2);
   }
 
   function calculateCoffee(water: number, ratio: Ratio): number {
@@ -85,6 +120,30 @@
     const output = calculateOutput(coffee, water);
     return { coffee, water, output };
   }
+
+  function calculatePreset(coffee: number, water: number): Preset {
+    const ratio = calculateRatio(coffee, water);
+
+    return {
+      label: 'Custom',
+      ratio,
+      factor: sanitize(water / ratio.water),
+    };
+  }
+
+  function calculateRatio(coffee: number, water: number): Ratio {
+    if (coffee === 0) {
+      return {
+        coffee: 0,
+        water,
+      };
+    }
+
+    return {
+      coffee: 1,
+      water: sanitize(water / coffee),
+    };
+  }
 </script>
 
 <PageHeader title="Brewing Calculator" />
@@ -97,6 +156,7 @@
   <hr class="md:divider-vertical md:h-full" />
   <Recipe
     {recipe}
+    bind:fixedRatio
     on:coffeeChange={handleCoffeeChange}
     on:waterChange={handleWaterChange}
     on:outputChange={handleOutputChange}

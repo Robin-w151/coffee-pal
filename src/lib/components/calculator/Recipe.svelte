@@ -9,7 +9,9 @@
   import MeasurementInput from '../ui/elements/form/MeasurementInput.svelte';
   import Form from '../ui/elements/form/Form.svelte';
   import Card from '../ui/elements/Card.svelte';
+  import { SlideToggle } from '@skeletonlabs/skeleton';
 
+  export let fixedRatio = true;
   export let recipe: Recipe;
 
   const dispatch = createEventDispatcher();
@@ -53,6 +55,16 @@
 <Card>
   <h3 class="h3">Recipe</h3>
   <Form>
+    <div class="flex items-center gap-2">
+      <SlideToggle
+        name="fixed-ratio"
+        label="Fixed Ratio"
+        size="sm"
+        active="slide-toggle-active-token"
+        bind:checked={fixedRatio}
+      />
+      <span>Fixed Ratio</span>
+    </div>
     <Label text="Amount of water">
       <MeasurementInput
         {units}
