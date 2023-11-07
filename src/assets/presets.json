@@ -1,13 +1,5 @@
 [
   {
-    "label": "Espresso",
-    "ratio": {
-      "coffee": 3,
-      "water": 10
-    },
-    "factor": 6
-  },
-  {
     "label": "Aeropress",
     "ratio": {
       "coffee": 1,
@@ -46,6 +38,14 @@
       "water": 15
     },
     "factor": 16
+  },
+  {
+    "label": "Orea",
+    "ratio": {
+      "coffee": 3,
+      "water": 50
+    },
+    "factor": 5
   },
   {
     "label": "Chemex",
