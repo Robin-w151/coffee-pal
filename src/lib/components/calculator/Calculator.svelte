@@ -10,7 +10,7 @@
   import PageCard from '../ui/elements/page/PageCard.svelte';
   import PageHeader from '../ui/elements/page/PageHeader.svelte';
 
-  let preset: Preset = presets.find((p) => p.label === 'V60') ?? presets[0];
+  let preset: Preset = presets.find((p) => p.label === 'Orea') ?? presets[0];
   let recipe: IRecipe = calculateRecipe(preset);
   let fixedRatio = true;
 

@@ -52,6 +52,7 @@ export const test = base.extend<TestFixtures>({
     const calculatorPage = new CalculatorPage(page);
     await calculatorPage.goto();
     await waitForTestReady(page);
+    await calculatorPage.getPreset('V60').click();
 
     await use(calculatorPage);
   },
