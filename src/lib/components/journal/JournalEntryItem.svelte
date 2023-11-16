@@ -40,10 +40,10 @@
 <div class="justify-between">
   <span class="max-sm:hidden badge variant-soft-tertiary w-16">{ratio}</span>
   <span class="block min-w-0 flex-1 max-sm:!ml-0">
-    <dt class="overflow-hidden text-ellipsis">
+    <dt class="overflow-hidden text-ellipsis whitespace-nowrap">
       <span class="font-bold">{entry.method} - {entry.coffeeType || 'Unknown'}</span>
     </dt>
-    <dd class="overflow-hidden text-ellipsis">
+    <dd class="overflow-hidden text-ellipsis whitespace-nowrap">
       <span class="sm:hidden">{ratio} - </span>
       <span>{details(entry)}</span>
     </dd>

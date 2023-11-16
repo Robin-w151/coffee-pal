@@ -21,10 +21,10 @@
 
 <div class="justify-between">
   <span class="block min-w-0 flex-1">
-    <dt class="overflow-hidden text-ellipsis">
+    <dt class="overflow-hidden text-ellipsis whitespace-nowrap">
       <span class="font-bold">{entry.name} - {entry.origin || 'Unknown Origin'}</span>
     </dt>
-    <dd class="overflow-hidden text-ellipsis">
+    <dd class="overflow-hidden text-ellipsis whitespace-nowrap">
       <span>{details(entry)}</span>
     </dd>
   </span>
