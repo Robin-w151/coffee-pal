@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { round } from '$lib/utils/math';
+  import { DRIP_INSTANTS_COUNT } from '$lib/config/dripCounter';
+  import { calculateDripRate } from '$lib/services/dripCounter/dripRate';
   import { clsx } from '$lib/utils/ui/clsx';
   import Card from '../ui/elements/Card.svelte';
 
@@ -8,7 +9,7 @@
 
   let timestamps: Array<number> = [];
 
-  $: calculateDripRate(timestamps);
+  $: dropsPerMinute = calculateDripRate(timestamps);
   $: dropsPerMinuteVariantClass = clsx(
     !dropsPerMinute && 'variant-soft-tertiary',
     dropsPerMinute && isWithinRange && 'variant-filled-primary',
@@ -16,26 +17,11 @@
   );
 
   function handleCountClick(): void {
-    timestamps = [...timestamps.slice(-1), performance.now()];
+    timestamps = [...timestamps.slice(-DRIP_INSTANTS_COUNT), performance.now()];
   }
 
   function handleResetClick(): void {
     timestamps = [];
-  }
-
-  function calculateDripRate(timestamps: Array<number>): void {
-    if (timestamps.length < 2) {
-      dropsPerMinute = 0;
-      return;
-    }
-
-    const differences = [];
-    for (let i = 0; i < timestamps.length - 1; i++) {
-      differences.push(timestamps[i + 1] - timestamps[0]);
-    }
-
-    const meanDifference = differences.reduce((d1, d2) => d1 + d2, 0) / differences.length;
-    dropsPerMinute = round(60_000 / meanDifference, 0)!;
   }
 </script>
 

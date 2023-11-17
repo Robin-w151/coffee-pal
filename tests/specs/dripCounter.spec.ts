@@ -1,13 +1,13 @@
 import { expect } from '@playwright/test';
 import { test } from '../fixtures';
 
-test('3 taps', async ({ page, dripCounterPage }) => {
-  for (const timeout of [0, 1000, 2000]) {
+test('multiple taps', async ({ page, dripCounterPage }) => {
+  for (const timeout of [0, 1000, 1100, 850, 990, 1010]) {
     await page.waitForTimeout(timeout);
     await dripCounterPage.clickTapButton();
   }
 
-  await expect(dripCounterPage.dropsPerMinute).toHaveText(/^[23]\d drops\/min$/i);
+  await expect(dripCounterPage.dropsPerMinute).toHaveText(/^[56]\d drops\/min$/i);
 });
 
 test('reset', async ({ dripCounterPage }) => {

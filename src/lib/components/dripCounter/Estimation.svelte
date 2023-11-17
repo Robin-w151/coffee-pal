@@ -25,7 +25,7 @@
   $: targetTime = calculateTime(waterMeasurement.value, targetDropsPerMinute);
   $: estimatedTime = calculateTime(waterMeasurement.value, dropsPerMinute);
   $: {
-    isWithinRange = Math.abs(dropsPerMinute - targetDropsPerMinute) < 10;
+    isWithinRange = Math.abs(dropsPerMinute - targetDropsPerMinute) < targetDropsPerMinute * 0.1;
   }
 
   $: estimatedTimeVariantClass = clsx(
