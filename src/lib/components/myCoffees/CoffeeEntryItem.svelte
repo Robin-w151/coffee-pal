@@ -14,8 +14,8 @@
   }
 
   function details(entry: ActiveCoffeeEntry): string {
-    const { variety, trader } = entry;
-    return [variety, trader].filter((s) => !!s).join(' | ');
+    const { variety, process, trader } = entry;
+    return [process, variety, trader].filter((s) => !!s).join(' | ');
   }
 </script>
 

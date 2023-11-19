@@ -11,7 +11,7 @@ test('entry item', async ({ myCoffeesPage }) => {
     'Rwanda Kamajumba - Kamajumba Estate',
   );
   await expect(myCoffeesPage.getCoffeeEntryDetail(firstEntry)).toHaveText(
-    'Red Bourbon | Drip Roasters',
+    'Washed | Red Bourbon | Drip Roasters',
   );
 });
 
@@ -45,6 +45,7 @@ test('entry add', async ({ myCoffeesPage, myCoffeesEntryDetailPage }) => {
 
   await myCoffeesEntryDetailPage.nameInput.fill('Tovolea Classic');
   await myCoffeesEntryDetailPage.originInput.fill('Brazil/Ethiopia');
+  await myCoffeesEntryDetailPage.processInput.fill('Washed');
   await myCoffeesEntryDetailPage.varietyInput.fill('Arabica');
   await myCoffeesEntryDetailPage.traderInput.fill('Tovolea');
   const aromasInput = myCoffeesEntryDetailPage.aromasInput;
@@ -60,7 +61,7 @@ test('entry add', async ({ myCoffeesPage, myCoffeesEntryDetailPage }) => {
   await expect(myCoffeesPage.getCoffeeEntryTitle(entry)).toHaveText(
     'Tovolea Classic - Brazil/Ethiopia',
   );
-  await expect(myCoffeesPage.getCoffeeEntryDetail(entry)).toHaveText('Arabica | Tovolea');
+  await expect(myCoffeesPage.getCoffeeEntryDetail(entry)).toHaveText('Washed | Arabica | Tovolea');
 });
 
 test('entry edit', async ({ myCoffeesPage, myCoffeesEntryDetailPage }) => {
@@ -68,7 +69,7 @@ test('entry edit', async ({ myCoffeesPage, myCoffeesEntryDetailPage }) => {
   await myCoffeesEntryDetailPage.traderInput.fill('Rösterei');
   await myCoffeesEntryDetailPage.clickSaveButton();
 
-  await expect(myCoffeesPage.getCoffeeEntryDetail(1)).toHaveText('Rösterei');
+  await expect(myCoffeesPage.getCoffeeEntryDetail(1)).toHaveText('Washed | Rösterei');
 });
 
 test('entry edit cancel', async ({ myCoffeesPage, myCoffeesEntryDetailPage }) => {
@@ -76,7 +77,7 @@ test('entry edit cancel', async ({ myCoffeesPage, myCoffeesEntryDetailPage }) =>
   await myCoffeesEntryDetailPage.traderInput.fill('');
   await myCoffeesEntryDetailPage.clickCloseButton();
 
-  await expect(myCoffeesPage.getCoffeeEntryDetail(1)).toHaveText('Blasercafe');
+  await expect(myCoffeesPage.getCoffeeEntryDetail(1)).toHaveText('Washed | Blasercafe');
 });
 
 test('entry delete', async ({ myCoffeesPage, myCoffeesEntryDetailPage }) => {

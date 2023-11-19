@@ -11,6 +11,7 @@ export interface ActiveCoffeeEntry {
   name: string;
   origin?: string;
   variety?: string;
+  process?: string;
   trader?: string;
   aromas: Array<string>;
   description?: string;

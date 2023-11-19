@@ -10,6 +10,7 @@
   import Description from './detail/Description.svelte';
   import Name from './detail/Name.svelte';
   import Origin from './detail/Origin.svelte';
+  import Process from './detail/Process.svelte';
   import Trader from './detail/Trader.svelte';
   import Variety from './detail/Variety.svelte';
 
@@ -85,6 +86,7 @@
   <Form class="px-4 pb-4 h-full overflow-auto">
     <Name bind:name={entry.name} bind:valid={nameInputValid} />
     <Origin bind:origin={entry.origin} />
+    <Process bind:process={entry.process} />
     <Variety bind:variety={entry.variety} />
     <Trader bind:trader={entry.trader} />
     <Aromas bind:aromas={entry.aromas} />

@@ -15,6 +15,10 @@ export class MyCoffeesEntryDetailPage {
     return this.page.getByPlaceholder('Origin');
   }
 
+  get processInput(): Locator {
+    return this.page.getByPlaceholder('Process');
+  }
+
   get varietyInput(): Locator {
     return this.page.getByPlaceholder('Variety');
   }
