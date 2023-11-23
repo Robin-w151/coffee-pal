@@ -37,6 +37,8 @@ const testCoffeeEntries = [
   {
     name: 'Frutos Rojos',
     origin: 'Colombia',
+    process: 'Washed',
+    variety: 'Arabica Castillo',
     trader: 'Alt Wien',
     aromas: [
       'strawberry yoghurt',
@@ -47,11 +49,13 @@ const testCoffeeEntries = [
       'sour cherry',
       'black tea',
     ],
-    description: 'Tastes super fresh',
+    description: '',
   },
   {
     name: 'Ethiopia Sidamo',
     origin: 'Ethiopia',
+    process: 'Natural',
+    variety: 'Arabica Heirloom',
     trader: 'Alt Wien',
     aromas: [],
     description: '',
@@ -59,6 +63,8 @@ const testCoffeeEntries = [
   {
     name: 'Java WIB',
     origin: 'Indonesia',
+    process: 'Washed',
+    variety: 'Robusta',
     trader: 'Alt Wien',
     aromas: [],
     description: '',
@@ -138,7 +144,7 @@ async function addJournalEntry(
   screenshot = false,
 ) {
   await clickAddButton();
-  await expect(page.getByText('add entry')).toBeVisible();
+  await expect(page.getByText('Journal Entry', { exact: true })).toBeVisible();
 
   const methodInput = page.getByLabel('brew method');
   await methodInput.fill(method);
@@ -163,12 +169,22 @@ async function addJournalEntry(
   await page.waitForTimeout(250);
 }
 
-async function addCoffeeEntry({ name, origin, trader, aromas, description } = {}) {
+async function addCoffeeEntry({
+  name,
+  origin,
+  process,
+  variety,
+  trader,
+  aromas,
+  description,
+} = {}) {
   await clickAddButton();
-  await expect(page.getByText('add entry')).toBeVisible();
+  await expect(page.getByText('Coffee Entry', { exact: true })).toBeVisible();
 
   await page.getByLabel('name').fill(name);
   await page.getByLabel('origin').fill(origin);
+  await page.getByLabel('process').fill(process);
+  await page.getByLabel('variety').fill(variety);
   await page.getByLabel('trader').fill(trader);
 
   const aromasInput = page.getByPlaceholder('aromas');
