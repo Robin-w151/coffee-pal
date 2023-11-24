@@ -82,6 +82,10 @@ body {
   @apply flex items-end gap-4 fixed z-10 bottom-8 right-8;
 }
 
+.radio-group-token {
+  @apply flex-col sm:flex-row sm:min-w-[24rem];
+}
+
 .range-slider-accent-token {
   @apply accent-primary-500 dark:accent-primary-600;
 }
