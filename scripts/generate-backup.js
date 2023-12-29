@@ -49,7 +49,7 @@ function generateCoffeeEntry() {
     name: chance.name(),
     origin: chance.country(),
     trader: chance.name(),
-    aromas: Array(chance.integer({ min: 2, max: 5 })).map(() => chance.word()),
+    aromas: Array.from({ length: chance.integer({ min: 2, max: 5 }) }, () => chance.word()),
     description: chance.paragraph(),
     createdAt: DateTime.now().toISO(),
     updatedAt: DateTime.now().toISO(),
