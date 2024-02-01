@@ -1,13 +1,13 @@
 import type { ActiveCoffeeEntry, MyCoffeesSearchState, MyCoffeesSort } from '$lib/models/myCoffees';
 import { buildFuseQuery } from '$lib/utils/search/fuzzy';
-import Fuse from 'fuse.js';
+import Fuse, { type IFuseOptions } from 'fuse.js';
 
 const FUSE_OPTIONS = {
   threshold: 0.4,
   ignoreLocation: true,
   findAllMatches: true,
   keys: ['name', 'origin', 'variety', 'trader', 'aromas', 'description'],
-} satisfies Fuse.IFuseOptions<ActiveCoffeeEntry>;
+} satisfies IFuseOptions<ActiveCoffeeEntry>;
 
 export function sortOrSearch(
   entries: Array<ActiveCoffeeEntry>,
