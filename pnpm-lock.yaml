@@ -138,8 +138,8 @@ devDependencies:
     specifier: ^4.2.11
     version: 4.2.11
   svelte-adapter-bun:
-    specifier: ^0.5.1
-    version: 0.5.1
+    specifier: ^0.5.2
+    version: 0.5.2
   svelte-awesome:
     specifier: ^3.3.1
     version: 3.3.1(svelte@4.2.11)
@@ -3514,6 +3514,10 @@ packages:
     resolution: {integrity: sha512-36yxDn5H7OFZQla0/jFJmbIKTdZAQHngCedGxiMmpNfEZM0sdEeT+WczLQrjK6D7o2aiyLYDnkw0R3JK0Qv1RQ==}
     dev: true
 
+  /flatted@3.3.0:
+    resolution: {integrity: sha512-noqGuLw158+DuD9UPRKHpJ2hGxpFyDlYYrfM0mWt4XhT4n0lwzTLh70Tkdyy4kyTmyTT9Bv7bWAJqw7cgkEXDg==}
+    dev: true
+
   /follow-redirects@1.15.5:
     resolution: {integrity: sha512-vSFWUON1B+yAw1VN4xMfxgn5fTUiaOzAJCKBwIIgT/+7CuGy9+r+5gITvP62j3RmaD5Ph65UaERdOSRGUzZtgw==}
     engines: {node: '>=4.0'}
@@ -4394,7 +4398,7 @@ packages:
     dependencies:
       date-format: 4.0.14
       debug: 4.3.4
-      flatted: 3.2.9
+      flatted: 3.3.0
       rfdc: 1.3.1
       streamroller: 3.1.5
     transitivePeerDependencies:
@@ -5704,8 +5708,8 @@ packages:
     engines: {node: '>= 0.4'}
     dev: true
 
-  /svelte-adapter-bun@0.5.1:
-    resolution: {integrity: sha512-eLbkKuoCaZPzVN20dg/oZOUybO16oEQCOQuzAI2jVLU90VbJ1P099bAlA+7H4KPGI2r2sdkfD1MppGAbk7PdMw==}
+  /svelte-adapter-bun@0.5.2:
+    resolution: {integrity: sha512-xEtFgaal6UgrCwwkSIcapO9kopoFNUYCYqyKCikdqxX9bz2TDYnrWQZ7qBnkunMxi1HOIERUCvTcebYGiarZLA==}
     dependencies:
       tiny-glob: 0.2.9
     dev: true
