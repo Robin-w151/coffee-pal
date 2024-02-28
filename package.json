@@ -6,7 +6,7 @@
     "dev": "vite dev",
     "build": "vite build",
     "preview": "vite build && vite preview",
-    "generate:schema": "yarn generate:schema:backup",
+    "generate:schema": "pnpm generate:schema:backup",
     "generate:schema:backup": "ts-json-schema-generator --path 'src/lib/models/backup.ts' --type Backup > src/assets/backup.schema.json",
     "generate:screenshots": "node scripts/generate-screenshots.js",
     "test": "playwright test",
