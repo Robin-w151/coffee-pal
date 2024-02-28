@@ -25,6 +25,7 @@
       name="aromas"
       placeholder="Aromas, e.g. Nutty, Dried Fruit"
       padding="px-3 py-2"
+      regionInput="focus:!outline-none"
       chips="variant-filled-primary"
       bind:value={aromas}
       on:keydown={handleInputKeydown}
