@@ -12,7 +12,7 @@
   import UrlInput from '../ui/elements/form/UrlInput.svelte';
   import NextcloudLoginModal from './NextcloudLoginModal.svelte';
   import type { UrlInputChange } from '$lib/models/urlInput';
-  import { Subscription, catchError, finalize, of, tap } from 'rxjs';
+  import { type Subscription, catchError, finalize, of, tap } from 'rxjs';
   import { onDestroy } from 'svelte';
   import { ToastHelper } from '$lib/utils/ui/toast';
 
