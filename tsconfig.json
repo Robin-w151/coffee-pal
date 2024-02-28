@@ -9,12 +9,6 @@
     "skipLibCheck": true,
     "sourceMap": true,
     "strict": true,
-    "paths": {
-      "$lib": ["./src/lib"],
-      "$lib/*": ["./src/lib/*"],
-      "$assets": ["./src/assets"],
-      "$assets/*": ["./src/assets/*"]
-    },
     "types": ["vite/client", "vite-plugin-pwa/info"]
   },
   "include": [
