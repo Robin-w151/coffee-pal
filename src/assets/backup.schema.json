@@ -26,6 +26,9 @@
         "origin": {
           "type": "string"
         },
+        "process": {
+          "type": "string"
+        },
         "trader": {
           "type": "string"
         },
