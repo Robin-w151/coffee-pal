@@ -21,10 +21,11 @@
   }
 
   function handleRatioChange({ detail: ratio }: { detail: Ratio }): void {
+    const factor = calculateFactor(ratio);
     preset = {
       label: 'Custom',
       ratio,
-      factor: 1,
+      factor,
     };
     recipe = calculateRecipe(preset);
     fixedRatio = true;
@@ -143,6 +144,12 @@
       coffee: 1,
       water: sanitize(water / coffee),
     };
+  }
+
+  function calculateFactor(ratio: Ratio): number {
+    let factor = 1;
+    for (; ratio.water * factor < 250; factor++);
+    return factor;
   }
 </script>
 
