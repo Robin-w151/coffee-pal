@@ -3,11 +3,13 @@
   import { createEventDispatcher } from 'svelte';
   import { Icon } from 'svelte-awesome';
   import Spinner from '../Spinner.svelte';
+  import { onlineStore } from 'svelte-legos';
 
   export let isSyncEnabled = false;
   export let isSynchronizing = false;
 
   const dispatch = createEventDispatcher();
+  const isOnline = onlineStore();
 
   function handleAddClick(): void {
     dispatch('add');
@@ -21,7 +23,7 @@
 </script>
 
 <div class="flex items-end gap-4 fixed z-10 bottom-8 right-8">
-  {#if isSyncEnabled}
+  {#if isSyncEnabled && $isOnline}
     <button
       class="btn btn-icon btn-icon-lg variant-filled-primary shadow-xl"
       title="Synchronize data"
