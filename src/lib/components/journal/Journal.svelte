@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { ActiveJournalEntry, JournalEntryAction } from '$lib/models/journal';
   import { journalSearchStore, journalStore } from '$lib/stores/journal';
-  import { syncStore } from '$lib/stores/sync';
+  import { syncAvailabilityStore } from '$lib/stores/syncAvailability';
   import { syncStateStore } from '$lib/stores/syncState';
   import { sync } from '$lib/utils/sync';
   import { ModalHelper } from '$lib/utils/ui/modal';
@@ -66,7 +66,7 @@
 </script>
 
 <PageActions
-  isSyncEnabled={!!$syncStore.connection}
+  isSyncEnabled={$syncAvailabilityStore.isAvailable}
   isSynchronizing={$syncStateStore.isSynchronizing}
   on:add={handleAddClick}
   on:synchronize={handleSyncClick}

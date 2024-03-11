@@ -6,6 +6,10 @@ export interface SyncState {
   isSynchronizing: boolean;
 }
 
+export interface SyncAvailability {
+  isAvailable: boolean;
+}
+
 export interface Connection {
   server: Server;
   credentials: Credentials;

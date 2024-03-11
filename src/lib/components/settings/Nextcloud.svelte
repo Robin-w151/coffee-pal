@@ -15,6 +15,7 @@
   import { type Subscription, catchError, finalize, of, tap } from 'rxjs';
   import { onDestroy } from 'svelte';
   import { ToastHelper } from '$lib/utils/ui/toast';
+  import { syncAvailabilityStore } from '$lib/stores/syncAvailability';
 
   const modalHelper = new ModalHelper(getModalStore());
   const toastHelper = new ToastHelper(getToastStore());
@@ -116,8 +117,11 @@
       >
         Disconnect
       </button>
-      <button class="btn variant-filled-primary" title="Sync app data" on:click={handleSyncClick}
-        >Sync</button
+      <button
+        class="btn variant-filled-primary"
+        title="Sync app data"
+        disabled={!$syncAvailabilityStore.isAvailable}
+        on:click={handleSyncClick}>Sync</button
       >
     {:else}
       {#if url}

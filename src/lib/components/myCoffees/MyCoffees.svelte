@@ -1,18 +1,18 @@
 <script lang="ts">
   import type { ActiveCoffeeEntry } from '$lib/models/myCoffees';
   import { myCoffeesSearchStore, myCoffeesStore } from '$lib/stores/myCoffees';
-  import { syncStore } from '$lib/stores/sync';
+  import { syncAvailabilityStore } from '$lib/stores/syncAvailability';
   import { syncStateStore } from '$lib/stores/syncState';
-  import { ModalHelper } from '$lib/utils/ui/modal';
   import { sync } from '$lib/utils/sync';
+  import { ModalHelper } from '$lib/utils/ui/modal';
   import { ToastHelper } from '$lib/utils/ui/toast';
   import { getModalStore, getToastStore } from '@skeletonlabs/skeleton';
+  import { onDestroy } from 'svelte';
   import PageActions from '../ui/elements/page/PageActions.svelte';
   import PageCard from '../ui/elements/page/PageCard.svelte';
   import PageSearch from '../ui/elements/page/PageSearch.svelte';
   import CoffeeEntries from './CoffeeEntries.svelte';
   import CoffeeEntryModal from './CoffeeEntryModal.svelte';
-  import { onDestroy } from 'svelte';
 
   const modalHelper = new ModalHelper(getModalStore());
   const toastHelper = new ToastHelper(getToastStore());
@@ -61,7 +61,7 @@
 </script>
 
 <PageActions
-  isSyncEnabled={!!$syncStore.connection}
+  isSyncEnabled={$syncAvailabilityStore.isAvailable}
   isSynchronizing={$syncStateStore.isSynchronizing}
   on:add={handleAddClick}
   on:synchronize={handleSyncClick}
