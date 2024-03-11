@@ -40,6 +40,12 @@
   const toastHelper = new ToastHelper(getToastStore());
   const sortOptions = [
     {
+      label: 'Latest',
+      icon: faCalendarDays,
+      sort: 'updated_at',
+      sortDirection: 'desc',
+    },
+    {
       label: 'A-Z',
       icon: faArrowUpAZ,
       sort: 'title',
@@ -49,12 +55,6 @@
       label: 'Z-A',
       icon: faArrowUpZA,
       sort: 'title',
-      sortDirection: 'desc',
-    },
-    {
-      label: 'Latest',
-      icon: faCalendarDays,
-      sort: 'updated_at',
       sortDirection: 'desc',
     },
   ] satisfies Array<SortOption>;
