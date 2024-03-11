@@ -24,7 +24,7 @@
 
   const dispatch = createEventDispatcher();
   const sortPopup: PopupSettings = {
-    event: 'focus-click',
+    event: 'click',
     target: 'sort-popup',
     placement: 'bottom',
   };
