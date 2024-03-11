@@ -5,7 +5,7 @@ test('ratio coffee', async ({ calculatorPage }) => {
   await calculatorPage.coffeeRatioInput.fill('5');
   await calculatorPage.coffeeRatioInput.press('Enter');
 
-  await expect(calculatorPage.coffeeAmountInput).toHaveValue('5');
+  await expect(calculatorPage.coffeeAmountInput).toHaveValue('85');
 });
 
 test('ratio water', async ({ calculatorPage }) => {
