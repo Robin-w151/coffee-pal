@@ -1,13 +1,34 @@
+<script lang="ts" context="module">
+  interface SortOption {
+    label: string;
+    icon: IconDefinition;
+    sort: JournalSort;
+    sortDirection: JournalSortDirection;
+  }
+</script>
+
 <script lang="ts">
-  import type { ActiveJournalEntry, JournalEntryAction } from '$lib/models/journal';
+  import type {
+    ActiveJournalEntry,
+    JournalEntryAction,
+    JournalSort,
+    JournalSortDirection,
+  } from '$lib/models/journal';
   import { journalSearchStore, journalStore } from '$lib/stores/journal';
   import { syncAvailabilityStore } from '$lib/stores/syncAvailability';
   import { syncStateStore } from '$lib/stores/syncState';
   import { sync } from '$lib/utils/sync';
   import { ModalHelper } from '$lib/utils/ui/modal';
   import { ToastHelper } from '$lib/utils/ui/toast';
+  import {
+    faArrowUpAZ,
+    faArrowUpZA,
+    faCalendarDays,
+    type IconDefinition,
+  } from '@fortawesome/free-solid-svg-icons';
   import { getModalStore, getToastStore } from '@skeletonlabs/skeleton';
   import { onDestroy } from 'svelte';
+  import { Icon } from 'svelte-awesome';
   import { v4 as uuid } from 'uuid';
   import PageActions from '../ui/elements/page/PageActions.svelte';
   import PageCard from '../ui/elements/page/PageCard.svelte';
@@ -17,6 +38,26 @@
 
   const modalHelper = new ModalHelper(getModalStore());
   const toastHelper = new ToastHelper(getToastStore());
+  const sortOptions = [
+    {
+      label: 'A-Z',
+      icon: faArrowUpAZ,
+      sort: 'title',
+      sortDirection: 'asc',
+    },
+    {
+      label: 'Z-A',
+      icon: faArrowUpZA,
+      sort: 'title',
+      sortDirection: 'desc',
+    },
+    {
+      label: 'Latest',
+      icon: faCalendarDays,
+      sort: 'updated_at',
+      sortDirection: 'desc',
+    },
+  ] satisfies Array<SortOption>;
 
   onDestroy(() => {
     journalSearchStore.reset();
@@ -26,8 +67,8 @@
     journalSearchStore.setFilter(searchInput);
   }
 
-  function handleSortToggle(): void {
-    journalSearchStore.setSort($journalSearchStore.sort === 'asc' ? 'desc' : 'asc');
+  function handleSortOptionClick(sort: JournalSort, sortDirection: JournalSortDirection): void {
+    journalSearchStore.setSort(sort, sortDirection);
   }
 
   function handleAddClick(): void {
@@ -73,11 +114,21 @@
 />
 <PageSearch
   title="Brewing Journal"
-  sort={$journalSearchStore.sort}
   isLoading={$journalStore.isLoading}
   on:searchChange={handleSearchChange}
-  on:sortToggle={handleSortToggle}
-/>
+>
+  <div class="flex flex-col items-start gap-2" slot="popup">
+    {#each sortOptions as { label, icon, sort, sortDirection }}
+      <button
+        class="btn btn-sm variant-filled flex justify-start items-center gap-2 p-4 w-full"
+        on:click={() => handleSortOptionClick(sort, sortDirection)}
+      >
+        <Icon data={icon} />
+        <span>{label}</span>
+      </button>
+    {/each}
+  </div>
+</PageSearch>
 <PageCard class="page-with-actions-token">
   <JournalEntries
     {...$journalStore}

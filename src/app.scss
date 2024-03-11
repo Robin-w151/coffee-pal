@@ -82,6 +82,10 @@ body {
   @apply flex items-end gap-4 fixed z-10 bottom-8 right-8;
 }
 
+.popup-token {
+  @apply card p-4 variant-glass-surface shadow-xl;
+}
+
 .radio-group-token {
   @apply flex-col sm:flex-row sm:min-w-[24rem];
 }

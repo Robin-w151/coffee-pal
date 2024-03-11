@@ -33,9 +33,12 @@ export interface JournalState {
 export interface JournalSearchState {
   filter?: string | null;
   sort?: JournalSort | null;
+  sortDirection?: JournalSortDirection | null;
 }
 
-export type JournalSort = 'asc' | 'desc';
+export type JournalSort = 'title' | 'updated_at';
+
+export type JournalSortDirection = 'asc' | 'desc';
 
 export interface JournalEntryAction {
   action: JournalEntryActionType;

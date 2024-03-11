@@ -9,6 +9,7 @@ import {
   type JournalSearchState,
   type JournalSort,
   type JournalState,
+  type JournalSortDirection,
 } from '$lib/models/journal';
 import type { SyncResult } from '$lib/models/sync';
 import { loadMore, sortOrSearch } from '$lib/services/journal/wrapper';
@@ -18,7 +19,7 @@ import { BehaviorSubject, debounceTime, switchMap, tap, type Observable } from '
 
 export interface JournalSearchStore extends Observable<JournalSearchState> {
   setFilter: (filter: string) => void;
-  setSort: (sort: JournalSort) => void;
+  setSort: (sort: JournalSort, sortDirection: JournalSortDirection) => void;
   reset: () => void;
 }
 
@@ -47,15 +48,15 @@ export const journalSearchStore = createJournalSearchStore();
 export const journalStore = createJournalStore(journalSearchStore);
 
 function createJournalSearchStore(): JournalSearchStore {
-  const initialState: JournalSearchState = { sort: 'asc' };
+  const initialState: JournalSearchState = { sort: 'updated_at', sortDirection: 'desc' };
   const subject = new BehaviorSubject<JournalSearchState>(initialState);
 
   function setFilter(filter: string): void {
     subject.next({ ...subject.value, filter });
   }
 
-  function setSort(sort: JournalSort): void {
-    subject.next({ ...subject.value, sort });
+  function setSort(sort: JournalSort, sortDirection: JournalSortDirection): void {
+    subject.next({ ...subject.value, sort, sortDirection });
   }
 
   function reset(): void {

@@ -3,19 +3,31 @@
 </script>
 
 <script lang="ts">
-  import { faArrowUpAZ, faArrowUpZA, faClose, faSearch } from '@fortawesome/free-solid-svg-icons';
+  import {
+    faArrowUpAZ,
+    faArrowUpWideShort,
+    faArrowUpZA,
+    faClose,
+    faSearch,
+  } from '@fortawesome/free-solid-svg-icons';
+  import { popup, type PopupSettings } from '@skeletonlabs/skeleton';
   import { createEventDispatcher, tick } from 'svelte';
   import { Icon } from 'svelte-awesome';
   import { fade } from 'svelte/transition';
   import { scaleX } from '../../transitions/scaleX';
-  import InputButton from '../form/InputButton.svelte';
   import Spinner from '../Spinner.svelte';
+  import InputButton from '../form/InputButton.svelte';
 
   export let title: string;
   export let sort: PageSearchSort | null = 'asc';
   export let isLoading = false;
 
   const dispatch = createEventDispatcher();
+  const sortPopup: PopupSettings = {
+    event: 'focus-click',
+    target: 'sort-popup',
+    placement: 'bottom',
+  };
 
   let searchInput = '';
   let searchInputRef: HTMLInputElement;
@@ -90,16 +102,29 @@
         <Icon data={faSearch} />
       </button>
     {/if}
-    <button
-      class="btn btn-icon {isSearchActive ? 'variant-filled-primary' : 'variant-ghost-secondary'}"
-      title="Change sort order"
-      on:click={handleSortClick}
-    >
-      {#if sort === 'asc'}
-        <Icon data={faArrowUpAZ} />
-      {:else}
-        <Icon data={faArrowUpZA} />
-      {/if}
-    </button>
+    {#if $$slots.popup}
+      <button
+        class="btn btn-icon {isSearchActive ? 'variant-filled-primary' : 'variant-ghost-secondary'}"
+        title="Change sort order"
+        use:popup={sortPopup}
+      >
+        <Icon data={faArrowUpWideShort} />
+      </button>
+      <div class="popup-token" data-popup="sort-popup">
+        <slot name="popup" />
+      </div>
+    {:else}
+      <button
+        class="btn btn-icon {isSearchActive ? 'variant-filled-primary' : 'variant-ghost-secondary'}"
+        title="Change sort order"
+        on:click={handleSortClick}
+      >
+        {#if sort === 'asc'}
+          <Icon data={faArrowUpAZ} />
+        {:else}
+          <Icon data={faArrowUpZA} />
+        {/if}
+      </button>
+    {/if}
   </div>
 </header>

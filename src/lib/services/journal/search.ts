@@ -1,4 +1,9 @@
-import type { ActiveJournalEntry, JournalSearchState, JournalSort } from '$lib/models/journal';
+import type {
+  ActiveJournalEntry,
+  JournalSearchState,
+  JournalSort,
+  JournalSortDirection,
+} from '$lib/models/journal';
 import { buildFuseQuery } from '$lib/utils/search/fuzzy';
 import Fuse, { type IFuseOptions } from 'fuse.js';
 
@@ -24,7 +29,7 @@ export function sortOrSearch(
   if (searchState.filter) {
     return search(entries, searchState.filter);
   } else {
-    return sort(entries, searchState.sort ?? 'asc');
+    return sort(entries, searchState.sort ?? 'title', searchState.sortDirection ?? 'asc');
   }
 }
 
@@ -43,13 +48,21 @@ export function search(
 
 export function sort(
   entries: Array<ActiveJournalEntry>,
-  sort: JournalSort = 'asc',
+  sort: JournalSort = 'title',
+  sortDirection: JournalSortDirection = 'asc',
 ): Array<ActiveJournalEntry> {
   const reverse = (entries: Array<ActiveJournalEntry>) =>
-    sort === 'asc' ? entries : entries.reverse();
+    sortDirection === 'asc' ? entries : entries.reverse();
   return reverse(
-    entries.sort((e1: ActiveJournalEntry, e2: ActiveJournalEntry) =>
-      `${e1.method}-${e1.coffeeType ?? ''}`.localeCompare(`${e2.method}-${e2.coffeeType ?? ''}`),
-    ),
+    entries.sort((e1: ActiveJournalEntry, e2: ActiveJournalEntry) => {
+      switch (sort) {
+        case 'title':
+          return `${e1.method}-${e1.coffeeType ?? ''}`.localeCompare(
+            `${e2.method}-${e2.coffeeType ?? ''}`,
+          );
+        case 'updated_at':
+          return e1.updatedAt.localeCompare(e2.updatedAt);
+      }
+    }),
   );
 }

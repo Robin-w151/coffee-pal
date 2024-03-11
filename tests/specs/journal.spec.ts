@@ -31,6 +31,7 @@ test('sort', async ({ journalPage }) => {
   await expect(journalPage.getJournalEntryTitle(0)).toHaveText('Aeropress - Terroir PAN');
 
   await journalPage.clickSortButton();
+  await journalPage.clickSortOption('Z-A');
 
   await expect(journalPage.getJournalEntryTitle(0)).toHaveText('V60 Switch - Honeymoon');
 });
@@ -51,7 +52,7 @@ test('entry add', async ({ journalPage, journalEntryDetailPage }) => {
 
   await journalEntryDetailPage.clickSaveButton();
 
-  const entry = journalPage.getJournalEntry(1);
+  const entry = journalPage.getJournalEntry(0);
   await expect(journalPage.getJournalEntryTitle(entry)).toHaveText('Chemex - Tovolea Classic');
   await expect(journalPage.getJournalEntryDetail(entry)).toHaveText(
     '1:17 - 510g/30g | 98 °C | 24 clicks | Nutty and smoky',

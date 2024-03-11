@@ -65,6 +65,10 @@ export class JournalPage {
     await this.page.getByRole('button', { name: 'Change sort order' }).click();
   }
 
+  async clickSortOption(option: 'A-Z' | 'Z-A' | 'Latest'): Promise<void> {
+    await this.page.getByRole('button', { name: option }).click();
+  }
+
   async clickUndoButton(): Promise<void> {
     await this.page.getByRole('button', { name: 'Undo' }).click();
   }
@@ -87,7 +91,7 @@ export const testJournalEntries: Array<ActiveJournalEntry> = [
     grindSettings: '24 clicks',
     description: '40% ice',
     createdAt: '2023-08-26T21:44:48.371+02:00',
-    updatedAt: '2023-08-26T21:44:48.371+02:00',
+    updatedAt: '2023-12-26T21:44:48.371+02:00',
   },
   {
     id: '1860f178-ded7-48fe-89f5-d464be0c698f',
@@ -98,7 +102,7 @@ export const testJournalEntries: Array<ActiveJournalEntry> = [
     grindSettings: '36 clicks',
     description: '20% ice, ~45-60 drops/min, 2.5h brew',
     createdAt: '2023-08-11T10:11:28.556+02:00',
-    updatedAt: '2023-09-23T18:45:30.180+02:00',
+    updatedAt: '2023-11-23T18:45:30.180+02:00',
   },
   {
     id: '20c94b21-0426-44ff-91a8-9e49ae54e04c',
