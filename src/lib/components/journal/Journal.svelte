@@ -24,6 +24,7 @@
     faArrowUpAZ,
     faArrowUpZA,
     faCalendarDays,
+    faCheck,
     type IconDefinition,
   } from '@fortawesome/free-solid-svg-icons';
   import { getModalStore, getToastStore } from '@skeletonlabs/skeleton';
@@ -120,11 +121,16 @@
   <div class="flex flex-col items-start gap-2" slot="popup">
     {#each sortOptions as { label, icon, sort, sortDirection }}
       <button
-        class="btn btn-sm variant-filled flex justify-start items-center gap-2 p-4 w-full"
+        class="btn btn-sm variant-filled flex justify-between items-center gap-4 p-4 w-full min-w-36"
         on:click={() => handleSortOptionClick(sort, sortDirection)}
       >
-        <Icon data={icon} />
-        <span>{label}</span>
+        <div class="flex items-center gap-2">
+          <Icon data={icon} />
+          <span>{label}</span>
+        </div>
+        {#if $journalSearchStore.sort === sort && $journalSearchStore.sortDirection === sortDirection}
+          <Icon data={faCheck} />
+        {/if}
       </button>
     {/each}
   </div>
