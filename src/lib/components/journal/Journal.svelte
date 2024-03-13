@@ -27,7 +27,7 @@
     faCheck,
     type IconDefinition,
   } from '@fortawesome/free-solid-svg-icons';
-  import { getModalStore, getToastStore } from '@skeletonlabs/skeleton';
+  import { ListBox, ListBoxItem, getModalStore, getToastStore } from '@skeletonlabs/skeleton';
   import { onDestroy } from 'svelte';
   import { Icon } from 'svelte-awesome';
   import { v4 as uuid } from 'uuid';
@@ -59,6 +59,8 @@
       sortDirection: 'desc',
     },
   ] satisfies Array<SortOption>;
+
+  let selectedSortOption = sortOptions[0].label;
 
   onDestroy(() => {
     journalSearchStore.reset();
@@ -118,22 +120,26 @@
   isLoading={$journalStore.isLoading}
   on:searchChange={handleSearchChange}
 >
-  <div class="flex flex-col items-start gap-2" slot="popup">
+  <ListBox slot="popup">
     {#each sortOptions as { label, icon, sort, sortDirection }}
-      <button
-        class="btn btn-sm variant-filled flex justify-between items-center gap-4 p-4 w-full min-w-36"
+      <ListBoxItem
+        name={label}
+        value={label}
+        bind:group={selectedSortOption}
         on:click={() => handleSortOptionClick(sort, sortDirection)}
       >
-        <div class="flex items-center gap-2">
-          <Icon data={icon} />
-          <span>{label}</span>
+        <div class="flex justify-between items-center gap-4 w-full min-w-36">
+          <div class="flex items-center gap-2">
+            <Icon data={icon} />
+            <span>{label}</span>
+          </div>
+          {#if $journalSearchStore.sort === sort && $journalSearchStore.sortDirection === sortDirection}
+            <Icon data={faCheck} />
+          {/if}
         </div>
-        {#if $journalSearchStore.sort === sort && $journalSearchStore.sortDirection === sortDirection}
-          <Icon data={faCheck} />
-        {/if}
-      </button>
+      </ListBoxItem>
     {/each}
-  </div>
+  </ListBox>
 </PageSearch>
 <PageCard class="page-with-actions-token">
   <JournalEntries
