@@ -38,6 +38,11 @@
     ? 'card flex-col !items-start px-4 py-4 h-auto transition ease-out duration-250'
     : '';
 
+  $: isChangeSortOrderButtonDisabled = !!searchInput;
+  $: changeSortOrderButtonTitle = isChangeSortOrderButtonDisabled
+    ? 'Sort order is determined by search input'
+    : 'Change sort order';
+
   async function handleSearchClick(): Promise<void> {
     isSearchActive = true;
     await tick();
@@ -105,7 +110,8 @@
     {#if $$slots.popup}
       <button
         class="btn btn-icon {isSearchActive ? 'variant-filled-primary' : 'variant-ghost-secondary'}"
-        title="Change sort order"
+        title={changeSortOrderButtonTitle}
+        disabled={isChangeSortOrderButtonDisabled}
         use:popup={sortPopup}
       >
         <Icon data={faArrowUpWideShort} />
@@ -116,7 +122,8 @@
     {:else}
       <button
         class="btn btn-icon {isSearchActive ? 'variant-filled-primary' : 'variant-ghost-secondary'}"
-        title="Change sort order"
+        title={changeSortOrderButtonTitle}
+        disabled={isChangeSortOrderButtonDisabled}
         on:click={handleSortClick}
       >
         {#if sort === 'asc'}
