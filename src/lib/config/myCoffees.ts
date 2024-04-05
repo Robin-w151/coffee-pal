@@ -1,1 +1,1 @@
-export const MY_COFFEES_BATCH_SIZE = 50;
+export const MY_COFFEES_PAGE_SIZE = 25;

@@ -18,9 +18,9 @@ export async function sortOrSearch(
   }
 }
 
-export async function loadMore(index: number, count: number): Promise<Array<ActiveCoffeeEntry>> {
+export async function loadPage(index: number, count: number): Promise<Array<ActiveCoffeeEntry>> {
   if (browser) {
-    return (await worker).loadMore(index, count);
+    return (await worker).loadPage(index, count);
   } else {
     return [];
   }

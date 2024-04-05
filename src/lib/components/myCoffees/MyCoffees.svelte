@@ -1,25 +1,42 @@
 <script lang="ts">
-  import type { ActiveCoffeeEntry } from '$lib/models/myCoffees';
+  import type { ActiveCoffeeEntry, MyCoffeesState } from '$lib/models/myCoffees';
   import { myCoffeesSearchStore, myCoffeesStore } from '$lib/stores/myCoffees';
   import { syncAvailabilityStore } from '$lib/stores/syncAvailability';
   import { syncStateStore } from '$lib/stores/syncState';
   import { sync } from '$lib/utils/sync';
   import { ModalHelper } from '$lib/utils/ui/modal';
   import { ToastHelper } from '$lib/utils/ui/toast';
-  import { getModalStore, getToastStore } from '@skeletonlabs/skeleton';
+  import {
+    getModalStore,
+    getToastStore,
+    Paginator,
+    type PaginationSettings,
+  } from '@skeletonlabs/skeleton';
   import { onDestroy } from 'svelte';
   import PageActions from '../ui/elements/page/PageActions.svelte';
   import PageCard from '../ui/elements/page/PageCard.svelte';
   import PageSearch from '../ui/elements/page/PageSearch.svelte';
   import CoffeeEntries from './CoffeeEntries.svelte';
   import CoffeeEntryModal from './CoffeeEntryModal.svelte';
+  import { MY_COFFEES_PAGE_SIZE } from '$lib/config/myCoffees';
 
   const modalHelper = new ModalHelper(getModalStore());
   const toastHelper = new ToastHelper(getToastStore());
 
+  $: paginationSettings = getPaginationSettings($myCoffeesStore);
+
   onDestroy(() => {
     myCoffeesSearchStore.reset();
   });
+
+  function getPaginationSettings({ page, totalEntries }: MyCoffeesState): PaginationSettings {
+    return {
+      page,
+      limit: MY_COFFEES_PAGE_SIZE,
+      size: totalEntries,
+      amounts: [],
+    };
+  }
 
   function handleSearchChange({ detail: searchInput }: CustomEvent<string>): void {
     myCoffeesSearchStore.setFilter(searchInput);
@@ -27,6 +44,10 @@
 
   function handleSortToggle(): void {
     myCoffeesSearchStore.setSort($myCoffeesSearchStore.sort === 'asc' ? 'desc' : 'asc');
+  }
+
+  function handlePageChange({ detail: page }: CustomEvent<number>): void {
+    myCoffeesStore.loadPage(page);
   }
 
   function handleAddClick(): void {
@@ -75,4 +96,13 @@
 />
 <PageCard class="page-with-actions-token">
   <CoffeeEntries {...$myCoffeesStore} on:update={handleEntryUpdate} on:remove={handleEntryRemove} />
+  {#if $myCoffeesStore.totalEntries}
+    <Paginator
+      settings={paginationSettings}
+      showFirstLastButtons
+      showPreviousNextButtons
+      justify="justify-center"
+      on:page={handlePageChange}
+    />
+  {/if}
 </PageCard>

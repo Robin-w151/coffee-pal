@@ -28,6 +28,7 @@ export interface MyCoffeesState extends MyCoffees {
   entries: Array<ActiveCoffeeEntry>;
   totalEntries: number;
   isLoading: boolean;
+  page: number;
 }
 
 export interface MyCoffeesSearchState {
@@ -42,7 +43,7 @@ export interface MyCoffeesWorker {
     entries: Array<ActiveCoffeeEntry>,
     search: MyCoffeesSearchState,
   ) => CachedSearchResult<ActiveCoffeeEntry>;
-  loadMore: (index: number, count: number) => Array<ActiveCoffeeEntry>;
+  loadPage: (index: number, count: number) => Array<ActiveCoffeeEntry>;
 }
 
 export function isActiveCoffeeEntry(

@@ -1,5 +1,5 @@
 import { browser } from '$app/environment';
-import { MY_COFFEES_BATCH_SIZE } from '$lib/config/myCoffees';
+import { MY_COFFEES_PAGE_SIZE } from '$lib/config/myCoffees';
 import type { CachedSearchResult } from '$lib/models/cachedSearch';
 import {
   isActiveCoffeeEntry,
@@ -11,7 +11,7 @@ import {
   type MyCoffeesState,
 } from '$lib/models/myCoffees';
 import type { SyncResult } from '$lib/models/sync';
-import { loadMore, sortOrSearch } from '$lib/services/myCoffees/wrapper';
+import { loadPage, sortOrSearch } from '$lib/services/myCoffees/wrapper';
 import Dexie, { liveQuery, type Observable as DxObservable, type Table } from 'dexie';
 import { DateTime } from 'luxon';
 import { BehaviorSubject, debounceTime, switchMap, tap, type Observable } from 'rxjs';
@@ -25,7 +25,7 @@ export interface MyCoffeesSearchStore extends Observable<MyCoffeesSearchState> {
 
 export interface MyCoffeesStore extends Readable<MyCoffeesState> {
   loadAll: () => Promise<Array<CoffeeEntry>>;
-  loadMore: () => Promise<void>;
+  loadPage: (page: number) => Promise<void>;
   add: (entry: ActiveCoffeeEntry) => void;
   update: (entry: ActiveCoffeeEntry) => void;
   remove: (id: string) => Promise<void>;
@@ -71,7 +71,12 @@ function createMyCoffeesSearchStore(): MyCoffeesSearchStore {
 }
 
 function createMyCoffeesStore(myCoffeesSearchStore: MyCoffeesSearchStore): MyCoffeesStore {
-  const initialState: MyCoffeesState = { entries: [], totalEntries: 0, isLoading: true };
+  const initialState: MyCoffeesState = {
+    entries: [],
+    totalEntries: 0,
+    isLoading: true,
+    page: 0,
+  };
   const removedEntries = new Map<string, ActiveCoffeeEntry>();
   const subject = new BehaviorSubject<MyCoffeesState>(initialState);
   let myCoffeesDb: MyCoffeesDb | null = null;
@@ -86,7 +91,13 @@ function createMyCoffeesStore(myCoffeesSearchStore: MyCoffeesSearchStore): MyCof
       )
       .subscribe((result) => {
         const { data: entries, totalEntries } = result;
-        subject.next({ ...subject.value, entries, totalEntries, isLoading: false });
+        subject.next({
+          ...subject.value,
+          entries,
+          totalEntries,
+          isLoading: false,
+          page: 0,
+        });
       });
   }
 
@@ -95,13 +106,14 @@ function createMyCoffeesStore(myCoffeesSearchStore: MyCoffeesSearchStore): MyCof
     return entries ?? [];
   }
 
-  async function loadMoreEntries(): Promise<void> {
-    const { entries, totalEntries } = subject.value;
-    if (entries.length < totalEntries) {
-      const moreEntries = await loadMore(entries.length, MY_COFFEES_BATCH_SIZE);
+  async function loadPageEntries(page: number): Promise<void> {
+    const { totalEntries } = subject.value;
+    if (page >= 0 && page * MY_COFFEES_PAGE_SIZE < totalEntries) {
+      const entries = await loadPage(page * MY_COFFEES_PAGE_SIZE, MY_COFFEES_PAGE_SIZE);
       subject.next({
         ...subject.value,
-        entries: [...entries, ...moreEntries],
+        entries,
+        page,
       });
     }
   }
@@ -157,7 +169,7 @@ function createMyCoffeesStore(myCoffeesSearchStore: MyCoffeesSearchStore): MyCof
 
   const myCoffeesStore = subject as unknown as MyCoffeesStore;
   myCoffeesStore.loadAll = loadAllEntries;
-  myCoffeesStore.loadMore = loadMoreEntries;
+  myCoffeesStore.loadPage = loadPageEntries;
   myCoffeesStore.add = addEntry;
   myCoffeesStore.update = updateEntry;
   myCoffeesStore.remove = removeEntry;

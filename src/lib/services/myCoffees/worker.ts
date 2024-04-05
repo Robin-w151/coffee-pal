@@ -6,7 +6,7 @@ import type {
 } from '$lib/models/myCoffees';
 import { expose } from 'comlink';
 import { sortOrSearch as sortOrSearchImpl } from './search';
-import { MY_COFFEES_BATCH_SIZE } from '$lib/config/myCoffees';
+import { MY_COFFEES_PAGE_SIZE } from '$lib/config/myCoffees';
 
 let data: Array<ActiveCoffeeEntry> = [];
 
@@ -17,16 +17,16 @@ function sortOrSearch(
   data = sortOrSearchImpl(entries, search);
 
   return {
-    data: data.slice(0, MY_COFFEES_BATCH_SIZE),
+    data: data.slice(0, MY_COFFEES_PAGE_SIZE),
     totalEntries: data.length,
   };
 }
 
-function loadMore(index: number, count: number): Array<ActiveCoffeeEntry> {
+function loadPage(index: number, count: number): Array<ActiveCoffeeEntry> {
   return data.slice(index, index + count);
 }
 
 expose({
   sortOrSearch,
-  loadMore,
+  loadPage,
 } satisfies MyCoffeesWorker);
