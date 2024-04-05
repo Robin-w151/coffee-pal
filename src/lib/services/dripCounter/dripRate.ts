@@ -10,8 +10,6 @@ export function calculateDripRate(timestamps: Array<number>): number {
     differences.push(timestamps[i + 1] - timestamps[i]);
   }
 
-  console.log(differences);
-
   const meanDifference = differences.reduce((d1, d2) => d1 + d2, 0) / differences.length;
   return round(60_000 / meanDifference, 0)!;
 }
