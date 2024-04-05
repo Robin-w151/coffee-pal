@@ -18,6 +18,17 @@ export async function sortOrSearch(
   }
 }
 
+export async function quickSearch(
+  entries: Array<ActiveCoffeeEntry>,
+  filter?: string,
+): Promise<Array<ActiveCoffeeEntry>> {
+  if (browser) {
+    return (await worker).quickSearch(entries, filter);
+  } else {
+    return [];
+  }
+}
+
 export async function loadPage(index: number, count: number): Promise<Array<ActiveCoffeeEntry>> {
   if (browser) {
     return (await worker).loadPage(index, count);

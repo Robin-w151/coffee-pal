@@ -43,6 +43,7 @@ export interface MyCoffeesWorker {
     entries: Array<ActiveCoffeeEntry>,
     search: MyCoffeesSearchState,
   ) => CachedSearchResult<ActiveCoffeeEntry>;
+  quickSearch: (entries: Array<ActiveCoffeeEntry>, filter?: string) => Array<ActiveCoffeeEntry>;
   loadPage: (index: number, count: number) => Array<ActiveCoffeeEntry>;
 }
 

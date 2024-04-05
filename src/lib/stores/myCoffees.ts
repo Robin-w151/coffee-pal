@@ -11,7 +11,7 @@ import {
   type MyCoffeesState,
 } from '$lib/models/myCoffees';
 import type { SyncResult } from '$lib/models/sync';
-import { loadPage, sortOrSearch } from '$lib/services/myCoffees/wrapper';
+import { loadPage, sortOrSearch, quickSearch } from '$lib/services/myCoffees/wrapper';
 import Dexie, { liveQuery, type Observable as DxObservable, type Table } from 'dexie';
 import { DateTime } from 'luxon';
 import { BehaviorSubject, debounceTime, switchMap, tap, type Observable } from 'rxjs';
@@ -26,6 +26,7 @@ export interface MyCoffeesSearchStore extends Observable<MyCoffeesSearchState> {
 export interface MyCoffeesStore extends Readable<MyCoffeesState> {
   loadAll: () => Promise<Array<CoffeeEntry>>;
   loadPage: (page: number) => Promise<void>;
+  quickSearch: (filter?: string) => Promise<Array<ActiveCoffeeEntry>>;
   add: (entry: ActiveCoffeeEntry) => void;
   update: (entry: ActiveCoffeeEntry) => void;
   remove: (id: string) => Promise<void>;
@@ -118,6 +119,15 @@ function createMyCoffeesStore(myCoffeesSearchStore: MyCoffeesSearchStore): MyCof
     }
   }
 
+  async function quickSearchEntries(filter?: string): Promise<Array<ActiveCoffeeEntry>> {
+    const entries = (await myCoffeesDb?.entries.toArray())?.filter(isActiveCoffeeEntry);
+    if (entries) {
+      return quickSearch(entries, filter);
+    } else {
+      return [];
+    }
+  }
+
   function addEntry(entry: ActiveCoffeeEntry): void {
     const now = DateTime.now().toISO()!;
     entry.createdAt = now;
@@ -170,6 +180,7 @@ function createMyCoffeesStore(myCoffeesSearchStore: MyCoffeesSearchStore): MyCof
   const myCoffeesStore = subject as unknown as MyCoffeesStore;
   myCoffeesStore.loadAll = loadAllEntries;
   myCoffeesStore.loadPage = loadPageEntries;
+  myCoffeesStore.quickSearch = quickSearchEntries;
   myCoffeesStore.add = addEntry;
   myCoffeesStore.update = updateEntry;
   myCoffeesStore.remove = removeEntry;
