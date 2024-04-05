@@ -28,6 +28,7 @@ export interface JournalState {
   entries: Array<ActiveJournalEntry>;
   totalEntries: number;
   isLoading: boolean;
+  page: number;
 }
 
 export interface JournalSearchState {
@@ -52,7 +53,7 @@ export interface JournalWorker {
     entries: Array<ActiveJournalEntry>,
     search: JournalSearchState,
   ) => CachedSearchResult<JournalEntry>;
-  loadMore: (index: number, count: number) => Array<ActiveJournalEntry>;
+  loadPage: (index: number, count: number) => Array<ActiveJournalEntry>;
 }
 
 export function isActiveJournalEntry(

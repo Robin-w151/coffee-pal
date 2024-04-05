@@ -1,1 +1,1 @@
-export const JOURNAL_BATCH_SIZE = 50;
+export const JOURNAL_PAGE_SIZE = 25;

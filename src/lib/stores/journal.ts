@@ -1,5 +1,5 @@
 import { browser } from '$app/environment';
-import { JOURNAL_BATCH_SIZE } from '$lib/config/journal';
+import { JOURNAL_PAGE_SIZE } from '$lib/config/journal';
 import type { CachedSearchResult } from '$lib/models/cachedSearch';
 import {
   isActiveJournalEntry,
@@ -12,7 +12,7 @@ import {
   type JournalSortDirection,
 } from '$lib/models/journal';
 import type { SyncResult } from '$lib/models/sync';
-import { loadMore, sortOrSearch } from '$lib/services/journal/wrapper';
+import { loadPage, sortOrSearch } from '$lib/services/journal/wrapper';
 import Dexie, { liveQuery, type Observable as DxObservable, type Table } from 'dexie';
 import { DateTime } from 'luxon';
 import { BehaviorSubject, debounceTime, switchMap, tap, type Observable } from 'rxjs';
@@ -25,7 +25,7 @@ export interface JournalSearchStore extends Observable<JournalSearchState> {
 
 export interface JournalStore extends Observable<JournalState> {
   loadAll: () => Promise<Array<JournalEntry>>;
-  loadMore: () => Promise<void>;
+  loadPage: (page: number) => Promise<void>;
   add: (entry: ActiveJournalEntry) => void;
   update: (entry: ActiveJournalEntry) => void;
   remove: (id: string) => Promise<void>;
@@ -75,6 +75,7 @@ function createJournalStore(journalSearchStore: JournalSearchStore): JournalStor
     entries: [],
     totalEntries: 0,
     isLoading: true,
+    page: 0,
   };
   const removedEntries = new Map<string, ActiveJournalEntry>();
   const subject = new BehaviorSubject<JournalState>(initialState);
@@ -95,6 +96,7 @@ function createJournalStore(journalSearchStore: JournalSearchStore): JournalStor
           entries,
           totalEntries,
           isLoading: false,
+          page: 0,
         });
       });
   }
@@ -104,13 +106,14 @@ function createJournalStore(journalSearchStore: JournalSearchStore): JournalStor
     return entries ?? [];
   }
 
-  async function loadMoreEntries(): Promise<void> {
-    const { entries, totalEntries } = subject.value;
-    if (entries.length < totalEntries) {
-      const moreEntries = await loadMore(entries.length, JOURNAL_BATCH_SIZE);
+  async function loadPageEntries(page: number): Promise<void> {
+    const { totalEntries } = subject.value;
+    if (page >= 0 && page * JOURNAL_PAGE_SIZE < totalEntries) {
+      const entries = await loadPage(page * JOURNAL_PAGE_SIZE, JOURNAL_PAGE_SIZE);
       subject.next({
         ...subject.value,
-        entries: [...entries, ...moreEntries],
+        entries,
+        page,
       });
     }
   }
@@ -166,7 +169,7 @@ function createJournalStore(journalSearchStore: JournalSearchStore): JournalStor
 
   const journalStore = subject as unknown as JournalStore;
   journalStore.loadAll = loadAllEntries;
-  journalStore.loadMore = loadMoreEntries;
+  journalStore.loadPage = loadPageEntries;
   journalStore.add = addEntry;
   journalStore.update = updateEntry;
   journalStore.remove = removeEntry;

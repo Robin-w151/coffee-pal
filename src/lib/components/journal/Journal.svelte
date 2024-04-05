@@ -13,6 +13,7 @@
     JournalEntryAction,
     JournalSort,
     JournalSortDirection,
+    JournalState,
   } from '$lib/models/journal';
   import { journalSearchStore, journalStore } from '$lib/stores/journal';
   import { syncAvailabilityStore } from '$lib/stores/syncAvailability';
@@ -27,7 +28,14 @@
     faCheck,
     type IconDefinition,
   } from '@fortawesome/free-solid-svg-icons';
-  import { ListBox, ListBoxItem, getModalStore, getToastStore } from '@skeletonlabs/skeleton';
+  import {
+    ListBox,
+    ListBoxItem,
+    Paginator,
+    getModalStore,
+    getToastStore,
+    type PaginationSettings,
+  } from '@skeletonlabs/skeleton';
   import { onDestroy } from 'svelte';
   import { Icon } from 'svelte-awesome';
   import { v4 as uuid } from 'uuid';
@@ -36,6 +44,7 @@
   import PageSearch from '../ui/elements/page/PageSearch.svelte';
   import JournalEntries from './JournalEntries.svelte';
   import JournalEntryModal from './JournalEntryModal.svelte';
+  import { JOURNAL_PAGE_SIZE } from '$lib/config/journal';
 
   const modalHelper = new ModalHelper(getModalStore());
   const toastHelper = new ToastHelper(getToastStore());
@@ -62,9 +71,20 @@
 
   let selectedSortOption = sortOptions[0].label;
 
+  $: paginationSettings = getPaginationSettings($journalStore);
+
   onDestroy(() => {
     journalSearchStore.reset();
   });
+
+  function getPaginationSettings({ page, totalEntries }: JournalState): PaginationSettings {
+    return {
+      page,
+      limit: JOURNAL_PAGE_SIZE,
+      size: totalEntries,
+      amounts: [],
+    };
+  }
 
   function handleSearchChange({ detail: searchInput }: CustomEvent<string>): void {
     journalSearchStore.setFilter(searchInput);
@@ -72,6 +92,10 @@
 
   function handleSortOptionClick(sort: JournalSort, sortDirection: JournalSortDirection): void {
     journalSearchStore.setSort(sort, sortDirection);
+  }
+
+  function handlePageChange({ detail: page }: CustomEvent<number>): void {
+    journalStore.loadPage(page);
   }
 
   function handleAddClick(): void {
@@ -148,4 +172,13 @@
     on:copy={handleEntryCopy}
     on:remove={handleEntryRemove}
   />
+  {#if $journalStore.totalEntries}
+    <Paginator
+      settings={paginationSettings}
+      showFirstLastButtons
+      showPreviousNextButtons
+      justify="justify-center"
+      on:page={handlePageChange}
+    />
+  {/if}
 </PageCard>
