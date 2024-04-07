@@ -97,7 +97,17 @@ test('variable ratio change output', async ({ calculatorPage }) => {
 
 test('select preset', async ({ calculatorPage }) => {
   await calculatorPage.fixedRatioToggle.uncheck();
-  await calculatorPage.getPreset('Aeropress').click();
+  await calculatorPage.getPreset('Aeropress 7:100').click();
 
   await expect(calculatorPage.fixedRatioToggle).toBeChecked();
+});
+
+test('select preset with ice ratio', async ({ calculatorPage }) => {
+  await calculatorPage.getPreset('Iced Aeropress 7:100').click();
+
+  await expect(calculatorPage.icedCoffeeToggle).toBeChecked();
+
+  await expect(calculatorPage.iceRatioRange).toHaveValue('30');
+  await expect(calculatorPage.brewWaterAmountInput).toHaveValue('140');
+  await expect(calculatorPage.iceAmountInput).toHaveValue('60');
 });

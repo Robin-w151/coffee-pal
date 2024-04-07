@@ -44,7 +44,7 @@ export class CalculatorPage {
   }
 
   getPreset(name: string): Locator {
-    return this.page.getByRole('button', { name });
+    return this.page.getByRole('button', { name, exact: true });
   }
 
   async goto(): Promise<void> {
