@@ -3,7 +3,6 @@ import type { App, InstallEvent } from '$lib/models/app';
 import { writable, type Readable, get } from 'svelte/store';
 
 export interface AppStore extends Readable<App> {
-  requestPersistentStorage: () => Promise<void>;
   requestAppInstall: () => Promise<void>;
 }
 
@@ -24,16 +23,6 @@ function createAppStore(): AppStore {
       .then((persisted) => update((app) => ({ ...app, persistentStorage: persisted })));
   }
 
-  async function requestPersistentStorage(): Promise<void> {
-    if (browser) {
-      const persisted = await navigator.storage.persist();
-
-      if (persisted) {
-        update((app) => ({ ...app, persistentStorage: persisted }));
-      }
-    }
-  }
-
   async function requestAppInstall(): Promise<void> {
     const { outcome } = (await get(appStore).installEvent?.prompt()) ?? { outcome: 'dismissed' };
     if (outcome === 'accepted') {
@@ -41,5 +30,5 @@ function createAppStore(): AppStore {
     }
   }
 
-  return { subscribe, requestPersistentStorage, requestAppInstall };
+  return { subscribe, requestAppInstall };
 }

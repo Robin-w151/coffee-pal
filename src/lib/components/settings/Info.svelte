@@ -5,10 +5,6 @@
   const appCommitHash = import.meta.env.APP_COMMIT_HASH;
   const itemClass = 'grid grid-cols-[subgrid] col-span-2';
 
-  function handleKeepDataClick(): void {
-    appStore.requestPersistentStorage();
-  }
-
   function handleInstallClick(): void {
     appStore.requestAppInstall();
   }
@@ -30,20 +26,11 @@
       <a href="https://github.com/Robin-w151/coffee-pal" target="_blank" rel="noopener">GitHub</a>
     </li>
   </ul>
-  <div class="flex flex-col sm:flex-row gap-2">
+  {#if $appStore.installEvent}
     <button
-      class="btn variant-ghost-primary"
-      title="Request that data is stored until manual removal"
-      disabled={$appStore.persistentStorage}
-      on:click={handleKeepDataClick}
-      >{$appStore.persistentStorage ? 'Data is persisted' : 'Keep Data'}</button
+      class="btn variant-filled-primary"
+      title="Install App on the system"
+      on:click={handleInstallClick}>Install App</button
     >
-    {#if $appStore.installEvent}
-      <button
-        class="btn variant-filled-primary"
-        title="Install App on the system"
-        on:click={handleInstallClick}>Install App</button
-      >
-    {/if}
-  </div>
+  {/if}
 </div>

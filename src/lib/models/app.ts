@@ -1,6 +1,5 @@
 export interface App {
   installEvent?: InstallEvent;
-  persistentStorage?: boolean;
 }
 
 export interface InstallEvent extends Event {
