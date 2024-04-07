@@ -1,13 +1,5 @@
 [
   {
-    "label": "Aeropress",
-    "ratio": {
-      "coffee": 1,
-      "water": 6
-    },
-    "factor": 30
-  },
-  {
     "label": "Moka Pot",
     "ratio": {
       "coffee": 1,
@@ -16,20 +8,46 @@
     "factor": 10
   },
   {
-    "label": "French Press",
-    "ratio": {
-      "coffee": 1,
-      "water": 12
-    },
-    "factor": 30
-  },
-  {
     "label": "PuckPuck",
     "ratio": {
       "coffee": 19,
       "water": 250
     },
+    "factor": 2,
+    "iceRatio": 20
+  },
+  {
+    "label": "Cold Brew",
+    "ratio": {
+      "coffee": 3,
+      "water": 40
+    },
+    "factor": 30
+  },
+  {
+    "label": "French Press",
+    "ratio": {
+      "coffee": 1,
+      "water": 14
+    },
+    "factor": 25
+  },
+  {
+    "label": "Aeropress",
+    "ratio": {
+      "coffee": 7,
+      "water": 100
+    },
     "factor": 2
+  },
+  {
+    "label": "Iced Aeropress",
+    "ratio": {
+      "coffee": 7,
+      "water": 100
+    },
+    "factor": 2,
+    "iceRatio": 30
   },
   {
     "label": "V60",
@@ -52,14 +70,6 @@
     "ratio": {
       "coffee": 1,
       "water": 17
-    },
-    "factor": 30
-  },
-  {
-    "label": "Cold Brew",
-    "ratio": {
-      "coffee": 3,
-      "water": 40
     },
     "factor": 30
   }

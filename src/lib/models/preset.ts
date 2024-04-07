@@ -4,4 +4,5 @@ export interface Preset {
   label: string;
   ratio: Ratio;
   factor: number;
+  iceRatio?: number;
 }

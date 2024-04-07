@@ -11,12 +11,11 @@
   import Card from '../ui/elements/Card.svelte';
 
   export let water: number;
+  export let iced = false;
+  export let iceRatio = 30;
 
   const units = WEIGHT_UNITS;
   const preferredUnit = getPreferredWeightUnit($settingsStore.preferredUnits);
-
-  let iced: boolean;
-  let iceRatio = 30;
 
   let brewWaterMeasurement: Measurement = {
     value: getBrewWater(water, iceRatio),

@@ -13,11 +13,13 @@
   let preset: Preset = presets.find((p) => p.label === 'Orea') ?? presets[0];
   let recipe: IRecipe = calculateRecipe(preset);
   let fixedRatio = true;
+  let iceRatio: number | undefined = undefined;
 
   function handlePresetSelect({ detail: newPreset }: { detail: Preset }): void {
     preset = newPreset;
     recipe = calculateRecipe(newPreset);
     fixedRatio = true;
+    iceRatio = newPreset.iceRatio;
   }
 
   function handleRatioChange({ detail: ratio }: { detail: Ratio }): void {
@@ -169,5 +171,5 @@
     on:outputChange={handleOutputChange}
   />
   <hr class="md:col-span-3" />
-  <Iced class="md:col-span-3" water={recipe.water} />
+  <Iced class="md:col-span-3" water={recipe.water} iced={!!iceRatio} {iceRatio} />
 </PageCard>
