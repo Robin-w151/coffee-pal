@@ -1,11 +1,17 @@
 <script lang="ts">
+  import { goto } from '$app/navigation';
   import type { ActiveJournalEntry } from '$lib/models/journal';
-  import { faClose } from '@fortawesome/free-solid-svg-icons';
-  import { createEventDispatcher } from 'svelte';
+  import { journalStore } from '$lib/stores/journal';
+  import { ToastHelper } from '$lib/utils/ui/toast';
+  import { faFaceSadCry } from '@fortawesome/free-solid-svg-icons';
+  import { getToastStore } from '@skeletonlabs/skeleton';
+  import { onMount } from 'svelte';
   import { Icon } from 'svelte-awesome';
   import { v4 as uuid } from 'uuid';
   import Actions from '../ui/elements/form/Actions.svelte';
   import Form from '../ui/elements/form/Form.svelte';
+  import PageCard from '../ui/elements/page/PageCard.svelte';
+  import PageHeader from '../ui/elements/page/PageHeader.svelte';
   import Coffee from './detail/Coffee.svelte';
   import CoffeeType from './detail/CoffeeType.svelte';
   import Description from './detail/Description.svelte';
@@ -15,8 +21,11 @@
   import Water from './detail/Water.svelte';
   import WaterTemperature from './detail/WaterTemperature.svelte';
 
-  export let entry: Partial<ActiveJournalEntry> = {
-    id: uuid(),
+  export let id: string | undefined = undefined;
+
+  const toastHelper = new ToastHelper(getToastStore());
+
+  let entry: Partial<ActiveJournalEntry> = {
     method: '',
     water: undefined,
     waterTemperature: undefined,
@@ -27,31 +36,77 @@
     createdAt: '',
     updatedAt: '',
   };
-  export let edit = false;
-
-  const dispatch = createEventDispatcher();
+  let unknown = false;
+  let isLoading = true;
 
   let methodInputValid: boolean;
   let waterInputValid: boolean;
   let coffeeInputValid: boolean;
   let waterTemperatureValid: boolean;
 
+  $: entryTitle = getTitle(unknown, entry);
   $: formValid = methodInputValid && waterInputValid && coffeeInputValid;
 
+  onMount(async () => {
+    if (id) {
+      const loadedEntry = await journalStore.loadOne(id);
+      if (loadedEntry) {
+        entry = loadedEntry;
+      } else {
+        unknown = true;
+      }
+    }
+    isLoading = false;
+  });
+
   function handleSave(): void {
-    dispatch('save', sanitizeEntry(entry));
+    const sanitizedEntry = sanitizeEntry(entry);
+    if (entry.id) {
+      journalStore.update(sanitizedEntry);
+    } else {
+      journalStore.add({ ...sanitizedEntry, id: uuid() });
+    }
+    goBack();
   }
 
   function handleCopy(): void {
-    dispatch('copy', sanitizeEntry(entry));
+    const sanitizedEntry = sanitizeEntry(entry);
+    journalStore.add({ ...sanitizedEntry, id: uuid() });
+    goBack();
   }
 
   function handleRemove(): void {
-    dispatch('remove', entry.id);
+    if (id) {
+      const entryId = id;
+      toastHelper.triggerInfo('Did you click to fast?', {
+        timeout: 15000,
+        action: {
+          label: 'Undo',
+          response: () => journalStore.undo(entryId),
+        },
+      });
+
+      journalStore.remove(id);
+    }
+    goBack();
   }
 
-  function handleCancelClick(): void {
-    dispatch('cancel');
+  function handleBack(): void {
+    goBack();
+  }
+
+  function handleCoffeeChange({ detail: coffee }: CustomEvent<number | undefined>): void {
+    entry.coffee = coffee;
+  }
+
+  function handleWaterChange({ detail: water }: CustomEvent<number | undefined>): void {
+    entry.water = water;
+  }
+
+  function handleWaterTemperatureChange({
+    detail: waterTemperature,
+  }: CustomEvent<number | undefined>): void {
+    entry.waterTemperature = waterTemperature;
   }
 
   function sanitizeEntry(entry: Partial<ActiveJournalEntry>): ActiveJournalEntry {
@@ -74,41 +129,55 @@
 
     return sanitizedEntry as ActiveJournalEntry;
   }
+
+  function goBack(): void {
+    goto('/');
+  }
+
+  function getTitle(unknown: boolean, entry?: Partial<ActiveJournalEntry>): string {
+    if (unknown) {
+      return 'Unknown';
+    } else if (entry?.id) {
+      return `${entry.method || 'Unknown'} - ${entry.coffeeType || 'Unknown'}`;
+    } else {
+      return 'New Entry';
+    }
+  }
 </script>
 
-<div class="card grid grid-rows-[min-content_1fr] w-full max-w-screen-md max-h-full">
-  <div class="flex justify-between items-center p-4">
-    <h3 class="h3">Journal Entry</h3>
-    <button
-      class="btn btn-icon hover:variant-soft-secondary float-right"
-      title="Close"
-      on:click={handleCancelClick}
-    >
-      <Icon data={faClose} />
-      <span class="sr-only">Close</span>
-    </button>
-  </div>
-  <Form class="px-4 pb-4 h-full overflow-auto">
-    <Method bind:method={entry.method} bind:valid={methodInputValid} />
-    <CoffeeType bind:coffeeType={entry.coffeeType} />
-    <Water bind:water={entry.water} bind:valid={waterInputValid} />
-    <Coffee bind:coffee={entry.coffee} bind:valid={coffeeInputValid} />
-    <WaterTemperature
-      bind:waterTemperature={entry.waterTemperature}
-      bind:valid={waterTemperatureValid}
-    />
-    <GrindSettings bind:grindSettings={entry.grindSettings} />
-    <Description bind:description={entry.description} />
-    <div class="flex justify-between items-center gap-4">
-      <Ratio coffee={entry.coffee} water={entry.water} />
-      <Actions
-        {edit}
-        {formValid}
-        allowCopy
-        on:save={handleSave}
-        on:copy={handleCopy}
-        on:remove={handleRemove}
+<PageHeader title={entryTitle} {isLoading} showBack on:back={handleBack} />
+<PageCard>
+  {#if unknown}
+    <p class="flex justify-center items-center gap-4">
+      <span class="flex items-center">
+        <Icon data={faFaceSadCry} />
+      </span>
+      <span>Could not find any entry! Go back to the <a href="/">overview</a></span>
+    </p>
+  {:else}
+    <Form>
+      <Method bind:method={entry.method} bind:valid={methodInputValid} />
+      <CoffeeType bind:coffeeType={entry.coffeeType} />
+      <Water water={entry.water} bind:valid={waterInputValid} on:change={handleWaterChange} />
+      <Coffee coffee={entry.coffee} bind:valid={coffeeInputValid} on:change={handleCoffeeChange} />
+      <WaterTemperature
+        waterTemperature={entry.waterTemperature}
+        bind:valid={waterTemperatureValid}
+        on:change={handleWaterTemperatureChange}
       />
-    </div>
-  </Form>
-</div>
+      <GrindSettings bind:grindSettings={entry.grindSettings} />
+      <Description bind:description={entry.description} />
+      <div class="flex justify-between items-center gap-4">
+        <Ratio coffee={entry.coffee} water={entry.water} />
+        <Actions
+          edit={!!id}
+          {formValid}
+          allowCopy
+          on:save={handleSave}
+          on:copy={handleCopy}
+          on:remove={handleRemove}
+        />
+      </div>
+    </Form>
+  {/if}
+</PageCard>

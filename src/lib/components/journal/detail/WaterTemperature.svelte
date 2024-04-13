@@ -5,6 +5,7 @@
   import type { Measurement } from '$lib/models/measurement';
   import { settingsStore } from '$lib/stores/settings';
   import { getPreferredTemperatureUnit } from '$lib/utils/units';
+  import { createEventDispatcher } from 'svelte';
 
   export let waterTemperature: number | undefined;
   export let valid = false;
@@ -15,6 +16,7 @@
     metric: 'water temperature must be greater than 0',
     imperial: 'water temperature must be greater than 32',
   };
+  const dispatch = createEventDispatcher();
 
   let waterTemperatureMeasurement: Measurement = {
     value: waterTemperature,
@@ -22,10 +24,15 @@
   };
   let inputTouched = false;
 
-  $: waterTemperature = waterTemperatureMeasurement.value;
+  $: handleWaterTemperatureChange(waterTemperature);
   $: checkValidity(waterTemperature);
+  $: dispatch('change', waterTemperatureMeasurement.value);
   $: showError = inputTouched && !valid;
   $: errorMessage = errorMessages[waterTemperatureMeasurement.unit.system];
+
+  function handleWaterTemperatureChange(waterTemperature?: number): void {
+    waterTemperatureMeasurement.value = waterTemperature;
+  }
 
   function handleInputBlur(): void {
     inputTouched = true;

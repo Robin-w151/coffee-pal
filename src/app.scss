@@ -74,6 +74,14 @@ body {
   @apply chip variant-soft-secondary hover:variant-filled-secondary;
 }
 
+.page-header-title {
+  @apply h2 flex items-center overflow-hidden;
+
+  span {
+    @apply leading-[1.3] overflow-hidden text-ellipsis whitespace-nowrap;
+  }
+}
+
 .page-with-actions-token {
   @apply mb-24;
 }

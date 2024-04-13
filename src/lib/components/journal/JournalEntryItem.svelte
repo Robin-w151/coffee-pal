@@ -4,21 +4,14 @@
   import { calculateRatio, round } from '$lib/utils/math';
   import { getPreferredTemperatureUnit, getPreferredWeightUnit } from '$lib/utils/units';
   import { faEye } from '@fortawesome/free-solid-svg-icons';
-  import { createEventDispatcher } from 'svelte';
   import { Icon } from 'svelte-awesome';
 
   export let entry: ActiveJournalEntry;
 
-  const dispatch = createEventDispatcher();
   const preferredWeightUnit = getPreferredWeightUnit($settingsStore.preferredUnits);
   const preferredTemperatureUnit = getPreferredTemperatureUnit($settingsStore.preferredUnits);
 
   $: ratio = calculateRatio(entry.coffee, entry.water) ?? 'unknown';
-
-  function handleUpdateClick(): void {
-    const copy = { ...entry };
-    dispatch('update', copy);
-  }
 
   function details(entry: ActiveJournalEntry): string {
     const { water, coffee, waterTemperature, grindSettings, description } = entry;
@@ -49,13 +42,9 @@
     </dd>
   </span>
   <span class="flex gap-2">
-    <button
-      class="btn btn-icon hover:variant-soft-secondary"
-      title="Show"
-      on:click={handleUpdateClick}
-    >
+    <a class="btn btn-icon hover:variant-soft-secondary" title="Show" href="/journal/{entry.id}">
       <Icon data={faEye} />
       <span class="sr-only">Show</span>
-    </button>
+    </a>
   </span>
 </div>

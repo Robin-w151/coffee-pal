@@ -5,6 +5,7 @@
   import type { Measurement } from '$lib/models/measurement';
   import { settingsStore } from '$lib/stores/settings';
   import { getPreferredWeightUnit } from '$lib/utils/units';
+  import { createEventDispatcher } from 'svelte';
 
   export let water: number | undefined;
   export let valid = false;
@@ -15,6 +16,7 @@
     required: 'amount of water is required',
     negative: 'amount of water must be greater than 0',
   };
+  const dispatch = createEventDispatcher();
 
   let waterMeasurement: Measurement = {
     value: water,
@@ -23,9 +25,14 @@
   let errorMessage: string | undefined;
   let inputTouched = false;
 
-  $: water = waterMeasurement.value;
-  $: checkValidity(water);
+  $: handleWaterChange(water);
+  $: checkValidity(waterMeasurement.value);
+  $: dispatch('change', waterMeasurement.value);
   $: showError = inputTouched && !valid;
+
+  function handleWaterChange(water?: number): void {
+    waterMeasurement.value = water;
+  }
 
   function handleInputBlur(): void {
     inputTouched = true;

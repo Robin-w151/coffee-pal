@@ -47,6 +47,7 @@
 <div class="input-group input-group-divider grid-cols-[1fr_auto] {$$props.class ?? ''}">
   <input
     type="number"
+    step="0.1"
     {placeholder}
     {disabled}
     {readonly}

@@ -5,6 +5,7 @@
   import type { Measurement } from '$lib/models/measurement';
   import { settingsStore } from '$lib/stores/settings';
   import { getPreferredWeightUnit } from '$lib/utils/units';
+  import { createEventDispatcher } from 'svelte';
 
   export let coffee: number | undefined;
   export let valid = false;
@@ -15,6 +16,7 @@
     required: 'amount of coffee is required',
     negative: 'amount of coffee must be greater than 0',
   };
+  const dispatch = createEventDispatcher();
 
   let coffeeMeasurement: Measurement = {
     value: coffee,
@@ -23,9 +25,14 @@
   let errorMessage: string | undefined;
   let inputTouched = false;
 
-  $: coffee = coffeeMeasurement.value;
+  $: handleCoffeeChange(coffee);
   $: checkValidity(coffee);
+  $: dispatch('change', coffeeMeasurement.value);
   $: showError = inputTouched && !valid;
+
+  function handleCoffeeChange(coffee?: number): void {
+    coffeeMeasurement.value = coffee;
+  }
 
   function handleInputBlur(): void {
     inputTouched = true;

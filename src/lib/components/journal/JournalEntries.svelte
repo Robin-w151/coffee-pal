@@ -1,32 +1,12 @@
 <script lang="ts">
-  import type { ActiveJournalEntry, JournalEntryAction } from '$lib/models/journal';
-  import { ModalHelper } from '$lib/utils/ui/modal';
+  import type { ActiveJournalEntry } from '$lib/models/journal';
   import { faFaceSadCry } from '@fortawesome/free-solid-svg-icons';
-  import { getModalStore } from '@skeletonlabs/skeleton';
-  import { createEventDispatcher } from 'svelte';
   import { Icon } from 'svelte-awesome';
   import JournalEntryItem from './JournalEntryItem.svelte';
-  import JournalEntryModal from './JournalEntryModal.svelte';
   import JournalEntryPlaceholder from './JournalEntryPlaceholder.svelte';
 
   export let entries: Array<ActiveJournalEntry>;
   export let isLoading = false;
-
-  const dispatch = createEventDispatcher();
-  const modalHelper = new ModalHelper(getModalStore());
-
-  function handleShowEntry({ detail: entry }: CustomEvent<ActiveJournalEntry>): void {
-    modalHelper.triggerModal(JournalEntryModal, {
-      props: { entry, edit: true },
-      response: handleEntryChange,
-    });
-  }
-
-  function handleEntryChange(value: JournalEntryAction): void {
-    if (value) {
-      dispatch(value.action, value.payload);
-    }
-  }
 </script>
 
 <dl class="list-dl">
@@ -36,7 +16,7 @@
     <JournalEntryPlaceholder />
   {:else}
     {#each entries as entry (entry.id)}
-      <JournalEntryItem {entry} on:update={handleShowEntry} />
+      <JournalEntryItem {entry} />
     {:else}
       <p class="flex justify-center items-center gap-4">
         <span class="flex items-center">

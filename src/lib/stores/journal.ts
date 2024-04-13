@@ -8,8 +8,8 @@ import {
   type JournalEntry,
   type JournalSearchState,
   type JournalSort,
-  type JournalState,
   type JournalSortDirection,
+  type JournalState,
 } from '$lib/models/journal';
 import type { SyncResult } from '$lib/models/sync';
 import { loadPage, sortOrSearch } from '$lib/services/journal/wrapper';
@@ -26,6 +26,7 @@ export interface JournalSearchStore extends Observable<JournalSearchState> {
 export interface JournalStore extends Observable<JournalState> {
   loadAll: () => Promise<Array<JournalEntry>>;
   loadPage: (page: number) => Promise<void>;
+  loadOne: (id: string) => Promise<ActiveJournalEntry | undefined>;
   add: (entry: ActiveJournalEntry) => void;
   update: (entry: ActiveJournalEntry) => void;
   remove: (id: string) => Promise<void>;
@@ -88,17 +89,18 @@ function createJournalStore(journalSearchStore: JournalSearchStore): JournalStor
         tap(() => subject.next({ ...subject.value, isLoading: true })),
         debounceTime(250),
         switchMap((search) => createQuery(db, search)),
+        tap((result) => {
+          const { data: entries, totalEntries } = result;
+          subject.next({
+            ...subject.value,
+            entries,
+            totalEntries,
+            isLoading: false,
+            page: 0,
+          });
+        }),
       )
-      .subscribe((result) => {
-        const { data: entries, totalEntries } = result;
-        subject.next({
-          ...subject.value,
-          entries,
-          totalEntries,
-          isLoading: false,
-          page: 0,
-        });
-      });
+      .subscribe();
   }
 
   async function loadAllEntries(): Promise<Array<JournalEntry>> {
@@ -115,6 +117,13 @@ function createJournalStore(journalSearchStore: JournalSearchStore): JournalStor
         entries,
         page,
       });
+    }
+  }
+
+  async function loadOneEntry(id: string): Promise<ActiveJournalEntry | undefined> {
+    const entry = await journalDb?.entries.get(id);
+    if (isActiveJournalEntry(entry)) {
+      return entry;
     }
   }
 
@@ -170,6 +179,7 @@ function createJournalStore(journalSearchStore: JournalSearchStore): JournalStor
   const journalStore = subject as unknown as JournalStore;
   journalStore.loadAll = loadAllEntries;
   journalStore.loadPage = loadPageEntries;
+  journalStore.loadOne = loadOneEntry;
   journalStore.add = addEntry;
   journalStore.update = updateEntry;
   journalStore.remove = removeEntry;

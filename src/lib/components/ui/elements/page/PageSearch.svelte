@@ -19,6 +19,7 @@
   import InputButton from '../form/InputButton.svelte';
 
   export let title: string;
+  export let search: string | null | undefined = '';
   export let sort: PageSearchSort | null = 'asc';
   export let isLoading = false;
 
@@ -29,16 +30,15 @@
     placement: 'bottom',
   };
 
-  let searchInput = '';
   let searchInputRef: HTMLInputElement;
-  let isSearchActive = false;
+  let isSearchActive = !!search;
 
-  $: handleSearchInputChange(searchInput);
+  $: handleSearchInputChange(search);
   $: headerSearchActiveClass = isSearchActive
     ? 'card flex-col !items-start px-4 py-4 h-auto transition ease-out duration-250'
     : '';
 
-  $: isChangeSortOrderButtonDisabled = !!searchInput;
+  $: isChangeSortOrderButtonDisabled = !!search;
   $: changeSortOrderButtonTitle = isChangeSortOrderButtonDisabled
     ? 'Sort order is determined by search input'
     : 'Change sort order';
@@ -49,12 +49,12 @@
     searchInputRef.focus();
   }
 
-  function handleSearchInputChange(searchInput: string): void {
+  function handleSearchInputChange(searchInput?: string | null): void {
     dispatch('searchChange', searchInput);
   }
 
   function handleSearchInputClearClick(): void {
-    searchInput = '';
+    search = '';
     searchInputRef.focus();
   }
 
@@ -77,19 +77,21 @@
 
 <header class="flex justify-between items-center gap-4 px-2 w-full h-12 {headerSearchActiveClass}">
   <div class="flex items-center gap-4 w-full">
-    <h2 class="h2">{title}</h2>
+    <h2 class="page-header-title">
+      <span>{title}</span>
+    </h2>
     {#if isSearchActive && isLoading}
       <Spinner />
     {/if}
   </div>
   <div class="grid grid-cols-[auto_max-content] items-center gap-2" class:w-full={isSearchActive}>
     {#if isSearchActive}
-      <InputButton title="Clear" visible={!!searchInput} on:click={handleSearchInputClearClick}>
+      <InputButton title="Clear" visible={!!search} on:click={handleSearchInputClearClick}>
         <input
           class="input"
           type="text"
           placeholder="Search..."
-          bind:value={searchInput}
+          bind:value={search}
           bind:this={searchInputRef}
           in:scaleX={{ direction: 'left', duration: 250 }}
         />
