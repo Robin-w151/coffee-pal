@@ -1,11 +1,17 @@
 <script lang="ts">
+  import { goto } from '$app/navigation';
   import type { ActiveCoffeeEntry } from '$lib/models/myCoffees';
-  import { faClose } from '@fortawesome/free-solid-svg-icons';
-  import { createEventDispatcher } from 'svelte';
+  import { myCoffeesStore } from '$lib/stores/myCoffees';
+  import { ToastHelper } from '$lib/utils/ui/toast';
+  import { faFaceSadCry } from '@fortawesome/free-solid-svg-icons';
+  import { getToastStore } from '@skeletonlabs/skeleton';
+  import { onMount } from 'svelte';
   import { Icon } from 'svelte-awesome';
   import { v4 as uuid } from 'uuid';
   import Actions from '../ui/elements/form/Actions.svelte';
   import Form from '../ui/elements/form/Form.svelte';
+  import PageCard from '../ui/elements/page/PageCard.svelte';
+  import PageHeader from '../ui/elements/page/PageHeader.svelte';
   import Aromas from './detail/Aromas.svelte';
   import Description from './detail/Description.svelte';
   import Name from './detail/Name.svelte';
@@ -14,8 +20,11 @@
   import Trader from './detail/Trader.svelte';
   import Variety from './detail/Variety.svelte';
 
-  export let entry: Partial<ActiveCoffeeEntry> = {
-    id: uuid(),
+  export let id: string | undefined = undefined;
+
+  const toastHelper = new ToastHelper(getToastStore());
+
+  let entry: Partial<ActiveCoffeeEntry> = {
     name: '',
     origin: undefined,
     trader: undefined,
@@ -24,24 +33,54 @@
     createdAt: '',
     updatedAt: '',
   };
-  export let edit = false;
-
-  const dispatch = createEventDispatcher();
+  let unknown = false;
+  let isLoading = true;
 
   let nameInputValid: boolean;
 
+  $: entryTitle = getTitle(unknown, entry);
   $: formValid = nameInputValid;
 
+  onMount(async () => {
+    if (id) {
+      const loadedEntry = await myCoffeesStore.loadOne(id);
+      if (loadedEntry) {
+        entry = loadedEntry;
+      } else {
+        unknown = true;
+      }
+    }
+    isLoading = false;
+  });
+
   function handleSave(): void {
-    dispatch('save', sanitizeEntry(entry));
+    const sanitizedEntry = sanitizeEntry(entry);
+    if (entry.id) {
+      myCoffeesStore.update(sanitizedEntry);
+    } else {
+      myCoffeesStore.add({ ...sanitizedEntry, id: uuid() });
+    }
+    goBack();
   }
 
   function handleRemove(): void {
-    dispatch('remove', entry.id);
+    if (id) {
+      const entryId = id;
+      toastHelper.triggerInfo('Did you click to fast?', {
+        timeout: 15000,
+        action: {
+          label: 'Undo',
+          response: () => myCoffeesStore.undo(entryId),
+        },
+      });
+
+      myCoffeesStore.remove(id);
+    }
+    goBack();
   }
 
-  function handleCancelClick(): void {
-    dispatch('cancel');
+  function handleBack(): void {
+    goBack();
   }
 
   function sanitizeEntry(entry: Partial<ActiveCoffeeEntry>): ActiveCoffeeEntry {
@@ -69,30 +108,43 @@
 
     return sanitizedEntry as ActiveCoffeeEntry;
   }
+
+  function goBack(): void {
+    goto('/my-coffees');
+  }
+
+  function getTitle(unknown: boolean, entry?: Partial<ActiveCoffeeEntry>): string {
+    if (unknown) {
+      return 'Unknown';
+    } else if (entry?.id) {
+      return entry.name || 'Unknown';
+    } else {
+      return 'New Entry';
+    }
+  }
 </script>
 
-<div class="card grid grid-rows-[min-content_1fr] w-full max-w-screen-md max-h-full">
-  <div class="flex justify-between items-center p-4">
-    <h3 class="h3">Coffee Entry</h3>
-    <button
-      class="btn btn-icon hover:variant-soft-secondary float-right"
-      title="Close"
-      on:click={handleCancelClick}
-    >
-      <Icon data={faClose} />
-      <span class="sr-only">Close</span>
-    </button>
-  </div>
-  <Form class="px-4 pb-4 h-full overflow-auto">
-    <Name bind:name={entry.name} bind:valid={nameInputValid} />
-    <Origin bind:origin={entry.origin} />
-    <Process bind:process={entry.process} />
-    <Variety bind:variety={entry.variety} />
-    <Trader bind:trader={entry.trader} />
-    <Aromas bind:aromas={entry.aromas} />
-    <Description bind:description={entry.description} />
-    <div class="flex justify-end items-center gap-2">
-      <Actions {edit} {formValid} on:save={handleSave} on:remove={handleRemove} />
-    </div>
-  </Form>
-</div>
+<PageHeader title={entryTitle} {isLoading} showBack on:back={handleBack} />
+<PageCard>
+  {#if unknown}
+    <p class="flex justify-center items-center gap-4">
+      <span class="flex items-center">
+        <Icon data={faFaceSadCry} />
+      </span>
+      <span>Could not find any entry! Go back to the <a href="/my-coffees">overview</a></span>
+    </p>
+  {:else}
+    <Form>
+      <Name bind:name={entry.name} bind:valid={nameInputValid} />
+      <Origin bind:origin={entry.origin} />
+      <Process bind:process={entry.process} />
+      <Variety bind:variety={entry.variety} />
+      <Trader bind:trader={entry.trader} />
+      <Aromas bind:aromas={entry.aromas} />
+      <Description bind:description={entry.description} />
+      <div class="flex justify-end items-center gap-2">
+        <Actions edit={!!id} {formValid} on:save={handleSave} on:remove={handleRemove} />
+      </div>
+    </Form>
+  {/if}
+</PageCard>

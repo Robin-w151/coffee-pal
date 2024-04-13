@@ -1,33 +1,18 @@
 <script lang="ts">
-  import type { ActiveCoffeeEntry, MyCoffeesState } from '$lib/models/myCoffees';
+  import { goto } from '$app/navigation';
+  import { MY_COFFEES_PAGE_SIZE } from '$lib/config/myCoffees';
+  import type { MyCoffeesState } from '$lib/models/myCoffees';
   import { myCoffeesSearchStore, myCoffeesStore } from '$lib/stores/myCoffees';
   import { syncAvailabilityStore } from '$lib/stores/syncAvailability';
   import { syncStateStore } from '$lib/stores/syncState';
   import { sync } from '$lib/utils/sync';
-  import { ModalHelper } from '$lib/utils/ui/modal';
-  import { ToastHelper } from '$lib/utils/ui/toast';
-  import {
-    getModalStore,
-    getToastStore,
-    Paginator,
-    type PaginationSettings,
-  } from '@skeletonlabs/skeleton';
-  import { onDestroy } from 'svelte';
+  import { Paginator, type PaginationSettings } from '@skeletonlabs/skeleton';
   import PageActions from '../ui/elements/page/PageActions.svelte';
   import PageCard from '../ui/elements/page/PageCard.svelte';
   import PageSearch from '../ui/elements/page/PageSearch.svelte';
   import CoffeeEntries from './CoffeeEntries.svelte';
-  import CoffeeEntryModal from './CoffeeEntryModal.svelte';
-  import { MY_COFFEES_PAGE_SIZE } from '$lib/config/myCoffees';
-
-  const modalHelper = new ModalHelper(getModalStore());
-  const toastHelper = new ToastHelper(getToastStore());
 
   $: paginationSettings = getPaginationSettings($myCoffeesStore);
-
-  onDestroy(() => {
-    myCoffeesSearchStore.reset();
-  });
 
   function getPaginationSettings({ page, totalEntries }: MyCoffeesState): PaginationSettings {
     return {
@@ -51,33 +36,11 @@
   }
 
   function handleAddClick(): void {
-    modalHelper.triggerModal(CoffeeEntryModal, { response: handleModalEntryAdd });
+    goto('/my-coffees/new');
   }
 
   function handleSyncClick(): void {
     sync();
-  }
-
-  function handleModalEntryAdd(entry: ActiveCoffeeEntry): void {
-    if (entry) {
-      myCoffeesStore.add(entry);
-    }
-  }
-
-  function handleEntryUpdate({ detail: entry }: CustomEvent<ActiveCoffeeEntry>): void {
-    myCoffeesStore.update(entry);
-  }
-
-  function handleEntryRemove({ detail: id }: CustomEvent<string>): void {
-    toastHelper.triggerInfo('Did you click to fast?', {
-      timeout: 15000,
-      action: {
-        label: 'Undo',
-        response: () => myCoffeesStore.undo(id),
-      },
-    });
-
-    myCoffeesStore.remove(id);
   }
 </script>
 
@@ -89,13 +52,14 @@
 />
 <PageSearch
   title="My Coffees"
+  search={$myCoffeesSearchStore.filter}
   sort={$myCoffeesSearchStore.sort}
   isLoading={$myCoffeesStore.isLoading}
   on:searchChange={handleSearchChange}
   on:sortToggle={handleSortToggle}
 />
 <PageCard class="page-with-actions-token">
-  <CoffeeEntries {...$myCoffeesStore} on:update={handleEntryUpdate} on:remove={handleEntryRemove} />
+  <CoffeeEntries {...$myCoffeesStore} />
   {#if $myCoffeesStore.totalEntries}
     <Paginator
       settings={paginationSettings}

@@ -1,17 +1,9 @@
 <script lang="ts">
   import type { ActiveCoffeeEntry } from '$lib/models/myCoffees';
   import { faEye } from '@fortawesome/free-solid-svg-icons';
-  import { createEventDispatcher } from 'svelte';
   import { Icon } from 'svelte-awesome';
 
   export let entry: ActiveCoffeeEntry;
-
-  const dispatch = createEventDispatcher();
-
-  function handleUpdateClick(): void {
-    const copy = { ...entry, aromas: [...entry.aromas] };
-    dispatch('update', copy);
-  }
 
   function details(entry: ActiveCoffeeEntry): string {
     const { variety, process, trader } = entry;
@@ -29,13 +21,9 @@
     </dd>
   </span>
   <span class="flex gap-2">
-    <button
-      class="btn btn-icon hover:variant-soft-secondary"
-      title="Show"
-      on:click={handleUpdateClick}
-    >
+    <a class="btn btn-icon hover:variant-soft-secondary" title="Show" href="/my-coffees/{entry.id}">
       <Icon data={faEye} />
       <span class="sr-only">Show</span>
-    </button>
+    </a>
   </span>
 </div>

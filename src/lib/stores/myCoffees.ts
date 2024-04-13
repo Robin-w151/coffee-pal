@@ -26,6 +26,7 @@ export interface MyCoffeesSearchStore extends Observable<MyCoffeesSearchState> {
 export interface MyCoffeesStore extends Readable<MyCoffeesState> {
   loadAll: () => Promise<Array<CoffeeEntry>>;
   loadPage: (page: number) => Promise<void>;
+  loadOne: (id: string) => Promise<ActiveCoffeeEntry | undefined>;
   quickSearch: (filter?: string) => Promise<Array<ActiveCoffeeEntry>>;
   add: (entry: ActiveCoffeeEntry) => void;
   update: (entry: ActiveCoffeeEntry) => void;
@@ -119,6 +120,13 @@ function createMyCoffeesStore(myCoffeesSearchStore: MyCoffeesSearchStore): MyCof
     }
   }
 
+  async function loadOneEntry(id: string): Promise<ActiveCoffeeEntry | undefined> {
+    const entry = await myCoffeesDb?.entries.get(id);
+    if (isActiveCoffeeEntry(entry)) {
+      return entry;
+    }
+  }
+
   async function quickSearchEntries(filter?: string): Promise<Array<ActiveCoffeeEntry>> {
     const entries = (await myCoffeesDb?.entries.toArray())?.filter(isActiveCoffeeEntry);
     if (entries) {
@@ -180,6 +188,7 @@ function createMyCoffeesStore(myCoffeesSearchStore: MyCoffeesSearchStore): MyCof
   const myCoffeesStore = subject as unknown as MyCoffeesStore;
   myCoffeesStore.loadAll = loadAllEntries;
   myCoffeesStore.loadPage = loadPageEntries;
+  myCoffeesStore.loadOne = loadOneEntry;
   myCoffeesStore.quickSearch = quickSearchEntries;
   myCoffeesStore.add = addEntry;
   myCoffeesStore.update = updateEntry;
