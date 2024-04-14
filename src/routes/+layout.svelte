@@ -44,16 +44,41 @@
   {/if}
 </Drawer>
 
-<AppShell>
+<AppShell slotHeader="fixed w-full">
   <svelte:fragment slot="header">
     <AppBar />
   </svelte:fragment>
-  <div class="hidden md:block h-full" slot="sidebarLeft">
+  <div class="app-rail" slot="sidebarLeft">
     <AppRail />
   </div>
-  <div class="flex justify-center p-4">
+  <div class="app-content">
     <div class="flex flex-col items-center gap-4 w-full max-w-screen-lg">
       <slot />
     </div>
   </div>
 </AppShell>
+
+<style lang="scss">
+  .app-rail {
+    display: none;
+    position: fixed;
+    margin-top: 64px;
+    height: calc(100dvh - 64px);
+
+    @media screen and (width > 768px) {
+      display: block;
+    }
+  }
+
+  .app-content {
+    display: flex;
+    justify-content: center;
+    margin-top: 59px;
+    padding: 1rem;
+
+    @media screen and (width > 768px) {
+      margin-top: 64px;
+      margin-left: 80px;
+    }
+  }
+</style>
