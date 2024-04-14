@@ -70,7 +70,7 @@ test('entry edit', async ({ journalPage, journalEntryDetailPage }) => {
 test('entry edit cancel', async ({ journalPage, journalEntryDetailPage }) => {
   await journalPage.clickJournalEntryShowButton(1);
   await journalEntryDetailPage.methodInput.fill('');
-  await journalEntryDetailPage.clickCloseButton();
+  await journalEntryDetailPage.clickBackButton();
 
   await expect(journalPage.getJournalEntryTitle(1)).toHaveText('PuckPuck - Äthiopien Chelbesa');
 });

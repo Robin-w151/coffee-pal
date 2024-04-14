@@ -4,7 +4,7 @@ export class MyCoffeesEntryDetailPage {
   constructor(private readonly page: Page) {}
 
   get header(): Locator {
-    return this.page.getByRole('heading', { name: 'Coffee Entry' });
+    return this.page.getByRole('heading', { name: 'New Entry' });
   }
 
   get nameInput(): Locator {
@@ -43,7 +43,7 @@ export class MyCoffeesEntryDetailPage {
     await this.page.getByRole('button', { name: 'Delete' }).click();
   }
 
-  async clickCloseButton(): Promise<void> {
-    await this.page.getByRole('button', { name: 'Close' }).click();
+  async clickBackButton(): Promise<void> {
+    await this.page.getByRole('button', { name: 'Go back' }).click();
   }
 }

@@ -4,7 +4,7 @@ export class JournalEntryDetailPage {
   constructor(private readonly page: Page) {}
 
   get header(): Locator {
-    return this.page.getByRole('heading', { name: 'Journal Entry' });
+    return this.page.getByRole('heading', { name: 'New Entry' });
   }
 
   get methodInput(): Locator {
@@ -47,7 +47,7 @@ export class JournalEntryDetailPage {
     await this.page.getByRole('button', { name: 'Delete' }).click();
   }
 
-  async clickCloseButton(): Promise<void> {
-    await this.page.getByRole('button', { name: 'Close' }).click();
+  async clickBackButton(): Promise<void> {
+    await this.page.getByRole('button', { name: 'Go back' }).click();
   }
 }

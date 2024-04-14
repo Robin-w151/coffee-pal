@@ -75,7 +75,7 @@ test('entry edit', async ({ myCoffeesPage, myCoffeesEntryDetailPage }) => {
 test('entry edit cancel', async ({ myCoffeesPage, myCoffeesEntryDetailPage }) => {
   await myCoffeesPage.clickJournalEntryShowButton(1);
   await myCoffeesEntryDetailPage.traderInput.fill('');
-  await myCoffeesEntryDetailPage.clickCloseButton();
+  await myCoffeesEntryDetailPage.clickBackButton();
 
   await expect(myCoffeesPage.getCoffeeEntryDetail(1)).toHaveText('Washed | Blasercafe');
 });
