@@ -140,11 +140,11 @@ async function captureDripCounter() {
 }
 
 async function addJournalEntry(
-  { method, water, waterTemperature, coffee, coffeeType, grindSettings, description } = {},
+  { method, water, waterTemperature, coffee, coffeeType, grindSettings, description },
   screenshot = false,
 ) {
   await clickAddButton();
-  await expect(page.getByText('Journal Entry', { exact: true })).toBeVisible();
+  await expect(page.getByText('New Entry', { exact: true })).toBeVisible();
 
   const methodInput = page.getByLabel('brew method');
   await methodInput.fill(method);
@@ -169,17 +169,9 @@ async function addJournalEntry(
   await page.waitForTimeout(250);
 }
 
-async function addCoffeeEntry({
-  name,
-  origin,
-  process,
-  variety,
-  trader,
-  aromas,
-  description,
-} = {}) {
+async function addCoffeeEntry({ name, origin, process, variety, trader, aromas, description }) {
   await clickAddButton();
-  await expect(page.getByText('Coffee Entry', { exact: true })).toBeVisible();
+  await expect(page.getByText('New Entry', { exact: true })).toBeVisible();
 
   await page.getByLabel('name').fill(name);
   await page.getByLabel('origin').fill(origin);
