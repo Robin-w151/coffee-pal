@@ -16,6 +16,10 @@
   font-weight: bold;
 }
 
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
 /* Mesh generator: https://csshero.org/mesher/ */
 [data-theme='coffee'] {
   background-color: hsla(224, 20%, 88%, 1);
