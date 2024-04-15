@@ -46,7 +46,7 @@
 // AppShell overrides
 
 body {
-  @apply bg-surface-50-900-token;
+  @apply bg-surface-50-900-token overflow-x-hidden;
 }
 
 // Modal overrides
