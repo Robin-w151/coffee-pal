@@ -58,14 +58,14 @@
   </div>
 </AppShell>
 
-<style lang="scss">
+<style lang="postcss">
   .app-rail {
     display: none;
     position: fixed;
     margin-top: 64px;
     height: calc(100dvh - 64px);
 
-    @media screen and (width > 768px) {
+    @media screen and (width > theme('screens.md')) {
       display: block;
     }
   }
@@ -76,7 +76,7 @@
     margin-top: 59px;
     padding: 1rem;
 
-    @media screen and (width > 768px) {
+    @media screen and (width > theme('screens.md')) {
       margin-top: 64px;
       margin-left: 80px;
     }
