@@ -11,6 +11,7 @@
   import PageCard from '../ui/elements/page/PageCard.svelte';
   import PageSearch from '../ui/elements/page/PageSearch.svelte';
   import CoffeeEntries from './CoffeeEntries.svelte';
+  import { scrollToTop } from '$lib/utils/ui/scroll';
 
   $: paginationSettings = getPaginationSettings($myCoffeesStore);
 
@@ -33,6 +34,7 @@
 
   function handlePageChange({ detail: page }: CustomEvent<number>): void {
     myCoffeesStore.loadPage(page);
+    scrollToTop();
   }
 
   function handleAddClick(): void {

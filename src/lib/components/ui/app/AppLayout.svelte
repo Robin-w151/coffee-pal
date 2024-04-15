@@ -20,12 +20,12 @@
   import { pwaInfo } from 'virtual:pwa-info';
   import '../../../../app.scss';
   import { page } from '$app/stores';
+  import { rememberScrollPosition, scrollToLastKnownPosition } from '$lib/utils/ui/scroll';
 
   initializeStores();
   storePopup.set({ computePosition, autoUpdate, offset, shift, flip, arrow });
 
   const drawerStore = getDrawerStore();
-  const scrollPositions = new Map<string, number>();
 
   $: webManifestLink = pwaInfo ? pwaInfo.webManifest.linkTag : '';
 
@@ -37,12 +37,12 @@
     const isNewPage = params.from?.url.pathname !== params.to?.url.pathname;
     const elemPage = document.querySelector('#page');
     if (isNewPage && elemPage !== null) {
-      elemPage.scrollTop = scrollPositions.get(params.to?.url.pathname ?? '') ?? 0;
+      scrollToLastKnownPosition(params.to?.url.pathname);
     }
   });
 
   function handleAppShellScroll(event: ComponentEvents<AppShell>['scroll']): void {
-    scrollPositions.set($page.url.pathname, event.currentTarget.scrollTop);
+    rememberScrollPosition($page.url.pathname, event.currentTarget.scrollTop);
   }
 </script>
 

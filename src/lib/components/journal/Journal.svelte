@@ -28,6 +28,7 @@
   import PageCard from '../ui/elements/page/PageCard.svelte';
   import PageSearch from '../ui/elements/page/PageSearch.svelte';
   import JournalEntries from './JournalEntries.svelte';
+  import { scrollToTop } from '$lib/utils/ui/scroll';
 
   const sortOptions = [
     {
@@ -82,6 +83,7 @@
 
   function handlePageChange({ detail: page }: CustomEvent<number>): void {
     journalStore.loadPage(page);
+    scrollToTop();
   }
 
   function handleAddClick(): void {
