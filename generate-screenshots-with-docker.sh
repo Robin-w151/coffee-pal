@@ -10,7 +10,7 @@ checkIsInstalled() {
 
 checkIsInstalled docker
 
-dockerfileName=screenshots.Dockerfile
+dockerfileName=d.screenshots.Dockerfile
 imageName=coffee-pal-screenshots
 
 docker build -t $imageName -f $dockerfileName .

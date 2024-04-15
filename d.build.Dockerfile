@@ -1,10 +1,10 @@
-FROM oven/bun AS build-stage
+FROM oven/bun:debian AS build-stage
 
-RUN apt update && apt install -yq git
+RUN apt update && apt install -yq git && apt-get clean
 
 WORKDIR /app/
 
-COPY package.json yarn.lock .npmrc /app/
+COPY package.json pnpm-lock.yaml .npmrc /app/
 
 RUN bun install
 
@@ -19,7 +19,7 @@ RUN bunx svelte-kit sync
 RUN bun run build
 
 
-FROM oven/bun AS deploy-stage
+FROM oven/bun:debian AS deploy-stage
 
 WORKDIR /app/
 

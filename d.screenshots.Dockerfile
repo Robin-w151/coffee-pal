@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/playwright:v1.39.0-jammy
+FROM mcr.microsoft.com/playwright:v1.43.1-jammy
 
 RUN npm i -g playwright @playwright/test
 
