@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { afterNavigate } from '$app/navigation';
   import AppBar from '$lib/components/ui/app/AppBar.svelte';
   import AppMenu from '$lib/components/ui/app/AppMenu.svelte';
   import AppRail from '$lib/components/ui/app/AppRail.svelte';
@@ -14,9 +15,10 @@
     initializeStores,
     storePopup,
   } from '@skeletonlabs/skeleton';
+  import type { AfterNavigate } from '@sveltejs/kit';
+  import { onMount } from 'svelte';
   import { pwaInfo } from 'virtual:pwa-info';
   import '../app.scss';
-  import { onMount } from 'svelte';
 
   initializeStores();
   storePopup.set({ computePosition, autoUpdate, offset, shift, flip, arrow });
@@ -26,6 +28,14 @@
 
   onMount(() => {
     document.documentElement.setAttribute('data-test', 'ready');
+  });
+
+  afterNavigate((params: AfterNavigate) => {
+    const isNewPage = params.from?.url.pathname !== params.to?.url.pathname;
+    const elemPage = document.querySelector('#page');
+    if (isNewPage && elemPage !== null) {
+      elemPage.scrollTop = 0;
+    }
   });
 </script>
 
@@ -44,41 +54,16 @@
   {/if}
 </Drawer>
 
-<AppShell slotHeader="fixed w-full z-20">
+<AppShell scrollbarGutter="stable">
   <svelte:fragment slot="header">
     <AppBar />
   </svelte:fragment>
-  <div class="app-rail" slot="sidebarLeft">
+  <div class="hidden md:block h-full" slot="sidebarLeft">
     <AppRail />
   </div>
-  <div class="app-content">
+  <div class="flex justify-center p-4">
     <div class="flex flex-col items-center gap-4 w-full max-w-screen-lg">
       <slot />
     </div>
   </div>
 </AppShell>
-
-<style lang="postcss">
-  .app-rail {
-    display: none;
-    position: fixed;
-    margin-top: 64px;
-    height: calc(100dvh - 64px);
-
-    @media screen and (width >= theme('screens.md')) {
-      display: block;
-    }
-  }
-
-  .app-content {
-    display: flex;
-    justify-content: center;
-    margin-top: 59px;
-    padding: 1rem;
-
-    @media screen and (width >= theme('screens.md')) {
-      margin-top: 64px;
-      margin-left: 80px;
-    }
-  }
-</style>
