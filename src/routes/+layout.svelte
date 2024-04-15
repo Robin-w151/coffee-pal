@@ -44,7 +44,7 @@
   {/if}
 </Drawer>
 
-<AppShell slotHeader="fixed w-full">
+<AppShell slotHeader="fixed w-full z-20">
   <svelte:fragment slot="header">
     <AppBar />
   </svelte:fragment>
