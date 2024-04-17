@@ -21,6 +21,8 @@
     "postpack": "pinst --enable"
   },
   "devDependencies": {
+    "@commitlint/cli": "^19.2.2",
+    "@commitlint/config-conventional": "^19.2.2",
     "@exodus/schemasafe": "^1.3.0",
     "@floating-ui/dom": "^1.6.3",
     "@fortawesome/free-brands-svg-icons": "^6.5.2",
