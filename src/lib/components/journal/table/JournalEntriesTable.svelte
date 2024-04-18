@@ -2,8 +2,8 @@
   import type { ActiveJournalEntry } from '$lib/models/journal';
   import { faFaceSadCry } from '@fortawesome/free-solid-svg-icons';
   import { Icon } from 'svelte-awesome';
-  import JournalEntryCellPlaceholder from './JournalEntryPlaceholder.svelte';
   import JournalEntryItem from './JournalEntryItem.svelte';
+  import JournalEntryPlaceholder from './JournalEntryPlaceholder.svelte';
 
   export let entries: Array<ActiveJournalEntry>;
   export let totalEntries = 0;
@@ -22,11 +22,11 @@
   </thead>
   <tbody>
     {#if isLoading && (!entries || entries.length === 0)}
-      <JournalEntryCellPlaceholder />
-      <JournalEntryCellPlaceholder />
-      <JournalEntryCellPlaceholder />
-      <JournalEntryCellPlaceholder />
-      <JournalEntryCellPlaceholder />
+      <JournalEntryPlaceholder />
+      <JournalEntryPlaceholder />
+      <JournalEntryPlaceholder />
+      <JournalEntryPlaceholder />
+      <JournalEntryPlaceholder />
     {:else}
       {#each entries as entry (entry.id)}
         <JournalEntryItem {entry} />
