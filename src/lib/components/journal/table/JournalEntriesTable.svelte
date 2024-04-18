@@ -21,7 +21,7 @@
     </tr>
   </thead>
   <tbody>
-    {#if (isLoading && !entries) || entries.length === 0}
+    {#if isLoading && (!entries || entries.length === 0)}
       <JournalEntryCellPlaceholder />
       <JournalEntryCellPlaceholder />
       <JournalEntryCellPlaceholder />
