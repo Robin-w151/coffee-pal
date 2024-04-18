@@ -131,10 +131,14 @@
 </PageSearch>
 <PageCard class="page-with-actions-token">
   <div class="md:hidden">
-    <JournalEntries {...$journalStore} />
+    <JournalEntries entries={$journalStore.entries} isLoading={$journalStore.isLoading} />
   </div>
   <div class="max-md:hidden">
-    <JournalEntriesTable {...$journalStore} totalEntries={paginationSettings.size} />
+    <JournalEntriesTable
+      entries={$journalStore.entries}
+      totalEntries={paginationSettings.size}
+      isLoading={$journalStore.isLoading}
+    />
   </div>
   {#if $journalStore.totalEntries}
     <Paginator
