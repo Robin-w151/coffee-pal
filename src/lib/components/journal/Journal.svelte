@@ -15,6 +15,7 @@
   import { syncAvailabilityStore } from '$lib/stores/syncAvailability';
   import { syncStateStore } from '$lib/stores/syncState';
   import { sync } from '$lib/utils/sync';
+  import { scrollToTop } from '$lib/utils/ui/scroll';
   import {
     faArrowUpAZ,
     faArrowUpZA,
@@ -27,8 +28,8 @@
   import PageActions from '../ui/elements/page/PageActions.svelte';
   import PageCard from '../ui/elements/page/PageCard.svelte';
   import PageSearch from '../ui/elements/page/PageSearch.svelte';
-  import JournalEntries from './JournalEntries.svelte';
-  import { scrollToTop } from '$lib/utils/ui/scroll';
+  import JournalEntries from './list/JournalEntries.svelte';
+  import JournalEntriesTable from './table/JournalEntriesTable.svelte';
 
   const sortOptions = [
     {
@@ -129,7 +130,12 @@
   </ListBox>
 </PageSearch>
 <PageCard class="page-with-actions-token">
-  <JournalEntries {...$journalStore} />
+  <div class="md:hidden">
+    <JournalEntries {...$journalStore} />
+  </div>
+  <div class="max-md:hidden">
+    <JournalEntriesTable {...$journalStore} totalEntries={paginationSettings.size} />
+  </div>
   {#if $journalStore.totalEntries}
     <Paginator
       settings={paginationSettings}
