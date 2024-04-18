@@ -10,8 +10,9 @@
   import PageActions from '../ui/elements/page/PageActions.svelte';
   import PageCard from '../ui/elements/page/PageCard.svelte';
   import PageSearch from '../ui/elements/page/PageSearch.svelte';
-  import CoffeeEntries from './CoffeeEntries.svelte';
+  import CoffeeEntries from './list/CoffeeEntries.svelte';
   import { scrollToTop } from '$lib/utils/ui/scroll';
+  import CoffeeEntriesTable from './table/CoffeeEntriesTable.svelte';
 
   $: paginationSettings = getPaginationSettings($myCoffeesStore);
 
@@ -61,7 +62,16 @@
   on:sortToggle={handleSortToggle}
 />
 <PageCard class="page-with-actions-token">
-  <CoffeeEntries {...$myCoffeesStore} />
+  <div class="md:hidden">
+    <CoffeeEntries entries={$myCoffeesStore.entries} isLoading={$myCoffeesStore.isLoading} />
+  </div>
+  <div class="max-md:hidden">
+    <CoffeeEntriesTable
+      entries={$myCoffeesStore.entries}
+      totalEntries={paginationSettings.size}
+      isLoading={$myCoffeesStore.isLoading}
+    />
+  </div>
   {#if $myCoffeesStore.totalEntries}
     <Paginator
       settings={paginationSettings}
