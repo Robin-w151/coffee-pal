@@ -9,7 +9,7 @@ export class JournalPage {
   }
 
   get emptyMessage(): Locator {
-    return this.page.getByText('could not find any entries');
+    return this.page.getByText('could not find any entries').first();
   }
 
   getJournalEntry(entry: number): Locator {
