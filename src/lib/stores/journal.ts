@@ -91,13 +91,17 @@ function createJournalStore(journalSearchStore: JournalSearchStore): JournalStor
         switchMap((search) => createQuery(db, search)),
         tap((result) => {
           const { data: entries, totalEntries } = result;
-          subject.next({
-            ...subject.value,
-            entries,
-            totalEntries,
-            isLoading: false,
-            page: 0,
-          });
+          const page = subject.value.page;
+          if (page) {
+            loadPageEntries(page);
+          } else {
+            subject.next({
+              ...subject.value,
+              entries,
+              totalEntries,
+              isLoading: false,
+            });
+          }
         }),
       )
       .subscribe();
@@ -116,6 +120,7 @@ function createJournalStore(journalSearchStore: JournalSearchStore): JournalStor
         ...subject.value,
         entries,
         page,
+        isLoading: false,
       });
     }
   }
