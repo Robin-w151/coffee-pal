@@ -11,9 +11,9 @@
 
 <dl class="list-dl">
   {#if isLoading && (!entries || entries.length === 0)}
-    <JournalEntryPlaceholder />
-    <JournalEntryPlaceholder />
-    <JournalEntryPlaceholder />
+    {#each { length: 3 } as _}
+      <JournalEntryPlaceholder />
+    {/each}
   {:else}
     {#each entries as entry (entry.id)}
       <JournalEntryItem {entry} />

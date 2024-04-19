@@ -11,9 +11,9 @@
 
 <dl class="list-dl">
   {#if isLoading && (!entries || entries.length === 0)}
-    <CoffeeEntryPlaceholder />
-    <CoffeeEntryPlaceholder />
-    <CoffeeEntryPlaceholder />
+    {#each { length: 3 } as _}
+      <CoffeeEntryPlaceholder />
+    {/each}
   {:else}
     {#each entries as entry (entry.id)}
       <CoffeeEntryItem {entry} />

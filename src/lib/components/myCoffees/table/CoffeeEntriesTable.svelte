@@ -23,11 +23,9 @@
     </thead>
     <tbody>
       {#if isLoading && (!entries || entries.length === 0)}
-        <CoffeeEntryPlaceholder />
-        <CoffeeEntryPlaceholder />
-        <CoffeeEntryPlaceholder />
-        <CoffeeEntryPlaceholder />
-        <CoffeeEntryPlaceholder />
+        {#each { length: 5 } as _}
+          <CoffeeEntryPlaceholder />
+        {/each}
       {:else}
         {#each entries as entry (entry.id)}
           <CoffeeEntryItem {entry} />

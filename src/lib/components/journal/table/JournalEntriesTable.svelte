@@ -22,11 +22,9 @@
     </thead>
     <tbody>
       {#if isLoading && (!entries || entries.length === 0)}
-        <JournalEntryPlaceholder />
-        <JournalEntryPlaceholder />
-        <JournalEntryPlaceholder />
-        <JournalEntryPlaceholder />
-        <JournalEntryPlaceholder />
+        {#each { length: 5 } as _}
+          <JournalEntryPlaceholder />
+        {/each}
       {:else}
         {#each entries as entry (entry.id)}
           <JournalEntryItem {entry} />
