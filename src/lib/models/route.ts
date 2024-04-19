@@ -6,4 +6,5 @@ export interface Route {
   label: string;
   icon: IconDefinition;
   shortcutIcon: IconResource;
+  match?: RegExp;
 }

@@ -18,6 +18,7 @@ export const routes: Array<Route> = [
       type: 'image/png',
       purpose: 'any',
     },
+    match: /^(\/|\/journal.*)$/,
   },
   {
     href: '/my-coffees',
@@ -29,6 +30,7 @@ export const routes: Array<Route> = [
       type: 'image/png',
       purpose: 'any',
     },
+    match: /^\/my-coffees.*$/,
   },
   {
     href: '/calculator',
