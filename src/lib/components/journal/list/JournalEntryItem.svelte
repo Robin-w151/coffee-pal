@@ -1,8 +1,12 @@
 <script lang="ts">
   import type { ActiveJournalEntry } from '$lib/models/journal';
   import { settingsStore } from '$lib/stores/settings';
-  import { calculateRatio, round } from '$lib/utils/math';
-  import { getPreferredTemperatureUnit, getPreferredWeightUnit } from '$lib/utils/units';
+  import { calculateRatio } from '$lib/utils/math';
+  import {
+    getDisplayValue,
+    getPreferredTemperatureUnit,
+    getPreferredWeightUnit,
+  } from '$lib/utils/units';
   import { faEye } from '@fortawesome/free-solid-svg-icons';
   import { Icon } from 'svelte-awesome';
 
@@ -15,13 +19,9 @@
 
   function details(entry: ActiveJournalEntry): string {
     const { water, coffee, waterTemperature, grindSettings, description } = entry;
-    const amountsStr = `${round(preferredWeightUnit.conversion.fromBase(water))}${
-      preferredWeightUnit.label
-    }/${round(preferredWeightUnit.conversion.fromBase(coffee))}${preferredWeightUnit.label}`;
+    const amountsStr = `${getDisplayValue(water, preferredWeightUnit)}/${getDisplayValue(coffee, preferredWeightUnit)}`;
     const waterTemperatureStr = waterTemperature
-      ? `${round(preferredTemperatureUnit.conversion.fromBase(waterTemperature))} ${
-          preferredTemperatureUnit.label
-        }`
+      ? getDisplayValue(waterTemperature, preferredTemperatureUnit, true)
       : undefined;
 
     return [amountsStr, waterTemperatureStr, grindSettings, description]

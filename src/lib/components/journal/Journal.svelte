@@ -1,10 +1,14 @@
 <script lang="ts" context="module">
+  import { screens } from '$lib/config/screens';
+
   interface SortOption {
     label: string;
     icon: IconDefinition;
     sort: JournalSort;
     sortDirection: JournalSortDirection;
   }
+
+  const screenMd = parseInt(screens.md);
 </script>
 
 <script lang="ts">
@@ -15,6 +19,7 @@
   import { syncAvailabilityStore } from '$lib/stores/syncAvailability';
   import { syncStateStore } from '$lib/stores/syncState';
   import { sync } from '$lib/utils/sync';
+  import { scrollToTop } from '$lib/utils/ui/scroll';
   import {
     faArrowUpAZ,
     faArrowUpZA,
@@ -22,13 +27,13 @@
     faCheck,
     type IconDefinition,
   } from '@fortawesome/free-solid-svg-icons';
-  import { ListBox, ListBoxItem, Paginator, type PaginationSettings } from '@skeletonlabs/skeleton';
+  import { ListBox, ListBoxItem, type PaginationSettings } from '@skeletonlabs/skeleton';
   import { Icon } from 'svelte-awesome';
   import PageActions from '../ui/elements/page/PageActions.svelte';
   import PageCard from '../ui/elements/page/PageCard.svelte';
   import PageSearch from '../ui/elements/page/PageSearch.svelte';
-  import JournalEntries from './JournalEntries.svelte';
-  import { scrollToTop } from '$lib/utils/ui/scroll';
+  import JournalEntries from './list/JournalEntries.svelte';
+  import JournalEntriesTable from './table/JournalEntriesTable.svelte';
 
   const sortOptions = [
     {
@@ -52,6 +57,7 @@
   ] satisfies Array<SortOption>;
 
   let selectedSortOption = getActiveSortOption().label;
+  let innerWidth = 0;
 
   $: paginationSettings = getPaginationSettings($journalStore);
 
@@ -95,6 +101,8 @@
   }
 </script>
 
+<svelte:window bind:innerWidth />
+
 <PageActions
   isSyncEnabled={$syncAvailabilityStore.isAvailable}
   isSynchronizing={$syncStateStore.isSynchronizing}
@@ -129,13 +137,20 @@
   </ListBox>
 </PageSearch>
 <PageCard class="page-with-actions-token">
-  <JournalEntries {...$journalStore} />
-  {#if $journalStore.totalEntries}
-    <Paginator
-      settings={paginationSettings}
-      showFirstLastButtons
-      showPreviousNextButtons
-      justify="justify-center"
+  {#if innerWidth > screenMd}
+    <JournalEntriesTable
+      entries={$journalStore.entries}
+      totalEntries={paginationSettings.size}
+      isLoading={$journalStore.isLoading}
+      {paginationSettings}
+      on:page={handlePageChange}
+    />
+  {:else}
+    <JournalEntries
+      entries={$journalStore.entries}
+      totalEntries={paginationSettings.size}
+      isLoading={$journalStore.isLoading}
+      {paginationSettings}
       on:page={handlePageChange}
     />
   {/if}

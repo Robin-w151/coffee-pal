@@ -1,3 +1,9 @@
+<script lang="ts" context="module">
+  import { screens } from '$lib/config/screens';
+
+  const screenMd = parseInt(screens.md);
+</script>
+
 <script lang="ts">
   import { goto } from '$app/navigation';
   import { MY_COFFEES_PAGE_SIZE } from '$lib/config/myCoffees';
@@ -6,12 +12,15 @@
   import { syncAvailabilityStore } from '$lib/stores/syncAvailability';
   import { syncStateStore } from '$lib/stores/syncState';
   import { sync } from '$lib/utils/sync';
-  import { Paginator, type PaginationSettings } from '@skeletonlabs/skeleton';
+  import { scrollToTop } from '$lib/utils/ui/scroll';
+  import { type PaginationSettings } from '@skeletonlabs/skeleton';
   import PageActions from '../ui/elements/page/PageActions.svelte';
   import PageCard from '../ui/elements/page/PageCard.svelte';
   import PageSearch from '../ui/elements/page/PageSearch.svelte';
-  import CoffeeEntries from './CoffeeEntries.svelte';
-  import { scrollToTop } from '$lib/utils/ui/scroll';
+  import CoffeeEntries from './list/CoffeeEntries.svelte';
+  import CoffeeEntriesTable from './table/CoffeeEntriesTable.svelte';
+
+  let innerWidth = 0;
 
   $: paginationSettings = getPaginationSettings($myCoffeesStore);
 
@@ -46,6 +55,8 @@
   }
 </script>
 
+<svelte:window bind:innerWidth />
+
 <PageActions
   isSyncEnabled={$syncAvailabilityStore.isAvailable}
   isSynchronizing={$syncStateStore.isSynchronizing}
@@ -61,13 +72,20 @@
   on:sortToggle={handleSortToggle}
 />
 <PageCard class="page-with-actions-token">
-  <CoffeeEntries {...$myCoffeesStore} />
-  {#if $myCoffeesStore.totalEntries}
-    <Paginator
-      settings={paginationSettings}
-      showFirstLastButtons
-      showPreviousNextButtons
-      justify="justify-center"
+  {#if innerWidth > screenMd}
+    <CoffeeEntriesTable
+      entries={$myCoffeesStore.entries}
+      totalEntries={paginationSettings.size}
+      isLoading={$myCoffeesStore.isLoading}
+      {paginationSettings}
+      on:page={handlePageChange}
+    />
+  {:else}
+    <CoffeeEntries
+      entries={$myCoffeesStore.entries}
+      totalEntries={paginationSettings.size}
+      isLoading={$myCoffeesStore.isLoading}
+      {paginationSettings}
       on:page={handlePageChange}
     />
   {/if}

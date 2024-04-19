@@ -68,6 +68,18 @@ body {
   @apply h-full;
 }
 
+// Table overrides
+
+.table {
+  @apply rounded-md;
+
+  tbody {
+    tr:nth-child(2n) {
+      @apply bg-surface-200-700-token;
+    }
+  }
+}
+
 // Custom design tokens
 
 .autocomplete-token {

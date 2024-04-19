@@ -9,7 +9,7 @@ export class MyCoffeesPage {
   }
 
   get emptyMessage(): Locator {
-    return this.page.getByText('could not find any coffees');
+    return this.page.getByText('could not find any coffees').first();
   }
 
   getCoffeeEntry(entry: number): Locator {
