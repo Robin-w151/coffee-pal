@@ -12,8 +12,8 @@
   import { FileDropzone, getToastStore } from '@skeletonlabs/skeleton';
   import { DateTime } from 'luxon';
   import { Icon } from 'svelte-awesome';
-  import Spinner from '../ui/elements/Spinner.svelte';
-  import Form from '../ui/elements/form/Form.svelte';
+  import Spinner from '../shared/elements/Spinner.svelte';
+  import Form from '../shared/elements/form/Form.svelte';
 
   const toastHelper = new ToastHelper(getToastStore());
 

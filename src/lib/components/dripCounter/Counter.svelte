@@ -2,7 +2,7 @@
   import { DRIP_INSTANTS_COUNT } from '$lib/config/dripCounter';
   import { calculateDripRate } from '$lib/services/dripCounter/dripRate';
   import { clsx } from '$lib/utils/ui/clsx';
-  import Card from '../ui/elements/Card.svelte';
+  import Card from '../shared/elements/Card.svelte';
 
   export let dropsPerMinute = 0;
   export let isWithinRange = false;

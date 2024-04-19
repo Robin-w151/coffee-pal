@@ -2,7 +2,7 @@
   import type { ColorScheme } from '$lib/models/settings';
   import { settingsStore } from '$lib/stores/settings';
   import { RadioGroup, RadioItem } from '@skeletonlabs/skeleton';
-  import Label from '../ui/elements/form/Label.svelte';
+  import Label from '../shared/elements/form/Label.svelte';
 
   let colorScheme: ColorScheme = $settingsStore.colorScheme;
 

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Label from '$lib/components/ui/elements/form/Label.svelte';
+  import Label from '$lib/components/shared/elements/form/Label.svelte';
 
   export let grindSettings: string | undefined;
 

@@ -1,6 +1,6 @@
 <script lang="ts">
-  import Label from '$lib/components/ui/elements/form/Label.svelte';
-  import MeasurementInput from '$lib/components/ui/elements/form/MeasurementInput.svelte';
+  import Label from '$lib/components/shared/elements/form/Label.svelte';
+  import MeasurementInput from '$lib/components/shared/elements/form/MeasurementInput.svelte';
   import { TEMPERATURE_UNITS } from '$lib/config/units';
   import type { Measurement } from '$lib/models/measurement';
   import { settingsStore } from '$lib/stores/settings';

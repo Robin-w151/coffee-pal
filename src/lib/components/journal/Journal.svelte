@@ -29,9 +29,9 @@
   } from '@fortawesome/free-solid-svg-icons';
   import { ListBox, ListBoxItem, type PaginationSettings } from '@skeletonlabs/skeleton';
   import { Icon } from 'svelte-awesome';
-  import PageActions from '../ui/elements/page/PageActions.svelte';
-  import PageCard from '../ui/elements/page/PageCard.svelte';
-  import PageSearch from '../ui/elements/page/PageSearch.svelte';
+  import PageActions from '../shared/elements/page/PageActions.svelte';
+  import PageCard from '../shared/elements/page/PageCard.svelte';
+  import PageSearch from '../shared/elements/page/PageSearch.svelte';
   import JournalEntries from './list/JournalEntries.svelte';
   import JournalEntriesTable from './table/JournalEntriesTable.svelte';
 

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Label from '$lib/components/ui/elements/form/Label.svelte';
+  import Label from '$lib/components/shared/elements/form/Label.svelte';
   import type { ActiveCoffeeEntry } from '$lib/models/myCoffees';
   import { myCoffeesStore } from '$lib/stores/myCoffees';
   import {

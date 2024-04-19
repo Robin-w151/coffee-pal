@@ -1,6 +1,6 @@
 <script lang="ts">
-  import PageCard from '../ui/elements/page/PageCard.svelte';
-  import PageHeader from '../ui/elements/page/PageHeader.svelte';
+  import PageCard from '../shared/elements/page/PageCard.svelte';
+  import PageHeader from '../shared/elements/page/PageHeader.svelte';
   import Counter from './Counter.svelte';
   import Estimation from './Estimation.svelte';
 

@@ -14,9 +14,9 @@
   import { sync } from '$lib/utils/sync';
   import { scrollToTop } from '$lib/utils/ui/scroll';
   import { type PaginationSettings } from '@skeletonlabs/skeleton';
-  import PageActions from '../ui/elements/page/PageActions.svelte';
-  import PageCard from '../ui/elements/page/PageCard.svelte';
-  import PageSearch from '../ui/elements/page/PageSearch.svelte';
+  import PageActions from '../shared/elements/page/PageActions.svelte';
+  import PageCard from '../shared/elements/page/PageCard.svelte';
+  import PageSearch from '../shared/elements/page/PageSearch.svelte';
   import CoffeeEntries from './list/CoffeeEntries.svelte';
   import CoffeeEntriesTable from './table/CoffeeEntriesTable.svelte';
 

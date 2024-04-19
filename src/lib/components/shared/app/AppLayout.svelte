@@ -1,9 +1,9 @@
 <script lang="ts">
   import { afterNavigate } from '$app/navigation';
-  import AppBar from '$lib/components/ui/app/AppBar.svelte';
-  import AppMenu from '$lib/components/ui/app/AppMenu.svelte';
-  import AppRail from '$lib/components/ui/app/AppRail.svelte';
-  import EnableColorSchemes from '$lib/components/ui/app/EnableColorSchemes.svelte';
+  import AppBar from '$lib/components/shared/app/AppBar.svelte';
+  import AppMenu from '$lib/components/shared/app/AppMenu.svelte';
+  import AppRail from '$lib/components/shared/app/AppRail.svelte';
+  import EnableColorSchemes from '$lib/components/shared/app/EnableColorSchemes.svelte';
   import '$lib/stores/app';
   import { arrow, autoUpdate, computePosition, flip, offset, shift } from '@floating-ui/dom';
   import {

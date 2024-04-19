@@ -1,5 +1,5 @@
 <script lang="ts">
-  import ResponsiveButton from '$lib/components/ui/elements/form/ResponsiveButton.svelte';
+  import ResponsiveButton from '$lib/components/shared/elements/form/ResponsiveButton.svelte';
   import { faRotateRight, faSave, faTrash } from '@fortawesome/free-solid-svg-icons';
   import { createEventDispatcher } from 'svelte';
   import { Icon } from 'svelte-awesome';

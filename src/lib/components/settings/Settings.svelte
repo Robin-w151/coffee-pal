@@ -1,6 +1,6 @@
 <script lang="ts">
-  import PageCard from '../ui/elements/page/PageCard.svelte';
-  import PageHeader from '../ui/elements/page/PageHeader.svelte';
+  import PageCard from '../shared/elements/page/PageCard.svelte';
+  import PageHeader from '../shared/elements/page/PageHeader.svelte';
   import Appearance from './Appearance.svelte';
   import Backup from './Backup.svelte';
   import Info from './Info.svelte';

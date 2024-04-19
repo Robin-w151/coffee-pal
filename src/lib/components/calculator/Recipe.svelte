@@ -5,10 +5,10 @@
   import { settingsStore } from '$lib/stores/settings';
   import { getPreferredWeightUnit } from '$lib/utils/units';
   import { createEventDispatcher } from 'svelte';
-  import Label from '../ui/elements/form/Label.svelte';
-  import MeasurementInput from '../ui/elements/form/MeasurementInput.svelte';
-  import Form from '../ui/elements/form/Form.svelte';
-  import Card from '../ui/elements/Card.svelte';
+  import Label from '../shared/elements/form/Label.svelte';
+  import MeasurementInput from '../shared/elements/form/MeasurementInput.svelte';
+  import Form from '../shared/elements/form/Form.svelte';
+  import Card from '../shared/elements/Card.svelte';
   import { SlideToggle } from '@skeletonlabs/skeleton';
 
   export let fixedRatio = true;

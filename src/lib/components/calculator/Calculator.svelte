@@ -7,8 +7,8 @@
   import presets from '$assets/presets.json';
   import Iced from './Iced.svelte';
   import { sanitize } from '$lib/utils/math';
-  import PageCard from '../ui/elements/page/PageCard.svelte';
-  import PageHeader from '../ui/elements/page/PageHeader.svelte';
+  import PageCard from '../shared/elements/page/PageCard.svelte';
+  import PageHeader from '../shared/elements/page/PageHeader.svelte';
 
   let preset: Preset = presets.find((p) => p.label === 'Orea') ?? presets[0];
   let recipe: IRecipe = calculateRecipe(preset);

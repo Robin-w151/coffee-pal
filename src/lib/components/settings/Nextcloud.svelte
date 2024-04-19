@@ -6,10 +6,10 @@
   import { ModalHelper } from '$lib/utils/ui/modal';
   import { sync } from '$lib/utils/sync';
   import { getModalStore, getToastStore } from '@skeletonlabs/skeleton';
-  import Spinner from '../ui/elements/Spinner.svelte';
-  import Form from '../ui/elements/form/Form.svelte';
-  import Label from '../ui/elements/form/Label.svelte';
-  import UrlInput from '../ui/elements/form/UrlInput.svelte';
+  import Spinner from '../shared/elements/Spinner.svelte';
+  import Form from '../shared/elements/form/Form.svelte';
+  import Label from '../shared/elements/form/Label.svelte';
+  import UrlInput from '../shared/elements/form/UrlInput.svelte';
   import NextcloudLoginModal from './NextcloudLoginModal.svelte';
   import type { UrlInputChange } from '$lib/models/urlInput';
   import { type Subscription, catchError, finalize, of, tap } from 'rxjs';

@@ -5,10 +5,10 @@
   import { sanitize } from '$lib/utils/math';
   import { getPreferredWeightUnit } from '$lib/utils/units';
   import { RangeSlider, SlideToggle } from '@skeletonlabs/skeleton';
-  import Label from '../ui/elements/form/Label.svelte';
-  import MeasurementInput from '../ui/elements/form/MeasurementInput.svelte';
-  import Form from '../ui/elements/form/Form.svelte';
-  import Card from '../ui/elements/Card.svelte';
+  import Label from '../shared/elements/form/Label.svelte';
+  import MeasurementInput from '../shared/elements/form/MeasurementInput.svelte';
+  import Form from '../shared/elements/form/Form.svelte';
+  import Card from '../shared/elements/Card.svelte';
 
   export let water: number;
   export let iced = false;

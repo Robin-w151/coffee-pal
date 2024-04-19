@@ -8,10 +8,10 @@
   import { onMount } from 'svelte';
   import { Icon } from 'svelte-awesome';
   import { v4 as uuid } from 'uuid';
-  import Actions from '../ui/elements/form/Actions.svelte';
-  import Form from '../ui/elements/form/Form.svelte';
-  import PageCard from '../ui/elements/page/PageCard.svelte';
-  import PageHeader from '../ui/elements/page/PageHeader.svelte';
+  import Actions from '../shared/elements/form/Actions.svelte';
+  import Form from '../shared/elements/form/Form.svelte';
+  import PageCard from '../shared/elements/page/PageCard.svelte';
+  import PageHeader from '../shared/elements/page/PageHeader.svelte';
   import Coffee from './detail/Coffee.svelte';
   import CoffeeType from './detail/CoffeeType.svelte';
   import Description from './detail/Description.svelte';
