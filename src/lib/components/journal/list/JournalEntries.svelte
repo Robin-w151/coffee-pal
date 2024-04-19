@@ -34,13 +34,11 @@
   {/if}
 </dl>
 {#if totalEntries}
-  <div class="mt-4">
-    <Paginator
-      settings={paginationSettings}
-      showFirstLastButtons
-      showPreviousNextButtons
-      justify="justify-center"
-      on:page
-    />
-  </div>
+  <Paginator
+    settings={paginationSettings}
+    showFirstLastButtons
+    showPreviousNextButtons
+    justify="justify-center"
+    on:page
+  />
 {/if}
