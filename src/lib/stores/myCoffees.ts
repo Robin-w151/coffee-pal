@@ -93,7 +93,7 @@ function createMyCoffeesStore(myCoffeesSearchStore: MyCoffeesSearchStore): MyCof
         tap((result) => {
           const { data: entries, totalEntries } = result;
           const page = subject.value.page;
-          if (page) {
+          if (page && page * MY_COFFEES_PAGE_SIZE <= totalEntries) {
             loadPageEntries(page);
           } else {
             subject.next({
@@ -101,6 +101,7 @@ function createMyCoffeesStore(myCoffeesSearchStore: MyCoffeesSearchStore): MyCof
               entries,
               totalEntries,
               isLoading: false,
+              page: 0,
             });
           }
         }),

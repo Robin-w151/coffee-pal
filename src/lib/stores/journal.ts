@@ -92,7 +92,7 @@ function createJournalStore(journalSearchStore: JournalSearchStore): JournalStor
         tap((result) => {
           const { data: entries, totalEntries } = result;
           const page = subject.value.page;
-          if (page) {
+          if (page && page * JOURNAL_PAGE_SIZE <= totalEntries) {
             loadPageEntries(page);
           } else {
             subject.next({
@@ -100,6 +100,7 @@ function createJournalStore(journalSearchStore: JournalSearchStore): JournalStor
               entries,
               totalEntries,
               isLoading: false,
+              page: 0,
             });
           }
         }),
