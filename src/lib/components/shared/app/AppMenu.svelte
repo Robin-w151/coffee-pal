@@ -1,17 +1,26 @@
 <script lang="ts">
   import { page } from '$app/stores';
   import { routes } from '$lib/config/routes';
+  import type { Route } from '$lib/models/route';
   import { faClose } from '@fortawesome/free-solid-svg-icons';
   import { getDrawerStore } from '@skeletonlabs/skeleton';
   import { Icon } from 'svelte-awesome';
 
   const drawerStore = getDrawerStore();
 
-  $: routeActiveClass = (href: string) =>
-    $page.url.pathname === href ? 'bg-primary-active-token' : '';
+  $: routeActiveClass = (route: Route) =>
+    isSelected(route, $page.url.pathname) ? 'bg-primary-active-token' : '';
 
   function handleClick(): void {
     drawerStore.close();
+  }
+
+  function isSelected(route: Route, pathname: string): boolean {
+    if (route.match) {
+      return route.match.test(pathname);
+    } else {
+      return route.href === pathname;
+    }
   }
 </script>
 
@@ -25,17 +34,17 @@
   <hr />
   <nav class="list-nav">
     <ul>
-      {#each routes as { href, label, icon } (href)}
+      {#each routes as route (route.href)}
         <li>
           <a
-            class="!grid grid-cols-[1.25rem_1fr] {routeActiveClass(href)}"
-            {href}
+            class="!grid grid-cols-[1.25rem_1fr] {routeActiveClass(route)}"
+            href={route.href}
             on:click={handleClick}
           >
             <span class="flex items-center justify-self-center">
-              <Icon data={icon} />
+              <Icon data={route.icon} />
             </span>
-            <span>{label}</span>
+            <span>{route.label}</span>
           </a>
         </li>
       {/each}
