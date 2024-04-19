@@ -4,9 +4,12 @@
   import { Icon } from 'svelte-awesome';
   import JournalEntryItem from './JournalEntryItem.svelte';
   import JournalEntryPlaceholder from './JournalEntryPlaceholder.svelte';
+  import { Paginator, type PaginationSettings } from '@skeletonlabs/skeleton';
 
   export let entries: Array<ActiveJournalEntry>;
+  export let totalEntries = 0;
   export let isLoading = false;
+  export let paginationSettings: PaginationSettings;
 </script>
 
 <dl class="list-dl">
@@ -30,3 +33,14 @@
     {/each}
   {/if}
 </dl>
+{#if totalEntries}
+  <div class="mt-4">
+    <Paginator
+      settings={paginationSettings}
+      showFirstLastButtons
+      showPreviousNextButtons
+      justify="justify-center"
+      on:page
+    />
+  </div>
+{/if}

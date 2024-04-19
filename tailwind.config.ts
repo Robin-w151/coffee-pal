@@ -4,6 +4,7 @@ import containerQueries from '@tailwindcss/container-queries';
 import { join } from 'path';
 import type { Config } from 'tailwindcss/types/config';
 import { coffeeTheme } from './theme';
+import { screens } from './src/lib/config/screens';
 
 export default {
   content: [
@@ -12,7 +13,9 @@ export default {
   ],
   darkMode: 'class',
   theme: {
-    extend: {},
+    extend: {
+      screens,
+    },
   },
   plugins: [
     forms,

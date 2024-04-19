@@ -4,10 +4,12 @@
   import { Icon } from 'svelte-awesome';
   import JournalEntryItem from './JournalEntryItem.svelte';
   import JournalEntryPlaceholder from './JournalEntryPlaceholder.svelte';
+  import { Paginator, type PaginationSettings } from '@skeletonlabs/skeleton';
 
   export let entries: Array<ActiveJournalEntry>;
   export let totalEntries = 0;
   export let isLoading = false;
+  export let paginationSettings: PaginationSettings;
 </script>
 
 <table class="table table-interactive">
@@ -47,7 +49,17 @@
   </tbody>
   <tfoot>
     <tr>
-      <th colspan="5">Total brews: {totalEntries}</th>
+      <th colspan="5">
+        {#if totalEntries}
+          <Paginator
+            settings={paginationSettings}
+            showFirstLastButtons
+            showPreviousNextButtons
+            justify="justify-center"
+            on:page
+          />
+        {/if}
+      </th>
     </tr>
   </tfoot>
 </table>

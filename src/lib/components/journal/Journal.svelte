@@ -1,10 +1,14 @@
 <script lang="ts" context="module">
+  import { screens } from '$lib/config/screens';
+
   interface SortOption {
     label: string;
     icon: IconDefinition;
     sort: JournalSort;
     sortDirection: JournalSortDirection;
   }
+
+  const screenMd = parseInt(screens.md);
 </script>
 
 <script lang="ts">
@@ -23,7 +27,7 @@
     faCheck,
     type IconDefinition,
   } from '@fortawesome/free-solid-svg-icons';
-  import { ListBox, ListBoxItem, Paginator, type PaginationSettings } from '@skeletonlabs/skeleton';
+  import { ListBox, ListBoxItem, type PaginationSettings } from '@skeletonlabs/skeleton';
   import { Icon } from 'svelte-awesome';
   import PageActions from '../ui/elements/page/PageActions.svelte';
   import PageCard from '../ui/elements/page/PageCard.svelte';
@@ -53,6 +57,7 @@
   ] satisfies Array<SortOption>;
 
   let selectedSortOption = getActiveSortOption().label;
+  let innerWidth = 0;
 
   $: paginationSettings = getPaginationSettings($journalStore);
 
@@ -96,6 +101,8 @@
   }
 </script>
 
+<svelte:window bind:innerWidth />
+
 <PageActions
   isSyncEnabled={$syncAvailabilityStore.isAvailable}
   isSynchronizing={$syncStateStore.isSynchronizing}
@@ -130,22 +137,20 @@
   </ListBox>
 </PageSearch>
 <PageCard class="page-with-actions-token">
-  <div class="md:hidden">
-    <JournalEntries entries={$journalStore.entries} isLoading={$journalStore.isLoading} />
-  </div>
-  <div class="max-md:hidden">
+  {#if innerWidth > screenMd}
     <JournalEntriesTable
       entries={$journalStore.entries}
       totalEntries={paginationSettings.size}
       isLoading={$journalStore.isLoading}
+      {paginationSettings}
+      on:page={handlePageChange}
     />
-  </div>
-  {#if $journalStore.totalEntries}
-    <Paginator
-      settings={paginationSettings}
-      showFirstLastButtons
-      showPreviousNextButtons
-      justify="justify-center"
+  {:else}
+    <JournalEntries
+      entries={$journalStore.entries}
+      totalEntries={paginationSettings.size}
+      isLoading={$journalStore.isLoading}
+      {paginationSettings}
       on:page={handlePageChange}
     />
   {/if}
