@@ -14,6 +14,7 @@ export interface ActiveJournalEntry {
   coffee: number;
   coffeeType?: string;
   grindSettings?: string;
+  rating?: number;
   description?: string;
   createdAt: string;
   updatedAt: string;

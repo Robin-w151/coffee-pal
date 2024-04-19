@@ -17,6 +17,7 @@
   import Description from './detail/Description.svelte';
   import GrindSettings from './detail/GrindSettings.svelte';
   import Method from './detail/Method.svelte';
+  import Rating from './detail/Rating.svelte';
   import Ratio from './detail/Ratio.svelte';
   import Water from './detail/Water.svelte';
   import WaterTemperature from './detail/WaterTemperature.svelte';
@@ -32,6 +33,7 @@
     coffee: undefined,
     coffeeType: '',
     grindSettings: '',
+    rating: undefined,
     description: '',
     createdAt: '',
     updatedAt: '',
@@ -127,6 +129,10 @@
       sanitizedEntry.coffeeType = undefined;
     }
 
+    if (!entry.rating) {
+      sanitizedEntry.rating = undefined;
+    }
+
     return sanitizedEntry as ActiveJournalEntry;
   }
 
@@ -166,8 +172,9 @@
         on:change={handleWaterTemperatureChange}
       />
       <GrindSettings bind:grindSettings={entry.grindSettings} />
+      <Rating bind:rating={entry.rating} />
       <Description bind:description={entry.description} />
-      <div class="flex justify-between items-center gap-4">
+      <div class="flex justify-between items-center gap-4 col-span-2">
         <Ratio coffee={entry.coffee} water={entry.water} />
         <Actions
           edit={!!id}
