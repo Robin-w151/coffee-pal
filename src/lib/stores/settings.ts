@@ -61,7 +61,7 @@ function createSettingsStore(): SettingsStore {
       }
 
       persist(settings as Settings);
-    } catch (error) {
+    } catch (_error) {
       persist(initialState);
     }
   }

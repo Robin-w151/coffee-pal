@@ -29,7 +29,7 @@ export function scaleX(
     delay,
     duration,
     easing,
-    css: (t: number, u: number) => {
+    css: (_t: number, u: number) => {
       const scale = 1 - sd * u;
       return `
 			transform: ${transform} ${translateX(direction, parseInt(style.width), scale)} scaleX(${scale});

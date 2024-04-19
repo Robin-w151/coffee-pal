@@ -12,7 +12,7 @@ export async function readJsonFile(file: File): Promise<any> {
       try {
         const data = JSON.parse(event.target?.result as string);
         resolve(data);
-      } catch (error) {
+      } catch (_error) {
         reject(new Error('Failed to read file!'));
       }
     };
