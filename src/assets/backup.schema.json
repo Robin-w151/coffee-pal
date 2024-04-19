@@ -29,6 +29,9 @@
         "process": {
           "type": "string"
         },
+        "rating": {
+          "type": "number"
+        },
         "trader": {
           "type": "string"
         },
@@ -65,6 +68,9 @@
         },
         "method": {
           "type": "string"
+        },
+        "rating": {
+          "type": "number"
         },
         "updatedAt": {
           "type": "string"
