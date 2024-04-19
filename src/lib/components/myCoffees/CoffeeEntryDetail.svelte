@@ -19,6 +19,7 @@
   import Process from './detail/Process.svelte';
   import Trader from './detail/Trader.svelte';
   import Variety from './detail/Variety.svelte';
+  import Rating from './detail/Rating.svelte';
 
   export let id: string | undefined = undefined;
 
@@ -102,6 +103,10 @@
       sanitizedEntry.aromas = [];
     }
 
+    if (!sanitizedEntry.rating) {
+      sanitizedEntry.rating = undefined;
+    }
+
     if (!sanitizedEntry.description) {
       sanitizedEntry.description = undefined;
     }
@@ -140,9 +145,10 @@
       <Process bind:process={entry.process} />
       <Variety bind:variety={entry.variety} />
       <Trader bind:trader={entry.trader} />
+      <Rating bind:rating={entry.rating} />
       <Aromas bind:aromas={entry.aromas} />
       <Description bind:description={entry.description} />
-      <div class="flex justify-end items-center gap-2">
+      <div class="flex justify-end items-center gap-2 col-span-2">
         <Actions edit={!!id} {formValid} on:save={handleSave} on:remove={handleRemove} />
       </div>
     </Form>
