@@ -1,13 +1,15 @@
 <script lang="ts">
   import type { ActiveCoffeeEntry } from '$lib/models/myCoffees';
-  import { Icon } from 'svelte-awesome';
-  import CoffeeEntryPlaceholder from './CoffeeEntryPlaceholder.svelte';
   import { faFaceSadCry } from '@fortawesome/free-solid-svg-icons';
+  import { Paginator, type PaginationSettings } from '@skeletonlabs/skeleton';
+  import { Icon } from 'svelte-awesome';
   import CoffeeEntryItem from './CoffeeEntryItem.svelte';
+  import CoffeeEntryPlaceholder from './CoffeeEntryPlaceholder.svelte';
 
   export let entries: Array<ActiveCoffeeEntry>;
   export let totalEntries = 0;
   export let isLoading = false;
+  export let paginationSettings: PaginationSettings;
 </script>
 
 <table class="table table-interactive">
@@ -48,7 +50,17 @@
   </tbody>
   <tfoot>
     <tr>
-      <th colspan="5">Total coffees: {totalEntries}</th>
+      <th colspan="6">
+        {#if totalEntries}
+          <Paginator
+            settings={paginationSettings}
+            showFirstLastButtons
+            showPreviousNextButtons
+            justify="justify-center"
+            on:page
+          />
+        {/if}
+      </th>
     </tr>
   </tfoot>
 </table>

@@ -1,12 +1,15 @@
 <script lang="ts">
   import type { ActiveCoffeeEntry } from '$lib/models/myCoffees';
   import { faFaceSadCry } from '@fortawesome/free-solid-svg-icons';
+  import { Paginator, type PaginationSettings } from '@skeletonlabs/skeleton';
   import { Icon } from 'svelte-awesome';
   import CoffeeEntryItem from './CoffeeEntryItem.svelte';
   import CoffeeEntryPlaceholder from './CoffeeEntryPlaceholder.svelte';
 
   export let entries: Array<ActiveCoffeeEntry>;
+  export let totalEntries = 0;
   export let isLoading = false;
+  export let paginationSettings: PaginationSettings;
 </script>
 
 <dl class="list-dl">
@@ -30,3 +33,14 @@
     {/each}
   {/if}
 </dl>
+{#if totalEntries}
+  <div class="mt-4">
+    <Paginator
+      settings={paginationSettings}
+      showFirstLastButtons
+      showPreviousNextButtons
+      justify="justify-center"
+      on:page
+    />
+  </div>
+{/if}
