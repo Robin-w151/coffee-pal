@@ -139,18 +139,20 @@
       <span>Could not find any entry! Go back to the <a href="/my-coffees">overview</a></span>
     </p>
   {:else}
-    <Form>
-      <Name bind:name={entry.name} bind:valid={nameInputValid} />
-      <Origin bind:origin={entry.origin} />
-      <Process bind:process={entry.process} />
-      <Variety bind:variety={entry.variety} />
-      <Trader bind:trader={entry.trader} />
-      <Rating bind:rating={entry.rating} />
-      <Aromas bind:aromas={entry.aromas} />
-      <Description bind:description={entry.description} />
-      <div class="flex justify-end items-center gap-2 col-span-2">
-        <Actions edit={!!id} {formValid} on:save={handleSave} on:remove={handleRemove} />
-      </div>
-    </Form>
+    <div class="@container">
+      <Form class="@3xl:grid @3xl:grid-cols-2">
+        <Name bind:name={entry.name} bind:valid={nameInputValid} />
+        <Origin bind:origin={entry.origin} />
+        <Process bind:process={entry.process} />
+        <Variety bind:variety={entry.variety} />
+        <Trader bind:trader={entry.trader} />
+        <Rating bind:rating={entry.rating} />
+        <Aromas bind:aromas={entry.aromas} />
+        <Description bind:description={entry.description} />
+        <div class="flex justify-end items-center gap-2 col-span-2">
+          <Actions edit={!!id} {formValid} on:save={handleSave} on:remove={handleRemove} />
+        </div>
+      </Form>
+    </div>
   {/if}
 </PageCard>

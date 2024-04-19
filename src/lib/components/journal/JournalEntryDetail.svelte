@@ -161,30 +161,36 @@
       <span>Could not find any entry! Go back to the <a href="/">overview</a></span>
     </p>
   {:else}
-    <Form>
-      <Method bind:method={entry.method} bind:valid={methodInputValid} />
-      <CoffeeType bind:coffeeType={entry.coffeeType} />
-      <Water water={entry.water} bind:valid={waterInputValid} on:change={handleWaterChange} />
-      <Coffee coffee={entry.coffee} bind:valid={coffeeInputValid} on:change={handleCoffeeChange} />
-      <WaterTemperature
-        waterTemperature={entry.waterTemperature}
-        bind:valid={waterTemperatureValid}
-        on:change={handleWaterTemperatureChange}
-      />
-      <GrindSettings bind:grindSettings={entry.grindSettings} />
-      <Rating bind:rating={entry.rating} />
-      <Description bind:description={entry.description} />
-      <div class="flex justify-between items-center gap-4 col-span-2">
-        <Ratio coffee={entry.coffee} water={entry.water} />
-        <Actions
-          edit={!!id}
-          {formValid}
-          allowCopy
-          on:save={handleSave}
-          on:copy={handleCopy}
-          on:remove={handleRemove}
+    <div class="@container">
+      <Form class="@3xl:grid @3xl:grid-cols-2">
+        <Method bind:method={entry.method} bind:valid={methodInputValid} />
+        <CoffeeType bind:coffeeType={entry.coffeeType} />
+        <Water water={entry.water} bind:valid={waterInputValid} on:change={handleWaterChange} />
+        <Coffee
+          coffee={entry.coffee}
+          bind:valid={coffeeInputValid}
+          on:change={handleCoffeeChange}
         />
-      </div>
-    </Form>
+        <WaterTemperature
+          waterTemperature={entry.waterTemperature}
+          bind:valid={waterTemperatureValid}
+          on:change={handleWaterTemperatureChange}
+        />
+        <GrindSettings bind:grindSettings={entry.grindSettings} />
+        <Rating bind:rating={entry.rating} />
+        <Description bind:description={entry.description} />
+        <div class="flex justify-between items-center gap-4 col-span-2">
+          <Ratio coffee={entry.coffee} water={entry.water} />
+          <Actions
+            edit={!!id}
+            {formValid}
+            allowCopy
+            on:save={handleSave}
+            on:copy={handleCopy}
+            on:remove={handleRemove}
+          />
+        </div>
+      </Form>
+    </div>
   {/if}
 </PageCard>
