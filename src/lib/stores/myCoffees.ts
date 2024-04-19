@@ -90,17 +90,22 @@ function createMyCoffeesStore(myCoffeesSearchStore: MyCoffeesSearchStore): MyCof
         tap(() => subject.next({ ...subject.value, isLoading: true })),
         debounceTime(250),
         switchMap((search) => createQuery(db, search)),
+        tap((result) => {
+          const { data: entries, totalEntries } = result;
+          const page = subject.value.page;
+          if (page) {
+            loadPageEntries(page);
+          } else {
+            subject.next({
+              ...subject.value,
+              entries,
+              totalEntries,
+              isLoading: false,
+            });
+          }
+        }),
       )
-      .subscribe((result) => {
-        const { data: entries, totalEntries } = result;
-        subject.next({
-          ...subject.value,
-          entries,
-          totalEntries,
-          isLoading: false,
-          page: 0,
-        });
-      });
+      .subscribe();
   }
 
   async function loadAllEntries(): Promise<Array<CoffeeEntry>> {
