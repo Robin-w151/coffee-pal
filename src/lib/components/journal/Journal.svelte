@@ -27,7 +27,7 @@
     faCheck,
     type IconDefinition,
   } from '@fortawesome/free-solid-svg-icons';
-  import { ListBox, ListBoxItem, type PaginationSettings } from '@skeletonlabs/skeleton';
+  import { ListBox, ListBoxItem, Paginator, type PaginationSettings } from '@skeletonlabs/skeleton';
   import { Icon } from 'svelte-awesome';
   import PageActions from '../shared/elements/page/PageActions.svelte';
   import PageCard from '../shared/elements/page/PageCard.svelte';
@@ -138,19 +138,16 @@
 </PageSearch>
 <PageCard class="page-with-actions-token">
   {#if innerWidth > screenMd}
-    <JournalEntriesTable
-      entries={$journalStore.entries}
-      totalEntries={paginationSettings.size}
-      isLoading={$journalStore.isLoading}
-      {paginationSettings}
-      on:page={handlePageChange}
-    />
+    <JournalEntriesTable entries={$journalStore.entries} isLoading={$journalStore.isLoading} />
   {:else}
-    <JournalEntries
-      entries={$journalStore.entries}
-      totalEntries={paginationSettings.size}
-      isLoading={$journalStore.isLoading}
-      {paginationSettings}
+    <JournalEntries entries={$journalStore.entries} isLoading={$journalStore.isLoading} />
+  {/if}
+  {#if $journalStore.totalEntries}
+    <Paginator
+      settings={paginationSettings}
+      showFirstLastButtons
+      showPreviousNextButtons
+      justify="justify-center"
       on:page={handlePageChange}
     />
   {/if}

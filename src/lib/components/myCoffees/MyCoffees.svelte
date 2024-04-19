@@ -13,7 +13,7 @@
   import { syncStateStore } from '$lib/stores/syncState';
   import { sync } from '$lib/utils/sync';
   import { scrollToTop } from '$lib/utils/ui/scroll';
-  import { type PaginationSettings } from '@skeletonlabs/skeleton';
+  import { Paginator, type PaginationSettings } from '@skeletonlabs/skeleton';
   import PageActions from '../shared/elements/page/PageActions.svelte';
   import PageCard from '../shared/elements/page/PageCard.svelte';
   import PageSearch from '../shared/elements/page/PageSearch.svelte';
@@ -73,19 +73,16 @@
 />
 <PageCard class="page-with-actions-token">
   {#if innerWidth > screenMd}
-    <CoffeeEntriesTable
-      entries={$myCoffeesStore.entries}
-      totalEntries={paginationSettings.size}
-      isLoading={$myCoffeesStore.isLoading}
-      {paginationSettings}
-      on:page={handlePageChange}
-    />
+    <CoffeeEntriesTable entries={$myCoffeesStore.entries} isLoading={$myCoffeesStore.isLoading} />
   {:else}
-    <CoffeeEntries
-      entries={$myCoffeesStore.entries}
-      totalEntries={paginationSettings.size}
-      isLoading={$myCoffeesStore.isLoading}
-      {paginationSettings}
+    <CoffeeEntries entries={$myCoffeesStore.entries} isLoading={$myCoffeesStore.isLoading} />
+  {/if}
+  {#if $myCoffeesStore.totalEntries}
+    <Paginator
+      settings={paginationSettings}
+      showFirstLastButtons
+      showPreviousNextButtons
+      justify="justify-center"
       on:page={handlePageChange}
     />
   {/if}
