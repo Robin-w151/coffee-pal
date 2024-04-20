@@ -6,16 +6,17 @@
   import { ModalHelper } from '$lib/utils/ui/modal';
   import { sync } from '$lib/utils/sync';
   import { getModalStore, getToastStore } from '@skeletonlabs/skeleton';
-  import Spinner from '../shared/elements/Spinner.svelte';
-  import Form from '../shared/elements/form/Form.svelte';
-  import Label from '../shared/elements/form/Label.svelte';
-  import UrlInput from '../shared/elements/form/UrlInput.svelte';
+  import Spinner from '../../shared/elements/Spinner.svelte';
+  import Form from '../../shared/elements/form/Form.svelte';
+  import Label from '../../shared/elements/form/Label.svelte';
+  import UrlInput from '../../shared/elements/form/UrlInput.svelte';
   import NextcloudLoginModal from './NextcloudLoginModal.svelte';
   import type { UrlInputChange } from '$lib/models/urlInput';
   import { type Subscription, catchError, finalize, of, tap } from 'rxjs';
   import { onDestroy } from 'svelte';
   import { ToastHelper } from '$lib/utils/ui/toast';
   import { syncAvailabilityStore } from '$lib/stores/syncAvailability';
+  import Card from '$lib/components/shared/elements/Card.svelte';
 
   const modalHelper = new ModalHelper(getModalStore());
   const toastHelper = new ToastHelper(getToastStore());
@@ -92,49 +93,51 @@
   }
 </script>
 
-<div class="flex justify-between items-center">
-  <h3 class="h3">Nextcloud Sync</h3>
-  {#if showSpinner}
-    <Spinner />
-  {/if}
-</div>
-<Form>
-  <Label text="Nextcloud Server URL">
-    <UrlInput
-      url={$syncStore.connection?.server.url}
-      placeholder="Nextcloud Server URL, e.g. example.nextcloud.com"
-      readonly={connected}
-      on:change={handleUrlChange}
-    />
-  </Label>
-  <div class="flex justify-end gap-2">
-    {#if connected}
-      <button
-        class="btn variant-filled-error"
-        type="button"
-        title="Disconnect Nextcloud Sync"
-        on:click={handleDisconnectClick}
-      >
-        Disconnect
-      </button>
-      <button
-        class="btn variant-filled-primary"
-        title="Sync app data"
-        disabled={!$syncAvailabilityStore.isAvailable}
-        on:click={handleSyncClick}>Sync</button
-      >
-    {:else}
-      {#if url}
-        <a class="btn variant-soft-primary" href={url} target="_blank" rel="noopener">Open</a>
-      {/if}
-      <button
-        class="btn variant-filled-primary"
-        title="Enable Sync via Nextcloud"
-        disabled={!hostValid}
-        on:click={handleConnectClick}
-      >
-        Connect
-      </button>
+<Card>
+  <div class="flex justify-between items-center">
+    <h3 class="h3">Nextcloud Sync</h3>
+    {#if showSpinner}
+      <Spinner />
     {/if}
   </div>
-</Form>
+  <Form>
+    <Label text="Nextcloud Server URL">
+      <UrlInput
+        url={$syncStore.connection?.server.url}
+        placeholder="Nextcloud Server URL, e.g. example.nextcloud.com"
+        readonly={connected}
+        on:change={handleUrlChange}
+      />
+    </Label>
+    <div class="flex justify-end gap-2">
+      {#if connected}
+        <button
+          class="btn variant-filled-error"
+          type="button"
+          title="Disconnect Nextcloud Sync"
+          on:click={handleDisconnectClick}
+        >
+          Disconnect
+        </button>
+        <button
+          class="btn variant-filled-primary"
+          title="Sync app data"
+          disabled={!$syncAvailabilityStore.isAvailable}
+          on:click={handleSyncClick}>Sync</button
+        >
+      {:else}
+        {#if url}
+          <a class="btn variant-soft-primary" href={url} target="_blank" rel="noopener">Open</a>
+        {/if}
+        <button
+          class="btn variant-filled-primary"
+          title="Enable Sync via Nextcloud"
+          disabled={!hostValid}
+          on:click={handleConnectClick}
+        >
+          Connect
+        </button>
+      {/if}
+    </div>
+  </Form>
+</Card>

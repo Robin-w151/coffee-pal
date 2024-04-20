@@ -12,8 +12,9 @@
   import { FileDropzone, getToastStore } from '@skeletonlabs/skeleton';
   import { DateTime } from 'luxon';
   import { Icon } from 'svelte-awesome';
-  import Spinner from '../shared/elements/Spinner.svelte';
-  import Form from '../shared/elements/form/Form.svelte';
+  import Spinner from '../../shared/elements/Spinner.svelte';
+  import Form from '../../shared/elements/form/Form.svelte';
+  import Card from '$lib/components/shared/elements/Card.svelte';
 
   const toastHelper = new ToastHelper(getToastStore());
 
@@ -74,38 +75,40 @@
   }
 </script>
 
-<div class="flex justify-between items-center">
-  <h3 class="h3">Backup</h3>
-  {#if isImporting}
-    <Spinner />
-  {/if}
-</div>
-<Form>
-  <FileDropzone name="import-file-input" accept="application/json" bind:files>
-    <svelte:fragment slot="lead">
-      <Icon data={faFileArrowUp} scale={1.5} />
-    </svelte:fragment>
-    <svelte:fragment slot="message">
-      {#if fileSelected}
-        <span>{files?.[0].name}</span>
-      {:else}
-        <span>Click to select file or drag and drop</span>
-      {/if}
-    </svelte:fragment>
-    <svelte:fragment slot="meta">Allowed type: JSON</svelte:fragment>
-  </FileDropzone>
-  <div class="flex justify-end gap-2">
-    <button
-      class="btn variant-ghost-primary"
-      type="button"
-      title="Export Data"
-      on:click={handleExportClick}>Export</button
-    >
-    <button
-      class="btn variant-filled-primary"
-      title="Import Data"
-      disabled={!fileSelected}
-      on:click={handleImportClick}>Import</button
-    >
+<Card>
+  <div class="flex justify-between items-center">
+    <h3 class="h3">Backup</h3>
+    {#if isImporting}
+      <Spinner />
+    {/if}
   </div>
-</Form>
+  <Form>
+    <FileDropzone name="import-file-input" accept="application/json" bind:files>
+      <svelte:fragment slot="lead">
+        <Icon data={faFileArrowUp} scale={1.5} />
+      </svelte:fragment>
+      <svelte:fragment slot="message">
+        {#if fileSelected}
+          <span>{files?.[0].name}</span>
+        {:else}
+          <span>Click to select file or drag and drop</span>
+        {/if}
+      </svelte:fragment>
+      <svelte:fragment slot="meta">Allowed type: JSON</svelte:fragment>
+    </FileDropzone>
+    <div class="flex justify-end gap-2">
+      <button
+        class="btn variant-ghost-primary"
+        type="button"
+        title="Export Data"
+        on:click={handleExportClick}>Export</button
+      >
+      <button
+        class="btn variant-filled-primary"
+        title="Import Data"
+        disabled={!fileSelected}
+        on:click={handleImportClick}>Import</button
+      >
+    </div>
+  </Form>
+</Card>
