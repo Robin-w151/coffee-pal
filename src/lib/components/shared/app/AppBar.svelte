@@ -15,7 +15,7 @@
   }
 </script>
 
-<AppBar padding="px-2 py-1 md:py-2" shadow="shadow-xl">
+<AppBar padding="px-4 md:px-2 py-1 md:py-2" shadow="shadow-xl" regionRowMain="max-md:!gap-2">
   <svelte:fragment slot="lead">
     <button
       class="btn btn-icon hover:variant-soft-secondary md:hidden"
