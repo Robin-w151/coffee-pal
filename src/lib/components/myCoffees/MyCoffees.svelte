@@ -57,12 +57,6 @@
 
 <svelte:window bind:innerWidth />
 
-<PageActions
-  isSyncEnabled={$syncAvailabilityStore.isAvailable}
-  isSynchronizing={$syncStateStore.isSynchronizing}
-  on:add={handleAddClick}
-  on:synchronize={handleSyncClick}
-/>
 <PageSearch
   title="My Coffees"
   search={$myCoffeesSearchStore.filter}
@@ -70,6 +64,12 @@
   isLoading={$myCoffeesStore.isLoading}
   on:searchChange={handleSearchChange}
   on:sortToggle={handleSortToggle}
+/>
+<PageActions
+  isSyncEnabled={$syncAvailabilityStore.isAvailable}
+  isSynchronizing={$syncStateStore.isSynchronizing}
+  on:add={handleAddClick}
+  on:synchronize={handleSyncClick}
 />
 <PageCard class="page-with-actions-token">
   {#if innerWidth > screenMd}
