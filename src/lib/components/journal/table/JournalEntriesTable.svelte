@@ -43,10 +43,5 @@
         {/each}
       {/if}
     </tbody>
-    <tfoot>
-      <tr>
-        <th colspan="5"> </th>
-      </tr>
-    </tfoot>
   </table>
 </div>
