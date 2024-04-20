@@ -61,14 +61,14 @@
   {/if}
 </Drawer>
 
-<AppShell scrollbarGutter="stable" on:scroll={handleAppShellScroll}>
+<AppShell scrollbarGutter="stable" regionPage="mx-1" on:scroll={handleAppShellScroll}>
   <svelte:fragment slot="header">
     <AppBar />
   </svelte:fragment>
   <div class="hidden md:block h-full" slot="sidebarLeft">
     <AppRail />
   </div>
-  <div class="flex justify-center p-4">
+  <div class="flex justify-center px-3 py-4">
     <div class="flex flex-col items-center gap-4 w-full max-w-screen-lg">
       <slot />
     </div>

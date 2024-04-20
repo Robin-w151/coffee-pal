@@ -15,7 +15,7 @@
   }
 </script>
 
-<AppBar padding="px-4 py-2 md:py-4" shadow="shadow-xl">
+<AppBar padding="px-2 py-1 md:py-2" shadow="shadow-xl">
   <svelte:fragment slot="lead">
     <button
       class="btn btn-icon hover:variant-soft-secondary md:hidden"
@@ -26,7 +26,7 @@
       <span class="sr-only">App menu</span>
     </button>
   </svelte:fragment>
-  <a class="flex items-center gap-4 w-fit" href={mainRoute.href}>
+  <a class="flex items-center gap-4 px-2 py-1 md:py-2 w-fit rounded-md" href={mainRoute.href}>
     <span class="hidden md:block">
       <Icon data={faMugHot} scale={1.5} />
     </span>

@@ -58,6 +58,10 @@ body {
   @apply bg-surface-50-900-token;
 }
 
+.app-rail-anchor {
+  @apply block overflow-hidden rounded-md;
+}
+
 // Modal overrides
 
 .modal-backdrop {
