@@ -91,8 +91,8 @@ function createJournalStore(journalSearchStore: JournalSearchStore): JournalStor
         switchMap((search) => createQuery(db, search)),
         tap((result) => {
           const { data: entries, totalEntries } = result;
-          const page = subject.value.page;
-          if (page && page * JOURNAL_PAGE_SIZE <= totalEntries) {
+          const { totalEntries: prevTotalEntries, page } = subject.value;
+          if (page && prevTotalEntries === totalEntries) {
             loadPageEntries(page);
           } else {
             subject.next({
