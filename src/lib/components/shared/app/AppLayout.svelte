@@ -1,10 +1,12 @@
 <script lang="ts">
   import { afterNavigate } from '$app/navigation';
+  import { page } from '$app/stores';
   import AppBar from '$lib/components/shared/app/AppBar.svelte';
   import AppMenu from '$lib/components/shared/app/AppMenu.svelte';
   import AppRail from '$lib/components/shared/app/AppRail.svelte';
   import EnableColorSchemes from '$lib/components/shared/app/EnableColorSchemes.svelte';
   import '$lib/stores/app';
+  import { rememberScrollPosition, scrollToLastKnownPosition } from '$lib/utils/ui/scroll';
   import { arrow, autoUpdate, computePosition, flip, offset, shift } from '@floating-ui/dom';
   import {
     AppShell,
@@ -19,8 +21,7 @@
   import { onMount, type ComponentEvents } from 'svelte';
   import { pwaInfo } from 'virtual:pwa-info';
   import '../../../../app.scss';
-  import { page } from '$app/stores';
-  import { rememberScrollPosition, scrollToLastKnownPosition } from '$lib/utils/ui/scroll';
+  import EnableUpdateListener from './EnableUpdateListener.svelte';
 
   initializeStores();
   storePopup.set({ computePosition, autoUpdate, offset, shift, flip, arrow });
@@ -52,6 +53,7 @@
 </svelte:head>
 
 <EnableColorSchemes />
+<EnableUpdateListener />
 
 <Modal />
 <Toast />

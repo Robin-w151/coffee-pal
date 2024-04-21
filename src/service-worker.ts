@@ -11,3 +11,9 @@ const wbManifest = self.__WB_MANIFEST;
 if (wbManifest) {
   precacheAndRoute(wbManifest);
 }
+
+self.addEventListener('message', (event) => {
+  if (event.data === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
+});
