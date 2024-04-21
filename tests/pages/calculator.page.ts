@@ -43,6 +43,18 @@ export class CalculatorPage {
     return this.page.getByLabel('Amount of ice');
   }
 
+  get temperatureConverterToggle(): Locator {
+    return this.page.getByLabel('Temperature Converter').locator('label');
+  }
+
+  get temperatureCelsiusInput(): Locator {
+    return this.page.getByLabel('Celsius');
+  }
+
+  get temperatureFahrenheitInput(): Locator {
+    return this.page.getByLabel('Fahrenheit');
+  }
+
   getPreset(name: string): Locator {
     return this.page.getByRole('button', { name, exact: true });
   }

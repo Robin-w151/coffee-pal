@@ -111,3 +111,26 @@ test('select preset with ice ratio', async ({ calculatorPage }) => {
   await expect(calculatorPage.brewWaterAmountInput).toHaveValue('140');
   await expect(calculatorPage.iceAmountInput).toHaveValue('60');
 });
+
+test('temperature converter toggle', async ({ calculatorPage }) => {
+  await calculatorPage.temperatureConverterToggle.check();
+
+  await expect(calculatorPage.temperatureCelsiusInput).toHaveValue('100');
+  await expect(calculatorPage.temperatureFahrenheitInput).toHaveValue('212');
+});
+
+test('convert celsius to fahrenheit', async ({ calculatorPage }) => {
+  await calculatorPage.temperatureConverterToggle.check();
+  await calculatorPage.temperatureCelsiusInput.fill('20');
+  await calculatorPage.temperatureCelsiusInput.press('Enter');
+
+  await expect(calculatorPage.temperatureFahrenheitInput).toHaveValue('68');
+});
+
+test('convert fahrenheit to celsius', async ({ calculatorPage }) => {
+  await calculatorPage.temperatureConverterToggle.check();
+  await calculatorPage.temperatureFahrenheitInput.fill('176');
+  await calculatorPage.temperatureFahrenheitInput.press('Enter');
+
+  await expect(calculatorPage.temperatureCelsiusInput).toHaveValue('80');
+});

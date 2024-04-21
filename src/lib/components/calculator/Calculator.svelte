@@ -1,14 +1,15 @@
 <script lang="ts">
+  import presets from '$assets/presets.json';
   import type { Preset } from '$lib/models/preset';
   import type { Ratio } from '$lib/models/ratio';
-  import Ratios from './Ratios.svelte';
-  import Recipe from './Recipe.svelte';
   import type { Recipe as IRecipe } from '$lib/models/recipe';
-  import presets from '$assets/presets.json';
-  import Iced from './Iced.svelte';
   import { sanitize } from '$lib/utils/math';
   import PageCard from '../shared/elements/page/PageCard.svelte';
   import PageHeader from '../shared/elements/page/PageHeader.svelte';
+  import Iced from './sections/Iced.svelte';
+  import Ratios from './sections/Ratios.svelte';
+  import Recipe from './sections/Recipe.svelte';
+  import TemperatureConverter from './sections/TemperatureConverter.svelte';
 
   let preset: Preset = presets.find((p) => p.label === 'Orea') ?? presets[0];
   let recipe: IRecipe = calculateRecipe(preset);
@@ -171,5 +172,7 @@
     on:outputChange={handleOutputChange}
   />
   <hr class="md:col-span-3" />
-  <Iced class="md:col-span-3" water={recipe.water} iced={!!iceRatio} {iceRatio} />
+  <Iced cardClass="md:col-span-3" water={recipe.water} iced={!!iceRatio} {iceRatio} />
+  <hr class="md:col-span-3" />
+  <TemperatureConverter cardClass="md:col-span-3" />
 </PageCard>

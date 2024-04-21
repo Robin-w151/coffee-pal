@@ -1,15 +1,15 @@
 <script lang="ts">
+  import Card from '$lib/components/shared/elements/Card.svelte';
+  import Form from '$lib/components/shared/elements/form/Form.svelte';
+  import Label from '$lib/components/shared/elements/form/Label.svelte';
+  import MeasurementInput from '$lib/components/shared/elements/form/MeasurementInput.svelte';
   import { WEIGHT_UNITS } from '$lib/config/units';
   import type { Measurement } from '$lib/models/measurement';
   import type { Recipe } from '$lib/models/recipe';
   import { settingsStore } from '$lib/stores/settings';
   import { getPreferredWeightUnit } from '$lib/utils/units';
-  import { createEventDispatcher } from 'svelte';
-  import Label from '../shared/elements/form/Label.svelte';
-  import MeasurementInput from '../shared/elements/form/MeasurementInput.svelte';
-  import Form from '../shared/elements/form/Form.svelte';
-  import Card from '../shared/elements/Card.svelte';
   import { SlideToggle } from '@skeletonlabs/skeleton';
+  import { createEventDispatcher } from 'svelte';
 
   export let fixedRatio = true;
   export let recipe: Recipe;

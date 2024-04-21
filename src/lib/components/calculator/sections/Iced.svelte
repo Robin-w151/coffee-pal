@@ -1,18 +1,19 @@
 <script lang="ts">
+  import Card from '$lib/components/shared/elements/Card.svelte';
+  import Form from '$lib/components/shared/elements/form/Form.svelte';
+  import Label from '$lib/components/shared/elements/form/Label.svelte';
+  import MeasurementInput from '$lib/components/shared/elements/form/MeasurementInput.svelte';
   import { WEIGHT_UNITS } from '$lib/config/units';
   import type { Measurement } from '$lib/models/measurement';
   import { settingsStore } from '$lib/stores/settings';
   import { sanitize } from '$lib/utils/math';
   import { getPreferredWeightUnit } from '$lib/utils/units';
   import { RangeSlider, SlideToggle } from '@skeletonlabs/skeleton';
-  import Label from '../shared/elements/form/Label.svelte';
-  import MeasurementInput from '../shared/elements/form/MeasurementInput.svelte';
-  import Form from '../shared/elements/form/Form.svelte';
-  import Card from '../shared/elements/Card.svelte';
 
   export let water: number;
   export let iced = false;
   export let iceRatio = 30;
+  export let cardClass: string | undefined = undefined;
 
   const units = WEIGHT_UNITS;
   const preferredUnit = getPreferredWeightUnit($settingsStore.preferredUnits);
@@ -38,7 +39,7 @@
   }
 </script>
 
-<Card class={$$props.class ?? ''}>
+<Card class={cardClass}>
   <div class="flex items-center gap-2">
     <SlideToggle
       name="iced-coffee"

@@ -1,10 +1,10 @@
 <script lang="ts">
-  import type { Ratio } from '$lib/models/ratio';
-  import type { Preset } from '$lib/models/preset';
-  import { createEventDispatcher } from 'svelte';
   import presets from '$assets/presets.json';
-  import Label from '../shared/elements/form/Label.svelte';
-  import Card from '../shared/elements/Card.svelte';
+  import Card from '$lib/components/shared/elements/Card.svelte';
+  import Label from '$lib/components/shared/elements/form/Label.svelte';
+  import type { Preset } from '$lib/models/preset';
+  import type { Ratio } from '$lib/models/ratio';
+  import { createEventDispatcher } from 'svelte';
 
   export let ratio: Ratio | undefined;
 
