@@ -84,6 +84,16 @@ body {
   }
 }
 
+// Toast overrides
+
+.toast {
+  @apply flex-col sm:flex-row gap-4;
+
+  .toast-actions {
+    margin-left: 0 !important;
+  }
+}
+
 // Custom design tokens
 
 .autocomplete-token {
