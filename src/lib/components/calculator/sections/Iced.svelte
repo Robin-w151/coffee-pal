@@ -64,12 +64,14 @@
           <span>{iceRatio} %</span>
         </div>
       </RangeSlider>
-      <Label text="Amount of brewing water">
-        <MeasurementInput readonly {units} bind:measurement={brewWaterMeasurement} />
-      </Label>
-      <Label text="Amount of ice">
-        <MeasurementInput readonly {units} bind:measurement={iceMeasurement} />
-      </Label>
+      <div class="grid sm:grid-cols-2 gap-4 w-full">
+        <Label text="Amount of brewing water">
+          <MeasurementInput readonly {units} bind:measurement={brewWaterMeasurement} />
+        </Label>
+        <Label text="Amount of ice">
+          <MeasurementInput readonly {units} bind:measurement={iceMeasurement} />
+        </Label>
+      </div>
     </Form>
   {/if}
 </Card>
