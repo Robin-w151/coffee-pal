@@ -64,6 +64,10 @@ export class MyCoffeesPage {
     await this.page.getByRole('button', { name: 'Change sort order' }).click();
   }
 
+  async clickSortOption(option: 'A-Z' | 'Z-A' | 'Latest'): Promise<void> {
+    await this.page.getByRole('option', { name: option }).click();
+  }
+
   async clickUndoButton(): Promise<void> {
     await this.page.getByRole('button', { name: 'Undo' }).click();
   }
@@ -85,7 +89,7 @@ export const testCoffeeEntries: Array<ActiveCoffeeEntry> = [
     trader: 'Drip Roasters',
     aromas: ['lemon', 'orange', 'black tea'],
     createdAt: '2023-08-26T21:29:31.780+02:00',
-    updatedAt: '2023-08-26T21:29:31.780+02:00',
+    updatedAt: '2023-10-26T21:29:31.780+02:00',
   },
   {
     id: '191ee4a7-a43d-4a43-98e3-9e5861106d86',
@@ -95,7 +99,7 @@ export const testCoffeeEntries: Array<ActiveCoffeeEntry> = [
     trader: 'Blasercafe',
     aromas: ['blueberry', 'caramel', 'floral', 'sweet', 'honey'],
     createdAt: '2023-08-26T21:26:11.665+02:00',
-    updatedAt: '2023-09-08T15:09:57.359+02:00',
+    updatedAt: '2023-09-28T15:09:57.359+02:00',
   },
   {
     id: '0f3bb076-7346-44fb-8c1d-d74a8c691441',

@@ -35,6 +35,7 @@ test('sort', async ({ myCoffeesPage }) => {
   );
 
   await myCoffeesPage.clickSortButton();
+  await myCoffeesPage.clickSortOption('Z-A');
 
   await expect(myCoffeesPage.getCoffeeEntryTitle(0)).toHaveText('Wiedner Mischung - Mix');
 });
@@ -57,7 +58,7 @@ test('entry add', async ({ myCoffeesPage, myCoffeesEntryDetailPage }) => {
 
   await myCoffeesEntryDetailPage.clickSaveButton();
 
-  const entry = myCoffeesPage.getCoffeeEntry(2);
+  const entry = myCoffeesPage.getCoffeeEntry(0);
   await expect(myCoffeesPage.getCoffeeEntryTitle(entry)).toHaveText(
     'Tovolea Classic - Brazil/Ethiopia',
   );
@@ -69,7 +70,7 @@ test('entry edit', async ({ myCoffeesPage, myCoffeesEntryDetailPage }) => {
   await myCoffeesEntryDetailPage.traderInput.fill('Rösterei');
   await myCoffeesEntryDetailPage.clickSaveButton();
 
-  await expect(myCoffeesPage.getCoffeeEntryDetail(1)).toHaveText('Washed | Rösterei');
+  await expect(myCoffeesPage.getCoffeeEntryDetail(0)).toHaveText('Washed | Rösterei');
 });
 
 test('entry edit cancel', async ({ myCoffeesPage, myCoffeesEntryDetailPage }) => {

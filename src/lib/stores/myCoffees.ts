@@ -8,6 +8,7 @@ import {
   type DeletedCoffeeEntry,
   type MyCoffeesSearchState,
   type MyCoffeesSort,
+  type MyCoffeesSortDirection,
   type MyCoffeesState,
 } from '$lib/models/myCoffees';
 import type { SyncResult } from '$lib/models/sync';
@@ -19,7 +20,7 @@ import type { Readable } from 'svelte/store';
 
 export interface MyCoffeesSearchStore extends Observable<MyCoffeesSearchState> {
   setFilter: (filter: string) => void;
-  setSort: (sort: MyCoffeesSort) => void;
+  setSort: (sort: MyCoffeesSort, sortDirection: MyCoffeesSortDirection) => void;
   reset: () => void;
 }
 
@@ -50,15 +51,15 @@ export const myCoffeesSearchStore = createMyCoffeesSearchStore();
 export const myCoffeesStore = createMyCoffeesStore(myCoffeesSearchStore);
 
 function createMyCoffeesSearchStore(): MyCoffeesSearchStore {
-  const initialState: MyCoffeesSearchState = { sort: 'asc' };
+  const initialState: MyCoffeesSearchState = { sort: 'updated_at', sortDirection: 'desc' };
   const subject = new BehaviorSubject<MyCoffeesSearchState>(initialState);
 
   function setFilter(filter: string): void {
     subject.next({ ...subject.value, filter });
   }
 
-  function setSort(sort: MyCoffeesSort): void {
-    subject.next({ ...subject.value, sort });
+  function setSort(sort: MyCoffeesSort, sortDirection: MyCoffeesSortDirection): void {
+    subject.next({ ...subject.value, sort, sortDirection });
   }
 
   function reset(): void {

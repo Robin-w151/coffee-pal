@@ -35,9 +35,12 @@ export interface MyCoffeesState extends MyCoffees {
 export interface MyCoffeesSearchState {
   filter?: string | null;
   sort?: MyCoffeesSort | null;
+  sortDirection?: MyCoffeesSortDirection | null;
 }
 
-export type MyCoffeesSort = 'asc' | 'desc';
+export type MyCoffeesSort = 'name_origin' | 'updated_at';
+
+export type MyCoffeesSortDirection = 'asc' | 'desc';
 
 export interface MyCoffeesWorker {
   sortOrSearch: (

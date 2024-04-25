@@ -1,4 +1,9 @@
-import type { ActiveCoffeeEntry, MyCoffeesSearchState, MyCoffeesSort } from '$lib/models/myCoffees';
+import type {
+  ActiveCoffeeEntry,
+  MyCoffeesSearchState,
+  MyCoffeesSort,
+  MyCoffeesSortDirection,
+} from '$lib/models/myCoffees';
 import { buildFuseQuery } from '$lib/utils/search/fuzzy';
 import Fuse, { type IFuseOptions } from 'fuse.js';
 
@@ -16,7 +21,7 @@ export function sortOrSearch(
   if (searchState.filter) {
     return search(entries, searchState.filter);
   } else {
-    return sort(entries, searchState.sort ?? 'asc');
+    return sort(entries, searchState.sort ?? 'updated_at', searchState.sortDirection ?? 'desc');
   }
 }
 
@@ -35,13 +40,19 @@ export function search(
 
 export function sort(
   entries: Array<ActiveCoffeeEntry>,
-  sort: MyCoffeesSort = 'asc',
+  sort: MyCoffeesSort = 'updated_at',
+  sortDirection: MyCoffeesSortDirection = 'desc',
 ): Array<ActiveCoffeeEntry> {
   const reverse = (entries: Array<ActiveCoffeeEntry>) =>
-    sort === 'asc' ? entries : entries.reverse();
+    sortDirection === 'asc' ? entries : entries.reverse();
   return reverse(
     entries.sort((e1: ActiveCoffeeEntry, e2: ActiveCoffeeEntry) => {
-      return `${e1.name}-${e1.origin ?? ''}`.localeCompare(`${e2.name}-${e2.origin ?? ''}`);
+      switch (sort) {
+        case 'name_origin':
+          return `${e1.name}-${e1.origin ?? ''}`.localeCompare(`${e2.name}-${e2.origin ?? ''}`);
+        case 'updated_at':
+          return e1.updatedAt.localeCompare(e2.updatedAt);
+      }
     }),
   );
 }
