@@ -38,7 +38,7 @@ export interface JournalSearchState {
   sortDirection?: JournalSortDirection | null;
 }
 
-export type JournalSort = 'title' | 'updated_at';
+export type JournalSort = 'method_coffee_type' | 'updated_at';
 
 export type JournalSortDirection = 'asc' | 'desc';
 

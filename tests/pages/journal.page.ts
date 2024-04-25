@@ -66,7 +66,6 @@ export class JournalPage {
   }
 
   async clickSortOption(option: 'A-Z' | 'Z-A' | 'Latest'): Promise<void> {
-    await this.page.getByRole('button', { name: 'Change sort order' }).click();
     await this.page.getByRole('option', { name: option }).click();
   }
 

@@ -45,13 +45,13 @@
     {
       label: 'A-Z',
       icon: faArrowUpAZ,
-      sort: 'title',
+      sort: 'method_coffee_type',
       sortDirection: 'asc',
     },
     {
       label: 'Z-A',
       icon: faArrowUpZA,
-      sort: 'title',
+      sort: 'method_coffee_type',
       sortDirection: 'desc',
     },
   ] satisfies Array<SortOption>;
@@ -122,7 +122,7 @@
             <Icon data={icon} />
             <span>{label}</span>
           </div>
-          {#if $journalSearchStore.sort === sort && $journalSearchStore.sortDirection === sortDirection}
+          {#if selectedSortOption === label}
             <Icon data={faCheck} />
           {/if}
         </div>

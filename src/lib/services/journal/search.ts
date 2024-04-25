@@ -29,7 +29,7 @@ export function sortOrSearch(
   if (searchState.filter) {
     return search(entries, searchState.filter);
   } else {
-    return sort(entries, searchState.sort ?? 'title', searchState.sortDirection ?? 'asc');
+    return sort(entries, searchState.sort ?? 'updated_at', searchState.sortDirection ?? 'desc');
   }
 }
 
@@ -48,15 +48,15 @@ export function search(
 
 export function sort(
   entries: Array<ActiveJournalEntry>,
-  sort: JournalSort = 'title',
-  sortDirection: JournalSortDirection = 'asc',
+  sort: JournalSort = 'updated_at',
+  sortDirection: JournalSortDirection = 'desc',
 ): Array<ActiveJournalEntry> {
   const reverse = (entries: Array<ActiveJournalEntry>) =>
     sortDirection === 'asc' ? entries : entries.reverse();
   return reverse(
     entries.sort((e1: ActiveJournalEntry, e2: ActiveJournalEntry) => {
       switch (sort) {
-        case 'title':
+        case 'method_coffee_type':
           return `${e1.method}-${e1.coffeeType ?? ''}`.localeCompare(
             `${e2.method}-${e2.coffeeType ?? ''}`,
           );
