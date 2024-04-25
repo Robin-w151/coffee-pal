@@ -134,14 +134,14 @@ function createJournalStore(journalSearchStore: JournalSearchStore): JournalStor
   }
 
   function addEntry(entry: ActiveJournalEntry): void {
-    const now = DateTime.now().toISO()!;
+    const now = DateTime.now().toISO();
     entry.createdAt = now;
     entry.updatedAt = now;
     journalDb?.entries.add(entry, entry.id);
   }
 
   function updateEntry(entry: ActiveJournalEntry): void {
-    entry.updatedAt = DateTime.now().toISO()!;
+    entry.updatedAt = DateTime.now().toISO();
     journalDb?.entries.put(entry, entry.id);
   }
 
@@ -151,7 +151,7 @@ function createJournalStore(journalSearchStore: JournalSearchStore): JournalStor
       removedEntries.set(id, entry);
     }
 
-    const deletedEntry: DeletedJournalEntry = { id, deletedAt: DateTime.now().toISO()! };
+    const deletedEntry: DeletedJournalEntry = { id, deletedAt: DateTime.now().toISO() };
     journalDb?.entries.put(deletedEntry, id);
   }
 

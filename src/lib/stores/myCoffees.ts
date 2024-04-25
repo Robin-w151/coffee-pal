@@ -143,14 +143,14 @@ function createMyCoffeesStore(myCoffeesSearchStore: MyCoffeesSearchStore): MyCof
   }
 
   function addEntry(entry: ActiveCoffeeEntry): void {
-    const now = DateTime.now().toISO()!;
+    const now = DateTime.now().toISO();
     entry.createdAt = now;
     entry.updatedAt = now;
     myCoffeesDb?.entries.add(entry, entry.id);
   }
 
   function updateEntry(entry: ActiveCoffeeEntry): void {
-    entry.updatedAt = DateTime.now().toISO()!;
+    entry.updatedAt = DateTime.now().toISO();
     myCoffeesDb?.entries.put(entry, entry.id);
   }
 
@@ -160,7 +160,7 @@ function createMyCoffeesStore(myCoffeesSearchStore: MyCoffeesSearchStore): MyCof
       removedEntries.set(id, entry);
     }
 
-    const deletedEntry: DeletedCoffeeEntry = { id, deletedAt: DateTime.now().toISO()! };
+    const deletedEntry: DeletedCoffeeEntry = { id, deletedAt: DateTime.now().toISO() };
     myCoffeesDb?.entries.put(deletedEntry, id);
   }
 
