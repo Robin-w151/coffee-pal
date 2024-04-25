@@ -6,19 +6,9 @@
 
   const toastHelper = new ToastHelper(getToastStore());
 
-  let isRefreshing = false;
   let isRestarting = false;
 
   onMount(async () => {
-    navigator.serviceWorker.addEventListener('controllerchange', () => {
-      if (isRefreshing) {
-        return;
-      }
-
-      isRefreshing = true;
-      window.location.reload();
-    });
-
     listenForUpdates(({ restart }) => {
       toastHelper.triggerInfo(
         'A new app version is available. Do you want to update and restart the app now?',

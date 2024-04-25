@@ -2,7 +2,18 @@ export interface UpdateActions {
   restart: () => void;
 }
 
+let isRefreshing = false;
+
 export async function listenForUpdates(callback: (actions: UpdateActions) => void) {
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (isRefreshing) {
+      return;
+    }
+
+    isRefreshing = true;
+    window.location.reload();
+  });
+
   const registration = await navigator.serviceWorker.ready;
   const actions: UpdateActions = { restart };
 
