@@ -72,7 +72,7 @@
       <MeasurementInput {units} bind:measurement={waterMeasurement} />
     </Label>
     <Label text="Target drip rate">
-      <div class="input-group input-group-divider grid-cols-[1fr_auto]">
+      <div class="input-group input-group-divider measurement-input grid-cols-[1fr_auto]">
         <input
           type="number"
           placeholder="Target drip rate, e.g. 60dpm"

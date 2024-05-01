@@ -69,7 +69,8 @@ body {
     min-width: 10rem !important;
   }
 
-  select {
+  select,
+  .input-group-shim {
     min-width: 6rem !important;
   }
 }
