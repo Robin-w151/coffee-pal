@@ -3,7 +3,7 @@
   import Form from '$lib/components/shared/elements/form/Form.svelte';
   import Label from '$lib/components/shared/elements/form/Label.svelte';
   import MeasurementInput from '$lib/components/shared/elements/form/MeasurementInput.svelte';
-  import { WEIGHT_UNITS } from '$lib/config/units';
+  import { WEIGHT_UNITS, WEIGHT_UNITS_COFFEE } from '$lib/config/units';
   import type { Measurement } from '$lib/models/measurement';
   import type { Recipe } from '$lib/models/recipe';
   import { settingsStore } from '$lib/stores/settings';
@@ -16,6 +16,7 @@
 
   const dispatch = createEventDispatcher();
   const units = WEIGHT_UNITS;
+  const units_coffee = WEIGHT_UNITS_COFFEE;
   const preferredUnit = getPreferredWeightUnit($settingsStore.preferredUnits);
 
   let coffeeMeasurement: Measurement = {
@@ -75,7 +76,7 @@
     </Label>
     <Label text="Amount of coffee">
       <MeasurementInput
-        {units}
+        units={units_coffee}
         bind:measurement={coffeeMeasurement}
         on:change={handleCoffeeChange}
         on:blur={handleCoffeeChange}

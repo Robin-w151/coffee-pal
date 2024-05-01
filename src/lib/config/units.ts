@@ -28,6 +28,25 @@ export const UNIT_OZ = {
   system: 'imperial',
 } satisfies Unit;
 
+export const UNIT_TABLESPOON_GROUND_COFFEE = {
+  label: 'tbsp',
+  conversion: {
+    fromBase: (value) => {
+      if (value == null) {
+        return;
+      }
+      return value / 5;
+    },
+    toBase: (value) => {
+      if (value == null) {
+        return;
+      }
+      return value * 5;
+    },
+  },
+  system: 'other',
+} satisfies Unit;
+
 export const UNIT_CELSIUS = {
   label: '°C',
   conversion: {
@@ -57,6 +76,8 @@ export const UNIT_FAHRENHEIT = {
 } satisfies Unit;
 
 export const WEIGHT_UNITS: Array<Unit> = [UNIT_GRAM, UNIT_OZ];
+
+export const WEIGHT_UNITS_COFFEE: Array<Unit> = [...WEIGHT_UNITS, UNIT_TABLESPOON_GROUND_COFFEE];
 
 export const TEMPERATURE_UNITS: Array<Unit> = [UNIT_CELSIUS, UNIT_FAHRENHEIT];
 

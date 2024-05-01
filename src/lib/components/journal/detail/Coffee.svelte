@@ -1,7 +1,7 @@
 <script lang="ts">
   import Label from '$lib/components/shared/elements/form/Label.svelte';
   import MeasurementInput from '$lib/components/shared/elements/form/MeasurementInput.svelte';
-  import { WEIGHT_UNITS } from '$lib/config/units';
+  import { WEIGHT_UNITS_COFFEE } from '$lib/config/units';
   import type { Measurement } from '$lib/models/measurement';
   import { settingsStore } from '$lib/stores/settings';
   import { getPreferredWeightUnit } from '$lib/utils/units';
@@ -10,7 +10,7 @@
   export let coffee: number | undefined;
   export let valid = false;
 
-  const units = WEIGHT_UNITS;
+  const units = WEIGHT_UNITS_COFFEE;
   const preferredUnit = getPreferredWeightUnit($settingsStore.preferredUnits);
   const errorMessages = {
     required: 'amount of coffee is required',

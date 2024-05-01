@@ -9,7 +9,7 @@ export interface Unit {
   system: MeasurementSystem;
 }
 
-export type MeasurementSystem = 'metric' | 'imperial';
+export type MeasurementSystem = 'metric' | 'imperial' | 'other';
 
 export interface Conversion {
   fromBase: (value?: number) => number | undefined;
