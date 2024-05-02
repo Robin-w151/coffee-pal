@@ -22,7 +22,7 @@ jobs:
       - uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
         with:
           node-version: ${{ vars.NODE_VERSION }}
-      - run: pnpm install
+      - run: corepack pnpm install
       - run: npm audit signatures
       - run: npx semantic-release
         env:
