@@ -1,11 +1,9 @@
-import { execSync } from 'child_process';
-
 function getCurrentBranch() {
-  return execSync('git rev-parse --abbrev-ref HEAD').toString().trim();
+  return process.env['VERCEL_GIT_COMMIT_REF'];
 }
 
 function getCurrentCommitMessage() {
-  return execSync('git show -s --format=%s').toString().trim();
+  return process.env['VERCEL_GIT_COMMIT_MESSAGE'];
 }
 
 function isMainBranch() {
@@ -13,7 +11,8 @@ function isMainBranch() {
 }
 
 function isReleaseCommit() {
-  return /^chore\(release\):/.test(getCurrentCommitMessage());
+  const message = getCurrentCommitMessage();
+  return message && /^chore\(release\):/.test(message);
 }
 
 if (isMainBranch() && !isReleaseCommit()) {
