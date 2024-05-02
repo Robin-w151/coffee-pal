@@ -6,7 +6,6 @@
     "type": "git",
     "url": "https://github.com/Robin-w151/coffee-pal.git"
   },
-  "private": true,
   "scripts": {
     "dev": "vite dev",
     "build": "vite build",
