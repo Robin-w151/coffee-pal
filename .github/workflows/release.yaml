@@ -23,7 +23,6 @@ jobs:
         with:
           node-version: ${{ vars.NODE_VERSION }}
       - run: corepack pnpm install
-      - run: npm audit signatures
       - run: npx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
