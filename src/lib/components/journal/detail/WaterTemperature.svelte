@@ -12,7 +12,7 @@
 
   const units = TEMPERATURE_UNITS;
   const preferredUnit = getPreferredTemperatureUnit($settingsStore.preferredUnits);
-  const errorMessages = {
+  const errorMessages: { [key: string]: string } = {
     metric: 'water temperature must be greater than 0',
     imperial: 'water temperature must be greater than 32',
   };
