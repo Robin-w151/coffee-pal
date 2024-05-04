@@ -1,8 +1,6 @@
 name: Test
 on:
   deployment_status:
-    types:
-      - success
 
 permissions:
   contents: read
@@ -11,7 +9,7 @@ jobs:
   check:
     name: test
     runs-on: ubuntu-latest
-    if: github.event.deployment.payload.pull_request != null
+    if: github.event.deployment_status.state == 'success'
     steps:
       - uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4.1.4
         with:
@@ -24,4 +22,3 @@ jobs:
       - run: npx playwright test
         env:
           TEST_BASE_URL: ${{ github.event.deployment_status.target_url }}
-# test
