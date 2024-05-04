@@ -1,16 +1,15 @@
-name: Check
+name: Test
 on:
-  pull_request:
-    branches:
-      - main
+  deployment_status:
 
 permissions:
   contents: read
 
 jobs:
   check:
-    name: check
+    name: test
     runs-on: ubuntu-latest
+    if: github.event.deployment_status.state == 'success'
     steps:
       - uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4.1.4
         with:
@@ -18,7 +17,8 @@ jobs:
       - uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
         with:
           node-version: ${{ vars.NODE_VERSION }}
-      - run: corepack enable pnpm
-      - run: pnpm install
-      - run: pnpm lint
-      - run: pnpm check
+      - run: corepack pnpm install
+      - run: npx playwright install --with-deps
+      - run: npx playwright test
+        env:
+          TEST_BASE_URL: ${{ github.event.deployment_status.target_url }}
