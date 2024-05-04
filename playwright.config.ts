@@ -13,6 +13,9 @@ export default defineConfig({
   use: {
     baseURL,
     trace: 'on-first-retry',
+    extraHTTPHeaders: {
+      'x-vercel-skip-toolbar': '1',
+    },
   },
   projects: [
     {
