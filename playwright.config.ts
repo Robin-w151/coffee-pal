@@ -3,13 +3,19 @@ import dotenv from 'dotenv-flow';
 
 dotenv.config({ silent: true });
 
+const isCI = !!process.env['CI'];
+const baseURL = process.env['TEST_BASE_URL'] ?? 'http://localhost:5173';
+
 export default defineConfig({
   testDir: './tests',
   fullyParallel: true,
-  reporter: 'html',
+  reporter: isCI ? 'github' : 'html',
   use: {
-    baseURL: process.env.TEST_BASE_URL ?? 'http://localhost:5173',
+    baseURL,
     trace: 'on-first-retry',
+    extraHTTPHeaders: {
+      'x-vercel-skip-toolbar': '1',
+    },
   },
   projects: [
     {
@@ -20,5 +26,5 @@ export default defineConfig({
   expect: {
     timeout: 30_000,
   },
-  retries: 1,
+  retries: isCI ? 2 : 0,
 });
