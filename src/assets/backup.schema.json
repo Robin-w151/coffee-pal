@@ -32,6 +32,9 @@
         "rating": {
           "type": "number"
         },
+        "roaster": {
+          "type": "string"
+        },
         "trader": {
           "type": "string"
         },

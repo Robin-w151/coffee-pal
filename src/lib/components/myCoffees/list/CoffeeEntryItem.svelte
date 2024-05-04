@@ -6,8 +6,8 @@
   export let entry: ActiveCoffeeEntry;
 
   function details(entry: ActiveCoffeeEntry): string {
-    const { variety, process, trader } = entry;
-    return [process, variety, trader].filter((s) => !!s).join(' | ');
+    const { variety, process, roaster } = entry;
+    return [process, variety, roaster].filter((s) => !!s).join(' | ');
   }
 </script>
 

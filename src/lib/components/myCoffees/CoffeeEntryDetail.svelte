@@ -20,6 +20,7 @@
   import Trader from './detail/Trader.svelte';
   import Variety from './detail/Variety.svelte';
   import Rating from './detail/Rating.svelte';
+  import Roaster from './detail/Roaster.svelte';
 
   export let id: string | undefined = undefined;
 
@@ -27,8 +28,6 @@
 
   let entry: Partial<ActiveCoffeeEntry> = {
     name: '',
-    origin: undefined,
-    trader: undefined,
     aromas: [],
     description: '',
     createdAt: '',
@@ -95,6 +94,10 @@
       sanitizedEntry.variety = undefined;
     }
 
+    if (!sanitizedEntry.roaster) {
+      sanitizedEntry.roaster = undefined;
+    }
+
     if (!sanitizedEntry.trader) {
       sanitizedEntry.trader = undefined;
     }
@@ -145,10 +148,11 @@
         <Origin bind:origin={entry.origin} />
         <Process bind:process={entry.process} />
         <Variety bind:variety={entry.variety} />
+        <Roaster bind:roaster={entry.roaster} />
         <Trader bind:trader={entry.trader} />
-        <Rating bind:rating={entry.rating} />
         <Aromas bind:aromas={entry.aromas} />
         <Description bind:description={entry.description} />
+        <Rating bind:rating={entry.rating} />
         <div class="flex justify-end items-center gap-2 col-span-2">
           <Actions edit={!!id} {formValid} on:save={handleSave} on:remove={handleRemove} />
         </div>

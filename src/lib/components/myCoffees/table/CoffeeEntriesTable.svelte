@@ -17,6 +17,7 @@
         <th>Origin</th>
         <th>Process</th>
         <th>Variety</th>
+        <th>Roaster</th>
         <th>Trader</th>
         <th>Aromas</th>
       </tr>

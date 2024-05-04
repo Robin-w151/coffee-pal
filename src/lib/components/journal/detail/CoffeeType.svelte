@@ -55,11 +55,14 @@
   }
 
   function getCoffeeTypeOptions(entries: Array<ActiveCoffeeEntry>): Array<AutocompleteOption> {
-    return entries.map((entry) => ({
-      label: entry.name,
-      value: entry.name,
-      keywords: `${entry.origin},${entry.trader},${entry.aromas.join(',')}`,
-    }));
+    return entries.map((entry) => {
+      const option = `${entry.name}${entry.roaster ? ' - ' + entry.roaster : ''}`;
+      return {
+        label: option,
+        value: option,
+        keywords: `${entry.origin},${entry.process},${entry.variety},${entry.roaster},${entry.trader},${entry.aromas.join(',')}`,
+      };
+    });
   }
 </script>
 
