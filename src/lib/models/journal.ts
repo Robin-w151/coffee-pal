@@ -16,6 +16,7 @@ export interface ActiveJournalEntry {
   grindSettings?: string;
   rating?: number;
   description?: string;
+  debugAttr?: string;
   createdAt: string;
   updatedAt: string;
 }
