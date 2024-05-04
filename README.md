@@ -1,8 +1,10 @@
 # Coffee Pal
 
-[![Vercel](https://vercelbadge.vercel.app/api/Robin-w151/coffee-pal)](https://vercel.com)
-[![SonarCloud](https://sonarcloud.io/api/project_badges/measure?project=Robin-w151_coffee-pal&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=Robin-w151_coffee-pal)
-[![License](https://img.shields.io/github/license/Robin-w151/coffee-pal?color=blue)](https://github.com/Robin-w151/coffee-pal/blob/main/LICENSE)
+![GitHub deployments](https://img.shields.io/github/deployments/Robin-w151/coffee-pal/production?style=for-the-badge&logo=vercel&label=deployment)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/Robin-w151/coffee-pal/test.yaml?branch=main&style=for-the-badge&logo=playwright&label=tests)
+![Sonar Quality Gate (branch)](https://img.shields.io/sonar/quality_gate/Robin-w151_coffee-pal/main?server=https%3A%2F%2Fsonarcloud.io&style=for-the-badge&logo=sonarcloud)
+![GitHub package.json version](https://img.shields.io/github/package-json/v/Robin-w151/coffee-pal?style=for-the-badge)
+![GitHub License](https://img.shields.io/github/license/Robin-w151/coffee-pal?style=for-the-badge&color=blue)
 
 Coffee Pal is a collection of utilities and helpers useful when preparing coffee.
 
