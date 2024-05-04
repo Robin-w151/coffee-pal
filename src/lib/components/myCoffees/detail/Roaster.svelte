@@ -1,7 +1,7 @@
 <script lang="ts">
   import Label from '$lib/components/shared/elements/form/Label.svelte';
 
-  export let trader: string | undefined;
+  export let roaster: string | undefined;
 
   function handleInputKeydown(event: KeyboardEvent): void {
     const { key } = event;
@@ -11,12 +11,12 @@
   }
 </script>
 
-<Label text="Trader">
+<Label text="Roaster">
   <input
     class="input"
     type="text"
-    placeholder="Trader, e.g. My retro coffee shop"
-    bind:value={trader}
+    placeholder="Roaster, e.g. My trendy roaster"
+    bind:value={roaster}
     on:keydown={handleInputKeydown}
   />
 </Label>

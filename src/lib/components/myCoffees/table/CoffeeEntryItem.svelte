@@ -26,6 +26,7 @@
   <td>{entry.origin ?? 'Unknown'}</td>
   <td>{entry.process ?? 'Unknown'}</td>
   <td>{entry.variety ?? 'Unknown'}</td>
+  <td>{entry.roaster ?? 'Unknown'}</td>
   <td>{entry.trader ?? 'Unknown'}</td>
   <td>{entry.aromas.join(', ')}</td>
 </tr>
