@@ -48,6 +48,7 @@ test('entry add', async ({ myCoffeesPage, myCoffeesEntryDetailPage }) => {
   await myCoffeesEntryDetailPage.originInput.fill('Brazil/Ethiopia');
   await myCoffeesEntryDetailPage.processInput.fill('Washed');
   await myCoffeesEntryDetailPage.varietyInput.fill('Arabica');
+  await myCoffeesEntryDetailPage.roasterInput.fill('Tovolea');
   await myCoffeesEntryDetailPage.traderInput.fill('Tovolea');
   const aromasInput = myCoffeesEntryDetailPage.aromasInput;
   for (const aroma of ['nutty', 'dark chocolate', 'smokey']) {
@@ -67,18 +68,18 @@ test('entry add', async ({ myCoffeesPage, myCoffeesEntryDetailPage }) => {
 
 test('entry edit', async ({ myCoffeesPage, myCoffeesEntryDetailPage }) => {
   await myCoffeesPage.clickJournalEntryShowButton(1);
-  await myCoffeesEntryDetailPage.traderInput.fill('Rösterei');
+  await myCoffeesEntryDetailPage.roasterInput.fill('Blasercafe');
   await myCoffeesEntryDetailPage.clickSaveButton();
 
-  await expect(myCoffeesPage.getCoffeeEntryDetail(0)).toHaveText('Washed | Rösterei');
+  await expect(myCoffeesPage.getCoffeeEntryDetail(0)).toHaveText('Washed | Blasercafe');
 });
 
 test('entry edit cancel', async ({ myCoffeesPage, myCoffeesEntryDetailPage }) => {
   await myCoffeesPage.clickJournalEntryShowButton(1);
-  await myCoffeesEntryDetailPage.traderInput.fill('');
+  await myCoffeesEntryDetailPage.roasterInput.fill('');
   await myCoffeesEntryDetailPage.clickBackButton();
 
-  await expect(myCoffeesPage.getCoffeeEntryDetail(1)).toHaveText('Washed | Blasercafe');
+  await expect(myCoffeesPage.getCoffeeEntryDetail(1)).toHaveText('Washed | Rösterei');
 });
 
 test('entry delete', async ({ myCoffeesPage, myCoffeesEntryDetailPage }) => {
