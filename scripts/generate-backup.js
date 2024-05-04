@@ -6,7 +6,7 @@ import { writeFileSync } from 'fs';
 const chance = new Chance();
 
 const backup = generateBackup();
-const backupName = `backup-${DateTime.now().toISO()}.json`;
+const backupName = `testdata/backup-${DateTime.now().toISO()}.json`;
 
 writeFileSync(backupName, JSON.stringify(backup));
 
@@ -37,6 +37,7 @@ function generateJournalEntry() {
     coffee: chance.integer({ min: 10, max: 80 }),
     coffeeType: chance.name(),
     grindSettings: chance.syllable(),
+    rating: chance.integer({ min: 0, max: 5 }) || undefined,
     description: chance.paragraph(),
     createdAt: DateTime.now().toISO(),
     updatedAt: DateTime.now().toISO(),
@@ -48,8 +49,12 @@ function generateCoffeeEntry() {
     id: uuid(),
     name: chance.name(),
     origin: chance.country(),
+    variety: chance.word(),
+    process: chance.word(),
+    roaster: chance.name(),
     trader: chance.name(),
     aromas: Array.from({ length: chance.integer({ min: 2, max: 5 }) }, () => chance.word()),
+    rating: chance.integer({ min: 0, max: 5 }) || undefined,
     description: chance.paragraph(),
     createdAt: DateTime.now().toISO(),
     updatedAt: DateTime.now().toISO(),
