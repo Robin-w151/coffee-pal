@@ -57,6 +57,10 @@
       .subscribe();
   }
 
+  function handleCancelClick(): void {
+    pollSubscription?.unsubscribe();
+  }
+
   function handleLoginStart(loginUrl: string): void {
     modalHelper.triggerModal(NextcloudLoginModal, {
       props: { loginUrl },
@@ -127,16 +131,26 @@
         >
       {:else}
         {#if url}
-          <a class="btn variant-soft-primary" href={url} target="_blank" rel="noopener">Open</a>
+          <a class="btn variant-ghost-primary" href={url} target="_blank" rel="noopener">Open</a>
         {/if}
-        <button
-          class="btn variant-filled-primary"
-          title="Enable Sync via Nextcloud"
-          disabled={!hostValid}
-          on:click={handleConnectClick}
-        >
-          Connect
-        </button>
+        {#if showSpinner}
+          <button
+            class="btn variant-filled-error"
+            title="Cancel Setup"
+            on:click={handleCancelClick}
+          >
+            Cancel
+          </button>
+        {:else}
+          <button
+            class="btn variant-filled-primary"
+            title="Enable Sync via Nextcloud"
+            disabled={!hostValid}
+            on:click={handleConnectClick}
+          >
+            Connect
+          </button>
+        {/if}
       {/if}
     </div>
   </Form>
