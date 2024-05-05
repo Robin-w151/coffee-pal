@@ -85,6 +85,12 @@ body {
   @apply h-full;
 }
 
+// Snackbar overrides
+
+.snackbar {
+  @apply px-8;
+}
+
 // Table overrides
 
 .table {
