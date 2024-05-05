@@ -5,6 +5,7 @@
   import AppMenu from '$lib/components/shared/app/AppMenu.svelte';
   import AppRail from '$lib/components/shared/app/AppRail.svelte';
   import EnableColorSchemes from '$lib/components/shared/app/EnableColorSchemes.svelte';
+  import { sync } from '$lib/services/sync/sync';
   import '$lib/stores/app';
   import { rememberScrollPosition, scrollToLastKnownPosition } from '$lib/utils/ui/scroll';
   import { arrow, autoUpdate, computePosition, flip, offset, shift } from '@floating-ui/dom';
@@ -32,6 +33,7 @@
 
   onMount(() => {
     document.documentElement.setAttribute('data-test', 'ready');
+    setTimeout(() => sync(), 5000);
   });
 
   afterNavigate((params: AfterNavigate) => {

@@ -15,10 +15,10 @@
   import { goto } from '$app/navigation';
   import { JOURNAL_PAGE_SIZE } from '$lib/config/journal';
   import type { JournalSort, JournalSortDirection, JournalState } from '$lib/models/journal';
+  import { sync } from '$lib/services/sync/sync';
   import { journalSearchStore, journalStore } from '$lib/stores/journal';
   import { syncAvailabilityStore } from '$lib/stores/syncAvailability';
   import { syncStateStore } from '$lib/stores/syncState';
-  import { sync } from '$lib/utils/sync';
   import { scrollToTop } from '$lib/utils/ui/scroll';
   import {
     faArrowUpAZ,

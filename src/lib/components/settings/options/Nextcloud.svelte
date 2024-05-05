@@ -1,22 +1,22 @@
 <script lang="ts">
-  import { NextcloudLoginClient } from '$lib/services/sync/nextcloud';
+  import Card from '$lib/components/shared/elements/Card.svelte';
   import type { Credentials } from '$lib/models/nextcloud';
+  import type { UrlInputChange } from '$lib/models/urlInput';
+  import { NextcloudLoginClient } from '$lib/services/sync/nextcloud';
+  import { sync } from '$lib/services/sync/sync';
   import { syncStore } from '$lib/stores/sync';
+  import { syncAvailabilityStore } from '$lib/stores/syncAvailability';
   import { syncStateStore } from '$lib/stores/syncState';
   import { ModalHelper } from '$lib/utils/ui/modal';
-  import { sync } from '$lib/utils/sync';
+  import { ToastHelper } from '$lib/utils/ui/toast';
   import { getModalStore, getToastStore } from '@skeletonlabs/skeleton';
+  import { catchError, finalize, of, tap, type Subscription } from 'rxjs';
+  import { onDestroy } from 'svelte';
   import Spinner from '../../shared/elements/Spinner.svelte';
   import Form from '../../shared/elements/form/Form.svelte';
   import Label from '../../shared/elements/form/Label.svelte';
   import UrlInput from '../../shared/elements/form/UrlInput.svelte';
   import NextcloudLoginModal from './NextcloudLoginModal.svelte';
-  import type { UrlInputChange } from '$lib/models/urlInput';
-  import { type Subscription, catchError, finalize, of, tap } from 'rxjs';
-  import { onDestroy } from 'svelte';
-  import { ToastHelper } from '$lib/utils/ui/toast';
-  import { syncAvailabilityStore } from '$lib/stores/syncAvailability';
-  import Card from '$lib/components/shared/elements/Card.svelte';
 
   const modalHelper = new ModalHelper(getModalStore());
   const toastHelper = new ToastHelper(getToastStore());
@@ -86,6 +86,7 @@
         password: appPassword,
       },
     });
+    sync();
   }
 
   function handleDisconnectClick(): void {
