@@ -5,6 +5,7 @@
   import AppMenu from '$lib/components/shared/app/AppMenu.svelte';
   import AppRail from '$lib/components/shared/app/AppRail.svelte';
   import EnableColorSchemes from '$lib/components/shared/app/EnableColorSchemes.svelte';
+  import { sync } from '$lib/services/sync/sync';
   import '$lib/stores/app';
   import { rememberScrollPosition, scrollToLastKnownPosition } from '$lib/utils/ui/scroll';
   import { arrow, autoUpdate, computePosition, flip, offset, shift } from '@floating-ui/dom';
@@ -22,7 +23,6 @@
   import { pwaInfo } from 'virtual:pwa-info';
   import '../../../../app.scss';
   import EnableUpdateListener from './EnableUpdateListener.svelte';
-  import { sync } from '$lib/utils/sync';
 
   initializeStores();
   storePopup.set({ computePosition, autoUpdate, offset, shift, flip, arrow });

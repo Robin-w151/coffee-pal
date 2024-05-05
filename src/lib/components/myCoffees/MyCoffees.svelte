@@ -19,17 +19,11 @@
     MyCoffeesSortDirection,
     MyCoffeesState,
   } from '$lib/models/myCoffees';
+  import { sync } from '$lib/services/sync/sync';
   import { myCoffeesSearchStore, myCoffeesStore } from '$lib/stores/myCoffees';
   import { syncAvailabilityStore } from '$lib/stores/syncAvailability';
   import { syncStateStore } from '$lib/stores/syncState';
-  import { sync } from '$lib/utils/sync';
   import { scrollToTop } from '$lib/utils/ui/scroll';
-  import { ListBox, ListBoxItem, Paginator, type PaginationSettings } from '@skeletonlabs/skeleton';
-  import PageActions from '../shared/elements/page/PageActions.svelte';
-  import PageCard from '../shared/elements/page/PageCard.svelte';
-  import PageSearch from '../shared/elements/page/PageSearch.svelte';
-  import CoffeeEntries from './list/CoffeeEntries.svelte';
-  import CoffeeEntriesTable from './table/CoffeeEntriesTable.svelte';
   import {
     faArrowUpAZ,
     faArrowUpZA,
@@ -37,7 +31,13 @@
     faCheck,
     type IconDefinition,
   } from '@fortawesome/free-solid-svg-icons';
+  import { ListBox, ListBoxItem, Paginator, type PaginationSettings } from '@skeletonlabs/skeleton';
   import { Icon } from 'svelte-awesome';
+  import PageActions from '../shared/elements/page/PageActions.svelte';
+  import PageCard from '../shared/elements/page/PageCard.svelte';
+  import PageSearch from '../shared/elements/page/PageSearch.svelte';
+  import CoffeeEntries from './list/CoffeeEntries.svelte';
+  import CoffeeEntriesTable from './table/CoffeeEntriesTable.svelte';
 
   const sortOptions = [
     {
