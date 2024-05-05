@@ -3,13 +3,21 @@ import { journalStore } from '$lib/stores/journal';
 import { myCoffeesStore } from '$lib/stores/myCoffees';
 import { syncStore } from '$lib/stores/sync';
 import { syncStateStore } from '$lib/stores/syncState';
+import { onlineStore } from 'svelte-legos';
 import { get } from 'svelte/store';
+
+const isOnline = onlineStore();
 
 export async function sync(): Promise<void> {
   const sync = get(syncStore);
   if (!sync.connection) {
     return;
   }
+
+  if (!get(isOnline)) {
+    return;
+  }
+
   syncStateStore.setIsSynchronizing(true);
 
   const journalEntries = await journalStore.loadAll();

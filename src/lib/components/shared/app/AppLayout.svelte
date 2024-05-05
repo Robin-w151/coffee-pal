@@ -22,6 +22,7 @@
   import { pwaInfo } from 'virtual:pwa-info';
   import '../../../../app.scss';
   import EnableUpdateListener from './EnableUpdateListener.svelte';
+  import { sync } from '$lib/utils/sync';
 
   initializeStores();
   storePopup.set({ computePosition, autoUpdate, offset, shift, flip, arrow });
@@ -32,6 +33,7 @@
 
   onMount(() => {
     document.documentElement.setAttribute('data-test', 'ready');
+    setTimeout(() => sync(), 5000);
   });
 
   afterNavigate((params: AfterNavigate) => {

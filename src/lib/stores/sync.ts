@@ -26,7 +26,7 @@ function updateLastSync(): void {
   update((sync) => ({
     ...sync,
     connection: sync.connection
-      ? { ...sync.connection, lastSync: DateTime.now().toISO()! }
+      ? { ...sync.connection, lastSync: DateTime.now().toISO() }
       : undefined,
   }));
 }

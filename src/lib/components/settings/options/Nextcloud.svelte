@@ -86,6 +86,7 @@
         password: appPassword,
       },
     });
+    sync();
   }
 
   function handleDisconnectClick(): void {
