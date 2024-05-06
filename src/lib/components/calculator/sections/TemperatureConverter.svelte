@@ -1,6 +1,7 @@
 <script lang="ts">
   import Card from '$lib/components/shared/elements/Card.svelte';
   import Label from '$lib/components/shared/elements/form/Label.svelte';
+  import { rollDown } from '$lib/components/shared/transitions/rollDown';
   import { UNIT_FAHRENHEIT } from '$lib/config/units';
   import { round } from '$lib/utils/math';
   import { faArrowsLeftRight } from '@fortawesome/free-solid-svg-icons';
@@ -34,7 +35,7 @@
     <h3 class="h3">Temperature Converter</h3>
   </div>
   {#if temperatureConverter}
-    <div class="grid sm:grid-cols-[auto_3rem_auto] max-sm:gap-4">
+    <div class="grid sm:grid-cols-[auto_3rem_auto] max-sm:gap-4" transition:rollDown>
       <Label text="Celsius">
         <input
           class="input"

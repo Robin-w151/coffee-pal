@@ -3,6 +3,7 @@
   import Form from '$lib/components/shared/elements/form/Form.svelte';
   import Label from '$lib/components/shared/elements/form/Label.svelte';
   import MeasurementInput from '$lib/components/shared/elements/form/MeasurementInput.svelte';
+  import { rollDown } from '$lib/components/shared/transitions/rollDown';
   import { WEIGHT_UNITS } from '$lib/config/units';
   import type { Measurement } from '$lib/models/measurement';
   import { settingsStore } from '$lib/stores/settings';
@@ -51,27 +52,29 @@
     <h3 class="h3">Iced Coffee</h3>
   </div>
   {#if iced}
-    <Form>
-      <RangeSlider
-        name="ice-ratio"
-        min={0}
-        max={100}
-        accent="range-slider-accent-token"
-        bind:value={iceRatio}
-      >
-        <div class="flex justify-between items-center">
-          <span>Ice Ratio</span>
-          <span>{iceRatio} %</span>
+    <div transition:rollDown>
+      <Form>
+        <RangeSlider
+          name="ice-ratio"
+          min={0}
+          max={100}
+          accent="range-slider-accent-token"
+          bind:value={iceRatio}
+        >
+          <div class="flex justify-between items-center">
+            <span>Ice Ratio</span>
+            <span>{iceRatio} %</span>
+          </div>
+        </RangeSlider>
+        <div class="grid sm:grid-cols-2 gap-4 w-full">
+          <Label text="Amount of brewing water">
+            <MeasurementInput readonly {units} bind:measurement={brewWaterMeasurement} />
+          </Label>
+          <Label text="Amount of ice">
+            <MeasurementInput readonly {units} bind:measurement={iceMeasurement} />
+          </Label>
         </div>
-      </RangeSlider>
-      <div class="grid sm:grid-cols-2 gap-4 w-full">
-        <Label text="Amount of brewing water">
-          <MeasurementInput readonly {units} bind:measurement={brewWaterMeasurement} />
-        </Label>
-        <Label text="Amount of ice">
-          <MeasurementInput readonly {units} bind:measurement={iceMeasurement} />
-        </Label>
-      </div>
-    </Form>
+      </Form>
+    </div>
   {/if}
 </Card>
