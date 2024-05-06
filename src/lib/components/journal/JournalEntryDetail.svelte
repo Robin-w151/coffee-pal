@@ -178,7 +178,9 @@
         />
         <GrindSettings bind:grindSettings={entry.grindSettings} />
         <Rating bind:rating={entry.rating} />
-        <Description bind:description={entry.description} />
+        <div class="col-span-2">
+          <Description bind:description={entry.description} />
+        </div>
         <div class="flex justify-between items-center gap-4 col-span-2">
           <Ratio coffee={entry.coffee} water={entry.water} />
           <Actions
