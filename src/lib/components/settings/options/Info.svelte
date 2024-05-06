@@ -29,6 +29,12 @@
         <span>Repository</span>
         <a href="https://github.com/Robin-w151/coffee-pal" target="_blank" rel="noopener">GitHub</a>
       </li>
+      <li class={itemClass}>
+        <span>Changelog</span>
+        <a href="https://github.com/Robin-w151/coffee-pal/releases" target="_blank" rel="noopener"
+          >Latest Releases</a
+        >
+      </li>
     </ul>
     {#if $appStore.installEvent}
       <button
