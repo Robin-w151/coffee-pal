@@ -150,9 +150,13 @@
         <Variety bind:variety={entry.variety} />
         <Roaster bind:roaster={entry.roaster} />
         <Trader bind:trader={entry.trader} />
-        <Aromas bind:aromas={entry.aromas} />
-        <Description bind:description={entry.description} />
         <Rating bind:rating={entry.rating} />
+        <div class="col-span-2">
+          <Aromas bind:aromas={entry.aromas} />
+        </div>
+        <div class="col-span-2">
+          <Description bind:description={entry.description} />
+        </div>
         <div class="flex justify-end items-center gap-2 col-span-2">
           <Actions edit={!!id} {formValid} on:save={handleSave} on:remove={handleRemove} />
         </div>
