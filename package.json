@@ -28,7 +28,7 @@
     "@commitlint/cli": "^19.3.0",
     "@commitlint/config-conventional": "^19.2.2",
     "@exodus/schemasafe": "^1.3.0",
-    "@floating-ui/dom": "^1.6.4",
+    "@floating-ui/dom": "^1.6.5",
     "@fortawesome/free-brands-svg-icons": "^6.5.2",
     "@fortawesome/free-regular-svg-icons": "^6.5.2",
     "@fortawesome/free-solid-svg-icons": "^6.5.2",
