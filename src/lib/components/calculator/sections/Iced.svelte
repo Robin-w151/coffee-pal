@@ -7,8 +7,8 @@
   import { WEIGHT_UNITS } from '$lib/config/units';
   import type { Measurement } from '$lib/models/measurement';
   import { settingsStore } from '$lib/stores/settings';
-  import { sanitize } from '$lib/utils/math';
-  import { getPreferredWeightUnit } from '$lib/utils/units';
+  import { sanitize } from '$lib/shared/math';
+  import { getPreferredWeightUnit } from '$lib/shared/units';
   import { RangeSlider, SlideToggle } from '@skeletonlabs/skeleton';
 
   export let water: number;

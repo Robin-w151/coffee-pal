@@ -2,9 +2,9 @@
   import { WEIGHT_UNITS } from '$lib/config/units';
   import type { Measurement } from '$lib/models/measurement';
   import { settingsStore } from '$lib/stores/settings';
-  import { round } from '$lib/utils/math';
-  import { clsx } from '$lib/utils/ui/clsx';
-  import { getPreferredWeightUnit } from '$lib/utils/units';
+  import { round } from '$lib/shared/math';
+  import { clsx } from '$lib/shared/ui/clsx';
+  import { getPreferredWeightUnit } from '$lib/shared/units';
   import Card from '../shared/elements/Card.svelte';
   import Form from '../shared/elements/form/Form.svelte';
   import Label from '../shared/elements/form/Label.svelte';

@@ -7,8 +7,8 @@
   import { syncStore } from '$lib/stores/sync';
   import { syncAvailabilityStore } from '$lib/stores/syncAvailability';
   import { syncStateStore } from '$lib/stores/syncState';
-  import { ModalHelper } from '$lib/utils/ui/modal';
-  import { ToastHelper } from '$lib/utils/ui/toast';
+  import { ModalHelper } from '$lib/shared/ui/modal';
+  import { ToastHelper } from '$lib/shared/ui/toast';
   import { getModalStore, getToastStore } from '@skeletonlabs/skeleton';
   import { catchError, finalize, of, tap, type Subscription } from 'rxjs';
   import { onDestroy } from 'svelte';

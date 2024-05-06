@@ -1,4 +1,4 @@
-import { round } from '$lib/utils/math';
+import { round } from '$lib/shared/math';
 
 export function calculateDripRate(timestamps: Array<number>): number {
   if (timestamps.length < 2) {

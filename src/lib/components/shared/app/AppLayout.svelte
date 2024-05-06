@@ -7,7 +7,7 @@
   import EnableColorSchemes from '$lib/components/shared/app/EnableColorSchemes.svelte';
   import { sync } from '$lib/services/sync/sync';
   import '$lib/stores/app';
-  import { rememberScrollPosition, scrollToLastKnownPosition } from '$lib/utils/ui/scroll';
+  import { rememberScrollPosition, scrollToLastKnownPosition } from '$lib/shared/ui/scroll';
   import { arrow, autoUpdate, computePosition, flip, offset, shift } from '@floating-ui/dom';
   import {
     AppShell,

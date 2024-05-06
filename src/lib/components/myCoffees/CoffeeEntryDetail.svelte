@@ -2,7 +2,7 @@
   import { goto } from '$app/navigation';
   import type { ActiveCoffeeEntry } from '$lib/models/myCoffees';
   import { myCoffeesStore } from '$lib/stores/myCoffees';
-  import { ToastHelper } from '$lib/utils/ui/toast';
+  import { ToastHelper } from '$lib/shared/ui/toast';
   import { faFaceSadCry } from '@fortawesome/free-solid-svg-icons';
   import { getToastStore } from '@skeletonlabs/skeleton';
   import { onMount } from 'svelte';

@@ -3,7 +3,7 @@
   import type { Preset } from '$lib/models/preset';
   import type { Ratio } from '$lib/models/ratio';
   import type { Recipe as IRecipe } from '$lib/models/recipe';
-  import { sanitize } from '$lib/utils/math';
+  import { sanitize } from '$lib/shared/math';
   import PageCard from '../shared/elements/page/PageCard.svelte';
   import PageHeader from '../shared/elements/page/PageHeader.svelte';
   import Iced from './sections/Iced.svelte';

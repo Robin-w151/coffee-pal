@@ -11,8 +11,8 @@ import {
   type SyncableName,
 } from '$lib/models/sync';
 import { merge } from '$lib/services/sync/merge';
-import { lazyLoad } from '$lib/utils/lazyLoad';
-import { isPresent } from '$lib/utils/observables';
+import { lazyLoad } from '$lib/shared/lazyLoad';
+import { isPresent } from '$lib/shared/observables';
 import {
   catchError,
   filter,

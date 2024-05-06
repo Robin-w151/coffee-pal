@@ -4,7 +4,7 @@
   import { TEMPERATURE_UNITS } from '$lib/config/units';
   import type { Measurement } from '$lib/models/measurement';
   import { settingsStore } from '$lib/stores/settings';
-  import { getPreferredTemperatureUnit } from '$lib/utils/units';
+  import { getPreferredTemperatureUnit } from '$lib/shared/units';
   import { createEventDispatcher } from 'svelte';
 
   export let waterTemperature: number | undefined;

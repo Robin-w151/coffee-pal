@@ -1,6 +1,6 @@
 <script lang="ts">
   import { listenForUpdates } from '$lib/services/updates/updateListener';
-  import { ToastHelper } from '$lib/utils/ui/toast';
+  import { ToastHelper } from '$lib/shared/ui/toast';
   import { getToastStore } from '@skeletonlabs/skeleton';
   import { onMount } from 'svelte';
 

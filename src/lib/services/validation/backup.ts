@@ -1,6 +1,6 @@
 import schema from '$assets/backup.schema.json';
 import type { Backup } from '$lib/models/backup';
-import { lazyLoad } from '$lib/utils/lazyLoad';
+import { lazyLoad } from '$lib/shared/lazyLoad';
 import type { Json } from '@exodus/schemasafe';
 
 const validator = lazyLoad(async () => (await import('@exodus/schemasafe')).validator);

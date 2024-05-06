@@ -2,7 +2,7 @@
   import { goto } from '$app/navigation';
   import type { ActiveJournalEntry } from '$lib/models/journal';
   import { journalStore } from '$lib/stores/journal';
-  import { ToastHelper } from '$lib/utils/ui/toast';
+  import { ToastHelper } from '$lib/shared/ui/toast';
   import { faFaceSadCry } from '@fortawesome/free-solid-svg-icons';
   import { getToastStore } from '@skeletonlabs/skeleton';
   import { onMount } from 'svelte';

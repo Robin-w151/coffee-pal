@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { Measurement, Unit } from '$lib/models/measurement';
-  import { round } from '$lib/utils/math';
+  import { round } from '$lib/shared/math';
   import { beforeUpdate } from 'svelte';
 
   export let measurement: Measurement;

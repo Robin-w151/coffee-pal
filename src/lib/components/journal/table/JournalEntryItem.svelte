@@ -6,7 +6,7 @@
     getDisplayValue,
     getPreferredTemperatureUnit,
     getPreferredWeightUnit,
-  } from '$lib/utils/units';
+  } from '$lib/shared/units';
 
   export let entry: ActiveJournalEntry;
 

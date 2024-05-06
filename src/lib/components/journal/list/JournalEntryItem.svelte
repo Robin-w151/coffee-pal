@@ -1,12 +1,12 @@
 <script lang="ts">
   import type { ActiveJournalEntry } from '$lib/models/journal';
   import { settingsStore } from '$lib/stores/settings';
-  import { calculateRatio } from '$lib/utils/math';
+  import { calculateRatio } from '$lib/shared/math';
   import {
     getDisplayValue,
     getPreferredTemperatureUnit,
     getPreferredWeightUnit,
-  } from '$lib/utils/units';
+  } from '$lib/shared/units';
   import { faEye } from '@fortawesome/free-solid-svg-icons';
   import { Icon } from 'svelte-awesome';
 

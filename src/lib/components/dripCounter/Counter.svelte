@@ -1,7 +1,7 @@
 <script lang="ts">
   import { DRIP_INSTANTS_COUNT } from '$lib/config/dripCounter';
   import { calculateDripRate } from '$lib/services/dripCounter/dripRate';
-  import { clsx } from '$lib/utils/ui/clsx';
+  import { clsx } from '$lib/shared/ui/clsx';
   import Card from '../shared/elements/Card.svelte';
 
   export let dropsPerMinute = 0;

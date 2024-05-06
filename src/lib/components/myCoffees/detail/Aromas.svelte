@@ -1,6 +1,6 @@
 <script lang="ts">
   import Label from '$lib/components/shared/elements/form/Label.svelte';
-  import { installEventHandler } from '$lib/utils/ui/events';
+  import { installEventHandler } from '$lib/shared/ui/events';
   import { InputChip } from '@skeletonlabs/skeleton';
 
   export let aromas: Array<string> | undefined;

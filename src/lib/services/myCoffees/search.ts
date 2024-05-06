@@ -4,7 +4,7 @@ import type {
   MyCoffeesSort,
   MyCoffeesSortDirection,
 } from '$lib/models/myCoffees';
-import { buildFuseQuery } from '$lib/utils/search/fuzzy';
+import { buildFuseQuery } from '$lib/services/search/fuzzy';
 import Fuse, { type IFuseOptions } from 'fuse.js';
 
 const FUSE_OPTIONS = {

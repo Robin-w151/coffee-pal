@@ -3,7 +3,7 @@
   import Label from '$lib/components/shared/elements/form/Label.svelte';
   import { rollDown } from '$lib/components/shared/transitions/rollDown';
   import { UNIT_FAHRENHEIT } from '$lib/config/units';
-  import { round } from '$lib/utils/math';
+  import { round } from '$lib/shared/math';
   import { faArrowsLeftRight } from '@fortawesome/free-solid-svg-icons';
   import { SlideToggle } from '@skeletonlabs/skeleton';
   import { Icon } from 'svelte-awesome';

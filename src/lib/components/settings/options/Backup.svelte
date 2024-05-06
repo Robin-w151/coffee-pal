@@ -6,8 +6,8 @@
   import { isValidBackup } from '$lib/services/validation/backup';
   import { journalStore } from '$lib/stores/journal';
   import { myCoffeesStore } from '$lib/stores/myCoffees';
-  import { readJsonFile, writeJsonFile } from '$lib/utils/file';
-  import { ToastHelper } from '$lib/utils/ui/toast';
+  import { readJsonFile, writeJsonFile } from '$lib/shared/file';
+  import { ToastHelper } from '$lib/shared/ui/toast';
   import { faFileArrowUp } from '@fortawesome/free-solid-svg-icons';
   import { FileDropzone, getToastStore } from '@skeletonlabs/skeleton';
   import { DateTime } from 'luxon';

@@ -7,7 +7,7 @@
   import type { Measurement } from '$lib/models/measurement';
   import type { Recipe } from '$lib/models/recipe';
   import { settingsStore } from '$lib/stores/settings';
-  import { getPreferredWeightUnit } from '$lib/utils/units';
+  import { getPreferredWeightUnit } from '$lib/shared/units';
   import { SlideToggle } from '@skeletonlabs/skeleton';
   import { createEventDispatcher } from 'svelte';
 

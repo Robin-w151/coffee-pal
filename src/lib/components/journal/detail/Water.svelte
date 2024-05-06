@@ -4,7 +4,7 @@
   import { WEIGHT_UNITS } from '$lib/config/units';
   import type { Measurement } from '$lib/models/measurement';
   import { settingsStore } from '$lib/stores/settings';
-  import { getPreferredWeightUnit } from '$lib/utils/units';
+  import { getPreferredWeightUnit } from '$lib/shared/units';
   import { createEventDispatcher } from 'svelte';
 
   export let water: number | undefined;

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { calculateRatio } from '$lib/utils/math';
+  import { calculateRatio } from '$lib/shared/math';
 
   export let coffee: number | undefined;
   export let water: number | undefined;
