@@ -85,6 +85,16 @@ body {
   @apply h-full;
 }
 
+.modal-footer {
+  button:not(:last-child) {
+    @apply variant-ghost-primary;
+  }
+
+  button:last-child {
+    @apply variant-filled-primary;
+  }
+}
+
 // Snackbar overrides
 
 .snackbar {

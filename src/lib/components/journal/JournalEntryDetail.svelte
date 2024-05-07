@@ -1,10 +1,13 @@
 <script lang="ts">
-  import { goto } from '$app/navigation';
+  import { beforeNavigate, goto } from '$app/navigation';
   import type { ActiveJournalEntry } from '$lib/models/journal';
-  import { journalStore } from '$lib/stores/journal';
+  import { getCoffeeLabel } from '$lib/models/myCoffees';
+  import { ModalHelper } from '$lib/shared/ui/modal';
   import { ToastHelper } from '$lib/shared/ui/toast';
+  import { journalStore } from '$lib/stores/journal';
   import { faFaceSadCry } from '@fortawesome/free-solid-svg-icons';
-  import { getToastStore } from '@skeletonlabs/skeleton';
+  import { getModalStore, getToastStore } from '@skeletonlabs/skeleton';
+  import { isEqual } from 'lodash-es';
   import { onMount } from 'svelte';
   import { Icon } from 'svelte-awesome';
   import { v4 as uuid } from 'uuid';
@@ -21,11 +24,11 @@
   import Ratio from './detail/Ratio.svelte';
   import Water from './detail/Water.svelte';
   import WaterTemperature from './detail/WaterTemperature.svelte';
-  import { getCoffeeLabel } from '$lib/models/myCoffees';
 
   export let id: string | undefined = undefined;
 
   const toastHelper = new ToastHelper(getToastStore());
+  const modalHelper = new ModalHelper(getModalStore());
 
   let entry: Partial<ActiveJournalEntry> = {
     method: '',
@@ -39,6 +42,7 @@
     createdAt: '',
     updatedAt: '',
   };
+  let originalEntry: Partial<ActiveJournalEntry> = entry;
   let unknown = false;
   let isLoading = true;
 
@@ -49,17 +53,33 @@
 
   $: entryTitle = getTitle(unknown, entry);
   $: formValid = methodInputValid && waterInputValid && coffeeInputValid;
+  $: hasChanged = !isEqual(entry, originalEntry);
 
   onMount(async () => {
     if (id) {
       const loadedEntry = await journalStore.loadOne(id);
       if (loadedEntry) {
         entry = loadedEntry;
+        originalEntry = structuredClone(loadedEntry);
       } else {
         unknown = true;
       }
     }
     isLoading = false;
+  });
+
+  beforeNavigate(async ({ cancel, to }) => {
+    if (hasChanged) {
+      cancel();
+      const confirmed = await modalHelper.triggerConfirm(
+        'Unsaved changes found',
+        'Are you sure you want to leave?',
+      );
+      if (confirmed && to) {
+        hasChanged = false;
+        goto(to.url);
+      }
+    }
   });
 
   function handleSave(): void {
@@ -69,12 +89,14 @@
     } else {
       journalStore.add({ ...sanitizedEntry, id: uuid() });
     }
+    hasChanged = false;
     goBack();
   }
 
   function handleCopy(): void {
     const sanitizedEntry = sanitizeEntry(entry);
     journalStore.add({ ...sanitizedEntry, id: uuid() });
+    hasChanged = false;
     goBack();
   }
 
@@ -91,6 +113,7 @@
 
       journalStore.remove(id);
     }
+    hasChanged = false;
     goBack();
   }
 

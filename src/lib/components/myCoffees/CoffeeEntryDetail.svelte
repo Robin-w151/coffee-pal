@@ -1,10 +1,12 @@
 <script lang="ts">
-  import { goto } from '$app/navigation';
+  import { beforeNavigate, goto } from '$app/navigation';
   import { getCoffeeLabel, type ActiveCoffeeEntry } from '$lib/models/myCoffees';
-  import { myCoffeesStore } from '$lib/stores/myCoffees';
+  import { ModalHelper } from '$lib/shared/ui/modal';
   import { ToastHelper } from '$lib/shared/ui/toast';
+  import { myCoffeesStore } from '$lib/stores/myCoffees';
   import { faFaceSadCry } from '@fortawesome/free-solid-svg-icons';
-  import { getToastStore } from '@skeletonlabs/skeleton';
+  import { getModalStore, getToastStore } from '@skeletonlabs/skeleton';
+  import { isEqual } from 'lodash-es';
   import { onMount } from 'svelte';
   import { Icon } from 'svelte-awesome';
   import { v4 as uuid } from 'uuid';
@@ -17,13 +19,14 @@
   import Name from './detail/Name.svelte';
   import Origin from './detail/Origin.svelte';
   import Process from './detail/Process.svelte';
-  import Trader from './detail/Trader.svelte';
-  import Variety from './detail/Variety.svelte';
   import Rating from './detail/Rating.svelte';
   import Roaster from './detail/Roaster.svelte';
+  import Trader from './detail/Trader.svelte';
+  import Variety from './detail/Variety.svelte';
 
   export let id: string | undefined = undefined;
 
+  const modalHelper = new ModalHelper(getModalStore());
   const toastHelper = new ToastHelper(getToastStore());
 
   let entry: Partial<ActiveCoffeeEntry> = {
@@ -33,6 +36,7 @@
     createdAt: '',
     updatedAt: '',
   };
+  let originalEntry: Partial<ActiveCoffeeEntry> = entry;
   let unknown = false;
   let isLoading = true;
 
@@ -40,6 +44,7 @@
 
   $: entryTitle = getTitle(unknown, entry);
   $: formValid = nameInputValid;
+  $: hasChanged = !isEqual(entry, originalEntry);
 
   onMount(async () => {
     if (id) {
@@ -53,6 +58,20 @@
     isLoading = false;
   });
 
+  beforeNavigate(async ({ cancel, to }) => {
+    if (hasChanged) {
+      cancel();
+      const confirmed = await modalHelper.triggerConfirm(
+        'Unsaved changes found',
+        'Are you sure you want to leave?',
+      );
+      if (confirmed && to) {
+        hasChanged = false;
+        goto(to.url);
+      }
+    }
+  });
+
   function handleSave(): void {
     const sanitizedEntry = sanitizeEntry(entry);
     if (entry.id) {
@@ -60,6 +79,7 @@
     } else {
       myCoffeesStore.add({ ...sanitizedEntry, id: uuid() });
     }
+    hasChanged = false;
     goBack();
   }
 
@@ -76,6 +96,7 @@
 
       myCoffeesStore.remove(id);
     }
+    hasChanged = false;
     goBack();
   }
 
