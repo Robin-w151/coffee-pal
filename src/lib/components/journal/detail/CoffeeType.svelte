@@ -24,8 +24,9 @@
   };
 
   let coffeeTypeOptions: Array<AutocompleteOption<ActiveCoffeeEntry>> = [];
+  let coffeeTypeInput = getCoffeeLabel(coffeeType);
 
-  $: coffeeTypeInput = getCoffeeLabel(coffeeType);
+  $: handleCoffeeTypeChange(coffeeType);
   $: coffeeTypeId = typeof coffeeType === 'object' ? coffeeType.id : undefined;
 
   onMount(() => {
@@ -45,10 +46,22 @@
     filter.complete();
   });
 
+  function handleCoffeeTypeChange(coffeeType?: string | ActiveCoffeeEntry): void {
+    if (coffeeType) {
+      const label = getCoffeeLabel(coffeeType);
+      if (coffeeTypeInput !== label) {
+        coffeeTypeInput = label;
+      }
+    } else {
+      coffeeTypeInput = undefined;
+    }
+  }
+
   function handleCoffeeTypeSelect({
     detail,
   }: CustomEvent<AutocompleteOption<ActiveCoffeeEntry>>): void {
     coffeeType = detail.value;
+    coffeeTypeInput = getCoffeeLabel(coffeeType);
   }
 
   function handleInputChange(): void {
