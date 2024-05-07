@@ -16,7 +16,7 @@
   import { fade } from 'svelte/transition';
   import { scaleX } from '../../transitions/scaleX';
   import Spinner from '../Spinner.svelte';
-  import InputButton from '../form/InputButton.svelte';
+  import InputWithButton from '../form/InputWithButton.svelte';
 
   export let title: string;
   export let search: string | null | undefined = '';
@@ -86,7 +86,7 @@
   </div>
   <div class="grid grid-cols-[auto_max-content] items-center gap-2" class:w-full={isSearchActive}>
     {#if isSearchActive}
-      <InputButton title="Clear" visible={!!search} on:click={handleSearchInputClearClick}>
+      <InputWithButton title="Clear" visible={!!search} on:click={handleSearchInputClearClick}>
         <input
           class="input"
           type="text"
@@ -98,7 +98,7 @@
         <svelte:fragment slot="button-content">
           <Icon data={faClose} />
         </svelte:fragment>
-      </InputButton>
+      </InputWithButton>
     {:else}
       <button
         class="btn btn-icon variant-ghost-secondary"

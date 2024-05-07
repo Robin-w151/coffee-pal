@@ -1,8 +1,9 @@
 <script lang="ts">
+  import InputWithButton from '$lib/components/shared/elements/form/InputWithButton.svelte';
   import Label from '$lib/components/shared/elements/form/Label.svelte';
-  import type { ActiveCoffeeEntry } from '$lib/models/myCoffees';
+  import { getCoffeeLabel, type ActiveCoffeeEntry } from '$lib/models/myCoffees';
   import { myCoffeesStore } from '$lib/stores/myCoffees';
-  import { faLink } from '@fortawesome/free-solid-svg-icons';
+  import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
   import {
     Autocomplete,
     popup,
@@ -24,11 +25,7 @@
 
   let coffeeTypeOptions: Array<AutocompleteOption<ActiveCoffeeEntry>> = [];
 
-  $: coffeeTypeInput = coffeeType
-    ? typeof coffeeType === 'string'
-      ? coffeeType
-      : [coffeeType.name, coffeeType.roaster].filter((s) => !!s).join('/')
-    : undefined;
+  $: coffeeTypeInput = getCoffeeLabel(coffeeType);
   $: coffeeTypeId = typeof coffeeType === 'object' ? coffeeType.id : undefined;
 
   onMount(() => {
@@ -70,19 +67,23 @@
     entries: Array<ActiveCoffeeEntry>,
   ): Array<AutocompleteOption<ActiveCoffeeEntry>> {
     return entries.map((entry) => {
-      const option = [entry.name, entry.roaster].filter((s) => !!s).join('/');
+      const option = getCoffeeLabel(entry)!;
       return {
         label: option,
         value: entry,
-        keywords: `${entry.origin},${entry.process},${entry.variety},${entry.roaster},${entry.trader},${entry.aromas.join(',')}`,
       };
     });
   }
 </script>
 
 <Label text="Type of coffee" class="relative">
-  <div class="input-group input-group-divider grid-cols-[1fr_auto] input autocomplete">
+  <InputWithButton
+    title="Open coffee entry"
+    visible={!!coffeeTypeId}
+    href="/my-coffees/{coffeeTypeId}"
+  >
     <input
+      class="input autocomplete"
       type="text"
       placeholder="Type of coffee, e.g. Some coffee brand"
       bind:value={coffeeTypeInput}
@@ -90,17 +91,15 @@
       on:input={handleInputChange}
       on:keydown={handleInputKeydown}
     />
-    {#if coffeeTypeId}
-      <a href="/my-coffees/{coffeeTypeId}">
-        <Icon data={faLink} />
-      </a>
-    {/if}
-  </div>
-  <div class="autocomplete-token !left-0" tabindex="-1" data-popup="popupCoffeeTypeAutocomplete">
-    <Autocomplete
-      options={coffeeTypeOptions}
-      filter={() => coffeeTypeOptions}
-      on:selection={handleCoffeeTypeSelect}
-    />
-  </div>
+    <svelte:fragment slot="button-content">
+      <Icon data={faArrowUpRightFromSquare} />
+    </svelte:fragment>
+    <div class="autocomplete-token" tabindex="-1" data-popup="popupCoffeeTypeAutocomplete">
+      <Autocomplete
+        options={coffeeTypeOptions}
+        filter={() => [...coffeeTypeOptions]}
+        on:selection={handleCoffeeTypeSelect}
+      />
+    </div>
+  </InputWithButton>
 </Label>

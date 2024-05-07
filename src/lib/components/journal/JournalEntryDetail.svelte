@@ -21,6 +21,7 @@
   import Ratio from './detail/Ratio.svelte';
   import Water from './detail/Water.svelte';
   import WaterTemperature from './detail/WaterTemperature.svelte';
+  import { getCoffeeLabel } from '$lib/models/myCoffees';
 
   export let id: string | undefined = undefined;
 
@@ -144,11 +145,7 @@
     if (unknown) {
       return 'Unknown';
     } else if (entry?.id) {
-      const coffeeType = entry.coffeeType
-        ? typeof entry.coffeeType === 'string'
-          ? entry.coffeeType
-          : [entry.coffeeType.name, entry.coffeeType.roaster].filter((s) => !!s).join('/')
-        : undefined;
+      const coffeeType = getCoffeeLabel(entry.coffeeType);
       return `${entry.method || 'Unknown'} - ${coffeeType || 'Unknown'}`;
     } else {
       return 'New Entry';

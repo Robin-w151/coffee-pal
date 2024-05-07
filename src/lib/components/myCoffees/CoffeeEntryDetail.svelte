@@ -1,6 +1,6 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
-  import type { ActiveCoffeeEntry } from '$lib/models/myCoffees';
+  import { getCoffeeLabel, type ActiveCoffeeEntry } from '$lib/models/myCoffees';
   import { myCoffeesStore } from '$lib/stores/myCoffees';
   import { ToastHelper } from '$lib/shared/ui/toast';
   import { faFaceSadCry } from '@fortawesome/free-solid-svg-icons';
@@ -125,7 +125,7 @@
     if (unknown) {
       return 'Unknown';
     } else if (entry?.id) {
-      return [entry.name, entry.roaster].filter((s) => !!s).join('/') || 'Unknown';
+      return getCoffeeLabel(entry) || 'Unknown';
     } else {
       return 'New Entry';
     }

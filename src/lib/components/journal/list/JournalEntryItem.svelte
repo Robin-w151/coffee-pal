@@ -9,6 +9,7 @@
   } from '$lib/shared/units';
   import { faEye } from '@fortawesome/free-solid-svg-icons';
   import { Icon } from 'svelte-awesome';
+  import { getCoffeeLabel } from '$lib/models/myCoffees';
 
   export let entry: ActiveJournalEntry;
 
@@ -16,11 +17,7 @@
   const preferredTemperatureUnit = getPreferredTemperatureUnit($settingsStore.preferredUnits);
 
   $: ratio = calculateRatio(entry.coffee, entry.water);
-  $: coffeeType = entry.coffeeType
-    ? typeof entry.coffeeType === 'string'
-      ? entry.coffeeType
-      : [entry.coffeeType.name, entry.coffeeType.roaster].filter((s) => !!s).join('/')
-    : undefined;
+  $: coffeeType = getCoffeeLabel(entry.coffeeType);
 
   function details(entry: ActiveJournalEntry): string {
     const { water, coffee, waterTemperature, grindSettings, description } = entry;

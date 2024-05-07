@@ -7,17 +7,14 @@
     getPreferredTemperatureUnit,
     getPreferredWeightUnit,
   } from '$lib/shared/units';
+  import { getCoffeeLabel } from '$lib/models/myCoffees';
 
   export let entry: ActiveJournalEntry;
 
   const preferredWeightUnit = getPreferredWeightUnit($settingsStore.preferredUnits);
   const preferredTemperatureUnit = getPreferredTemperatureUnit($settingsStore.preferredUnits);
 
-  $: coffeeType = entry.coffeeType
-    ? typeof entry.coffeeType === 'string'
-      ? entry.coffeeType
-      : [entry.coffeeType.name, entry.coffeeType.roaster].filter((s) => !!s).join('/')
-    : undefined;
+  $: coffeeType = getCoffeeLabel(entry.coffeeType);
 
   function handleEntryClick(): void {
     gotoDetail();
