@@ -144,7 +144,12 @@
     if (unknown) {
       return 'Unknown';
     } else if (entry?.id) {
-      return `${entry.method || 'Unknown'} - ${entry.coffeeType || 'Unknown'}`;
+      const coffeeType = entry.coffeeType
+        ? typeof entry.coffeeType === 'string'
+          ? entry.coffeeType
+          : [entry.coffeeType.name, entry.coffeeType.roaster].filter((s) => !!s).join('/')
+        : undefined;
+      return `${entry.method || 'Unknown'} - ${coffeeType || 'Unknown'}`;
     } else {
       return 'New Entry';
     }

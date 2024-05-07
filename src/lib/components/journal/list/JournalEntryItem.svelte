@@ -15,7 +15,12 @@
   const preferredWeightUnit = getPreferredWeightUnit($settingsStore.preferredUnits);
   const preferredTemperatureUnit = getPreferredTemperatureUnit($settingsStore.preferredUnits);
 
-  $: ratio = calculateRatio(entry.coffee, entry.water) ?? 'unknown';
+  $: ratio = calculateRatio(entry.coffee, entry.water);
+  $: coffeeType = entry.coffeeType
+    ? typeof entry.coffeeType === 'string'
+      ? entry.coffeeType
+      : [entry.coffeeType.name, entry.coffeeType.roaster].filter((s) => !!s).join('/')
+    : undefined;
 
   function details(entry: ActiveJournalEntry): string {
     const { water, coffee, waterTemperature, grindSettings, description } = entry;
@@ -31,10 +36,10 @@
 </script>
 
 <div class="justify-between">
-  <span class="max-sm:hidden badge variant-soft-tertiary w-16">{ratio}</span>
+  <span class="max-sm:hidden badge variant-soft-tertiary w-16">{ratio ?? 'unknown'}</span>
   <span class="block min-w-0 flex-1 max-sm:!ml-0">
     <dt class="overflow-hidden text-ellipsis whitespace-nowrap">
-      <span class="font-bold">{entry.method} - {entry.coffeeType || 'Unknown'}</span>
+      <span class="font-bold">{entry.method} - {coffeeType ?? 'Unknown'}</span>
     </dt>
     <dd class="overflow-hidden text-ellipsis whitespace-nowrap">
       <span class="sm:hidden">{ratio} - </span>

@@ -125,7 +125,7 @@
     if (unknown) {
       return 'Unknown';
     } else if (entry?.id) {
-      return entry.name || 'Unknown';
+      return [entry.name, entry.roaster].filter((s) => !!s).join('/') || 'Unknown';
     } else {
       return 'New Entry';
     }

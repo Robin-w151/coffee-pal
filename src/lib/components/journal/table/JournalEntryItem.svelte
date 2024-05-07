@@ -13,6 +13,12 @@
   const preferredWeightUnit = getPreferredWeightUnit($settingsStore.preferredUnits);
   const preferredTemperatureUnit = getPreferredTemperatureUnit($settingsStore.preferredUnits);
 
+  $: coffeeType = entry.coffeeType
+    ? typeof entry.coffeeType === 'string'
+      ? entry.coffeeType
+      : [entry.coffeeType.name, entry.coffeeType.roaster].filter((s) => !!s).join('/')
+    : undefined;
+
   function handleEntryClick(): void {
     gotoDetail();
   }
@@ -44,7 +50,7 @@
 
 <tr tabindex="0" role="button" on:click={handleEntryClick} on:keydown={handleEntryKeyDown}>
   <td>{entry.method}</td>
-  <td>{entry.coffeeType ?? 'Unknown'}</td>
+  <td>{coffeeType ?? 'Unknown'}</td>
   <td>{waterDisplayValue(entry.water)}/{coffeeDisplayValue(entry.coffee)}</td>
   <td>{entry.waterTemperature ? waterTemperatureDisplayValue(entry.waterTemperature) : 'N/A'}</td>
   <td>{entry.grindSettings || 'N/A'}</td>
