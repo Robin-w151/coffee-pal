@@ -112,7 +112,7 @@ export const testJournalEntries: Array<ActiveJournalEntry> = [
     coffee: 25,
     coffeeType: 'Honeymoon',
     grindSettings: '24 clicks',
-    description: '2m30s brew',
+    description: undefined,
     createdAt: '2023-10-01T19:32:09.015+02:00',
     updatedAt: '2023-10-01T19:32:09.015+02:00',
   },

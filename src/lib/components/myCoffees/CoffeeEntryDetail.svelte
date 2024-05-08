@@ -31,8 +31,14 @@
 
   let entry: Partial<ActiveCoffeeEntry> = {
     name: '',
+    origin: undefined,
+    process: undefined,
+    variety: undefined,
+    roaster: undefined,
+    trader: undefined,
+    rating: 0,
     aromas: [],
-    description: '',
+    description: undefined,
     createdAt: '',
     updatedAt: '',
   };
@@ -110,6 +116,10 @@
 
     if (!sanitizedEntry.origin) {
       sanitizedEntry.origin = undefined;
+    }
+
+    if (!sanitizedEntry.process) {
+      sanitizedEntry.process = undefined;
     }
 
     if (!sanitizedEntry.variety) {

@@ -35,10 +35,10 @@
     water: undefined,
     waterTemperature: undefined,
     coffee: undefined,
-    coffeeType: '',
-    grindSettings: '',
+    coffeeType: undefined,
+    grindSettings: undefined,
     rating: 0,
-    description: '',
+    description: undefined,
     createdAt: '',
     updatedAt: '',
   };

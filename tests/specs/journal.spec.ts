@@ -78,8 +78,8 @@ test('entry edit cancel', async ({ appPage, journalPage, journalEntryDetailPage 
 
 test('entry edit without changes', async ({ journalPage, journalEntryDetailPage }) => {
   await journalPage.clickJournalEntryShowButton(2);
-  await journalEntryDetailPage.coffeeTypeInput.fill('');
-  await journalEntryDetailPage.coffeeTypeInput.fill('Honeymoon');
+  await journalEntryDetailPage.descriptionInput.fill('2m30s brew time');
+  await journalEntryDetailPage.descriptionInput.fill('');
   await journalEntryDetailPage.clickBackButton();
 
   await expect(journalPage.getJournalEntryTitle(2)).toHaveText('V60 Switch - Honeymoon');

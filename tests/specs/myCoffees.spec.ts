@@ -85,8 +85,8 @@ test('entry edit cancel', async ({ appPage, myCoffeesPage, myCoffeesEntryDetailP
 
 test('entry edit without changes', async ({ myCoffeesPage, myCoffeesEntryDetailPage }) => {
   await myCoffeesPage.clickJournalEntryShowButton(2);
-  await myCoffeesEntryDetailPage.originInput.fill('');
-  await myCoffeesEntryDetailPage.originInput.fill('Mix');
+  await myCoffeesEntryDetailPage.descriptionInput.fill('Excellent for cold brew');
+  await myCoffeesEntryDetailPage.descriptionInput.fill('');
   await myCoffeesEntryDetailPage.clickBackButton();
 
   await expect(myCoffeesPage.getCoffeeEntryTitle(2)).toHaveText('Wiedner Mischung - Mix');
