@@ -45,7 +45,7 @@ export const test = base.extend<TestFixtures>({
     await myCoffeesPage.addCoffeeEntry(testCoffeeEntries);
     await myCoffeesPage.goto();
     await expect(myCoffeesPage.getCoffeeEntryTitle(0)).toHaveText(
-      'Rwanda Kamajumba - Kamajumba Estate',
+      'Rwanda Kamajumba (Drip Roasters)',
     );
 
     await use(myCoffeesPage);
