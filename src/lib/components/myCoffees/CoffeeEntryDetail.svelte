@@ -150,7 +150,7 @@
   }
 
   function goBack(): void {
-    goto('/my-coffees');
+    history.back();
   }
 
   function getTitle(unknown: boolean, entry?: Partial<ActiveCoffeeEntry>): string {

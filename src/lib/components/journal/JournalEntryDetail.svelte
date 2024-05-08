@@ -161,7 +161,7 @@
   }
 
   function goBack(): void {
-    goto('/');
+    history.back();
   }
 
   function getTitle(unknown: boolean, entry?: Partial<ActiveJournalEntry>): string {

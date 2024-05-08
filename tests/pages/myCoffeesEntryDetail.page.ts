@@ -4,7 +4,7 @@ export class MyCoffeesEntryDetailPage {
   constructor(private readonly page: Page) {}
 
   get header(): Locator {
-    return this.page.getByRole('heading', { name: 'New Entry' });
+    return this.page.getByRole('heading');
   }
 
   get nameInput(): Locator {

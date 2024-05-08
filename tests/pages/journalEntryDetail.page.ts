@@ -50,4 +50,8 @@ export class JournalEntryDetailPage {
   async clickBackButton(): Promise<void> {
     await this.page.getByRole('button', { name: 'Go back' }).click();
   }
+
+  async clickOpenCoffeeEntry(): Promise<void> {
+    await this.page.getByRole('link', { name: 'Open coffee entry' }).click();
+  }
 }

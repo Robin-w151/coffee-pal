@@ -7,7 +7,9 @@ test('list', async ({ journalPage }) => {
 
 test('entry item', async ({ journalPage }) => {
   const firstEntry = journalPage.getJournalEntry(0);
-  await expect(journalPage.getJournalEntryTitle(firstEntry)).toHaveText('Aeropress - Terroir PAN');
+  await expect(journalPage.getJournalEntryTitle(firstEntry)).toHaveText(
+    'Aeropress - Terroir PAN (Rösterei)',
+  );
   await expect(journalPage.getJournalEntryDetail(firstEntry)).toHaveText(
     '1:15.4 - 200g/13g | 100 °C | 24 clicks | 40% ice',
   );
@@ -28,7 +30,9 @@ test('search clear', async ({ journalPage }) => {
 });
 
 test('sort', async ({ journalPage }) => {
-  await expect(journalPage.getJournalEntryTitle(0)).toHaveText('Aeropress - Terroir PAN');
+  await expect(journalPage.getJournalEntryTitle(0)).toHaveText(
+    'Aeropress - Terroir PAN (Rösterei)',
+  );
 
   await journalPage.clickSortButton();
   await journalPage.clickSortOption('Z-A');
@@ -64,7 +68,9 @@ test('entry edit', async ({ journalPage, journalEntryDetailPage }) => {
   await journalEntryDetailPage.methodInput.fill('Aeropress Clear');
   await journalEntryDetailPage.clickSaveButton();
 
-  await expect(journalPage.getJournalEntryTitle(0)).toHaveText('Aeropress Clear - Terroir PAN');
+  await expect(journalPage.getJournalEntryTitle(0)).toHaveText(
+    'Aeropress Clear - Terroir PAN (Rösterei)',
+  );
 });
 
 test('entry edit cancel', async ({ appPage, journalPage, journalEntryDetailPage }) => {
@@ -106,4 +112,22 @@ test('entry copy', async ({ journalPage, journalEntryDetailPage }) => {
   await journalEntryDetailPage.clickCopyButton();
 
   await expect(journalPage.journalList).toHaveCount(4);
+});
+
+test('entry navigate to coffee entry and back to overview', async ({
+  journalPage,
+  journalEntryDetailPage,
+  myCoffeesEntryDetailPage,
+}) => {
+  await journalPage.clickJournalEntryShowButton(0);
+  await journalEntryDetailPage.clickOpenCoffeeEntry();
+
+  await expect(myCoffeesEntryDetailPage.header).toHaveText('Terroir PAN (Rösterei)');
+
+  await myCoffeesEntryDetailPage.clickBackButton();
+  await journalEntryDetailPage.clickBackButton();
+
+  await expect(journalPage.getJournalEntryTitle(0)).toHaveText(
+    'Aeropress - Terroir PAN (Rösterei)',
+  );
 });

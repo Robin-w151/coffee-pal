@@ -1,11 +1,11 @@
-import { JournalPage, testJournalEntries } from './pages/journal.page';
 import { test as base, expect, type Page } from '@playwright/test';
-import { MyCoffeesPage, testCoffeeEntries } from './pages/myCoffees.page';
+import { AppPage, testCoffeeEntries, testJournalEntries } from './features/app.feature';
 import { CalculatorPage } from './pages/calculator.page';
-import { JournalEntryDetailPage } from './pages/journalEntryDetail.page';
-import { MyCoffeesEntryDetailPage } from './pages/myCoffeesEntryDetail.page';
 import { DripCounterPage } from './pages/dripCounter.page';
-import { AppPage } from './pages/app.page';
+import { JournalPage } from './pages/journal.page';
+import { JournalEntryDetailPage } from './pages/journalEntryDetail.page';
+import { MyCoffeesPage } from './pages/myCoffees.page';
+import { MyCoffeesEntryDetailPage } from './pages/myCoffeesEntryDetail.page';
 
 interface TestFixtures {
   appPage: AppPage;
@@ -18,18 +18,25 @@ interface TestFixtures {
 }
 
 export const test = base.extend<TestFixtures>({
-  appPage: async ({ page }, use) => {
-    const appPage = new AppPage(page);
-    await use(appPage);
-  },
+  appPage: [
+    async ({ page }, use) => {
+      const appPage = new AppPage(page);
+      await appPage.goto();
+      await expect(page.getByText('could not find any entries').first()).toBeVisible();
+
+      await appPage.addJournalEntries(testJournalEntries);
+      await appPage.addCoffeeEntries(testCoffeeEntries);
+
+      await use(appPage);
+    },
+    { auto: true },
+  ],
   journalPage: async ({ page }, use) => {
     const journalPage = new JournalPage(page);
     await journalPage.goto();
-    await expect(journalPage.emptyMessage).toBeVisible();
-
-    await journalPage.addJournalEntries(testJournalEntries);
-    await journalPage.goto();
-    await expect(journalPage.getJournalEntryTitle(0)).toHaveText('Aeropress - Terroir PAN');
+    await expect(journalPage.getJournalEntryTitle(0)).toHaveText(
+      'Aeropress - Terroir PAN (Rösterei)',
+    );
 
     await use(journalPage);
   },
@@ -39,10 +46,6 @@ export const test = base.extend<TestFixtures>({
   },
   myCoffeesPage: async ({ page }, use) => {
     const myCoffeesPage = new MyCoffeesPage(page);
-    await myCoffeesPage.goto();
-    await expect(myCoffeesPage.emptyMessage).toBeVisible();
-
-    await myCoffeesPage.addCoffeeEntry(testCoffeeEntries);
     await myCoffeesPage.goto();
     await expect(myCoffeesPage.getCoffeeEntryTitle(0)).toHaveText(
       'Rwanda Kamajumba (Drip Roasters)',

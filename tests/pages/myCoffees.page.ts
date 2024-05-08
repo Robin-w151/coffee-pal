@@ -1,4 +1,3 @@
-import type { ActiveCoffeeEntry } from '$lib/models/myCoffees';
 import type { Locator, Page } from '@playwright/test';
 
 export class MyCoffeesPage {
@@ -26,25 +25,6 @@ export class MyCoffeesPage {
 
   async goto(): Promise<void> {
     await this.page.goto('/my-coffees');
-  }
-
-  async addCoffeeEntry(entries: Array<ActiveCoffeeEntry>): Promise<void> {
-    await this.page.evaluate(async (entries) => {
-      return new Promise((resolve, reject) => {
-        const openRequest = window.indexedDB.open('my-coffees');
-        openRequest.onsuccess = (event: any) => {
-          const db = event.target.result as IDBDatabase;
-          const tx = db.transaction(['entries'], 'readwrite');
-          entries.forEach((entry) => tx.objectStore('entries').add(entry));
-
-          tx.commit();
-          tx.oncomplete = resolve;
-          tx.onerror = reject;
-          tx.onabort = reject;
-        };
-        openRequest.onerror = reject;
-      });
-    }, entries);
   }
 
   async clickAddButton(): Promise<void> {
@@ -78,48 +58,3 @@ export class MyCoffeesPage {
       .click();
   }
 }
-
-export const testCoffeeEntries: Array<ActiveCoffeeEntry> = [
-  {
-    id: '1bdfaa18-8722-439f-b26b-caa7f67fed00',
-    name: 'Rwanda Kamajumba',
-    origin: 'Kamajumba Estate',
-    process: 'Washed',
-    variety: 'Red Bourbon',
-    roaster: 'Drip Roasters',
-    trader: 'Drip Roasters',
-    rating: undefined,
-    aromas: ['lemon', 'orange', 'black tea'],
-    description: undefined,
-    createdAt: '2023-08-26T21:29:31.780+02:00',
-    updatedAt: '2023-10-26T21:29:31.780+02:00',
-  },
-  {
-    id: '191ee4a7-a43d-4a43-98e3-9e5861106d86',
-    name: 'Terroir PAN',
-    origin: 'Panama',
-    process: 'Washed',
-    variety: undefined,
-    roaster: 'Rösterei',
-    trader: 'Blasercafe',
-    rating: undefined,
-    aromas: ['blueberry', 'caramel', 'floral', 'sweet', 'honey'],
-    description: undefined,
-    createdAt: '2023-08-26T21:26:11.665+02:00',
-    updatedAt: '2023-09-28T15:09:57.359+02:00',
-  },
-  {
-    id: '0f3bb076-7346-44fb-8c1d-d74a8c691441',
-    name: 'Wiedner Mischung',
-    origin: 'Mix',
-    process: 'Washed',
-    variety: 'Arabica',
-    roaster: 'Alt Wien',
-    trader: 'Alt Wien',
-    rating: undefined,
-    aromas: ['cocoa', 'caramel', 'walnut', 'black tea', 'nut meg', 'pepper', 'marzipan'],
-    description: undefined,
-    createdAt: '2023-09-14T16:19:42.679+02:00',
-    updatedAt: '2023-09-14T18:30:27.456+02:00',
-  },
-];
