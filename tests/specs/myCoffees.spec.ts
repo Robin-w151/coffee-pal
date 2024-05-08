@@ -74,10 +74,11 @@ test('entry edit', async ({ myCoffeesPage, myCoffeesEntryDetailPage }) => {
   await expect(myCoffeesPage.getCoffeeEntryDetail(0)).toHaveText('Washed | Blasercafe');
 });
 
-test('entry edit cancel', async ({ myCoffeesPage, myCoffeesEntryDetailPage }) => {
+test('entry edit cancel', async ({ appPage, myCoffeesPage, myCoffeesEntryDetailPage }) => {
   await myCoffeesPage.clickJournalEntryShowButton(1);
   await myCoffeesEntryDetailPage.roasterInput.fill('');
   await myCoffeesEntryDetailPage.clickBackButton();
+  await appPage.clickWarningConfirmButton();
 
   await expect(myCoffeesPage.getCoffeeEntryDetail(1)).toHaveText('Washed | Rösterei');
 });
