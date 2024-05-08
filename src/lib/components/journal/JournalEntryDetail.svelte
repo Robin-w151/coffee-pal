@@ -72,7 +72,7 @@
     if (hasChanged) {
       cancel();
       const confirmed = await modalHelper.triggerConfirm(
-        'Unsaved changes found',
+        'You have unsaved changes',
         'Are you sure you want to leave?',
       );
       if (confirmed && to) {
