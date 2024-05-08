@@ -67,12 +67,22 @@ test('entry edit', async ({ journalPage, journalEntryDetailPage }) => {
   await expect(journalPage.getJournalEntryTitle(0)).toHaveText('Aeropress Clear - Terroir PAN');
 });
 
-test('entry edit cancel', async ({ journalPage, journalEntryDetailPage }) => {
+test('entry edit cancel', async ({ appPage, journalPage, journalEntryDetailPage }) => {
   await journalPage.clickJournalEntryShowButton(1);
   await journalEntryDetailPage.methodInput.fill('');
   await journalEntryDetailPage.clickBackButton();
+  await appPage.clickWarningConfirmButton();
 
   await expect(journalPage.getJournalEntryTitle(1)).toHaveText('PuckPuck - Äthiopien Chelbesa');
+});
+
+test('entry edit without changes', async ({ journalPage, journalEntryDetailPage }) => {
+  await journalPage.clickJournalEntryShowButton(2);
+  await journalEntryDetailPage.descriptionInput.fill('2m30s brew time');
+  await journalEntryDetailPage.descriptionInput.fill('');
+  await journalEntryDetailPage.clickBackButton();
+
+  await expect(journalPage.getJournalEntryTitle(2)).toHaveText('V60 Switch - Honeymoon');
 });
 
 test('entry delete', async ({ journalPage, journalEntryDetailPage }) => {

@@ -1,10 +1,13 @@
 <script lang="ts">
-  import { goto } from '$app/navigation';
+  import { beforeNavigate, goto } from '$app/navigation';
   import type { ActiveJournalEntry } from '$lib/models/journal';
-  import { journalStore } from '$lib/stores/journal';
+  import { getCoffeeLabel } from '$lib/models/myCoffees';
+  import { isEqual } from '$lib/shared/compare';
+  import { ModalHelper } from '$lib/shared/ui/modal';
   import { ToastHelper } from '$lib/shared/ui/toast';
+  import { journalStore } from '$lib/stores/journal';
   import { faFaceSadCry } from '@fortawesome/free-solid-svg-icons';
-  import { getToastStore } from '@skeletonlabs/skeleton';
+  import { getModalStore, getToastStore } from '@skeletonlabs/skeleton';
   import { onMount } from 'svelte';
   import { Icon } from 'svelte-awesome';
   import { v4 as uuid } from 'uuid';
@@ -24,6 +27,7 @@
 
   export let id: string | undefined = undefined;
 
+  const modalHelper = new ModalHelper(getModalStore());
   const toastHelper = new ToastHelper(getToastStore());
 
   let entry: Partial<ActiveJournalEntry> = {
@@ -31,13 +35,14 @@
     water: undefined,
     waterTemperature: undefined,
     coffee: undefined,
-    coffeeType: '',
-    grindSettings: '',
-    rating: undefined,
-    description: '',
+    coffeeType: undefined,
+    grindSettings: undefined,
+    rating: 0,
+    description: undefined,
     createdAt: '',
     updatedAt: '',
   };
+  let originalEntry: Partial<ActiveJournalEntry> = structuredClone(entry);
   let unknown = false;
   let isLoading = true;
 
@@ -48,17 +53,33 @@
 
   $: entryTitle = getTitle(unknown, entry);
   $: formValid = methodInputValid && waterInputValid && coffeeInputValid;
+  $: hasChanged = !isEqual(entry, originalEntry);
 
   onMount(async () => {
     if (id) {
       const loadedEntry = await journalStore.loadOne(id);
       if (loadedEntry) {
         entry = loadedEntry;
+        originalEntry = structuredClone(loadedEntry);
       } else {
         unknown = true;
       }
     }
     isLoading = false;
+  });
+
+  beforeNavigate(async ({ cancel, to }) => {
+    if (hasChanged && !unknown && !isLoading) {
+      cancel();
+      const confirmed = await modalHelper.triggerConfirm(
+        'You have unsaved changes',
+        'Are you sure you want to leave?',
+      );
+      if (confirmed && to) {
+        hasChanged = false;
+        goto(to.url);
+      }
+    }
   });
 
   function handleSave(): void {
@@ -68,12 +89,14 @@
     } else {
       journalStore.add({ ...sanitizedEntry, id: uuid() });
     }
+    hasChanged = false;
     goBack();
   }
 
   function handleCopy(): void {
     const sanitizedEntry = sanitizeEntry(entry);
     journalStore.add({ ...sanitizedEntry, id: uuid() });
+    hasChanged = false;
     goBack();
   }
 
@@ -90,6 +113,7 @@
 
       journalStore.remove(id);
     }
+    hasChanged = false;
     goBack();
   }
 
@@ -144,7 +168,8 @@
     if (unknown) {
       return 'Unknown';
     } else if (entry?.id) {
-      return `${entry.method || 'Unknown'} - ${entry.coffeeType || 'Unknown'}`;
+      const coffeeType = getCoffeeLabel(entry.coffeeType);
+      return `${entry.method || 'Unknown'} - ${coffeeType || 'Unknown'}`;
     } else {
       return 'New Entry';
     }

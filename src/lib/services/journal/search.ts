@@ -4,6 +4,7 @@ import type {
   JournalSort,
   JournalSortDirection,
 } from '$lib/models/journal';
+import { getCoffeeLabel } from '$lib/models/myCoffees';
 import { buildFuseQuery } from '$lib/services/search/fuzzy';
 import Fuse, { type IFuseOptions } from 'fuse.js';
 
@@ -17,6 +18,14 @@ const FUSE_OPTIONS = {
     'waterTemperature',
     'coffee',
     'coffeeType',
+    'coffeeType.name',
+    'coffeeType.origin',
+    'coffeeType.variety',
+    'coffeeType.process',
+    'coffeeType.roaster',
+    'coffeeType.trader',
+    'coffeeType.aromas',
+    'coffeeType.description',
     'grindSettings',
     'description',
   ],
@@ -57,8 +66,8 @@ export function sort(
     entries.sort((e1: ActiveJournalEntry, e2: ActiveJournalEntry) => {
       switch (sort) {
         case 'method_coffee_type':
-          return `${e1.method}-${e1.coffeeType ?? ''}`.localeCompare(
-            `${e2.method}-${e2.coffeeType ?? ''}`,
+          return `${e1.method}-${getCoffeeLabel(e1.coffeeType) ?? ''}`.localeCompare(
+            `${e2.method}-${getCoffeeLabel(e2.coffeeType) ?? ''}`,
           );
         case 'updated_at':
           return e1.updatedAt.localeCompare(e2.updatedAt);

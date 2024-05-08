@@ -1,4 +1,5 @@
 import type { CachedSearchResult } from './cachedSearch';
+import type { ActiveCoffeeEntry } from './myCoffees';
 
 export interface Journal {
   entries: Array<JournalEntry>;
@@ -12,7 +13,7 @@ export interface ActiveJournalEntry {
   water: number;
   waterTemperature?: number;
   coffee: number;
-  coffeeType?: string;
+  coffeeType?: string | ActiveCoffeeEntry;
   grindSettings?: string;
   rating?: number;
   description?: string;

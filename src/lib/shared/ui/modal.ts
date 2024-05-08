@@ -24,4 +24,15 @@ export class ModalHelper {
 
     this.store.trigger(newModal);
   }
+
+  public triggerConfirm(title: string, body: string): Promise<boolean> {
+    return new Promise((resolve) => {
+      this.store.trigger({
+        type: 'confirm',
+        title,
+        body,
+        response: resolve,
+      });
+    });
+  }
 }

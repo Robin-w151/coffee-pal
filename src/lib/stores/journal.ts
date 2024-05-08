@@ -11,6 +11,7 @@ import {
   type JournalSortDirection,
   type JournalState,
 } from '$lib/models/journal';
+import type { ActiveCoffeeEntry } from '$lib/models/myCoffees';
 import type { SyncResult } from '$lib/models/sync';
 import { loadPage, sortOrSearch } from '$lib/services/journal/wrapper';
 import Dexie, { liveQuery, type Observable as DxObservable, type Table } from 'dexie';
@@ -29,6 +30,7 @@ export interface JournalStore extends Observable<JournalState> {
   loadOne: (id: string) => Promise<ActiveJournalEntry | undefined>;
   add: (entry: ActiveJournalEntry) => void;
   update: (entry: ActiveJournalEntry) => void;
+  updateCoffee: (entry: ActiveCoffeeEntry) => void;
   remove: (id: string) => Promise<void>;
   undo: (id: string) => void;
   apply: (syncResult: SyncResult<ActiveJournalEntry, DeletedJournalEntry>) => void;
@@ -145,6 +147,28 @@ function createJournalStore(journalSearchStore: JournalSearchStore): JournalStor
     journalDb?.entries.put(entry, entry.id);
   }
 
+  function updateCoffeeEntry(coffeeEntry: ActiveCoffeeEntry): void {
+    const updatedAt = DateTime.now().toISO();
+    journalDb?.transaction('readwrite', journalDb.entries, async () => {
+      const entries = await journalDb.entries
+        .filter(
+          (entry) =>
+            isActiveJournalEntry(entry) &&
+            typeof entry.coffeeType === 'object' &&
+            entry.coffeeType.id === coffeeEntry.id,
+        )
+        .toArray();
+
+      entries.forEach((entry) => {
+        journalDb.entries.put({
+          ...entry,
+          coffeeType: coffeeEntry,
+          updatedAt,
+        });
+      });
+    });
+  }
+
   async function removeEntry(id: string): Promise<void> {
     const entry = await journalDb?.entries.get(id);
     if (isActiveJournalEntry(entry)) {
@@ -188,6 +212,7 @@ function createJournalStore(journalSearchStore: JournalSearchStore): JournalStor
   journalStore.loadOne = loadOneEntry;
   journalStore.add = addEntry;
   journalStore.update = updateEntry;
+  journalStore.updateCoffee = updateCoffeeEntry;
   journalStore.remove = removeEntry;
   journalStore.undo = undoRemoveEntry;
   journalStore.apply = applySyncResult;

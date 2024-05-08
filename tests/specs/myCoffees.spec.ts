@@ -8,17 +8,17 @@ test('list', async ({ myCoffeesPage }) => {
 test('entry item', async ({ myCoffeesPage }) => {
   const firstEntry = myCoffeesPage.getCoffeeEntry(0);
   await expect(myCoffeesPage.getCoffeeEntryTitle(firstEntry)).toHaveText(
-    'Rwanda Kamajumba - Kamajumba Estate',
+    'Rwanda Kamajumba (Drip Roasters)',
   );
   await expect(myCoffeesPage.getCoffeeEntryDetail(firstEntry)).toHaveText(
-    'Washed | Red Bourbon | Drip Roasters',
+    'Kamajumba Estate | Washed | Red Bourbon',
   );
 });
 
 test('search', async ({ myCoffeesPage }) => {
   await myCoffeesPage.enterSearch('Terroir PAN');
   await expect(myCoffeesPage.coffeeList).toHaveCount(1);
-  await expect(myCoffeesPage.getCoffeeEntryTitle(0)).toHaveText('Terroir PAN - Panama');
+  await expect(myCoffeesPage.getCoffeeEntryTitle(0)).toHaveText('Terroir PAN (Rösterei)');
 });
 
 test('search clear', async ({ myCoffeesPage }) => {
@@ -30,14 +30,12 @@ test('search clear', async ({ myCoffeesPage }) => {
 });
 
 test('sort', async ({ myCoffeesPage }) => {
-  await expect(myCoffeesPage.getCoffeeEntryTitle(0)).toHaveText(
-    'Rwanda Kamajumba - Kamajumba Estate',
-  );
+  await expect(myCoffeesPage.getCoffeeEntryTitle(0)).toHaveText('Rwanda Kamajumba (Drip Roasters)');
 
   await myCoffeesPage.clickSortButton();
   await myCoffeesPage.clickSortOption('Z-A');
 
-  await expect(myCoffeesPage.getCoffeeEntryTitle(0)).toHaveText('Wiedner Mischung - Mix');
+  await expect(myCoffeesPage.getCoffeeEntryTitle(0)).toHaveText('Wiedner Mischung (Alt Wien)');
 });
 
 test('entry add', async ({ myCoffeesPage, myCoffeesEntryDetailPage }) => {
@@ -60,26 +58,36 @@ test('entry add', async ({ myCoffeesPage, myCoffeesEntryDetailPage }) => {
   await myCoffeesEntryDetailPage.clickSaveButton();
 
   const entry = myCoffeesPage.getCoffeeEntry(0);
-  await expect(myCoffeesPage.getCoffeeEntryTitle(entry)).toHaveText(
-    'Tovolea Classic - Brazil/Ethiopia',
+  await expect(myCoffeesPage.getCoffeeEntryTitle(entry)).toHaveText('Tovolea Classic (Tovolea)');
+  await expect(myCoffeesPage.getCoffeeEntryDetail(entry)).toHaveText(
+    'Brazil/Ethiopia | Washed | Arabica',
   );
-  await expect(myCoffeesPage.getCoffeeEntryDetail(entry)).toHaveText('Washed | Arabica | Tovolea');
 });
 
 test('entry edit', async ({ myCoffeesPage, myCoffeesEntryDetailPage }) => {
   await myCoffeesPage.clickJournalEntryShowButton(1);
-  await myCoffeesEntryDetailPage.roasterInput.fill('Blasercafe');
+  await myCoffeesEntryDetailPage.varietyInput.fill('SL34');
   await myCoffeesEntryDetailPage.clickSaveButton();
 
-  await expect(myCoffeesPage.getCoffeeEntryDetail(0)).toHaveText('Washed | Blasercafe');
+  await expect(myCoffeesPage.getCoffeeEntryDetail(0)).toHaveText('Panama | Washed | SL34');
 });
 
-test('entry edit cancel', async ({ myCoffeesPage, myCoffeesEntryDetailPage }) => {
+test('entry edit cancel', async ({ appPage, myCoffeesPage, myCoffeesEntryDetailPage }) => {
   await myCoffeesPage.clickJournalEntryShowButton(1);
   await myCoffeesEntryDetailPage.roasterInput.fill('');
   await myCoffeesEntryDetailPage.clickBackButton();
+  await appPage.clickWarningConfirmButton();
 
-  await expect(myCoffeesPage.getCoffeeEntryDetail(1)).toHaveText('Washed | Rösterei');
+  await expect(myCoffeesPage.getCoffeeEntryDetail(1)).toHaveText('Panama | Washed');
+});
+
+test('entry edit without changes', async ({ myCoffeesPage, myCoffeesEntryDetailPage }) => {
+  await myCoffeesPage.clickJournalEntryShowButton(2);
+  await myCoffeesEntryDetailPage.descriptionInput.fill('Excellent for cold brew');
+  await myCoffeesEntryDetailPage.descriptionInput.fill('');
+  await myCoffeesEntryDetailPage.clickBackButton();
+
+  await expect(myCoffeesPage.getCoffeeEntryTitle(2)).toHaveText('Wiedner Mischung (Alt Wien)');
 });
 
 test('entry delete', async ({ myCoffeesPage, myCoffeesEntryDetailPage }) => {

@@ -7,11 +7,14 @@
     getPreferredTemperatureUnit,
     getPreferredWeightUnit,
   } from '$lib/shared/units';
+  import { getCoffeeLabel } from '$lib/models/myCoffees';
 
   export let entry: ActiveJournalEntry;
 
   const preferredWeightUnit = getPreferredWeightUnit($settingsStore.preferredUnits);
   const preferredTemperatureUnit = getPreferredTemperatureUnit($settingsStore.preferredUnits);
+
+  $: coffeeType = getCoffeeLabel(entry.coffeeType);
 
   function handleEntryClick(): void {
     gotoDetail();
@@ -44,7 +47,7 @@
 
 <tr tabindex="0" role="button" on:click={handleEntryClick} on:keydown={handleEntryKeyDown}>
   <td>{entry.method}</td>
-  <td>{entry.coffeeType ?? 'Unknown'}</td>
+  <td>{coffeeType ?? 'Unknown'}</td>
   <td>{waterDisplayValue(entry.water)}/{coffeeDisplayValue(entry.coffee)}</td>
   <td>{entry.waterTemperature ? waterTemperatureDisplayValue(entry.waterTemperature) : 'N/A'}</td>
   <td>{entry.grindSettings || 'N/A'}</td>

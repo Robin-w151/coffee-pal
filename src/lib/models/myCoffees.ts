@@ -63,3 +63,16 @@ export function isDeletedCoffeeEntry(
 ): entry is DeletedCoffeeEntry {
   return (entry as DeletedCoffeeEntry)?.deletedAt !== undefined;
 }
+
+export function getCoffeeLabel(entry?: string | Partial<ActiveCoffeeEntry>): string | undefined {
+  if (entry) {
+    if (typeof entry === 'string') {
+      return entry;
+    } else {
+      return [entry.name, entry.roaster]
+        .filter((s) => !!s)
+        .map((value, index) => (index ? `(${value})` : value))
+        .join(' ');
+    }
+  }
+}

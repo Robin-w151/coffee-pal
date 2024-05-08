@@ -5,8 +5,10 @@ import { CalculatorPage } from './pages/calculator.page';
 import { JournalEntryDetailPage } from './pages/journalEntryDetail.page';
 import { MyCoffeesEntryDetailPage } from './pages/myCoffeesEntryDetail.page';
 import { DripCounterPage } from './pages/dripCounter.page';
+import { AppPage } from './pages/app.page';
 
 interface TestFixtures {
+  appPage: AppPage;
   journalPage: JournalPage;
   journalEntryDetailPage: JournalEntryDetailPage;
   myCoffeesPage: MyCoffeesPage;
@@ -16,6 +18,10 @@ interface TestFixtures {
 }
 
 export const test = base.extend<TestFixtures>({
+  appPage: async ({ page }, use) => {
+    const appPage = new AppPage(page);
+    await use(appPage);
+  },
   journalPage: async ({ page }, use) => {
     const journalPage = new JournalPage(page);
     await journalPage.goto();
@@ -39,7 +45,7 @@ export const test = base.extend<TestFixtures>({
     await myCoffeesPage.addCoffeeEntry(testCoffeeEntries);
     await myCoffeesPage.goto();
     await expect(myCoffeesPage.getCoffeeEntryTitle(0)).toHaveText(
-      'Rwanda Kamajumba - Kamajumba Estate',
+      'Rwanda Kamajumba (Drip Roasters)',
     );
 
     await use(myCoffeesPage);

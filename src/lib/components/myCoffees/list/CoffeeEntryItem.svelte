@@ -1,20 +1,24 @@
 <script lang="ts">
-  import type { ActiveCoffeeEntry } from '$lib/models/myCoffees';
+  import { getCoffeeLabel, type ActiveCoffeeEntry } from '$lib/models/myCoffees';
   import { faEye } from '@fortawesome/free-solid-svg-icons';
   import { Icon } from 'svelte-awesome';
 
   export let entry: ActiveCoffeeEntry;
 
+  function title(entry: ActiveCoffeeEntry): string {
+    return getCoffeeLabel(entry)!;
+  }
+
   function details(entry: ActiveCoffeeEntry): string {
-    const { variety, process, roaster } = entry;
-    return [process, variety, roaster].filter((s) => !!s).join(' | ');
+    const { origin, variety, process } = entry;
+    return [origin, process, variety].filter((s) => !!s).join(' | ');
   }
 </script>
 
 <div class="justify-between">
   <span class="block min-w-0 flex-1">
     <dt class="overflow-hidden text-ellipsis whitespace-nowrap">
-      <span class="font-bold">{entry.name} - {entry.origin || 'Unknown Origin'}</span>
+      <span class="font-bold">{title(entry)}</span>
     </dt>
     <dd class="overflow-hidden text-ellipsis whitespace-nowrap">
       <span>{details(entry)}</span>
