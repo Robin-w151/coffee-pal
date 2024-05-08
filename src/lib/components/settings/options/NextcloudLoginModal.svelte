@@ -20,7 +20,7 @@
   <header class="text-2xl font-bold">Finish Setup</header>
   <article>Please press Login to finish Nextcloud synchronization setup.</article>
   <div class="flex justify-end gap-4">
-    <button class="btn variant-soft-primary" on:click={handleCancelClick}>Cancel</button>
+    <button class="btn variant-ghost-primary" on:click={handleCancelClick}>Cancel</button>
     <a
       class="btn variant-filled-primary"
       href={loginUrl}
