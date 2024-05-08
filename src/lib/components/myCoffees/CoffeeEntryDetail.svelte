@@ -51,6 +51,7 @@
       const loadedEntry = await myCoffeesStore.loadOne(id);
       if (loadedEntry) {
         entry = loadedEntry;
+        originalEntry = structuredClone(loadedEntry);
       } else {
         unknown = true;
       }
