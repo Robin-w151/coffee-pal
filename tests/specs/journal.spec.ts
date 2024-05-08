@@ -76,6 +76,15 @@ test('entry edit cancel', async ({ appPage, journalPage, journalEntryDetailPage 
   await expect(journalPage.getJournalEntryTitle(1)).toHaveText('PuckPuck - Äthiopien Chelbesa');
 });
 
+test('entry edit without changes', async ({ journalPage, journalEntryDetailPage }) => {
+  await journalPage.clickJournalEntryShowButton(2);
+  await journalEntryDetailPage.coffeeTypeInput.fill('');
+  await journalEntryDetailPage.coffeeTypeInput.fill('Honeymoon');
+  await journalEntryDetailPage.clickBackButton();
+
+  await expect(journalPage.getJournalEntryTitle(2)).toHaveText('V60 Switch - Honeymoon');
+});
+
 test('entry delete', async ({ journalPage, journalEntryDetailPage }) => {
   await journalPage.clickJournalEntryShowButton(0);
   await journalEntryDetailPage.clickDeleteButton();
