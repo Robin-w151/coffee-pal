@@ -2,12 +2,12 @@
   import { beforeNavigate, goto } from '$app/navigation';
   import type { ActiveJournalEntry } from '$lib/models/journal';
   import { getCoffeeLabel } from '$lib/models/myCoffees';
+  import { isEqual } from '$lib/shared/compare';
   import { ModalHelper } from '$lib/shared/ui/modal';
   import { ToastHelper } from '$lib/shared/ui/toast';
   import { journalStore } from '$lib/stores/journal';
   import { faFaceSadCry } from '@fortawesome/free-solid-svg-icons';
   import { getModalStore, getToastStore } from '@skeletonlabs/skeleton';
-  import { isEqual } from 'lodash-es';
   import { onMount } from 'svelte';
   import { Icon } from 'svelte-awesome';
   import { v4 as uuid } from 'uuid';
@@ -27,8 +27,8 @@
 
   export let id: string | undefined = undefined;
 
-  const toastHelper = new ToastHelper(getToastStore());
   const modalHelper = new ModalHelper(getModalStore());
+  const toastHelper = new ToastHelper(getToastStore());
 
   let entry: Partial<ActiveJournalEntry> = {
     method: '',
@@ -37,12 +37,12 @@
     coffee: undefined,
     coffeeType: '',
     grindSettings: '',
-    rating: undefined,
+    rating: 0,
     description: '',
     createdAt: '',
     updatedAt: '',
   };
-  let originalEntry: Partial<ActiveJournalEntry> = entry;
+  let originalEntry: Partial<ActiveJournalEntry> = structuredClone(entry);
   let unknown = false;
   let isLoading = true;
 
@@ -69,7 +69,7 @@
   });
 
   beforeNavigate(async ({ cancel, to }) => {
-    if (hasChanged) {
+    if (hasChanged && !unknown && !isLoading) {
       cancel();
       const confirmed = await modalHelper.triggerConfirm(
         'You have unsaved changes',

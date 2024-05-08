@@ -1,12 +1,12 @@
 <script lang="ts">
   import { beforeNavigate, goto } from '$app/navigation';
   import { getCoffeeLabel, type ActiveCoffeeEntry } from '$lib/models/myCoffees';
+  import { isEqual } from '$lib/shared/compare';
   import { ModalHelper } from '$lib/shared/ui/modal';
   import { ToastHelper } from '$lib/shared/ui/toast';
   import { myCoffeesStore } from '$lib/stores/myCoffees';
   import { faFaceSadCry } from '@fortawesome/free-solid-svg-icons';
   import { getModalStore, getToastStore } from '@skeletonlabs/skeleton';
-  import { isEqual } from 'lodash-es';
   import { onMount } from 'svelte';
   import { Icon } from 'svelte-awesome';
   import { v4 as uuid } from 'uuid';
@@ -36,7 +36,7 @@
     createdAt: '',
     updatedAt: '',
   };
-  let originalEntry: Partial<ActiveCoffeeEntry> = entry;
+  let originalEntry: Partial<ActiveCoffeeEntry> = structuredClone(entry);
   let unknown = false;
   let isLoading = true;
 
@@ -60,7 +60,7 @@
   });
 
   beforeNavigate(async ({ cancel, to }) => {
-    if (hasChanged) {
+    if (hasChanged && !unknown && !isLoading) {
       cancel();
       const confirmed = await modalHelper.triggerConfirm(
         'You have unsaved changes',
