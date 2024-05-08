@@ -45,7 +45,7 @@
   });
 
   function handleAppShellScroll(event: ComponentEvents<AppShell>['scroll']): void {
-    rememberScrollPosition($page.url.pathname, event.currentTarget.scrollTop);
+    rememberScrollPosition($page.url.pathname, (event.currentTarget as HTMLElement)?.scrollTop);
   }
 </script>
 
