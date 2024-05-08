@@ -55,7 +55,14 @@
           "type": "number"
         },
         "coffeeType": {
-          "type": "string"
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "$ref": "#/definitions/ActiveCoffeeEntry"
+            }
+          ]
         },
         "createdAt": {
           "type": "string"
