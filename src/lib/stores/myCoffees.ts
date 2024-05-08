@@ -17,6 +17,7 @@ import Dexie, { liveQuery, type Observable as DxObservable, type Table } from 'd
 import { DateTime } from 'luxon';
 import { BehaviorSubject, debounceTime, switchMap, tap, type Observable } from 'rxjs';
 import type { Readable } from 'svelte/store';
+import { journalStore } from './journal';
 
 export interface MyCoffeesSearchStore extends Observable<MyCoffeesSearchState> {
   setFilter: (filter: string) => void;
@@ -153,6 +154,8 @@ function createMyCoffeesStore(myCoffeesSearchStore: MyCoffeesSearchStore): MyCof
   function updateEntry(entry: ActiveCoffeeEntry): void {
     entry.updatedAt = DateTime.now().toISO();
     myCoffeesDb?.entries.put(entry, entry.id);
+
+    journalStore.updateCoffee(entry);
   }
 
   async function removeEntry(id: string): Promise<void> {
