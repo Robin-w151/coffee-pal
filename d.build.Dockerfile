@@ -13,6 +13,8 @@ COPY src/ /app/src/
 COPY static/ /app/static/
 COPY .git/ /app/.git/
 
+ARG APP_MODE=dev
+ENV PUBLIC_APP_MODE=$APP_MODE
 ENV USE_ADAPTER_BUN=true
 
 RUN bunx svelte-kit sync
