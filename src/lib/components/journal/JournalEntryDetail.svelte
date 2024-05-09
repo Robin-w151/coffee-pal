@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { beforeNavigate, goto } from '$app/navigation';
+  import { beforeNavigate } from '$app/navigation';
   import type { ActiveJournalEntry } from '$lib/models/journal';
   import { getCoffeeLabel } from '$lib/models/myCoffees';
   import { isEqual } from '$lib/shared/compare';
@@ -77,7 +77,7 @@
       );
       if (confirmed && to) {
         hasChanged = false;
-        goto(to.url);
+        history.back();
       }
     }
   });

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { beforeNavigate, goto } from '$app/navigation';
+  import { beforeNavigate } from '$app/navigation';
   import { getCoffeeLabel, type ActiveCoffeeEntry } from '$lib/models/myCoffees';
   import { isEqual } from '$lib/shared/compare';
   import { ModalHelper } from '$lib/shared/ui/modal';
@@ -74,7 +74,7 @@
       );
       if (confirmed && to) {
         hasChanged = false;
-        goto(to.url);
+        history.back();
       }
     }
   });
