@@ -1,6 +1,7 @@
 <script lang="ts">
   import Card from '$lib/components/shared/elements/Card.svelte';
   import { appStore } from '$lib/stores/app';
+  import { PUBLIC_APP_PROD_MODE } from '$env/static/public';
 
   export let cardClass: string | undefined = '';
 
@@ -19,20 +20,29 @@
     <ul class="grid grid-cols-[max-content_max-content] gap-x-8 gap-y-2">
       <li class={itemClass}>
         <span>Version</span>
-        <a
-          href="https://github.com/Robin-w151/coffee-pal/tree/{appCommitHash}"
-          target="_blank"
-          rel="noopener">{appVersion} ({appCommitHash})</a
-        >
+        <span>
+          <a
+            href="https://github.com/Robin-w151/coffee-pal/tree/v{appVersion}"
+            target="_blank"
+            rel="noopener">{appVersion}</a
+          >
+          {#if PUBLIC_APP_PROD_MODE !== 'true'}
+            <a
+              href="https://github.com/Robin-w151/coffee-pal/tree/{appCommitHash}"
+              target="_blank"
+              rel="noopener">({appCommitHash})</a
+            >
+          {/if}
+        </span>
       </li>
       <li class={itemClass}>
         <span>Repository</span>
         <a href="https://github.com/Robin-w151/coffee-pal" target="_blank" rel="noopener">GitHub</a>
       </li>
       <li class={itemClass}>
-        <span>Changelog</span>
+        <span>What's new</span>
         <a href="https://github.com/Robin-w151/coffee-pal/releases" target="_blank" rel="noopener"
-          >Latest Releases</a
+          >Releases</a
         >
       </li>
     </ul>
