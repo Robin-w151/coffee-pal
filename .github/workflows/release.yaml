@@ -56,4 +56,4 @@ jobs:
           context: .
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: Robin-w151/coffee-pal:stable,Robin-w151/coffee-pal:${{ needs.release.outputs.version }}
+          tags: ghcr.io/Robin-w151/coffee-pal:latest,ghcr.io/Robin-w151/coffee-pal:${{ needs.release.outputs.version }}
