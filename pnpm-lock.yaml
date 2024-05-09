@@ -56,6 +56,9 @@ devDependencies:
   '@types/chance':
     specifier: ^1.1.6
     version: 1.1.6
+  '@types/dotenv-flow':
+    specifier: ^3.3.3
+    version: 3.3.3
   '@types/file-saver':
     specifier: ^2.0.7
     version: 2.0.7
@@ -2577,6 +2580,10 @@ packages:
 
   /@types/cookie@0.6.0:
     resolution: {integrity: sha512-4Kh9a6B2bQciAhf7FSuMRRkUWecJgJu9nPnx3yzpsfXX/c50REIqpHY4C82bXP90qrLtXtkDxTZosYO3UpOwlA==}
+    dev: true
+
+  /@types/dotenv-flow@3.3.3:
+    resolution: {integrity: sha512-aJjBsKw4bfGjvaRwrxBtEOfYZxCAq+LiFTpZ4DGTEK2b9eLVt/IAClapSxMfgV4Mi/2bIBKKjoTCO0lOh4ACLg==}
     dev: true
 
   /@types/estree@0.0.39:

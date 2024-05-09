@@ -1,7 +1,7 @@
 <script lang="ts">
   import Card from '$lib/components/shared/elements/Card.svelte';
   import { appStore } from '$lib/stores/app';
-  import { PUBLIC_APP_PROD_MODE } from '$env/static/public';
+  import { PUBLIC_APP_MODE } from '$env/static/public';
 
   export let cardClass: string | undefined = '';
 
@@ -26,7 +26,7 @@
             target="_blank"
             rel="noopener">{appVersion}</a
           >
-          {#if PUBLIC_APP_PROD_MODE !== 'true'}
+          {#if PUBLIC_APP_MODE === 'dev'}
             <a
               href="https://github.com/Robin-w151/coffee-pal/tree/{appCommitHash}"
               target="_blank"
