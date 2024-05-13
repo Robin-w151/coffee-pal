@@ -8,7 +8,7 @@
   import { journalStore } from '$lib/stores/journal';
   import { faFaceSadCry } from '@fortawesome/free-solid-svg-icons';
   import { getModalStore, getToastStore } from '@skeletonlabs/skeleton';
-  import { onMount } from 'svelte';
+  import { onDestroy, onMount } from 'svelte';
   import { Icon } from 'svelte-awesome';
   import { v4 as uuid } from 'uuid';
   import Actions from '../shared/elements/form/Actions.svelte';
@@ -24,6 +24,11 @@
   import Ratio from './detail/Ratio.svelte';
   import Water from './detail/Water.svelte';
   import WaterTemperature from './detail/WaterTemperature.svelte';
+  import {
+    pauseScheduledSync,
+    resumeScheduledSync,
+    scheduleSync,
+  } from '$lib/services/scheduler/syncScheduler';
 
   export let id: string | undefined = undefined;
 
@@ -56,6 +61,8 @@
   $: hasChanged = !isEqual(entry, originalEntry);
 
   onMount(async () => {
+    pauseScheduledSync();
+
     if (id) {
       const loadedEntry = await journalStore.loadOne(id);
       if (loadedEntry) {
@@ -66,6 +73,10 @@
       }
     }
     isLoading = false;
+  });
+
+  onDestroy(() => {
+    resumeScheduledSync();
   });
 
   beforeNavigate(async ({ cancel, to }) => {
@@ -90,6 +101,7 @@
       journalStore.add({ ...sanitizedEntry, id: uuid() });
     }
     hasChanged = false;
+    scheduleSync();
     goBack();
   }
 
@@ -97,6 +109,7 @@
     const sanitizedEntry = sanitizeEntry(entry);
     journalStore.add({ ...sanitizedEntry, id: uuid() });
     hasChanged = false;
+    scheduleSync();
     goBack();
   }
 

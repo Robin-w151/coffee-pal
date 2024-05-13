@@ -8,6 +8,7 @@ import { syncStore } from '$lib/stores/sync';
 import { syncStateStore } from '$lib/stores/syncState';
 import { journalStore } from '$lib/stores/journal';
 import { myCoffeesStore } from '$lib/stores/myCoffees';
+import { clearScheduledSync } from '../scheduler/syncScheduler';
 
 const isOnline = onlineStore();
 
@@ -20,6 +21,8 @@ export async function sync(): Promise<void> {
   if (!get(isOnline)) {
     return;
   }
+
+  clearScheduledSync();
 
   syncStateStore.setIsSynchronizing(true);
 
