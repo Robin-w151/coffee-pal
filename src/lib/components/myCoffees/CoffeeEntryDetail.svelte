@@ -7,7 +7,7 @@
   import { myCoffeesStore } from '$lib/stores/myCoffees';
   import { faFaceSadCry } from '@fortawesome/free-solid-svg-icons';
   import { getModalStore, getToastStore } from '@skeletonlabs/skeleton';
-  import { onMount } from 'svelte';
+  import { onDestroy, onMount } from 'svelte';
   import { Icon } from 'svelte-awesome';
   import { v4 as uuid } from 'uuid';
   import Actions from '../shared/elements/form/Actions.svelte';
@@ -23,6 +23,11 @@
   import Roaster from './detail/Roaster.svelte';
   import Trader from './detail/Trader.svelte';
   import Variety from './detail/Variety.svelte';
+  import {
+    pauseScheduledSync,
+    resumeScheduledSync,
+    scheduleSync,
+  } from '$lib/services/scheduler/syncScheduler';
 
   export let id: string | undefined = undefined;
 
@@ -53,6 +58,8 @@
   $: hasChanged = !isEqual(entry, originalEntry);
 
   onMount(async () => {
+    pauseScheduledSync();
+
     if (id) {
       const loadedEntry = await myCoffeesStore.loadOne(id);
       if (loadedEntry) {
@@ -63,6 +70,10 @@
       }
     }
     isLoading = false;
+  });
+
+  onDestroy(() => {
+    resumeScheduledSync();
   });
 
   beforeNavigate(async ({ cancel, to }) => {
@@ -87,6 +98,7 @@
       myCoffeesStore.add({ ...sanitizedEntry, id: uuid() });
     }
     hasChanged = false;
+    scheduleSync();
     goBack();
   }
 
