@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { pauseScheduledSync } from '$lib/services/scheduler/syncScheduler';
   import { listenForUpdates } from '$lib/services/updates/updateListener';
   import { ToastHelper } from '$lib/shared/ui/toast';
   import { getToastStore } from '@skeletonlabs/skeleton';
@@ -17,6 +18,7 @@
             label: 'Restart now',
             response: async () => {
               isRestarting = true;
+              pauseScheduledSync();
               restart();
             },
           },
