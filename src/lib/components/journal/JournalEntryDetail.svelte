@@ -1,8 +1,7 @@
 <script lang="ts">
   import { beforeNavigate, goto } from '$app/navigation';
-  import type { ActiveJournalEntry } from '$lib/models/journal';
+  import { type ActiveJournalEntry } from '$lib/models/journal';
   import { getCoffeeLabel } from '$lib/models/myCoffees';
-  import { isEqual } from '$lib/shared/compare';
   import { ModalHelper } from '$lib/shared/ui/modal';
   import { ToastHelper } from '$lib/shared/ui/toast';
   import { journalStore } from '$lib/stores/journal';
@@ -29,6 +28,7 @@
     resumeScheduledSync,
     scheduleSync,
   } from '$lib/services/scheduler/syncScheduler';
+  import { isEqualJournalEntry } from '$lib/shared/compare';
 
   export let id: string | undefined = undefined;
 
@@ -59,7 +59,7 @@
 
   $: entryTitle = getTitle(unknown, entry);
   $: formValid = methodInputValid && waterInputValid && coffeeInputValid;
-  $: hasChanged = !isEqual(entry, originalEntry);
+  $: hasChanged = !isEqualJournalEntry(entry, originalEntry);
 
   onMount(async () => {
     pauseScheduledSync();

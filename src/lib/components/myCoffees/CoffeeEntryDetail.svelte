@@ -1,7 +1,6 @@
 <script lang="ts">
   import { beforeNavigate, goto } from '$app/navigation';
   import { getCoffeeLabel, type ActiveCoffeeEntry } from '$lib/models/myCoffees';
-  import { isEqual } from '$lib/shared/compare';
   import { ModalHelper } from '$lib/shared/ui/modal';
   import { ToastHelper } from '$lib/shared/ui/toast';
   import { myCoffeesStore } from '$lib/stores/myCoffees';
@@ -28,6 +27,7 @@
     resumeScheduledSync,
     scheduleSync,
   } from '$lib/services/scheduler/syncScheduler';
+  import { isEqualCoffeeEntry } from '$lib/shared/compare';
 
   export let id: string | undefined = undefined;
 
@@ -56,7 +56,7 @@
 
   $: entryTitle = getTitle(unknown, entry);
   $: formValid = nameInputValid;
-  $: hasChanged = !isEqual(entry, originalEntry);
+  $: hasChanged = !isEqualCoffeeEntry(entry, originalEntry);
 
   onMount(async () => {
     pauseScheduledSync();
