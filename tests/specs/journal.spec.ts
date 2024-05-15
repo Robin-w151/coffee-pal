@@ -131,3 +131,24 @@ test('entry navigate to coffee entry and back to overview', async ({
     'Aeropress - Terroir PAN (Rösterei)',
   );
 });
+
+test('entry change detail without save, navigate to coffee entry and back to overview', async ({
+  appPage,
+  journalPage,
+  journalEntryDetailPage,
+  myCoffeesEntryDetailPage,
+}) => {
+  await journalPage.clickJournalEntryShowButton(0);
+  await journalEntryDetailPage.waterInput.fill('2000');
+  await journalEntryDetailPage.clickOpenCoffeeEntry();
+  await appPage.clickWarningConfirmButton();
+
+  await expect(myCoffeesEntryDetailPage.header).toHaveText('Terroir PAN (Rösterei)');
+
+  await myCoffeesEntryDetailPage.clickBackButton();
+  await journalEntryDetailPage.clickBackButton();
+
+  await expect(journalPage.getJournalEntryTitle(0)).toHaveText(
+    'Aeropress - Terroir PAN (Rösterei)',
+  );
+});

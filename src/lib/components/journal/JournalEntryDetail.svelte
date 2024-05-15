@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { beforeNavigate } from '$app/navigation';
+  import { beforeNavigate, goto } from '$app/navigation';
   import type { ActiveJournalEntry } from '$lib/models/journal';
   import { getCoffeeLabel } from '$lib/models/myCoffees';
   import { isEqual } from '$lib/shared/compare';
@@ -50,6 +50,7 @@
   let originalEntry: Partial<ActiveJournalEntry> = structuredClone(entry);
   let unknown = false;
   let isLoading = true;
+  let shouldGoBack = false;
 
   let methodInputValid: boolean;
   let waterInputValid: boolean;
@@ -88,7 +89,12 @@
       );
       if (confirmed && to) {
         hasChanged = false;
-        history.back();
+
+        if (shouldGoBack) {
+          history.back();
+        } else {
+          goto(to.url.pathname);
+        }
       }
     }
   });
@@ -174,6 +180,7 @@
   }
 
   function goBack(): void {
+    shouldGoBack = true;
     history.back();
   }
 

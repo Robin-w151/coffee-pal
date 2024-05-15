@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { beforeNavigate } from '$app/navigation';
+  import { beforeNavigate, goto } from '$app/navigation';
   import { getCoffeeLabel, type ActiveCoffeeEntry } from '$lib/models/myCoffees';
   import { isEqual } from '$lib/shared/compare';
   import { ModalHelper } from '$lib/shared/ui/modal';
@@ -50,6 +50,7 @@
   let originalEntry: Partial<ActiveCoffeeEntry> = structuredClone(entry);
   let unknown = false;
   let isLoading = true;
+  let shouldGoBack = true;
 
   let nameInputValid: boolean;
 
@@ -85,7 +86,12 @@
       );
       if (confirmed && to) {
         hasChanged = false;
-        history.back();
+
+        if (shouldGoBack) {
+          history.back();
+        } else {
+          goto(to.url.pathname);
+        }
       }
     }
   });
@@ -162,6 +168,7 @@
   }
 
   function goBack(): void {
+    shouldGoBack = true;
     history.back();
   }
 
