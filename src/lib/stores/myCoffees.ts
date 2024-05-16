@@ -12,20 +12,23 @@ import {
   type MyCoffeesState,
 } from '$lib/models/myCoffees';
 import type { SyncResult } from '$lib/models/sync';
-import { loadPage, sortOrSearch, quickSearch } from '$lib/services/myCoffees/wrapper';
+import { loadPage, quickSearch, sortOrSearch } from '$lib/services/myCoffees/wrapper';
 import Dexie, { liveQuery, type Observable as DxObservable, type Table } from 'dexie';
 import { DateTime } from 'luxon';
 import { BehaviorSubject, debounceTime, switchMap, tap, type Observable } from 'rxjs';
-import type { Readable } from 'svelte/store';
 import { journalStore } from './journal';
 
-export interface MyCoffeesSearchStore extends Observable<MyCoffeesSearchState> {
+export interface MyCoffeesSearchStore {
+  pipe: Observable<MyCoffeesSearchState>['pipe'];
+  subscribe: Observable<MyCoffeesSearchState>['subscribe'];
   setFilter: (filter: string) => void;
   setSort: (sort: MyCoffeesSort, sortDirection: MyCoffeesSortDirection) => void;
   reset: () => void;
 }
 
-export interface MyCoffeesStore extends Readable<MyCoffeesState> {
+export interface MyCoffeesStore {
+  pipe: Observable<MyCoffeesState>['pipe'];
+  subscribe: Observable<MyCoffeesState>['subscribe'];
   loadAll: () => Promise<Array<CoffeeEntry>>;
   loadPage: (page: number) => Promise<void>;
   loadOne: (id: string) => Promise<ActiveCoffeeEntry | undefined>;
@@ -67,11 +70,13 @@ function createMyCoffeesSearchStore(): MyCoffeesSearchStore {
     subject.next(initialState);
   }
 
-  const myCoffeesSearchStore = subject as unknown as MyCoffeesSearchStore;
-  myCoffeesSearchStore.setFilter = setFilter;
-  myCoffeesSearchStore.setSort = setSort;
-  myCoffeesSearchStore.reset = reset;
-  return myCoffeesSearchStore;
+  return {
+    pipe: subject.pipe.bind(subject),
+    subscribe: subject.subscribe.bind(subject),
+    setFilter,
+    setSort,
+    reset,
+  };
 }
 
 function createMyCoffeesStore(myCoffeesSearchStore: MyCoffeesSearchStore): MyCoffeesStore {
@@ -195,17 +200,19 @@ function createMyCoffeesStore(myCoffeesSearchStore: MyCoffeesSearchStore): MyCof
     });
   }
 
-  const myCoffeesStore = subject as unknown as MyCoffeesStore;
-  myCoffeesStore.loadAll = loadAllEntries;
-  myCoffeesStore.loadPage = loadPageEntries;
-  myCoffeesStore.loadOne = loadOneEntry;
-  myCoffeesStore.quickSearch = quickSearchEntries;
-  myCoffeesStore.add = addEntry;
-  myCoffeesStore.update = updateEntry;
-  myCoffeesStore.remove = removeEntry;
-  myCoffeesStore.undo = undoRemoveEntry;
-  myCoffeesStore.apply = applySyncResult;
-  return myCoffeesStore;
+  return {
+    pipe: subject.pipe.bind(subject),
+    subscribe: subject.subscribe.bind(subject),
+    loadAll: loadAllEntries,
+    loadPage: loadPageEntries,
+    loadOne: loadOneEntry,
+    quickSearch: quickSearchEntries,
+    add: addEntry,
+    update: updateEntry,
+    remove: removeEntry,
+    undo: undoRemoveEntry,
+    apply: applySyncResult,
+  };
 }
 
 function createQuery(
