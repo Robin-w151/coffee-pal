@@ -27,7 +27,7 @@
 
 <Card class="@container">
   <h3 class="h3">Counter</h3>
-  <div class="flex flex-col gap-4">
+  <div class="flex flex-1 flex-col gap-4">
     <span class="badge {dropsPerMinuteVariantClass} @md:self-start px-4 py-2 text-base">
       {#if timestamps.length > 0}
         {dropsPerMinute} drops/min
@@ -35,16 +35,14 @@
         Tap to start counting
       {/if}
     </span>
-    <div
-      class="flex flex-col @md:flex-row-reverse items-center @md:justify-center @md:items-end gap-4"
-    >
+    <div class="flex flex-1 flex-row-reverse justify-center items-end gap-4">
       <button
-        class="btn btn-xl variant-filled-primary w-64 max-w-full aspect-square rounded-full"
+        class="btn btn-xl variant-filled-primary w-40 @md:w-64 max-w-full aspect-square rounded-full"
         title="Tap to count drop rate"
         on:click={handleCountClick}>Tap</button
       >
       <button
-        class="btn variant-filled-secondary w-24 max-w-full aspect-square rounded-full"
+        class="btn variant-filled-secondary w-20 @md:w-32 max-w-full aspect-square rounded-full"
         title="Reset counter"
         on:click={handleResetClick}>Reset</button
       >
