@@ -36,11 +36,11 @@
       {/if}
     </span>
     <button
-      class="btn btn-xl variant-ghost-primary h-40 @md:h-32"
+      class="btn btn-xl variant-filled-primary h-40"
       title="Tap to count drop rate"
       on:click={handleCountClick}>Tap</button
     >
-    <button class="btn variant-ghost-secondary" title="Reset counter" on:click={handleResetClick}
+    <button class="btn variant-filled-secondary" title="Reset counter" on:click={handleResetClick}
       >Reset</button
     >
   </div>
