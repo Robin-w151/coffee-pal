@@ -148,7 +148,6 @@ function createJournalStore(journalSearchStore: JournalSearchStore): JournalStor
   }
 
   function updateCoffeeEntry(coffeeEntry: ActiveCoffeeEntry): void {
-    const updatedAt = DateTime.now().toISO();
     journalDb?.transaction('readwrite', journalDb.entries, async () => {
       const entries = await journalDb.entries
         .filter(
@@ -163,7 +162,6 @@ function createJournalStore(journalSearchStore: JournalSearchStore): JournalStor
         journalDb.entries.put({
           ...entry,
           coffeeType: coffeeEntry,
-          updatedAt,
         });
       });
     });
