@@ -1,6 +1,6 @@
 <script lang="ts">
   import Label from '$lib/components/shared/elements/form/Label.svelte';
-  import { methodOptions } from '$lib/config/autocomplete';
+  import { methodOptions } from '$lib/config/brewMethods';
   import {
     Autocomplete,
     popup,
