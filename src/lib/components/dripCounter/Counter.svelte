@@ -35,13 +35,19 @@
         Tap to start counting
       {/if}
     </span>
-    <button
-      class="btn btn-xl variant-filled-primary h-40"
-      title="Tap to count drop rate"
-      on:click={handleCountClick}>Tap</button
+    <div
+      class="flex flex-col @md:flex-row-reverse items-center @md:justify-center @md:items-end gap-4"
     >
-    <button class="btn variant-filled-secondary" title="Reset counter" on:click={handleResetClick}
-      >Reset</button
-    >
+      <button
+        class="btn btn-xl variant-filled-primary w-64 max-w-full aspect-square rounded-full"
+        title="Tap to count drop rate"
+        on:click={handleCountClick}>Tap</button
+      >
+      <button
+        class="btn variant-filled-secondary w-24 max-w-full aspect-square rounded-full"
+        title="Reset counter"
+        on:click={handleResetClick}>Reset</button
+      >
+    </div>
   </div>
 </Card>
