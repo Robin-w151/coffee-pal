@@ -18,13 +18,17 @@ import Dexie, { liveQuery, type Observable as DxObservable, type Table } from 'd
 import { DateTime } from 'luxon';
 import { BehaviorSubject, debounceTime, switchMap, tap, type Observable } from 'rxjs';
 
-export interface JournalSearchStore extends Observable<JournalSearchState> {
+export interface JournalSearchStore {
+  pipe: Observable<JournalSearchState>['pipe'];
+  subscribe: Observable<JournalSearchState>['subscribe'];
   setFilter: (filter: string) => void;
   setSort: (sort: JournalSort, sortDirection: JournalSortDirection) => void;
   reset: () => void;
 }
 
-export interface JournalStore extends Observable<JournalState> {
+export interface JournalStore {
+  pipe: Observable<JournalState>['pipe'];
+  subscribe: Observable<JournalState>['subscribe'];
   loadAll: () => Promise<Array<JournalEntry>>;
   loadPage: (page: number) => Promise<void>;
   loadOne: (id: string) => Promise<ActiveJournalEntry | undefined>;
@@ -66,11 +70,13 @@ function createJournalSearchStore(): JournalSearchStore {
     subject.next(initialState);
   }
 
-  const journalMetaStore = subject as unknown as JournalSearchStore;
-  journalMetaStore.setFilter = setFilter;
-  journalMetaStore.setSort = setSort;
-  journalMetaStore.reset = reset;
-  return journalMetaStore;
+  return {
+    pipe: subject.pipe.bind(subject),
+    subscribe: subject.subscribe.bind(subject),
+    setFilter,
+    setSort,
+    reset,
+  };
 }
 
 function createJournalStore(journalSearchStore: JournalSearchStore): JournalStore {
@@ -204,17 +210,19 @@ function createJournalStore(journalSearchStore: JournalSearchStore): JournalStor
     });
   }
 
-  const journalStore = subject as unknown as JournalStore;
-  journalStore.loadAll = loadAllEntries;
-  journalStore.loadPage = loadPageEntries;
-  journalStore.loadOne = loadOneEntry;
-  journalStore.add = addEntry;
-  journalStore.update = updateEntry;
-  journalStore.updateCoffee = updateCoffeeEntry;
-  journalStore.remove = removeEntry;
-  journalStore.undo = undoRemoveEntry;
-  journalStore.apply = applySyncResult;
-  return journalStore;
+  return {
+    pipe: subject.pipe.bind(subject),
+    subscribe: subject.subscribe.bind(subject),
+    loadAll: loadAllEntries,
+    loadPage: loadPageEntries,
+    loadOne: loadOneEntry,
+    add: addEntry,
+    update: updateEntry,
+    updateCoffee: updateCoffeeEntry,
+    remove: removeEntry,
+    undo: undoRemoveEntry,
+    apply: applySyncResult,
+  };
 }
 
 function createQuery(
