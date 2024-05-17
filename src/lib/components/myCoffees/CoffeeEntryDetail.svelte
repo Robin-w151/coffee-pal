@@ -202,13 +202,13 @@
         <Roaster bind:roaster={entry.roaster} />
         <Trader bind:trader={entry.trader} />
         <Rating bind:rating={entry.rating} />
-        <div class="col-span-2">
+        <div class="col-span-full">
           <Aromas bind:aromas={entry.aromas} />
         </div>
-        <div class="col-span-2">
+        <div class="col-span-full">
           <Description bind:description={entry.description} />
         </div>
-        <div class="flex justify-end items-center gap-2 col-span-2">
+        <div class="flex justify-end items-center gap-2 col-span-full">
           <Actions edit={!!id} {formValid} on:save={handleSave} on:remove={handleRemove} />
         </div>
       </Form>

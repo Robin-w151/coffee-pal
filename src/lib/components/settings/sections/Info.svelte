@@ -7,7 +7,7 @@
 
   const appVersion = import.meta.env.APP_VERSION;
   const appCommitHash = import.meta.env.APP_COMMIT_HASH;
-  const itemClass = 'grid grid-cols-[subgrid] col-span-2';
+  const itemClass = 'grid grid-cols-subgrid col-span-full';
 
   function handleInstallClick(): void {
     appStore.requestAppInstall();

@@ -12,7 +12,7 @@
   export let cardClass: string | undefined = '';
 
   const modalHelper = new ModalHelper(getModalStore());
-  const itemClass = 'grid grid-cols-[subgrid] col-span-2';
+  const itemClass = 'grid grid-cols-subgrid col-span-full';
 
   let developerSettingsActive = false;
   let estimatedStorageUsage: number | undefined = 0;

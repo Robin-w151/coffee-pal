@@ -171,8 +171,8 @@
     on:waterChange={handleWaterChange}
     on:outputChange={handleOutputChange}
   />
-  <hr class="md:col-span-3" />
-  <Iced cardClass="md:col-span-3" water={recipe.water} iced={!!iceRatio} {iceRatio} />
-  <hr class="md:col-span-3" />
-  <TemperatureConverter cardClass="md:col-span-3" />
+  <hr class="col-span-full" />
+  <Iced cardClass="col-span-full" water={recipe.water} iced={!!iceRatio} {iceRatio} />
+  <hr class="col-span-full" />
+  <TemperatureConverter cardClass="col-span-full" />
 </PageCard>
