@@ -59,7 +59,7 @@ const testCoffeeEntries = [
     variety: 'Arabica Heirloom',
     roaster: 'DAK',
     trader: 'TGCS',
-    aromas: [],
+    aromas: ['lime', 'sugarcane'],
     description: '',
   },
   {
@@ -69,7 +69,7 @@ const testCoffeeEntries = [
     variety: 'Robusta',
     roaster: 'Rösterei',
     trader: 'Rösterei',
-    aromas: [],
+    aromas: ['nutty', 'smokey', 'stone fruits', 'tropical'],
     description: '',
   },
 ];
@@ -161,6 +161,7 @@ async function addJournalEntry(
   await page.getByLabel('amount of coffee').fill(`${coffee}`);
   await page.getByLabel('water temperature').fill(`${waterTemperature}`);
   await page.getByLabel('grind settings').fill(grindSettings);
+  await page.locator('button.rating-icon').nth(3).click();
   await page.getByLabel('description').fill(description);
 
   await page.waitForTimeout(250);
@@ -172,7 +173,16 @@ async function addJournalEntry(
   await page.waitForTimeout(250);
 }
 
-async function addCoffeeEntry({ name, origin, process, variety, trader, aromas, description }) {
+async function addCoffeeEntry({
+  name,
+  origin,
+  process,
+  variety,
+  roaster,
+  trader,
+  aromas,
+  description,
+}) {
   await clickAddButton();
   await expect(page.getByText('New Entry', { exact: true })).toBeVisible();
 
@@ -180,6 +190,7 @@ async function addCoffeeEntry({ name, origin, process, variety, trader, aromas, 
   await page.getByLabel('origin').fill(origin);
   await page.getByLabel('process').fill(process);
   await page.getByLabel('variety').fill(variety);
+  await page.getByLabel('roaster').fill(roaster);
   await page.getByLabel('trader').fill(trader);
 
   const aromasInput = page.getByPlaceholder('aromas');
