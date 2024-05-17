@@ -1,11 +1,12 @@
 <script lang="ts">
   import PageCard from '../shared/elements/page/PageCard.svelte';
   import PageHeader from '../shared/elements/page/PageHeader.svelte';
-  import Appearance from './options/Appearance.svelte';
-  import Backup from './options/Backup.svelte';
-  import Info from './options/Info.svelte';
-  import Nextcloud from './options/Nextcloud.svelte';
-  import Units from './options/Units.svelte';
+  import Appearance from './sections/Appearance.svelte';
+  import Backup from './sections/Backup.svelte';
+  import Developer from './sections/Developer.svelte';
+  import Info from './sections/Info.svelte';
+  import Nextcloud from './sections/Nextcloud.svelte';
+  import Units from './sections/Units.svelte';
 </script>
 
 <PageHeader title="Settings" />
@@ -13,10 +14,12 @@
   <Appearance />
   <hr class="lg:divider-vertical lg:h-full" />
   <Units />
-  <hr class="lg:col-span-3" />
+  <hr class="col-span-full" />
   <Nextcloud />
   <hr class="lg:divider-vertical lg:h-full" />
   <Backup />
-  <hr class="lg:col-span-3" />
-  <Info cardClass="lg:col-span-3" />
+  <hr class="col-span-full" />
+  <Info cardClass="col-span-full" />
+  <hr class="col-span-full" />
+  <Developer cardClass="col-span-full" />
 </PageCard>

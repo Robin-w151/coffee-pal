@@ -85,6 +85,18 @@ body {
   @apply h-full;
 }
 
+.modal.dangerous {
+  .modal-footer {
+    button:not(:last-child) {
+      @apply variant-ghost-surface;
+    }
+
+    button:last-child {
+      @apply variant-filled-error;
+    }
+  }
+}
+
 .modal-footer {
   button:not(:last-child) {
     @apply variant-ghost-primary;

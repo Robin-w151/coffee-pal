@@ -1,5 +1,5 @@
 import { browser } from '$app/environment';
-import { MY_COFFEES_PAGE_SIZE } from '$lib/config/myCoffees';
+import { MY_COFFEES_DB_NAME, MY_COFFEES_PAGE_SIZE } from '$lib/config/myCoffees';
 import type { CachedSearchResult } from '$lib/models/cachedSearch';
 import {
   isActiveCoffeeEntry,
@@ -39,8 +39,6 @@ export interface MyCoffeesStore {
   undo: (id: string) => void;
   apply: (syncResult: SyncResult<ActiveCoffeeEntry, DeletedCoffeeEntry>) => void;
 }
-
-const MY_COFFEES_DB_NAME = 'my-coffees';
 
 class MyCoffeesDb extends Dexie {
   entries!: Table<CoffeeEntry, string>;

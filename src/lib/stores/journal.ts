@@ -1,5 +1,5 @@
 import { browser } from '$app/environment';
-import { JOURNAL_PAGE_SIZE } from '$lib/config/journal';
+import { JOURNAL_DB_NAME, JOURNAL_PAGE_SIZE } from '$lib/config/journal';
 import type { CachedSearchResult } from '$lib/models/cachedSearch';
 import {
   isActiveJournalEntry,
@@ -39,8 +39,6 @@ export interface JournalStore {
   undo: (id: string) => void;
   apply: (syncResult: SyncResult<ActiveJournalEntry, DeletedJournalEntry>) => void;
 }
-
-const JOURNAL_DB_NAME = 'journal';
 
 class JournalDb extends Dexie {
   entries!: Table<JournalEntry, string>;
