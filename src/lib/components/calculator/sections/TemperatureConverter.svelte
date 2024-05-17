@@ -1,11 +1,10 @@
 <script lang="ts">
   import Card from '$lib/components/shared/elements/Card.svelte';
+  import ToggleableSection from '$lib/components/shared/elements/ToggleableSection.svelte';
   import Label from '$lib/components/shared/elements/form/Label.svelte';
-  import { rollDown } from '$lib/components/shared/transitions/rollDown';
   import { UNIT_FAHRENHEIT } from '$lib/config/units';
   import { round } from '$lib/shared/math';
   import { faArrowsLeftRight } from '@fortawesome/free-solid-svg-icons';
-  import { SlideToggle } from '@skeletonlabs/skeleton';
   import { Icon } from 'svelte-awesome';
 
   export let temperatureConverter = false;
@@ -24,18 +23,13 @@
 </script>
 
 <Card class={cardClass}>
-  <div class="flex items-center gap-2">
-    <SlideToggle
-      name="temperature-converter"
-      label="Temperature Converter"
-      size="sm"
-      active="slide-toggle-active-token"
-      bind:checked={temperatureConverter}
-    />
-    <h3 class="h3">Temperature Converter</h3>
-  </div>
-  {#if temperatureConverter}
-    <div class="grid sm:grid-cols-[auto_3rem_auto] max-sm:gap-4" transition:rollDown>
+  <ToggleableSection
+    name="temperature-converter"
+    label="Toggle Temperature Converter"
+    title="Temperature Converter"
+    bind:active={temperatureConverter}
+  >
+    <div class="grid sm:grid-cols-[auto_3rem_auto] max-sm:gap-4">
       <Label text="Celsius">
         <input
           class="input"
@@ -61,5 +55,5 @@
         />
       </Label>
     </div>
-  {/if}
+  </ToggleableSection>
 </Card>

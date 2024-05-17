@@ -149,6 +149,9 @@ devDependencies:
   sass:
     specifier: ^1.77.1
     version: 1.77.1
+  scroll-into-view-if-needed:
+    specifier: ^3.1.0
+    version: 3.1.0
   semantic-release:
     specifier: ^23.1.1
     version: 23.1.1(typescript@5.4.5)
@@ -3335,6 +3338,10 @@ packages:
       dot-prop: 5.3.0
     dev: true
 
+  /compute-scroll-into-view@3.1.0:
+    resolution: {integrity: sha512-rj8l8pD4bJ1nx+dAkMhV1xB5RuZEyVysfxJqB1pRchh1KVvwOv9b7CGB8ZfjTImVv2oF+sYMUkMZq6Na5Ftmbg==}
+    dev: true
+
   /concat-map@0.0.1:
     resolution: {integrity: sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==}
     dev: true
@@ -6483,6 +6490,12 @@ packages:
       chokidar: 3.6.0
       immutable: 4.3.5
       source-map-js: 1.2.0
+    dev: true
+
+  /scroll-into-view-if-needed@3.1.0:
+    resolution: {integrity: sha512-49oNpRjWRvnU8NyGVmUaYG4jtTkNonFZI86MmGRDqBphEK2EXT9gdEUoQPZhuBM8yWHxCWbobltqYO5M4XrUvQ==}
+    dependencies:
+      compute-scroll-into-view: 3.1.0
     dev: true
 
   /semantic-release@23.1.1(typescript@5.4.5):

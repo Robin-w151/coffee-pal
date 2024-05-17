@@ -1,3 +1,5 @@
+import { tick } from 'svelte';
+
 type Resolve<T> = (value?: T) => void;
 type Reject = (reason?: any) => void;
 
@@ -15,4 +17,8 @@ export function withResolvers<T>(): WithResolvers<T> {
     reject = rej;
   });
   return { promise, resolve, reject } as unknown as WithResolvers<T>;
+}
+
+export function waitAndTick(timeout: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, timeout)).then(tick);
 }
