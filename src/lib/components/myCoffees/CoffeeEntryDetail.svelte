@@ -55,6 +55,7 @@
   let unknown = false;
   let isLoading = true;
   let shouldGoBack = true;
+  let updateInfoToast: string | undefined;
 
   let nameInputValid: boolean;
 
@@ -71,7 +72,7 @@
           if (!isSynchronizing && id && entry) {
             const loadedEntry = await myCoffeesStore.loadOne(id);
             if (loadedEntry && !isEqualCoffeeEntry(entry, loadedEntry)) {
-              toastHelper.triggerInfo(
+              updateInfoToast = toastHelper.triggerInfo(
                 'This entry was updated in the background. Do you want to reload now?',
                 {
                   action: {
@@ -107,7 +108,10 @@
     resumeScheduledSync();
     destroy.next();
     destroy.complete();
-    toastStore.clear();
+
+    if (updateInfoToast) {
+      toastStore.close(updateInfoToast);
+    }
   });
 
   beforeNavigate(async ({ cancel, to }) => {

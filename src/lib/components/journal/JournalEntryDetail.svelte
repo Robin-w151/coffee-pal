@@ -55,6 +55,7 @@
   let unknown = false;
   let isLoading = true;
   let shouldGoBack = false;
+  let updateInfoToast: string | undefined;
 
   let methodInputValid: boolean;
   let waterInputValid: boolean;
@@ -74,7 +75,7 @@
           if (!isSynchronizing && id && entry) {
             const loadedEntry = await journalStore.loadOne(id);
             if (loadedEntry && !isEqualJournalEntry(entry, loadedEntry)) {
-              toastHelper.triggerInfo(
+              updateInfoToast = toastHelper.triggerInfo(
                 'This entry was updated in the background. Do you want to reload now?',
                 {
                   action: {
@@ -110,7 +111,10 @@
     resumeScheduledSync();
     destroy.next();
     destroy.complete();
-    toastStore.clear();
+
+    if (updateInfoToast) {
+      toastStore.close(updateInfoToast);
+    }
   });
 
   beforeNavigate(async ({ cancel, to }) => {
