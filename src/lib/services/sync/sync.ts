@@ -8,8 +8,9 @@ import { syncStore } from '$lib/stores/sync';
 import { syncStateStore } from '$lib/stores/syncState';
 import { journalStore } from '$lib/stores/journal';
 import { myCoffeesStore } from '$lib/stores/myCoffees';
-import { clearScheduledSync } from '../scheduler/syncScheduler';
+import { setupScheduledTask } from '../scheduler/scheduler';
 
+const SYNC = Symbol('sync');
 const isOnline = onlineStore();
 
 export async function sync(): Promise<void> {
@@ -53,6 +54,13 @@ export async function sync(): Promise<void> {
     syncStateStore.setIsSynchronizing(false);
   }
 }
+
+export const {
+  scheduleExecution: scheduleSync,
+  clearScheduledExecution: clearScheduledSync,
+  pauseScheduledTask: pauseScheduledSync,
+  resumeScheduledTask: resumeScheduledSync,
+} = setupScheduledTask(SYNC, sync);
 
 async function syncJournal(
   connection: Connection,

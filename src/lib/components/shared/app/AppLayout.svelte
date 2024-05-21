@@ -5,7 +5,7 @@
   import AppMenu from '$lib/components/shared/app/AppMenu.svelte';
   import AppRail from '$lib/components/shared/app/AppRail.svelte';
   import EnableColorSchemes from '$lib/components/shared/app/EnableColorSchemes.svelte';
-  import { scheduleSync } from '$lib/services/scheduler/syncScheduler';
+  import { scheduleSync } from '$lib/services/sync/sync';
   import { rememberScrollPosition, scrollToLastKnownPosition } from '$lib/shared/ui/scroll';
   import '$lib/stores/app';
   import { arrow, autoUpdate, computePosition, flip, offset, shift } from '@floating-ui/dom';

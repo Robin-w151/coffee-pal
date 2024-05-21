@@ -1,11 +1,7 @@
 <script lang="ts">
   import { beforeNavigate, goto } from '$app/navigation';
   import { getCoffeeLabel, type ActiveCoffeeEntry } from '$lib/models/myCoffees';
-  import {
-    pauseScheduledSync,
-    resumeScheduledSync,
-    scheduleSync,
-  } from '$lib/services/scheduler/syncScheduler';
+  import { pauseScheduledSync, resumeScheduledSync, scheduleSync } from '$lib/services/sync/sync';
   import { isEqualCoffeeEntry } from '$lib/shared/compare';
   import { ModalHelper } from '$lib/shared/ui/modal';
   import { ToastHelper } from '$lib/shared/ui/toast';
@@ -152,7 +148,14 @@
         timeout: 15000,
         action: {
           label: 'Undo',
-          response: () => myCoffeesStore.undo(entryId),
+          response: () => {
+            myCoffeesStore.undo(entryId);
+          },
+        },
+        callback: (response) => {
+          if (response.status === 'closed') {
+            scheduleSync();
+          }
         },
       });
 

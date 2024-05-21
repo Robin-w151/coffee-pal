@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { pauseScheduledSync } from '$lib/services/scheduler/syncScheduler';
+  import { pauseScheduledSync } from '$lib/services/sync/sync';
   import { listenForUpdates } from '$lib/services/updates/updateListener';
   import { ToastHelper } from '$lib/shared/ui/toast';
   import { getToastStore } from '@skeletonlabs/skeleton';
