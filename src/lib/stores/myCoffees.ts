@@ -147,18 +147,18 @@ function createMyCoffeesStore(myCoffeesSearchStore: MyCoffeesSearchStore): MyCof
     }
   }
 
-  function addEntry(entry: ActiveCoffeeEntry): void {
+  async function addEntry(entry: ActiveCoffeeEntry): Promise<void> {
     const now = DateTime.now().toISO();
     entry.createdAt = now;
     entry.updatedAt = now;
-    myCoffeesDb?.entries.add(entry, entry.id);
+    await myCoffeesDb?.entries.add(entry, entry.id);
   }
 
-  function updateEntry(entry: ActiveCoffeeEntry): void {
+  async function updateEntry(entry: ActiveCoffeeEntry): Promise<void> {
     entry.updatedAt = DateTime.now().toISO();
     myCoffeesDb?.entries.put(entry, entry.id);
 
-    journalStore.updateCoffee(entry);
+    await journalStore.updateCoffee(entry);
   }
 
   async function removeEntry(id: string): Promise<void> {
@@ -168,17 +168,19 @@ function createMyCoffeesStore(myCoffeesSearchStore: MyCoffeesSearchStore): MyCof
     }
 
     const deletedEntry: DeletedCoffeeEntry = { id, deletedAt: DateTime.now().toISO() };
-    myCoffeesDb?.entries.put(deletedEntry, id);
+    await myCoffeesDb?.entries.put(deletedEntry, id);
   }
 
-  function undoRemoveEntry(id: string): void {
+  async function undoRemoveEntry(id: string): Promise<void> {
     const entry = removedEntries.get(id);
     if (entry) {
-      myCoffeesDb?.entries.put(entry, entry.id);
+      await myCoffeesDb?.entries.put(entry, entry.id);
     }
   }
 
-  function applySyncResult(syncResult: SyncResult<ActiveCoffeeEntry, DeletedCoffeeEntry>): void {
+  async function applySyncResult(
+    syncResult: SyncResult<ActiveCoffeeEntry, DeletedCoffeeEntry>,
+  ): Promise<void> {
     if (!myCoffeesDb) {
       return;
     }
@@ -188,7 +190,7 @@ function createMyCoffeesStore(myCoffeesSearchStore: MyCoffeesSearchStore): MyCof
       return;
     }
 
-    myCoffeesDb.transaction('readwrite', myCoffeesDb.entries, async () => {
+    await myCoffeesDb.transaction('readwrite', myCoffeesDb.entries, async () => {
       if (updateEntries.length > 0) {
         myCoffeesDb?.entries.bulkPut(updateEntries);
       }

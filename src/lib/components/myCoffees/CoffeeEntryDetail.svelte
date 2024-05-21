@@ -1,11 +1,19 @@
 <script lang="ts">
   import { beforeNavigate, goto } from '$app/navigation';
   import { getCoffeeLabel, type ActiveCoffeeEntry } from '$lib/models/myCoffees';
+  import {
+    pauseScheduledSync,
+    resumeScheduledSync,
+    scheduleSync,
+  } from '$lib/services/scheduler/syncScheduler';
+  import { isEqualCoffeeEntry } from '$lib/shared/compare';
   import { ModalHelper } from '$lib/shared/ui/modal';
   import { ToastHelper } from '$lib/shared/ui/toast';
   import { myCoffeesStore } from '$lib/stores/myCoffees';
+  import { syncStateEvents } from '$lib/stores/syncState';
   import { faFaceSadCry } from '@fortawesome/free-solid-svg-icons';
   import { getModalStore, getToastStore } from '@skeletonlabs/skeleton';
+  import { Subject, takeUntil, tap } from 'rxjs';
   import { onDestroy, onMount } from 'svelte';
   import { Icon } from 'svelte-awesome';
   import { v4 as uuid } from 'uuid';
@@ -22,17 +30,13 @@
   import Roaster from './detail/Roaster.svelte';
   import Trader from './detail/Trader.svelte';
   import Variety from './detail/Variety.svelte';
-  import {
-    pauseScheduledSync,
-    resumeScheduledSync,
-    scheduleSync,
-  } from '$lib/services/scheduler/syncScheduler';
-  import { isEqualCoffeeEntry } from '$lib/shared/compare';
 
   export let id: string | undefined = undefined;
 
   const modalHelper = new ModalHelper(getModalStore());
-  const toastHelper = new ToastHelper(getToastStore());
+  const toastStore = getToastStore();
+  const toastHelper = new ToastHelper(toastStore);
+  const destroy = new Subject<void>();
 
   let entry: Partial<ActiveCoffeeEntry> = {
     name: '',
@@ -61,6 +65,32 @@
   onMount(async () => {
     pauseScheduledSync();
 
+    syncStateEvents
+      .pipe(
+        tap(async ({ isSynchronizing }) => {
+          if (!isSynchronizing && id && entry) {
+            const loadedEntry = await myCoffeesStore.loadOne(id);
+            if (loadedEntry && !isEqualCoffeeEntry(entry, loadedEntry)) {
+              toastHelper.triggerInfo(
+                'This entry was updated in the background. Do you want to reload now?',
+                {
+                  action: {
+                    label: 'Reload now',
+                    response: async () => {
+                      entry = loadedEntry;
+                      originalEntry = structuredClone(loadedEntry);
+                    },
+                  },
+                  autohide: false,
+                },
+              );
+            }
+          }
+        }),
+        takeUntil(destroy),
+      )
+      .subscribe();
+
     if (id) {
       const loadedEntry = await myCoffeesStore.loadOne(id);
       if (loadedEntry) {
@@ -75,6 +105,9 @@
 
   onDestroy(() => {
     resumeScheduledSync();
+    destroy.next();
+    destroy.complete();
+    toastStore.clear();
   });
 
   beforeNavigate(async ({ cancel, to }) => {

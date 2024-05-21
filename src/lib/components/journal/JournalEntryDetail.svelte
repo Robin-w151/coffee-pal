@@ -2,11 +2,19 @@
   import { beforeNavigate, goto } from '$app/navigation';
   import { type ActiveJournalEntry } from '$lib/models/journal';
   import { getCoffeeLabel } from '$lib/models/myCoffees';
+  import {
+    pauseScheduledSync,
+    resumeScheduledSync,
+    scheduleSync,
+  } from '$lib/services/scheduler/syncScheduler';
+  import { isEqualJournalEntry } from '$lib/shared/compare';
   import { ModalHelper } from '$lib/shared/ui/modal';
   import { ToastHelper } from '$lib/shared/ui/toast';
   import { journalStore } from '$lib/stores/journal';
+  import { syncStateEvents } from '$lib/stores/syncState';
   import { faFaceSadCry } from '@fortawesome/free-solid-svg-icons';
   import { getModalStore, getToastStore } from '@skeletonlabs/skeleton';
+  import { Subject, takeUntil, tap } from 'rxjs';
   import { onDestroy, onMount } from 'svelte';
   import { Icon } from 'svelte-awesome';
   import { v4 as uuid } from 'uuid';
@@ -23,17 +31,13 @@
   import Ratio from './detail/Ratio.svelte';
   import Water from './detail/Water.svelte';
   import WaterTemperature from './detail/WaterTemperature.svelte';
-  import {
-    pauseScheduledSync,
-    resumeScheduledSync,
-    scheduleSync,
-  } from '$lib/services/scheduler/syncScheduler';
-  import { isEqualJournalEntry } from '$lib/shared/compare';
 
   export let id: string | undefined = undefined;
 
   const modalHelper = new ModalHelper(getModalStore());
-  const toastHelper = new ToastHelper(getToastStore());
+  const toastStore = getToastStore();
+  const toastHelper = new ToastHelper(toastStore);
+  const destroy = new Subject<void>();
 
   let entry: Partial<ActiveJournalEntry> = {
     method: '',
@@ -64,6 +68,32 @@
   onMount(async () => {
     pauseScheduledSync();
 
+    syncStateEvents
+      .pipe(
+        tap(async ({ isSynchronizing }) => {
+          if (!isSynchronizing && id && entry) {
+            const loadedEntry = await journalStore.loadOne(id);
+            if (loadedEntry && !isEqualJournalEntry(entry, loadedEntry)) {
+              toastHelper.triggerInfo(
+                'This entry was updated in the background. Do you want to reload now?',
+                {
+                  action: {
+                    label: 'Reload now',
+                    response: async () => {
+                      entry = loadedEntry;
+                      originalEntry = structuredClone(loadedEntry);
+                    },
+                  },
+                  autohide: false,
+                },
+              );
+            }
+          }
+        }),
+        takeUntil(destroy),
+      )
+      .subscribe();
+
     if (id) {
       const loadedEntry = await journalStore.loadOne(id);
       if (loadedEntry) {
@@ -78,6 +108,9 @@
 
   onDestroy(() => {
     resumeScheduledSync();
+    destroy.next();
+    destroy.complete();
+    toastStore.clear();
   });
 
   beforeNavigate(async ({ cancel, to }) => {

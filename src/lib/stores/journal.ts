@@ -32,12 +32,12 @@ export interface JournalStore {
   loadAll: () => Promise<Array<JournalEntry>>;
   loadPage: (page: number) => Promise<void>;
   loadOne: (id: string) => Promise<ActiveJournalEntry | undefined>;
-  add: (entry: ActiveJournalEntry) => void;
-  update: (entry: ActiveJournalEntry) => void;
-  updateCoffee: (entry: ActiveCoffeeEntry) => void;
+  add: (entry: ActiveJournalEntry) => Promise<void>;
+  update: (entry: ActiveJournalEntry) => Promise<void>;
+  updateCoffee: (entry: ActiveCoffeeEntry) => Promise<void>;
   remove: (id: string) => Promise<void>;
-  undo: (id: string) => void;
-  apply: (syncResult: SyncResult<ActiveJournalEntry, DeletedJournalEntry>) => void;
+  undo: (id: string) => Promise<void>;
+  apply: (syncResult: SyncResult<ActiveJournalEntry, DeletedJournalEntry>) => Promise<void>;
 }
 
 class JournalDb extends Dexie {
@@ -139,20 +139,20 @@ function createJournalStore(journalSearchStore: JournalSearchStore): JournalStor
     }
   }
 
-  function addEntry(entry: ActiveJournalEntry): void {
+  async function addEntry(entry: ActiveJournalEntry): Promise<void> {
     const now = DateTime.now().toISO();
     entry.createdAt = now;
     entry.updatedAt = now;
-    journalDb?.entries.add(entry, entry.id);
+    await journalDb?.entries.add(entry, entry.id);
   }
 
-  function updateEntry(entry: ActiveJournalEntry): void {
+  async function updateEntry(entry: ActiveJournalEntry): Promise<void> {
     entry.updatedAt = DateTime.now().toISO();
-    journalDb?.entries.put(entry, entry.id);
+    await journalDb?.entries.put(entry, entry.id);
   }
 
-  function updateCoffeeEntry(coffeeEntry: ActiveCoffeeEntry): void {
-    journalDb?.transaction('readwrite', journalDb.entries, async () => {
+  async function updateCoffeeEntry(coffeeEntry: ActiveCoffeeEntry): Promise<void> {
+    await journalDb?.transaction('readwrite', journalDb.entries, async () => {
       const entries = await journalDb.entries
         .filter(
           (entry) =>
@@ -178,17 +178,19 @@ function createJournalStore(journalSearchStore: JournalSearchStore): JournalStor
     }
 
     const deletedEntry: DeletedJournalEntry = { id, deletedAt: DateTime.now().toISO() };
-    journalDb?.entries.put(deletedEntry, id);
+    await journalDb?.entries.put(deletedEntry, id);
   }
 
-  function undoRemoveEntry(id: string): void {
+  async function undoRemoveEntry(id: string): Promise<void> {
     const entry = removedEntries.get(id);
     if (entry) {
-      journalDb?.entries.put(entry, entry.id);
+      await journalDb?.entries.put(entry, entry.id);
     }
   }
 
-  function applySyncResult(syncResult: SyncResult<ActiveJournalEntry, DeletedJournalEntry>): void {
+  async function applySyncResult(
+    syncResult: SyncResult<ActiveJournalEntry, DeletedJournalEntry>,
+  ): Promise<void> {
     if (!journalDb) {
       return;
     }
@@ -198,7 +200,7 @@ function createJournalStore(journalSearchStore: JournalSearchStore): JournalStor
       return;
     }
 
-    journalDb.transaction('readwrite', journalDb.entries, async () => {
+    await journalDb.transaction('readwrite', journalDb.entries, async () => {
       if (updateEntries.length > 0) {
         journalDb?.entries.bulkPut(updateEntries);
       }

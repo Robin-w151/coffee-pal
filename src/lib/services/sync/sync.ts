@@ -38,13 +38,15 @@ export async function sync(): Promise<void> {
       myCoffeesSync,
     ]);
 
+    const applyResults = [];
     if (journalSyncResult.status === 'fulfilled') {
-      journalStore.apply(journalSyncResult.value);
+      applyResults.push(journalStore.apply(journalSyncResult.value));
     }
 
     if (myCoffeesSyncResult.status === 'fulfilled') {
-      myCoffeesStore.apply(myCoffeesSyncResult.value);
+      applyResults.push(myCoffeesStore.apply(myCoffeesSyncResult.value));
     }
+    await Promise.all(applyResults);
 
     syncStore.updateLastSync();
   } finally {
