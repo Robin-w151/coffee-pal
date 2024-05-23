@@ -60,10 +60,14 @@
           <span>{iceRatio} %</span>
         </div>
       </RangeSlider>
-      <div class="grid sm:grid-cols-2 gap-4 w-full">
+      <div class="grid sm:grid-cols-[1fr_auto_1fr] gap-4 w-full">
         <Label text="Amount of brewing water">
           <MeasurementInput readonly {units} bind:measurement={brewWaterMeasurement} />
         </Label>
+        <div class="hidden sm:flex flex-col gap-1 h-full">
+          <div class="h-[24px]" />
+          <hr class="flex-1 divider-vertical" />
+        </div>
         <Label text="Amount of ice">
           <MeasurementInput readonly {units} bind:measurement={iceMeasurement} />
         </Label>

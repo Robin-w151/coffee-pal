@@ -4,8 +4,6 @@
   import Label from '$lib/components/shared/elements/form/Label.svelte';
   import { UNIT_FAHRENHEIT } from '$lib/config/units';
   import { round } from '$lib/shared/math';
-  import { faArrowsLeftRight } from '@fortawesome/free-solid-svg-icons';
-  import { Icon } from 'svelte-awesome';
 
   export let temperatureConverter = false;
   export let cardClass: string | undefined = undefined;
@@ -29,7 +27,7 @@
     title="Temperature Converter"
     bind:active={temperatureConverter}
   >
-    <div class="grid sm:grid-cols-[auto_3rem_auto] max-sm:gap-4">
+    <div class="grid sm:grid-cols-[1fr_auto_1fr] gap-4">
       <Label text="Celsius">
         <input
           class="input"
@@ -39,11 +37,9 @@
           on:blur={handleCelsiusChange}
         />
       </Label>
-      <div class="hidden sm:flex flex-col gap-1">
-        <div class="flex-1 max-h-[24px]" />
-        <div class="flex-1 flex justify-center items-center font-bold text-2xl">
-          <Icon data={faArrowsLeftRight} />
-        </div>
+      <div class="hidden sm:flex flex-col gap-1 h-full">
+        <div class="h-[24px]" />
+        <hr class="flex-1 divider-vertical" />
       </div>
       <Label text="Fahrenheit">
         <input
