@@ -37,7 +37,7 @@
           on:blur={handleCelsiusChange}
         />
       </Label>
-      <div class="hidden sm:flex flex-col gap-1 h-full">
+      <div class="hidden sm:flex flex-col gap-1">
         <div class="h-[24px]" />
         <hr class="flex-1 divider-vertical" />
       </div>
