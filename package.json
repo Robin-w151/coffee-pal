@@ -54,7 +54,7 @@
     "autoprefixer": "^10.4.19",
     "chance": "^1.1.11",
     "comlink": "^4.4.1",
-    "dexie": "^4.0.4",
+    "dexie": "^4.0.7",
     "dotenv-flow": "^4.1.0",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
