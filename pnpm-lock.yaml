@@ -171,8 +171,8 @@ devDependencies:
     specifier: ^3.7.1
     version: 3.7.1(@babel/core@7.24.5)(postcss@8.4.38)(sass@1.77.2)(svelte@4.2.17)
   svelte-legos:
-    specifier: ^0.2.2
-    version: 0.2.2(svelte@4.2.17)
+    specifier: ^0.2.3
+    version: 0.2.3(svelte@4.2.17)
   tailwindcss:
     specifier: ^3.4.3
     version: 3.4.3
@@ -7061,8 +7061,8 @@ packages:
       svelte: 4.2.17
     dev: true
 
-  /svelte-legos@0.2.2(svelte@4.2.17):
-    resolution: {integrity: sha512-HTVkCIqhrxdy+OpXjxGr/4xIJEGv4d2cRQwTjm0SYfLw/YF1I1l/TQR59nb2WvjccnO8TNFNTvAWP5pgXQnU+w==}
+  /svelte-legos@0.2.3(svelte@4.2.17):
+    resolution: {integrity: sha512-HuFzPC7of2ZErJaIoxFRu2Z5Rk7VUhlkAfqWoXpO1S9CNSByMakzTLVsM0/VDE6jmCG5JXLqvjND+rsV6nkOHQ==}
     peerDependencies:
       svelte: ^4.0.0
     dependencies:
