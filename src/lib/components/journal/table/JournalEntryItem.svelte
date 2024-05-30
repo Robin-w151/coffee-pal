@@ -8,12 +8,14 @@
     getPreferredWeightUnit,
   } from '$lib/shared/units';
   import { getCoffeeLabel } from '$lib/models/myCoffees';
+  import { calculateRatio } from '$lib/shared/math';
 
   export let entry: ActiveJournalEntry;
 
   const preferredWeightUnit = getPreferredWeightUnit($settingsStore.preferredUnits);
   const preferredTemperatureUnit = getPreferredTemperatureUnit($settingsStore.preferredUnits);
 
+  $: ratio = calculateRatio(entry.coffee, entry.water);
   $: coffeeType = getCoffeeLabel(entry.coffeeType);
 
   function handleEntryClick(): void {
@@ -46,6 +48,7 @@
 </script>
 
 <tr tabindex="0" role="button" on:click={handleEntryClick} on:keydown={handleEntryKeyDown}>
+  <td><span class="badge variant-soft-tertiary w-16">{ratio}</span></td>
   <td>{entry.method}</td>
   <td>{coffeeType ?? 'Unknown'}</td>
   <td>{waterDisplayValue(entry.water)}/{coffeeDisplayValue(entry.coffee)}</td>

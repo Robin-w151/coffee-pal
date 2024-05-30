@@ -13,9 +13,10 @@
   <table class="table table-interactive">
     <thead>
       <tr>
+        <th />
         <th>Method</th>
         <th>Coffee</th>
-        <th>Ratio</th>
+        <th>Recipe</th>
         <th>Temperature</th>
         <th>Grind settings</th>
       </tr>
