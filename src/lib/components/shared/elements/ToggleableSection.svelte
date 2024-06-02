@@ -11,9 +11,7 @@
 
   let ref: HTMLDivElement;
 
-  $: handleActiveChange(active);
-
-  async function handleActiveChange(active: boolean): Promise<void> {
+  async function handleToggleChange(): Promise<void> {
     if (active) {
       await waitAndTick(150);
       scrollIntoView(ref, {
@@ -25,7 +23,14 @@
 </script>
 
 <div class="flex items-center gap-2" bind:this={ref}>
-  <SlideToggle {name} {label} size="sm" active="slide-toggle-active-token" bind:checked={active} />
+  <SlideToggle
+    {name}
+    {label}
+    size="sm"
+    active="slide-toggle-active-token"
+    bind:checked={active}
+    on:change={handleToggleChange}
+  />
   <h3 class="h3">{title || label}</h3>
 </div>
 {#if active}
