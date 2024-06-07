@@ -69,7 +69,7 @@ export function getCoffeeLabel(entry?: string | Partial<ActiveCoffeeEntry>): str
     if (typeof entry === 'string') {
       return entry;
     } else {
-      return [entry.name, entry.roaster]
+      return [entry.name, entry.roaster || entry.trader]
         .filter((s) => !!s)
         .map((value, index) => (index ? `(${value})` : value))
         .join(' ');
