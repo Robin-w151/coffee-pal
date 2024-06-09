@@ -1,2 +1,2 @@
 export const JOURNAL_DB_NAME = 'journal';
-export const JOURNAL_PAGE_SIZE = 25;
+export const JOURNAL_PAGE_SIZE = 20;
