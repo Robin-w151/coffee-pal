@@ -1,7 +1,7 @@
 <script lang="ts">
-  import type { Scheme, UrlInputChange } from '$lib/models/urlInput';
   import { HOST_REGEXP } from '$lib/config/regexp';
-  import { faLock, faLockOpen } from '@fortawesome/free-solid-svg-icons';
+  import type { Scheme, UrlInputChange } from '$lib/models/urlInput';
+  import { faArrowUpRightFromSquare, faLock, faLockOpen } from '@fortawesome/free-solid-svg-icons';
   import { createEventDispatcher } from 'svelte';
   import { Icon } from 'svelte-awesome';
 
@@ -49,7 +49,7 @@
 </script>
 
 <div
-  class="input-group input-group-divider grid-cols-[auto_1fr]"
+  class="input-group input-group-divider grid-cols-[auto_1fr_auto]"
   class:input-error={inputTouched && !hostValid}
 >
   {#if readonly}
@@ -64,4 +64,9 @@
     </select>
   {/if}
   <input type="text" {placeholder} {readonly} bind:value={host} on:blur={handleInputBlur} />
+  {#if host}
+    <a class="input-group-shim" href="{scheme}//{host}" target="_blank">
+      <Icon data={faArrowUpRightFromSquare} />
+    </a>
+  {/if}
 </div>

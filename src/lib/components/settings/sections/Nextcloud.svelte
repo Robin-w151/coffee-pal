@@ -4,11 +4,11 @@
   import type { UrlInputChange } from '$lib/models/urlInput';
   import { NextcloudLoginClient } from '$lib/services/sync/nextcloud';
   import { sync } from '$lib/services/sync/sync';
+  import { ModalHelper } from '$lib/shared/ui/modal';
+  import { ToastHelper } from '$lib/shared/ui/toast';
   import { syncStore } from '$lib/stores/sync';
   import { syncAvailabilityStore } from '$lib/stores/syncAvailability';
   import { syncStateStore } from '$lib/stores/syncState';
-  import { ModalHelper } from '$lib/shared/ui/modal';
-  import { ToastHelper } from '$lib/shared/ui/toast';
   import { getModalStore, getToastStore } from '@skeletonlabs/skeleton';
   import { catchError, finalize, of, tap, type Subscription } from 'rxjs';
   import { onDestroy } from 'svelte';
@@ -130,28 +130,19 @@
           disabled={!$syncAvailabilityStore.isAvailable}
           on:click={handleSyncClick}>Sync</button
         >
+      {:else if showSpinner}
+        <button class="btn variant-filled-error" title="Cancel Setup" on:click={handleCancelClick}>
+          Cancel
+        </button>
       {:else}
-        {#if url}
-          <a class="btn variant-ghost-primary" href={url} target="_blank" rel="noopener">Open</a>
-        {/if}
-        {#if showSpinner}
-          <button
-            class="btn variant-filled-error"
-            title="Cancel Setup"
-            on:click={handleCancelClick}
-          >
-            Cancel
-          </button>
-        {:else}
-          <button
-            class="btn variant-filled-primary"
-            title="Enable Sync via Nextcloud"
-            disabled={!hostValid}
-            on:click={handleConnectClick}
-          >
-            Connect
-          </button>
-        {/if}
+        <button
+          class="btn variant-filled-primary"
+          title="Enable Sync via Nextcloud"
+          disabled={!hostValid}
+          on:click={handleConnectClick}
+        >
+          Connect
+        </button>
       {/if}
     </div>
   </Form>
