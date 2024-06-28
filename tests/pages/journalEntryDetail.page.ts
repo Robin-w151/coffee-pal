@@ -54,4 +54,8 @@ export class JournalEntryDetailPage {
   async clickOpenCoffeeEntry(): Promise<void> {
     await this.page.getByRole('link', { name: 'Open coffee entry' }).click();
   }
+
+  async clickOpenInCalculatorButton(): Promise<void> {
+    await this.page.getByRole('button', { name: 'Calculator' }).click();
+  }
 }

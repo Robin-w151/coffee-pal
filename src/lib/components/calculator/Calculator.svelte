@@ -1,9 +1,10 @@
 <script lang="ts">
+  import { afterNavigate, goto } from '$app/navigation';
   import presets from '$assets/presets.json';
   import type { Preset } from '$lib/models/preset';
   import type { Ratio } from '$lib/models/ratio';
   import type { Recipe as IRecipe } from '$lib/models/recipe';
-  import { sanitize } from '$lib/shared/math';
+  import { round, sanitize } from '$lib/shared/math';
   import PageCard from '../shared/elements/page/PageCard.svelte';
   import PageHeader from '../shared/elements/page/PageHeader.svelte';
   import Iced from './sections/Iced.svelte';
@@ -15,6 +16,38 @@
   let recipe: IRecipe = calculateRecipe(preset);
   let fixedRatio = true;
   let iceRatio: number | undefined = undefined;
+
+  afterNavigate(({ to }) => {
+    const searchParams = to?.url.searchParams;
+    if (!searchParams) {
+      return;
+    }
+
+    const water = parseFloat(searchParams.get('water') ?? '');
+    const coffee = parseFloat(searchParams.get('coffee') ?? '');
+
+    if (isNaN(water) || isNaN(coffee) || water === recipe.water || coffee === recipe.coffee) {
+      return;
+    }
+
+    preset = {
+      label: 'Custom',
+      ratio: {
+        coffee: 1,
+        water: round(water / coffee)!,
+      },
+      factor: 1,
+    };
+    recipe = {
+      coffee,
+      water,
+      output: calculateOutput(coffee, water),
+    };
+    fixedRatio = true;
+    iceRatio = undefined;
+
+    goto(`?`, { replaceState: true });
+  });
 
   function handlePresetSelect({ detail: newPreset }: { detail: Preset }): void {
     preset = newPreset;
