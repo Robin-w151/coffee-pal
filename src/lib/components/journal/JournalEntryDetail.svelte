@@ -295,7 +295,7 @@
                 type="button"
                 label="Calculator"
                 title="Open in calculator"
-                variant="variant-ghost-surface"
+                variant="variant-ghost-tertiary"
                 disabled={!formValid}
                 on:click={handleOpenInCalculator}
               >
