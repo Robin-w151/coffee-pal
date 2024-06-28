@@ -63,9 +63,16 @@
       {/each}
     </select>
   {/if}
-  <input type="text" {placeholder} {readonly} bind:value={host} on:blur={handleInputBlur} />
+  <input
+    style="min-width: 6rem !important"
+    type="text"
+    {placeholder}
+    {readonly}
+    bind:value={host}
+    on:blur={handleInputBlur}
+  />
   {#if host}
-    <a class="input-group-shim" href="{scheme}//{host}" target="_blank">
+    <a class="input-group-shim" href="{scheme}//{host}" target="_blank" title="Open URL">
       <Icon data={faArrowUpRightFromSquare} />
     </a>
   {/if}
