@@ -24,6 +24,7 @@
 </script>
 
 <div class="flex gap-2">
+  <slot name="before" />
   {#if edit}
     <ResponsiveButton
       type="button"
@@ -59,4 +60,5 @@
       <Icon data={faSave} />
     </svelte:fragment>
   </ResponsiveButton>
+  <slot name="after" />
 </div>

@@ -123,7 +123,7 @@
         if (shouldGoBack) {
           history.back();
         } else {
-          goto(to.url.pathname);
+          goto(`${to.url.pathname}${to.url.search}`);
         }
       }
     }

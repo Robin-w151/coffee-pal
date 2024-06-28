@@ -8,7 +8,7 @@
   import { ToastHelper } from '$lib/shared/ui/toast';
   import { journalStore } from '$lib/stores/journal';
   import { syncStateEvents } from '$lib/stores/syncState';
-  import { faFaceSadCry } from '@fortawesome/free-solid-svg-icons';
+  import { faCalculator, faFaceSadCry } from '@fortawesome/free-solid-svg-icons';
   import { getModalStore, getToastStore } from '@skeletonlabs/skeleton';
   import { Subject, takeUntil, tap } from 'rxjs';
   import { onDestroy, onMount } from 'svelte';
@@ -27,6 +27,7 @@
   import Ratio from './detail/Ratio.svelte';
   import Water from './detail/Water.svelte';
   import WaterTemperature from './detail/WaterTemperature.svelte';
+  import ResponsiveButton from '../shared/elements/form/ResponsiveButton.svelte';
 
   export let id: string | undefined = undefined;
 
@@ -126,7 +127,7 @@
         if (shouldGoBack) {
           history.back();
         } else {
-          goto(to.url.pathname);
+          goto(`${to.url.pathname}${to.url.search}`);
         }
       }
     }
@@ -178,6 +179,19 @@
 
   function handleBack(): void {
     goBack();
+  }
+
+  function handleOpenInCalculator(): void {
+    if (entry.water === undefined || entry.coffee === undefined) {
+      return;
+    }
+
+    const recipe = {
+      water: `${entry.water}`,
+      coffee: `${entry.coffee}`,
+    };
+
+    goto(`/calculator?${new URLSearchParams(recipe).toString()}`);
   }
 
   function handleCoffeeChange({ detail: coffee }: CustomEvent<number | undefined>): void {
@@ -275,7 +289,22 @@
             on:save={handleSave}
             on:copy={handleCopy}
             on:remove={handleRemove}
-          />
+          >
+            <svelte:fragment slot="before">
+              <ResponsiveButton
+                type="button"
+                label="Calculator"
+                title="Open in calculator"
+                variant="variant-ghost-tertiary"
+                disabled={!formValid}
+                on:click={handleOpenInCalculator}
+              >
+                <svelte:fragment slot="icon">
+                  <Icon data={faCalculator} />
+                </svelte:fragment>
+              </ResponsiveButton>
+            </svelte:fragment>
+          </Actions>
         </div>
       </Form>
     </div>

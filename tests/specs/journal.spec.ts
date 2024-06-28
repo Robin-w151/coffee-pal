@@ -152,3 +152,38 @@ test('entry change detail without save, navigate to coffee entry and back to ove
     'Aeropress - Terroir PAN (Rösterei)',
   );
 });
+
+test('entry navigate to calculator', async ({
+  journalPage,
+  journalEntryDetailPage,
+  calculatorPage,
+}) => {
+  await journalPage.goto();
+
+  await journalPage.clickJournalEntryShowButton(0);
+  await journalEntryDetailPage.clickOpenInCalculatorButton();
+
+  await expect(calculatorPage.coffeeRatioInput).toHaveValue('1');
+  await expect(calculatorPage.waterRatioInput).toHaveValue('15.38');
+  await expect(calculatorPage.waterAmountInput).toHaveValue('200');
+  await expect(calculatorPage.coffeeAmountInput).toHaveValue('13');
+});
+
+test('entry change detail without save, navigate to calculator', async ({
+  appPage,
+  journalPage,
+  journalEntryDetailPage,
+  calculatorPage,
+}) => {
+  await journalPage.goto();
+
+  await journalPage.clickJournalEntryShowButton(0);
+  await journalEntryDetailPage.coffeeInput.fill('14');
+  await journalEntryDetailPage.clickOpenInCalculatorButton();
+  await appPage.clickWarningConfirmButton();
+
+  await expect(calculatorPage.coffeeRatioInput).toHaveValue('1');
+  await expect(calculatorPage.waterRatioInput).toHaveValue('14.29');
+  await expect(calculatorPage.waterAmountInput).toHaveValue('200');
+  await expect(calculatorPage.coffeeAmountInput).toHaveValue('14');
+});
