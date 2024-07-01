@@ -125,6 +125,8 @@
         } else {
           goto(`${to.url.pathname}${to.url.search}`);
         }
+      } else {
+        shouldGoBack = false;
       }
     }
   });

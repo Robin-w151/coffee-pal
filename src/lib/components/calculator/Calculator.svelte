@@ -16,6 +16,7 @@
   let recipe: IRecipe = calculateRecipe(preset);
   let fixedRatio = true;
   let iceRatio: number | undefined = undefined;
+  let showBack = false;
 
   afterNavigate(({ to }) => {
     const searchParams = to?.url.searchParams;
@@ -30,6 +31,7 @@
       return;
     }
 
+    showBack = true;
     preset = {
       label: 'Custom',
       ratio: {
@@ -48,6 +50,10 @@
 
     goto(`?`, { replaceState: true });
   });
+
+  function handleBackClick(): void {
+    history.back();
+  }
 
   function handlePresetSelect({ detail: newPreset }: { detail: Preset }): void {
     preset = newPreset;
@@ -189,7 +195,7 @@
   }
 </script>
 
-<PageHeader title="Brewing Calculator" />
+<PageHeader title="Brewing Calculator" {showBack} on:back={handleBackClick} />
 <PageCard display="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-4">
   <Ratios
     ratio={preset.ratio}

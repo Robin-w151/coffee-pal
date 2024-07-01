@@ -129,6 +129,8 @@
         } else {
           goto(`${to.url.pathname}${to.url.search}`);
         }
+      } else {
+        shouldGoBack = false;
       }
     }
   });
@@ -293,8 +295,7 @@
             <svelte:fragment slot="before">
               <ResponsiveButton
                 type="button"
-                label="Calculator"
-                title="Open in calculator"
+                label="Open in calculator"
                 variant="variant-ghost-tertiary"
                 disabled={!formValid}
                 on:click={handleOpenInCalculator}

@@ -10,12 +10,12 @@
 </script>
 
 <button
-  class="btn max-md:btn-icon {variant} {$$props.class ?? ''}"
+  class="btn max-lg:btn-icon {variant} {$$props.class ?? ''}"
   {type}
   {disabled}
   title={title || label}
   on:click
 >
   <slot name="icon" />
-  <span class="hidden md:inline">{label}</span>
+  <span class="hidden lg:inline">{label}</span>
 </button>
