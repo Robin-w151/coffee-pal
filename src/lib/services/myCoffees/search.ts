@@ -11,7 +11,40 @@ const FUSE_OPTIONS = {
   threshold: 0.4,
   ignoreLocation: true,
   findAllMatches: true,
-  keys: ['name', 'origin', 'variety', 'process', 'roaster', 'trader', 'aromas', 'description'],
+  keys: [
+    {
+      name: 'name',
+      weight: 3,
+    },
+    {
+      name: 'origin',
+      weight: 2,
+    },
+    {
+      name: 'variety',
+      weight: 2,
+    },
+    {
+      name: 'process',
+      weight: 2,
+    },
+    {
+      name: 'roaster',
+      weight: 2,
+    },
+    {
+      name: 'trader',
+      weight: 2,
+    },
+    {
+      name: 'aromas',
+      weight: 1,
+    },
+    {
+      name: 'description',
+      weight: 2,
+    },
+  ],
 } satisfies IFuseOptions<ActiveCoffeeEntry>;
 
 export function sortOrSearch(
