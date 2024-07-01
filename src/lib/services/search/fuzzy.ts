@@ -1,8 +1,11 @@
-export function buildFuseQuery(filter: string, keys: Array<string>) {
+export function buildFuseQuery(
+  filter: string,
+  keys: Array<string | { name: string; weight: number }>,
+) {
   const filterTokens = normalizeAndSplit(filter);
   return {
     $and: filterTokens.map((token) => ({
-      $or: keys?.map((key) => ({ [key]: token })),
+      $or: keys?.map((key) => ({ [typeof key === 'object' ? key.name : key]: token })),
     })),
   };
 }

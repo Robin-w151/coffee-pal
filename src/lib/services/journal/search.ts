@@ -13,21 +13,66 @@ const FUSE_OPTIONS = {
   ignoreLocation: true,
   findAllMatches: true,
   keys: [
-    'method',
-    'water',
-    'waterTemperature',
-    'coffee',
-    'coffeeType',
-    'coffeeType.name',
-    'coffeeType.origin',
-    'coffeeType.variety',
-    'coffeeType.process',
-    'coffeeType.roaster',
-    'coffeeType.trader',
-    'coffeeType.aromas',
-    'coffeeType.description',
-    'grindSettings',
-    'description',
+    {
+      name: 'method',
+      weight: 3,
+    },
+    {
+      name: 'water',
+      weight: 1,
+    },
+    {
+      name: 'waterTemperature',
+      weight: 1,
+    },
+    {
+      name: 'coffee',
+      weight: 1,
+    },
+    {
+      name: 'coffeeType',
+      weight: 3,
+    },
+    {
+      name: 'coffeeType.name',
+      weight: 2,
+    },
+    {
+      name: 'coffeeType.origin',
+      weight: 2,
+    },
+    {
+      name: 'coffeeType.variety',
+      weight: 2,
+    },
+    {
+      name: 'coffeeType.process',
+      weight: 2,
+    },
+    {
+      name: 'coffeeType.roaster',
+      weight: 2,
+    },
+    {
+      name: 'coffeeType.trader',
+      weight: 2,
+    },
+    {
+      name: 'coffeeType.aromas',
+      weight: 1,
+    },
+    {
+      name: 'coffeeType.description',
+      weight: 2,
+    },
+    {
+      name: 'grindSettings',
+      weight: 1,
+    },
+    {
+      name: 'description',
+      weight: 2,
+    },
   ],
 } satisfies IFuseOptions<ActiveJournalEntry>;
 
