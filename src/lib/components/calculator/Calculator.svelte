@@ -27,11 +27,16 @@
     const water = parseFloat(searchParams.get('water') ?? '');
     const coffee = parseFloat(searchParams.get('coffee') ?? '');
 
-    if (isNaN(water) || isNaN(coffee) || water === recipe.water || coffee === recipe.coffee) {
+    if (isNaN(water) || isNaN(coffee)) {
       return;
     }
 
     showBack = true;
+
+    if (water === recipe.water || coffee === recipe.coffee) {
+      return;
+    }
+
     preset = {
       label: 'Custom',
       ratio: {
