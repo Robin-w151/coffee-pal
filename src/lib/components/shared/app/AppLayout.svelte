@@ -23,6 +23,7 @@
   import { pwaInfo } from 'virtual:pwa-info';
   import '../../../../app.scss';
   import EnableUpdateListener from './EnableUpdateListener.svelte';
+  import EnableShortcuts from './EnableShortcuts.svelte';
 
   initializeStores();
   storePopup.set({ computePosition, autoUpdate, offset, shift, flip, arrow });
@@ -56,6 +57,7 @@
 
 <EnableColorSchemes />
 <EnableUpdateListener />
+<EnableShortcuts />
 
 <Modal />
 <Toast />
