@@ -20,7 +20,7 @@
     "lint": "prettier --check . && eslint .",
     "format": "prettier --write .",
     "sme": "source-map-explorer .svelte-kit/output/client/**/*.js",
-    "postinstall": "husky install",
+    "prepare": "husky",
     "prepack": "pinst --disable",
     "postpack": "pinst --enable"
   },
