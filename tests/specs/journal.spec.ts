@@ -55,6 +55,7 @@ test('entry add', async ({ journalPage, journalEntryDetailPage }) => {
   await journalEntryDetailPage.descriptionInput.fill('Nutty and smoky');
 
   await journalEntryDetailPage.clickSaveButton();
+  await journalEntryDetailPage.clickBackButton();
 
   const entry = journalPage.getJournalEntry(0);
   await expect(journalPage.getJournalEntryTitle(entry)).toHaveText('Chemex - Tovolea Classic');
@@ -67,6 +68,7 @@ test('entry edit', async ({ journalPage, journalEntryDetailPage }) => {
   await journalPage.clickJournalEntryShowButton(0);
   await journalEntryDetailPage.methodInput.fill('Aeropress Clear');
   await journalEntryDetailPage.clickSaveButton();
+  await journalEntryDetailPage.clickBackButton();
 
   await expect(journalPage.getJournalEntryTitle(0)).toHaveText(
     'Aeropress Clear - Terroir PAN (Rösterei)',
@@ -110,6 +112,7 @@ test('entry copy', async ({ journalPage, journalEntryDetailPage }) => {
   await journalPage.clickJournalEntryShowButton(0);
   await journalEntryDetailPage.methodInput.fill('Aeropress Clear');
   await journalEntryDetailPage.clickCopyButton();
+  await journalEntryDetailPage.clickBackButton();
 
   await expect(journalPage.journalList).toHaveCount(4);
 });

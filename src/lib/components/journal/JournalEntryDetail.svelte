@@ -117,10 +117,7 @@
   beforeNavigate(async ({ cancel, to }) => {
     if (hasChanged && !unknown && !isLoading) {
       cancel();
-      const confirmed = await modalHelper.triggerConfirm(
-        'You have unsaved changes',
-        'Are you sure you want to leave?',
-      );
+      const confirmed = await askUnsavedChanges();
       if (confirmed && to) {
         hasChanged = false;
 
@@ -137,22 +134,25 @@
 
   function handleSave(): void {
     const sanitizedEntry = sanitizeEntry(entry);
+    hasChanged = false;
+    scheduleSync();
+
     if (entry.id) {
       journalStore.update(sanitizedEntry);
     } else {
-      journalStore.add({ ...sanitizedEntry, id: uuid() });
+      const newId = uuid();
+      journalStore.add({ ...sanitizedEntry, id: newId });
+      goToEntry(newId);
     }
-    hasChanged = false;
-    scheduleSync();
-    goBack();
   }
 
-  function handleCopy(): void {
+  async function handleCopy(): Promise<void> {
     const sanitizedEntry = sanitizeEntry(entry);
-    journalStore.add({ ...sanitizedEntry, id: uuid() });
+    const newId = uuid();
+    journalStore.add({ ...sanitizedEntry, id: newId });
     hasChanged = false;
     scheduleSync();
-    goBack();
+    goToEntry(newId);
   }
 
   function handleRemove(): void {
@@ -240,6 +240,10 @@
     history.back();
   }
 
+  function goToEntry(id: string): void {
+    goto(`/journal/${id}`, { replaceState: true });
+  }
+
   function getTitle(unknown: boolean, entry?: Partial<ActiveJournalEntry>): string {
     if (unknown) {
       return 'Unknown';
@@ -249,6 +253,13 @@
     } else {
       return 'New Entry';
     }
+  }
+
+  function askUnsavedChanges(): Promise<boolean> {
+    return modalHelper.triggerConfirm(
+      'You have unsaved changes',
+      'Are you sure you want to leave?',
+    );
   }
 </script>
 
