@@ -56,6 +56,7 @@ test('entry add', async ({ myCoffeesPage, myCoffeesEntryDetailPage }) => {
   await myCoffeesEntryDetailPage.descriptionInput.fill('excellent for iced coffee');
 
   await myCoffeesEntryDetailPage.clickSaveButton();
+  await myCoffeesEntryDetailPage.clickBackButton();
 
   const entry = myCoffeesPage.getCoffeeEntry(0);
   await expect(myCoffeesPage.getCoffeeEntryTitle(entry)).toHaveText('Tovolea Classic (Tovolea)');
@@ -68,6 +69,7 @@ test('entry edit', async ({ myCoffeesPage, myCoffeesEntryDetailPage }) => {
   await myCoffeesPage.clickJournalEntryShowButton(1);
   await myCoffeesEntryDetailPage.varietyInput.fill('SL34');
   await myCoffeesEntryDetailPage.clickSaveButton();
+  await myCoffeesEntryDetailPage.clickBackButton();
 
   await expect(myCoffeesPage.getCoffeeEntryDetail(0)).toHaveText('Panama | Washed | SL34');
 });

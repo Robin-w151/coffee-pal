@@ -113,10 +113,7 @@
   beforeNavigate(async ({ cancel, to }) => {
     if (hasChanged && !unknown && !isLoading) {
       cancel();
-      const confirmed = await modalHelper.triggerConfirm(
-        'You have unsaved changes',
-        'Are you sure you want to leave?',
-      );
+      const confirmed = await askUnsavedChanges();
       if (confirmed && to) {
         hasChanged = false;
 
@@ -133,14 +130,16 @@
 
   function handleSave(): void {
     const sanitizedEntry = sanitizeEntry(entry);
+    hasChanged = false;
+    scheduleSync();
+
     if (entry.id) {
       myCoffeesStore.update(sanitizedEntry);
     } else {
-      myCoffeesStore.add({ ...sanitizedEntry, id: uuid() });
+      const newId = uuid();
+      myCoffeesStore.add({ ...sanitizedEntry, id: newId });
+      goToEntry(newId);
     }
-    hasChanged = false;
-    scheduleSync();
-    goBack();
   }
 
   function handleRemove(): void {
@@ -214,6 +213,10 @@
     history.back();
   }
 
+  function goToEntry(id: string): void {
+    goto(`/my-coffees/${id}`, { replaceState: true });
+  }
+
   function getTitle(unknown: boolean, entry?: Partial<ActiveCoffeeEntry>): string {
     if (unknown) {
       return 'Unknown';
@@ -222,6 +225,13 @@
     } else {
       return 'New Entry';
     }
+  }
+
+  function askUnsavedChanges(): Promise<boolean> {
+    return modalHelper.triggerConfirm(
+      'You have unsaved changes',
+      'Are you sure you want to leave?',
+    );
   }
 </script>
 
