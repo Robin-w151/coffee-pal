@@ -130,7 +130,7 @@
 
   function handleSave(): void {
     const sanitizedEntry = sanitizeEntry(entry);
-    hasChanged = false;
+    originalEntry = structuredClone(sanitizedEntry);
     scheduleSync();
 
     if (entry.id) {
@@ -138,6 +138,7 @@
     } else {
       const newId = uuid();
       myCoffeesStore.add({ ...sanitizedEntry, id: newId });
+      hasChanged = false;
       goToEntry(newId);
     }
   }
@@ -261,7 +262,13 @@
           <Description bind:description={entry.description} />
         </div>
         <div class="flex justify-end items-center gap-2 col-span-full">
-          <Actions edit={!!id} {formValid} on:save={handleSave} on:remove={handleRemove} />
+          <Actions
+            edit={!!id}
+            {formValid}
+            hasChanged={id ? hasChanged : undefined}
+            on:save={handleSave}
+            on:remove={handleRemove}
+          />
         </div>
       </Form>
     </div>
