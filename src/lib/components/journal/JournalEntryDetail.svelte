@@ -134,7 +134,7 @@
 
   function handleSave(): void {
     const sanitizedEntry = sanitizeEntry(entry);
-    hasChanged = false;
+    originalEntry = structuredClone(sanitizedEntry);
     scheduleSync();
 
     if (entry.id) {
@@ -142,6 +142,7 @@
     } else {
       const newId = uuid();
       journalStore.add({ ...sanitizedEntry, id: newId });
+      hasChanged = false;
       goToEntry(newId);
     }
   }
@@ -298,6 +299,7 @@
           <Actions
             edit={!!id}
             {formValid}
+            hasChanged={id ? hasChanged : undefined}
             allowCopy
             on:save={handleSave}
             on:copy={handleCopy}

@@ -6,6 +6,7 @@
 
   export let edit = false;
   export let formValid = false;
+  export let hasChanged: boolean | undefined = undefined;
   export let allowCopy = false;
 
   const dispatch = createEventDispatcher();
@@ -53,7 +54,7 @@
   <ResponsiveButton
     label="Save"
     variant="variant-filled-primary"
-    disabled={!formValid}
+    disabled={!formValid || (hasChanged !== undefined && !hasChanged)}
     on:click={handleSaveClick}
   >
     <svelte:fragment slot="icon">
