@@ -4,7 +4,7 @@
   import type { HasEventTargetAddRemove } from 'rxjs/internal/observable/fromEvent';
   import { onMount } from 'svelte';
 
-  let visible = browser ? navigator.windowControlsOverlay?.visible ?? false : false;
+  let visible = browser ? (navigator.windowControlsOverlay?.visible ?? false) : false;
 
   onMount(() => {
     if ('windowControlsOverlay' in navigator) {
