@@ -66,7 +66,7 @@ test('entry add', async ({ myCoffeesPage, myCoffeesEntryDetailPage }) => {
 });
 
 test('entry edit', async ({ myCoffeesPage, myCoffeesEntryDetailPage }) => {
-  await myCoffeesPage.clickJournalEntryShowButton(1);
+  await myCoffeesPage.clickCoffeeEntry(1);
   await myCoffeesEntryDetailPage.varietyInput.fill('SL34');
   await myCoffeesEntryDetailPage.clickSaveButton();
   await myCoffeesEntryDetailPage.clickBackButton();
@@ -75,7 +75,7 @@ test('entry edit', async ({ myCoffeesPage, myCoffeesEntryDetailPage }) => {
 });
 
 test('entry edit cancel', async ({ appPage, myCoffeesPage, myCoffeesEntryDetailPage }) => {
-  await myCoffeesPage.clickJournalEntryShowButton(1);
+  await myCoffeesPage.clickCoffeeEntry(1);
   await myCoffeesEntryDetailPage.roasterInput.fill('');
   await myCoffeesEntryDetailPage.clickBackButton();
   await appPage.clickWarningConfirmButton();
@@ -84,7 +84,7 @@ test('entry edit cancel', async ({ appPage, myCoffeesPage, myCoffeesEntryDetailP
 });
 
 test('entry edit without changes', async ({ myCoffeesPage, myCoffeesEntryDetailPage }) => {
-  await myCoffeesPage.clickJournalEntryShowButton(2);
+  await myCoffeesPage.clickCoffeeEntry(2);
   await myCoffeesEntryDetailPage.descriptionInput.fill('Excellent for cold brew');
   await myCoffeesEntryDetailPage.descriptionInput.fill('');
   await myCoffeesEntryDetailPage.clickBackButton();
@@ -93,14 +93,14 @@ test('entry edit without changes', async ({ myCoffeesPage, myCoffeesEntryDetailP
 });
 
 test('entry delete', async ({ myCoffeesPage, myCoffeesEntryDetailPage }) => {
-  await myCoffeesPage.clickJournalEntryShowButton(2);
+  await myCoffeesPage.clickCoffeeEntry(2);
   await myCoffeesEntryDetailPage.clickDeleteButton();
 
   await expect(myCoffeesPage.coffeeList).toHaveCount(2);
 });
 
 test('entry delete undo', async ({ myCoffeesPage, myCoffeesEntryDetailPage }) => {
-  await myCoffeesPage.clickJournalEntryShowButton(2);
+  await myCoffeesPage.clickCoffeeEntry(2);
   await myCoffeesEntryDetailPage.clickDeleteButton();
   await myCoffeesPage.clickUndoButton();
 

@@ -4,7 +4,7 @@ export class JournalPage {
   constructor(private readonly page: Page) {}
 
   get journalList(): Locator {
-    return this.page.locator('main dl > div');
+    return this.page.locator('main dl > a');
   }
 
   get emptyMessage(): Locator {
@@ -52,9 +52,7 @@ export class JournalPage {
     await this.page.getByRole('button', { name: 'Undo' }).click();
   }
 
-  async clickJournalEntryShowButton(entry: Locator | number): Promise<void> {
-    return (typeof entry === 'number' ? this.getJournalEntry(entry) : entry)
-      .getByTitle('Show')
-      .click();
+  async clickJournalEntry(entry: Locator | number): Promise<void> {
+    return (typeof entry === 'number' ? this.getJournalEntry(entry) : entry).click();
   }
 }

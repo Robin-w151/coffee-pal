@@ -65,7 +65,7 @@ test('entry add', async ({ journalPage, journalEntryDetailPage }) => {
 });
 
 test('entry edit', async ({ journalPage, journalEntryDetailPage }) => {
-  await journalPage.clickJournalEntryShowButton(0);
+  await journalPage.clickJournalEntry(0);
   await journalEntryDetailPage.methodInput.fill('Aeropress Clear');
   await journalEntryDetailPage.clickSaveButton();
   await journalEntryDetailPage.clickBackButton();
@@ -76,7 +76,7 @@ test('entry edit', async ({ journalPage, journalEntryDetailPage }) => {
 });
 
 test('entry edit cancel', async ({ appPage, journalPage, journalEntryDetailPage }) => {
-  await journalPage.clickJournalEntryShowButton(1);
+  await journalPage.clickJournalEntry(1);
   await journalEntryDetailPage.methodInput.fill('');
   await journalEntryDetailPage.clickBackButton();
   await appPage.clickWarningConfirmButton();
@@ -85,7 +85,7 @@ test('entry edit cancel', async ({ appPage, journalPage, journalEntryDetailPage 
 });
 
 test('entry edit without changes', async ({ journalPage, journalEntryDetailPage }) => {
-  await journalPage.clickJournalEntryShowButton(2);
+  await journalPage.clickJournalEntry(2);
   await journalEntryDetailPage.descriptionInput.fill('2m30s brew time');
   await journalEntryDetailPage.descriptionInput.fill('');
   await journalEntryDetailPage.clickBackButton();
@@ -94,14 +94,14 @@ test('entry edit without changes', async ({ journalPage, journalEntryDetailPage 
 });
 
 test('entry delete', async ({ journalPage, journalEntryDetailPage }) => {
-  await journalPage.clickJournalEntryShowButton(0);
+  await journalPage.clickJournalEntry(0);
   await journalEntryDetailPage.clickDeleteButton();
 
   await expect(journalPage.journalList).toHaveCount(2);
 });
 
 test('entry delete undo', async ({ journalPage, journalEntryDetailPage }) => {
-  await journalPage.clickJournalEntryShowButton(0);
+  await journalPage.clickJournalEntry(0);
   await journalEntryDetailPage.clickDeleteButton();
   await journalPage.clickUndoButton();
 
@@ -109,7 +109,7 @@ test('entry delete undo', async ({ journalPage, journalEntryDetailPage }) => {
 });
 
 test('entry copy', async ({ journalPage, journalEntryDetailPage }) => {
-  await journalPage.clickJournalEntryShowButton(0);
+  await journalPage.clickJournalEntry(0);
   await journalEntryDetailPage.methodInput.fill('Aeropress Clear');
   await journalEntryDetailPage.clickCopyButton();
   await journalEntryDetailPage.clickBackButton();
@@ -122,7 +122,7 @@ test('entry navigate to coffee entry and back to overview', async ({
   journalEntryDetailPage,
   myCoffeesEntryDetailPage,
 }) => {
-  await journalPage.clickJournalEntryShowButton(0);
+  await journalPage.clickJournalEntry(0);
   await journalEntryDetailPage.clickOpenCoffeeEntry();
 
   await expect(myCoffeesEntryDetailPage.header).toHaveText('Terroir PAN (Rösterei)');
@@ -141,7 +141,7 @@ test('entry change detail without save, navigate to coffee entry and back to ove
   journalEntryDetailPage,
   myCoffeesEntryDetailPage,
 }) => {
-  await journalPage.clickJournalEntryShowButton(0);
+  await journalPage.clickJournalEntry(0);
   await journalEntryDetailPage.waterInput.fill('2000');
   await journalEntryDetailPage.clickOpenCoffeeEntry();
   await appPage.clickWarningConfirmButton();
@@ -163,7 +163,7 @@ test('entry navigate to calculator', async ({
 }) => {
   await journalPage.goto();
 
-  await journalPage.clickJournalEntryShowButton(0);
+  await journalPage.clickJournalEntry(0);
   await journalEntryDetailPage.clickOpenInCalculatorButton();
 
   await expect(calculatorPage.coffeeRatioInput).toHaveValue('1');
@@ -180,7 +180,7 @@ test('entry change detail without save, navigate to calculator', async ({
 }) => {
   await journalPage.goto();
 
-  await journalPage.clickJournalEntryShowButton(0);
+  await journalPage.clickJournalEntry(0);
   await journalEntryDetailPage.coffeeInput.fill('14');
   await journalEntryDetailPage.clickOpenInCalculatorButton();
   await appPage.clickWarningConfirmButton();
