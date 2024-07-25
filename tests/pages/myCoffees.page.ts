@@ -4,7 +4,7 @@ export class MyCoffeesPage {
   constructor(private readonly page: Page) {}
 
   get coffeeList(): Locator {
-    return this.page.locator('main dl > div');
+    return this.page.locator('main dl > a');
   }
 
   get emptyMessage(): Locator {
@@ -52,9 +52,7 @@ export class MyCoffeesPage {
     await this.page.getByRole('button', { name: 'Undo' }).click();
   }
 
-  async clickJournalEntryShowButton(entry: Locator | number): Promise<void> {
-    return (typeof entry === 'number' ? this.getCoffeeEntry(entry) : entry)
-      .getByTitle('Show')
-      .click();
+  async clickCoffeeEntry(entry: Locator | number): Promise<void> {
+    return (typeof entry === 'number' ? this.getCoffeeEntry(entry) : entry).click();
   }
 }

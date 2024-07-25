@@ -7,8 +7,6 @@
     getPreferredTemperatureUnit,
     getPreferredWeightUnit,
   } from '$lib/shared/units';
-  import { faEye } from '@fortawesome/free-solid-svg-icons';
-  import { Icon } from 'svelte-awesome';
   import { getCoffeeLabel } from '$lib/models/myCoffees';
 
   export let entry: ActiveJournalEntry;
@@ -32,21 +30,18 @@
   }
 </script>
 
-<div class="justify-between">
+<a
+  class="flex items-center gap-4 px-3 sm:px-2 py-2 hover:bg-primary-500/10 rounded-md"
+  href="/journal/{entry.id}"
+>
   <span class="max-sm:hidden badge variant-soft-tertiary w-16">{ratio}</span>
   <span class="block min-w-0 flex-1 max-sm:!ml-0">
     <dt class="overflow-hidden text-ellipsis whitespace-nowrap">
-      <span class="font-bold">{entry.method} - {coffeeType ?? 'Unknown'}</span>
+      <span>{entry.method} - {coffeeType ?? 'Unknown'}</span>
     </dt>
-    <dd class="overflow-hidden text-ellipsis whitespace-nowrap">
+    <dd class="font-normal overflow-hidden text-ellipsis whitespace-nowrap">
       <span class="sm:hidden">{ratio} - </span>
       <span>{details(entry)}</span>
     </dd>
   </span>
-  <span class="flex gap-2">
-    <a class="btn btn-icon hover:variant-soft-secondary" title="Show" href="/journal/{entry.id}">
-      <Icon data={faEye} />
-      <span class="sr-only">Show</span>
-    </a>
-  </span>
-</div>
+</a>
