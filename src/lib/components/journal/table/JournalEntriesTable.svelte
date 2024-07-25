@@ -31,7 +31,7 @@
           <JournalEntryItem {entry} />
         {:else}
           <tr>
-            <td colspan="5">
+            <td colspan="6">
               <div class="flex justify-center items-center gap-4 w-full">
                 <Icon data={faFaceSadCry} />
                 <span

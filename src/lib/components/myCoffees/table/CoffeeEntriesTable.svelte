@@ -32,7 +32,7 @@
           <CoffeeEntryItem {entry} />
         {:else}
           <tr>
-            <td colspan="6">
+            <td colspan="7">
               <div class="flex justify-center items-center gap-4 w-full">
                 <Icon data={faFaceSadCry} />
                 <span
