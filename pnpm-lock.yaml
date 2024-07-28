@@ -176,9 +176,6 @@ importers:
       tailwindcss:
         specifier: ^3.4.4
         version: 3.4.4
-      ts-json-schema-generator:
-        specifier: ^2.3.0
-        version: 2.3.0
       tslib:
         specifier: ^2.6.3
         version: 2.6.3
@@ -206,6 +203,9 @@ importers:
       workbox-precaching:
         specifier: ^7.1.0
         version: 7.1.0
+      zod:
+        specifier: ^3.23.8
+        version: 3.23.8
 
 packages:
 
@@ -1441,9 +1441,6 @@ packages:
 
   '@types/file-saver@2.0.7':
     resolution: {integrity: sha512-dNKVfHd/jk0SkR/exKGj2ggkB45MAkzvWCaqLUUgkyjITkGNzH8H+yUwr+BLJUBjZOe9w8X3wgmXhZDRg1ED6A==}
-
-  '@types/json-schema@7.0.15':
-    resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
 
   '@types/lodash-es@4.17.12':
     resolution: {integrity: sha512-0NgftHUcV4v34VhXm8QBSftKVXtbkBG3ViCjs6+eJ5a6y6Mi/jiFGPc1sC7QK+9BFhWrURE3EOggmWaSxL9OzQ==}
@@ -3694,10 +3691,6 @@ packages:
     resolution: {integrity: sha512-CdASjNJPvRa7roO6Ra/gLYBTzYzzPyyBXxIMdGW3USQLyjWEls2RgW5UBTXaQVp+OrpeCK3bLem8smtmheoRuw==}
     engines: {node: '>= 0.4'}
 
-  safe-stable-stringify@2.4.3:
-    resolution: {integrity: sha512-e2bDA2WJT0wxseVd4lsDP4+3ONX6HpMXQa1ZhFQ7SU+GjvORCmShbCMltrtIDfkYhVHrOcPtj+KhmDBdPdZD1g==}
-    engines: {node: '>=10'}
-
   sander@0.5.1:
     resolution: {integrity: sha512-3lVqBir7WuKDHGrKRDn/1Ye3kwpXaDOMsiRP1wd6wpZW56gJhsbp5RqQpA6JG/P+pkXizygnr1dKR8vzWaVsfA==}
 
@@ -4118,11 +4111,6 @@ packages:
   ts-interface-checker@0.1.13:
     resolution: {integrity: sha512-Y/arvbn+rrz3JCKl9C4kVNfTfSm2/mEp5FSz5EsZSANGPSlQrpRI5M4PKF+mJnE52jOO90PnPSc3Ur3bTQw0gA==}
 
-  ts-json-schema-generator@2.3.0:
-    resolution: {integrity: sha512-t4lBQAwZc0sOJq9LJt3NgbznIcslVnm0JeEMFq8qIRklpMRY8jlYD0YmnRWbqBKANxkby91P1XanSSlSOFpUmg==}
-    engines: {node: '>=18.0.0'}
-    hasBin: true
-
   tslib@2.6.3:
     resolution: {integrity: sha512-xNvxJEOUiWPGhUuUdQgAJPKOOJfGnIyKySOc09XkKsgdUV/3E2zvwZYdejjmRgPCgcym1juLH3226yA7sEFJKQ==}
 
@@ -4460,6 +4448,9 @@ packages:
   yoctocolors@2.1.0:
     resolution: {integrity: sha512-FsQpXXeOEe05tcJN4Z2eicuC6+6KiJdBbPOAChanSkwwjZ277XGsh8wh/HaPuGeifTiw/7dgAzabitu2bnDvRg==}
     engines: {node: '>=18'}
+
+  zod@3.23.8:
+    resolution: {integrity: sha512-XBx9AXhXktjUqnepgTiE5flcKIYWi/rme0Eaj+5Y0lftuGBq+jyRu/md4WnuxqgP1ubdpNCsYEYPxrzVHD8d6g==}
 
 snapshots:
 
@@ -5898,8 +5889,6 @@ snapshots:
   '@types/estree@1.0.5': {}
 
   '@types/file-saver@2.0.7': {}
-
-  '@types/json-schema@7.0.15': {}
 
   '@types/lodash-es@4.17.12':
     dependencies:
@@ -8076,8 +8065,6 @@ snapshots:
       es-errors: 1.3.0
       is-regex: 1.1.4
 
-  safe-stable-stringify@2.4.3: {}
-
   sander@0.5.1:
     dependencies:
       es6-promise: 3.3.1
@@ -8585,17 +8572,6 @@ snapshots:
 
   ts-interface-checker@0.1.13: {}
 
-  ts-json-schema-generator@2.3.0:
-    dependencies:
-      '@types/json-schema': 7.0.15
-      commander: 12.1.0
-      glob: 10.4.2
-      json5: 2.2.3
-      normalize-path: 3.0.0
-      safe-stable-stringify: 2.4.3
-      tslib: 2.6.3
-      typescript: 5.5.3
-
   tslib@2.6.3: {}
 
   type-check@0.4.0:
@@ -8987,3 +8963,5 @@ snapshots:
   yocto-queue@1.1.1: {}
 
   yoctocolors@2.1.0: {}
+
+  zod@3.23.8: {}

@@ -1,30 +1,35 @@
 import type { CachedSearchResult } from './cachedSearch';
-import type { ActiveCoffeeEntry } from './myCoffees';
+import { ActiveCoffeeEntry } from './myCoffees';
+import { z } from 'zod';
 
-export interface Journal {
-  entries: Array<JournalEntry>;
-}
+export const ActiveJournalEntry = z.object({
+  id: z.string(),
+  method: z.string(),
+  water: z.number(),
+  waterTemperature: z.number().optional(),
+  coffee: z.number(),
+  coffeeType: z.union([z.string(), ActiveCoffeeEntry]).optional(),
+  grindSettings: z.string().optional(),
+  rating: z.number().optional(),
+  description: z.string().optional(),
+  createdAt: z.string().datetime({ offset: true }),
+  updatedAt: z.string().datetime({ offset: true }),
+});
+export type ActiveJournalEntry = z.infer<typeof ActiveJournalEntry>;
 
-export type JournalEntry = ActiveJournalEntry | DeletedJournalEntry;
+export const DeletedJournalEntry = z.object({
+  id: z.string(),
+  deletedAt: z.string().datetime({ offset: true }),
+});
+export type DeletedJournalEntry = z.infer<typeof DeletedJournalEntry>;
 
-export interface ActiveJournalEntry {
-  id: string;
-  method: string;
-  water: number;
-  waterTemperature?: number;
-  coffee: number;
-  coffeeType?: string | ActiveCoffeeEntry;
-  grindSettings?: string;
-  rating?: number;
-  description?: string;
-  createdAt: string;
-  updatedAt: string;
-}
+export const JournalEntry = z.union([ActiveJournalEntry, DeletedJournalEntry]);
+export type JournalEntry = z.infer<typeof JournalEntry>;
 
-export interface DeletedJournalEntry {
-  id: string;
-  deletedAt: string;
-}
+export const Journal = z.object({
+  entries: z.array(JournalEntry),
+});
+export type Journal = z.infer<typeof Journal>;
 
 export interface JournalState {
   entries: Array<ActiveJournalEntry>;

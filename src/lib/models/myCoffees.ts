@@ -1,30 +1,35 @@
 import type { CachedSearchResult } from './cachedSearch';
+import { z } from 'zod';
 
-export interface MyCoffees {
-  entries: Array<CoffeeEntry>;
-}
+export const ActiveCoffeeEntry = z.object({
+  id: z.string(),
+  name: z.string(),
+  origin: z.string().optional(),
+  variety: z.string().optional(),
+  process: z.string().optional(),
+  roaster: z.string().optional(),
+  trader: z.string().optional(),
+  aromas: z.array(z.string()),
+  rating: z.number().optional(),
+  description: z.string().optional(),
+  createdAt: z.string().datetime({ offset: true }),
+  updatedAt: z.string().datetime({ offset: true }),
+});
+export type ActiveCoffeeEntry = z.infer<typeof ActiveCoffeeEntry>;
 
-export type CoffeeEntry = ActiveCoffeeEntry | DeletedCoffeeEntry;
+export const DeletedCoffeeEntry = z.object({
+  id: z.string(),
+  deletedAt: z.string().datetime({ offset: true }),
+});
+export type DeletedCoffeeEntry = z.infer<typeof DeletedCoffeeEntry>;
 
-export interface ActiveCoffeeEntry {
-  id: string;
-  name: string;
-  origin?: string;
-  variety?: string;
-  process?: string;
-  roaster?: string;
-  trader?: string;
-  aromas: Array<string>;
-  rating?: number;
-  description?: string;
-  createdAt: string;
-  updatedAt: string;
-}
+export const CoffeeEntry = z.union([ActiveCoffeeEntry, DeletedCoffeeEntry]);
+export type CoffeeEntry = z.infer<typeof CoffeeEntry>;
 
-export interface DeletedCoffeeEntry {
-  id: string;
-  deletedAt: string;
-}
+export const MyCoffees = z.object({
+  entries: z.array(CoffeeEntry),
+});
+export type MyCoffees = z.infer<typeof MyCoffees>;
 
 export interface MyCoffeesState extends MyCoffees {
   entries: Array<ActiveCoffeeEntry>;

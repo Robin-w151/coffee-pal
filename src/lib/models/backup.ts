@@ -1,7 +1,9 @@
-import type { Journal } from './journal';
-import type { MyCoffees } from './myCoffees';
+import { z } from 'zod';
+import { Journal } from './journal';
+import { MyCoffees } from './myCoffees';
 
-export interface Backup {
-  journal?: Journal;
-  myCoffees?: MyCoffees;
-}
+export const Backup = z.object({
+  journal: Journal.optional(),
+  myCoffees: MyCoffees.optional(),
+});
+export type Backup = z.infer<typeof Backup>;
