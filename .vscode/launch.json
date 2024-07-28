@@ -39,14 +39,6 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Generate schema",
-      "cwd": "${workspaceFolder}",
-      "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["generate:schema"]
-    },
-    {
-      "type": "node",
-      "request": "launch",
       "name": "Test",
       "cwd": "${workspaceFolder}",
       "runtimeExecutable": "pnpm",

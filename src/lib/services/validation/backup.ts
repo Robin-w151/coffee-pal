@@ -1,11 +1,9 @@
-import schema from '$assets/backup.schema.json';
-import type { Backup } from '$lib/models/backup';
-import { lazyLoad } from '$lib/shared/lazyLoad';
-import type { Json } from '@exodus/schemasafe';
+import { Backup } from '$lib/models/backup';
 
-const validator = lazyLoad(async () => (await import('@exodus/schemasafe')).validator);
-
-export async function isValidBackup(backup: Backup): Promise<boolean> {
-  const validate = (await validator.handle)(schema);
-  return validate(backup as Json);
+export async function isValidBackup(backup: unknown): Promise<boolean> {
+  const result = await Backup.safeParseAsync(backup);
+  if (result.error) {
+    console.warn(result.error);
+  }
+  return result.success;
 }

@@ -23,5 +23,3 @@ jobs:
       - run: pnpm install
       - run: pnpm lint
       - run: pnpm check
-      - run: pnpm generate:schema
-      - run: git diff --exit-code src/**/*.schema.json
