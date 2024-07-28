@@ -55,9 +55,3 @@ pnpm check
 npx playwright install
 pnpm test
 ```
-
-### Update generated schema files
-
-```shell
-pnpm generate:schema
-```
