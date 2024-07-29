@@ -7,10 +7,14 @@
 
   export let entries: Array<ActiveCoffeeEntry>;
   export let isLoading = false;
+
+  function hasEntries(entries?: Array<ActiveCoffeeEntry>): boolean {
+    return !!entries && entries.length > 0;
+  }
 </script>
 
 <div class="overflow-auto">
-  <table class="table table-interactive">
+  <table class="table {hasEntries(entries) ? 'table-interactive' : ''}">
     <thead>
       <tr>
         <th>Name</th>
@@ -23,7 +27,7 @@
       </tr>
     </thead>
     <tbody>
-      {#if isLoading && (!entries || entries.length === 0)}
+      {#if isLoading && !hasEntries(entries)}
         {#each { length: 5 } as _}
           <CoffeeEntryPlaceholder />
         {/each}

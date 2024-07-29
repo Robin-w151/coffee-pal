@@ -123,6 +123,10 @@ body {
       @apply bg-surface-200-700-token;
     }
   }
+
+  &.table-interactive tbody tr {
+    @apply transition ease-out;
+  }
 }
 
 // Toast overrides

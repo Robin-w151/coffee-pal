@@ -31,7 +31,7 @@
 </script>
 
 <a
-  class="flex items-center gap-4 px-3 sm:px-2 py-2 hover:bg-primary-500/10 rounded-md"
+  class="flex items-center gap-4 px-3 sm:px-2 py-2 hover:bg-primary-500/10 rounded-md transition ease-out"
   href="/journal/{entry.id}"
 >
   <span class="max-sm:hidden badge variant-soft-tertiary w-16">{ratio}</span>

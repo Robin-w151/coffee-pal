@@ -7,10 +7,14 @@
 
   export let entries: Array<ActiveJournalEntry>;
   export let isLoading = false;
+
+  function hasEntries(entries?: Array<ActiveJournalEntry>): boolean {
+    return !!entries && entries.length > 0;
+  }
 </script>
 
 <div class="overflow-auto">
-  <table class="table table-interactive">
+  <table class="table {hasEntries(entries) ? 'table-interactive' : ''}">
     <thead>
       <tr>
         <th />
@@ -22,7 +26,7 @@
       </tr>
     </thead>
     <tbody>
-      {#if isLoading && (!entries || entries.length === 0)}
+      {#if isLoading && !hasEntries(entries)}
         {#each { length: 5 } as _}
           <JournalEntryPlaceholder />
         {/each}
