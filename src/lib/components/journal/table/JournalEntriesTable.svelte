@@ -17,7 +17,7 @@
   <table class="table {hasEntries(entries) ? 'table-interactive' : ''}">
     <thead>
       <tr>
-        <th />
+        <th>Ratio</th>
         <th>Method</th>
         <th>Coffee</th>
         <th>Recipe</th>
