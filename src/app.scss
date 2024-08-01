@@ -62,6 +62,12 @@ body {
   @apply block overflow-hidden rounded-md;
 }
 
+// Autocomplete overrides
+
+.autocomplete-button {
+  text-align: start;
+}
+
 // Input group overrides
 
 .input-group.measurement-input {
@@ -142,7 +148,7 @@ body {
 // Custom design tokens
 
 .autocomplete-token {
-  @apply card z-10 p-4 w-full max-h-48 bg-surface-200-700-token overflow-y-auto shadow-xl;
+  @apply card z-10 p-4 max-h-48 bg-surface-200-700-token overflow-y-auto shadow-xl;
 }
 
 .chip-interactive-token {

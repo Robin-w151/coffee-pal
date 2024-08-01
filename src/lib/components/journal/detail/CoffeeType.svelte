@@ -1,11 +1,14 @@
 <script lang="ts">
   import InputWithButton from '$lib/components/shared/elements/form/InputWithButton.svelte';
   import Label from '$lib/components/shared/elements/form/Label.svelte';
+  import Portal from '$lib/components/shared/elements/Portal.svelte';
   import { getCoffeeLabel, type ActiveCoffeeEntry } from '$lib/models/myCoffees';
+  import { autocompletePopupBaseSettings } from '$lib/shared/ui/autocomplete';
   import { myCoffeesStore } from '$lib/stores/myCoffees';
   import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
   import {
     Autocomplete,
+    focusTrap,
     popup,
     type AutocompleteOption,
     type PopupSettings,
@@ -18,13 +21,13 @@
 
   const filter = new BehaviorSubject<string | undefined>(undefined);
   const popupCoffeeTypeAutocomplete: PopupSettings = {
-    event: 'focus-click',
+    ...autocompletePopupBaseSettings,
     target: 'popupCoffeeTypeAutocomplete',
-    placement: 'bottom',
   };
 
   let coffeeTypeOptions: Array<AutocompleteOption<ActiveCoffeeEntry>> = [];
   let coffeeTypeInput = getCoffeeLabel(coffeeType);
+  let inputElementRef: HTMLInputElement;
 
   $: handleCoffeeTypeChange(coffeeType);
   $: coffeeTypeId = typeof coffeeType === 'object' ? coffeeType.id : undefined;
@@ -62,6 +65,7 @@
   }: CustomEvent<AutocompleteOption<ActiveCoffeeEntry>>): void {
     coffeeType = detail.value;
     coffeeTypeInput = getCoffeeLabel(coffeeType);
+    inputElementRef?.focus();
   }
 
   function handleInputChange(): void {
@@ -89,6 +93,20 @@
   }
 </script>
 
+<Portal target="body">
+  <div
+    class="autocomplete-token"
+    tabindex="-1"
+    data-popup="popupCoffeeTypeAutocomplete"
+    use:focusTrap={true}
+  >
+    <Autocomplete
+      options={coffeeTypeOptions}
+      filter={() => [...coffeeTypeOptions]}
+      on:selection={handleCoffeeTypeSelect}
+    />
+  </div>
+</Portal>
 <Label text="Type of coffee" class="relative">
   <InputWithButton
     title="Open coffee entry"
@@ -99,6 +117,7 @@
       class="input autocomplete"
       type="text"
       placeholder="Type of coffee, e.g. Some coffee brand"
+      bind:this={inputElementRef}
       bind:value={coffeeTypeInput}
       use:popup={popupCoffeeTypeAutocomplete}
       on:input={handleInputChange}
@@ -107,12 +126,5 @@
     <svelte:fragment slot="button-content">
       <Icon data={faArrowUpRightFromSquare} />
     </svelte:fragment>
-    <div class="autocomplete-token" tabindex="-1" data-popup="popupCoffeeTypeAutocomplete">
-      <Autocomplete
-        options={coffeeTypeOptions}
-        filter={() => [...coffeeTypeOptions]}
-        on:selection={handleCoffeeTypeSelect}
-      />
-    </div>
   </InputWithButton>
 </Label>

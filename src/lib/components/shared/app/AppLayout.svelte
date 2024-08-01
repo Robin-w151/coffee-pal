@@ -8,7 +8,16 @@
   import { scheduleSync } from '$lib/services/sync/sync';
   import { rememberScrollPosition, scrollToLastKnownPosition } from '$lib/shared/ui/scroll';
   import '$lib/stores/app';
-  import { arrow, autoUpdate, computePosition, flip, offset, shift } from '@floating-ui/dom';
+  import {
+    arrow,
+    autoUpdate,
+    computePosition,
+    flip,
+    offset,
+    shift,
+    size,
+    inline,
+  } from '@floating-ui/dom';
   import {
     AppShell,
     Drawer,
@@ -26,7 +35,7 @@
   import EnableShortcuts from './EnableShortcuts.svelte';
 
   initializeStores();
-  storePopup.set({ computePosition, autoUpdate, offset, shift, flip, arrow });
+  storePopup.set({ computePosition, autoUpdate, offset, shift, flip, arrow, size, inline });
 
   const drawerStore = getDrawerStore();
 
