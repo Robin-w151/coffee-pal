@@ -33,6 +33,9 @@
   import '../../../../app.scss';
   import EnableUpdateListener from './EnableUpdateListener.svelte';
   import EnableShortcuts from './EnableShortcuts.svelte';
+  import { get } from 'svelte/store';
+  import { syncStore } from '$lib/stores/sync';
+  import { DateTime } from 'luxon';
 
   initializeStores();
   storePopup.set({ computePosition, autoUpdate, offset, shift, flip, arrow, size, inline });
@@ -43,7 +46,11 @@
 
   onMount(() => {
     document.documentElement.setAttribute('data-test', 'ready');
-    scheduleSync();
+
+    const lastSync = get(syncStore).connection?.lastSync;
+    if (!lastSync || DateTime.now().diff(DateTime.fromISO(lastSync), 'minutes').minutes > 15) {
+      scheduleSync();
+    }
   });
 
   afterNavigate((params: AfterNavigate) => {
