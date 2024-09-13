@@ -114,6 +114,16 @@ export function sort(
           return `${e1.method}-${getCoffeeLabel(e1.coffeeType) ?? ''}`.localeCompare(
             `${e2.method}-${getCoffeeLabel(e2.coffeeType) ?? ''}`,
           );
+        case 'rating':
+          if (e1.rating === undefined && e2.rating === undefined) {
+            return 0;
+          } else if (e1.rating === undefined) {
+            return -1;
+          } else if (e2.rating === undefined) {
+            return 1;
+          } else {
+            return e1.rating - e2.rating;
+          }
         case 'updated_at':
           return e1.updatedAt.localeCompare(e2.updatedAt);
       }

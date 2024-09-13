@@ -25,6 +25,7 @@
     faArrowUpZA,
     faCalendarDays,
     faCheck,
+    faStar,
     type IconDefinition,
   } from '@fortawesome/free-solid-svg-icons';
   import { ListBox, ListBoxItem, Paginator, type PaginationSettings } from '@skeletonlabs/skeleton';
@@ -40,6 +41,12 @@
       label: 'Latest',
       icon: faCalendarDays,
       sort: 'updated_at',
+      sortDirection: 'desc',
+    },
+    {
+      label: 'Best',
+      icon: faStar,
+      sort: 'rating',
       sortDirection: 'desc',
     },
     {
