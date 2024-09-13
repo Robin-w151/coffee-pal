@@ -29,7 +29,34 @@ test('search clear', async ({ myCoffeesPage }) => {
   await expect(myCoffeesPage.coffeeList).toHaveCount(3);
 });
 
-test('sort', async ({ myCoffeesPage }) => {
+test('sort Latest', async ({ myCoffeesPage }) => {
+  await expect(myCoffeesPage.getCoffeeEntryTitle(0)).toHaveText('Rwanda Kamajumba (Drip Roasters)');
+
+  await myCoffeesPage.clickSortButton();
+  await myCoffeesPage.clickSortOption('Latest');
+
+  await expect(myCoffeesPage.getCoffeeEntryTitle(0)).toHaveText('Rwanda Kamajumba (Drip Roasters)');
+});
+
+test('sort Best', async ({ myCoffeesPage }) => {
+  await expect(myCoffeesPage.getCoffeeEntryTitle(0)).toHaveText('Rwanda Kamajumba (Drip Roasters)');
+
+  await myCoffeesPage.clickSortButton();
+  await myCoffeesPage.clickSortOption('Best');
+
+  await expect(myCoffeesPage.getCoffeeEntryTitle(0)).toHaveText('Terroir PAN (Rösterei)');
+});
+
+test('sort A-Z', async ({ myCoffeesPage }) => {
+  await expect(myCoffeesPage.getCoffeeEntryTitle(0)).toHaveText('Rwanda Kamajumba (Drip Roasters)');
+
+  await myCoffeesPage.clickSortButton();
+  await myCoffeesPage.clickSortOption('A-Z');
+
+  await expect(myCoffeesPage.getCoffeeEntryTitle(0)).toHaveText('Rwanda Kamajumba (Drip Roasters)');
+});
+
+test('sort Z-A', async ({ myCoffeesPage }) => {
   await expect(myCoffeesPage.getCoffeeEntryTitle(0)).toHaveText('Rwanda Kamajumba (Drip Roasters)');
 
   await myCoffeesPage.clickSortButton();

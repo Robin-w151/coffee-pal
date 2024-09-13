@@ -29,7 +29,44 @@ test('search clear', async ({ journalPage }) => {
   await expect(journalPage.journalList).toHaveCount(3);
 });
 
-test('sort', async ({ journalPage }) => {
+test('sort Latest', async ({ journalPage }) => {
+  await expect(journalPage.getJournalEntryTitle(0)).toHaveText(
+    'Aeropress - Terroir PAN (Rösterei)',
+  );
+
+  await journalPage.clickSortButton();
+  await journalPage.clickSortOption('Latest');
+
+  await expect(journalPage.getJournalEntryTitle(0)).toHaveText(
+    'Aeropress - Terroir PAN (Rösterei)',
+  );
+});
+
+test('sort Best', async ({ journalPage }) => {
+  await expect(journalPage.getJournalEntryTitle(0)).toHaveText(
+    'Aeropress - Terroir PAN (Rösterei)',
+  );
+
+  await journalPage.clickSortButton();
+  await journalPage.clickSortOption('Best');
+
+  await expect(journalPage.getJournalEntryTitle(0)).toHaveText('V60 Switch - Honeymoon');
+});
+
+test('sort A-Z', async ({ journalPage }) => {
+  await expect(journalPage.getJournalEntryTitle(0)).toHaveText(
+    'Aeropress - Terroir PAN (Rösterei)',
+  );
+
+  await journalPage.clickSortButton();
+  await journalPage.clickSortOption('A-Z');
+
+  await expect(journalPage.getJournalEntryTitle(0)).toHaveText(
+    'Aeropress - Terroir PAN (Rösterei)',
+  );
+});
+
+test('sort Z-A', async ({ journalPage }) => {
   await expect(journalPage.getJournalEntryTitle(0)).toHaveText(
     'Aeropress - Terroir PAN (Rösterei)',
   );
