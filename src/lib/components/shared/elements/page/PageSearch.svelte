@@ -64,7 +64,7 @@
 
   async function handleKeyDown(event: KeyboardEvent): Promise<void> {
     const { key, ctrlKey, metaKey } = event;
-    if (key === 'k' && (ctrlKey || metaKey)) {
+    if (['f', 'k'].includes(key) && (ctrlKey || metaKey)) {
       event.preventDefault();
       isSearchActive = true;
       await tick();
