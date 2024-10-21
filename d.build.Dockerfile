@@ -17,8 +17,7 @@ ARG APP_MODE=dev
 ENV PUBLIC_APP_MODE=$APP_MODE
 ENV USE_ADAPTER_BUN=true
 
-RUN bunx svelte-kit sync
-RUN bun run build
+RUN bunx svelte-kit sync && bun run build
 
 
 FROM oven/bun:debian AS deploy-stage
