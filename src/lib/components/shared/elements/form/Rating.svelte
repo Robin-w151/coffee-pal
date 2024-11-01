@@ -4,7 +4,11 @@
   import { Ratings } from '@skeletonlabs/skeleton';
   import { Icon } from 'svelte-awesome';
 
-  export let rating: number | undefined = 0;
+  interface Props {
+    rating?: number;
+  }
+
+  let { rating = $bindable(0) }: Props = $props();
 
   function handleRatingChange({ detail }: CustomEvent<{ index: number }>): void {
     rating = rating === detail.index ? 0 : detail.index;
@@ -20,11 +24,11 @@
     text="text-tertiary-600-300-token"
     on:icon={handleRatingChange}
   >
-    <svelte:fragment slot="empty">
+    {#snippet empty()}
       <Icon data={faStarRegular} scale={2} />
-    </svelte:fragment>
-    <svelte:fragment slot="full">
+    {/snippet}
+    {#snippet full()}
       <Icon data={faStar} scale={2} />
-    </svelte:fragment>
+    {/snippet}
   </Ratings>
 </div>

@@ -1,53 +1,99 @@
 <script lang="ts">
   import type { Measurement, Unit } from '$lib/models/measurement';
   import { round } from '$lib/shared/math';
-  import { beforeUpdate } from 'svelte';
+  import { untrack } from 'svelte';
+  import type { FocusEventHandler, KeyboardEventHandler } from 'svelte/elements';
 
-  export let measurement: Measurement;
-  export let units: Array<Unit>;
-  export let placeholder: string | undefined = undefined;
-  export let disabled = false;
-  export let readonly = false;
+  interface Props {
+    measurement: Measurement;
+    units: Array<Unit>;
+    placeholder?: string;
+    disabled?: boolean;
+    readonly?: boolean;
+    class?: string;
+    onValueChange?: (value?: number) => void;
+    onfocus?: FocusEventHandler<HTMLInputElement>;
+    onblur?: FocusEventHandler<HTMLInputElement>;
+    onkeydown?: KeyboardEventHandler<HTMLInputElement>;
+    onkeyup?: KeyboardEventHandler<HTMLInputElement>;
+  }
 
-  let value = measurement.unit.conversion.fromBase(measurement.value);
+  let {
+    measurement = $bindable(),
+    units,
+    placeholder,
+    disabled = false,
+    readonly = false,
+    class: clazz,
+    onValueChange,
+    onfocus,
+    onblur,
+    onkeydown,
+    onkeyup,
+  }: Props = $props();
+
+  let value = $state(measurement.unit.conversion.fromBase(measurement.value));
   let previousValue: number | undefined;
   let previousUnit: Unit;
 
-  $: measurementValue = measurement.value;
-  $: measurementUnit = measurement.unit;
-
-  $: handleValueChange(value);
-  $: handleMeasurementValueChange(measurementValue);
-  $: handleMeasurementUnitChange(measurementUnit);
-
-  beforeUpdate(() => {
-    previousValue = measurement.value;
-    previousUnit = measurement.unit;
+  $effect(() => {
+    handleMeasurementChange(measurement);
   });
 
-  function handleValueChange(value?: number): void {
-    measurement.value = round(measurement.unit.conversion.toBase(value));
+  function handleInputChange(): void {
+    updateMeasurement(value, {
+      callback: onValueChange,
+    });
   }
 
-  function handleMeasurementValueChange(newValue?: number): void {
-    if (previousValue === newValue) {
-      return;
-    }
-    value = round(measurement.unit.conversion.fromBase(newValue));
+  function handleInputBlur(event: Event): void {
+    updateMeasurement(value, {
+      callback: onblur,
+      args: [event],
+    });
   }
 
-  function handleMeasurementUnitChange(newUnit: Unit): void {
-    if (previousUnit === newUnit) {
-      return;
+  function handleMeasurementChange(newMeasurement: Measurement): void {
+    const { value: newValue, unit: newUnit } = newMeasurement;
+
+    if (previousValue !== newValue) {
+      previousValue = newValue;
+      value = round(newUnit.conversion.fromBase(newValue));
     }
-    value = round(newUnit.conversion.fromBase(measurement.value));
+
+    if (previousUnit !== newUnit) {
+      previousUnit = newUnit;
+      value = round(newUnit.conversion.fromBase(measurement.value));
+    }
+  }
+
+  function updateMeasurement(
+    newValue: number | undefined,
+    options?: {
+      callback?: (...args: any[]) => void;
+      args?: unknown[];
+    },
+  ): void {
+    const { unit } = untrack(() => measurement);
+    const { callback, args } = options ?? {};
+    if (previousValue !== newValue) {
+      const baseValue = round(unit.conversion.toBase(newValue));
+      previousValue = baseValue;
+      measurement = {
+        unit,
+        value: baseValue,
+      };
+
+      if (args) {
+        callback?.(...args);
+      } else {
+        callback?.(baseValue);
+      }
+    }
   }
 </script>
 
-<div
-  class="input-group input-group-divider measurement-input grid-cols-[1fr_auto] {$$props.class ??
-    ''}"
->
+<div class="input-group input-group-divider measurement-input grid-cols-[1fr_auto] {clazz ?? ''}">
   <input
     type="number"
     step="0.1"
@@ -55,13 +101,11 @@
     {disabled}
     {readonly}
     bind:value
-    on:change
-    on:input
-    on:focus
-    on:blur
-    on:keydown
-    on:keyup
-    on:paste
+    onchange={handleInputChange}
+    {onfocus}
+    onblur={handleInputBlur}
+    {onkeydown}
+    {onkeyup}
   />
   <select class="focus:bg-surface-300 dark:focus:bg-surface-500" bind:value={measurement.unit}>
     {#each units as unit}

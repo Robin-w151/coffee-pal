@@ -1,7 +1,11 @@
 <script lang="ts">
   import Label from '$lib/components/shared/elements/form/Label.svelte';
 
-  export let grindSettings: string | undefined;
+  interface Props {
+    grindSettings?: string;
+  }
+
+  let { grindSettings = $bindable() }: Props = $props();
 
   function handleInputKeydown(event: KeyboardEvent): void {
     const { key } = event;
@@ -17,6 +21,6 @@
     type="text"
     placeholder="Grind settings, e.g. 24 clicks"
     bind:value={grindSettings}
-    on:keydown={handleInputKeydown}
+    onkeydown={handleInputKeydown}
   />
 </Label>

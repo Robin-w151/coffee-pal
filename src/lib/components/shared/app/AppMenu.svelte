@@ -8,8 +8,9 @@
 
   const drawerStore = getDrawerStore();
 
-  $: routeActiveClass = (route: Route) =>
-    isSelected(route, $page.url.pathname) ? 'bg-primary-active-token' : '';
+  let routeActiveClass = $derived((route: Route) =>
+    isSelected(route, $page.url.pathname) ? 'bg-primary-active-token' : '',
+  );
 
   function handleClick(): void {
     drawerStore.close();
@@ -27,7 +28,7 @@
 <section class="flex flex-col gap-4 p-4">
   <div class="flex justify-between items-center">
     <h2 class="h2">Coffee Pal</h2>
-    <button class="btn btn-icon hover:variant-soft-secondary" on:click={handleClick}>
+    <button class="btn btn-icon hover:variant-soft-secondary" onclick={handleClick}>
       <Icon data={faClose} />
     </button>
   </div>
@@ -39,7 +40,7 @@
           <a
             class="!grid grid-cols-[1.25rem_1fr] {routeActiveClass(route)}"
             href={route.href}
-            on:click={handleClick}
+            onclick={handleClick}
           >
             <span class="flex items-center justify-self-center">
               <Icon data={route.icon} />

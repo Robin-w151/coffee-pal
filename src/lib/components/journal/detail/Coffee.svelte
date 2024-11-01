@@ -5,10 +5,15 @@
   import type { Measurement } from '$lib/models/measurement';
   import { settingsStore } from '$lib/stores/settings';
   import { getPreferredWeightUnit } from '$lib/shared/units';
-  import { createEventDispatcher } from 'svelte';
+  import { untrack } from 'svelte';
 
-  export let coffee: number | undefined;
-  export let valid = false;
+  interface Props {
+    coffee: number | undefined;
+    valid?: boolean;
+    onChange: (coffee: number) => void;
+  }
+
+  let { coffee, valid = $bindable(false), onChange }: Props = $props();
 
   const units = WEIGHT_UNITS_COFFEE;
   const preferredUnit = getPreferredWeightUnit($settingsStore.preferredUnits);
@@ -16,22 +21,30 @@
     required: 'amount of coffee is required',
     negative: 'amount of coffee must be greater than 0',
   };
-  const dispatch = createEventDispatcher();
 
-  let coffeeMeasurement: Measurement = {
+  let coffeeMeasurement: Measurement = $state({
     value: coffee,
     unit: preferredUnit,
-  };
-  let errorMessage: string | undefined;
-  let inputTouched = false;
+  });
+  let errorMessage: string | undefined = $state();
+  let inputTouched = $state(false);
+  let showError = $derived(inputTouched && !valid);
 
-  $: handleCoffeeChange(coffee);
-  $: checkValidity(coffee);
-  $: dispatch('change', coffeeMeasurement.value);
-  $: showError = inputTouched && !valid;
+  $effect(() => {
+    handleCoffeeChange(coffee);
+    checkValidity(coffee);
+  });
+
+  $effect(() => {
+    if (coffeeMeasurement.value !== undefined) {
+      onChange(coffeeMeasurement.value);
+    }
+  });
 
   function handleCoffeeChange(coffee?: number): void {
-    coffeeMeasurement.value = coffee;
+    untrack(() => {
+      coffeeMeasurement.value = coffee;
+    });
   }
 
   function handleInputBlur(): void {
@@ -69,7 +82,7 @@
     placeholder="Amount of coffee, e.g. 12"
     {units}
     bind:measurement={coffeeMeasurement}
-    on:blur={handleInputBlur}
-    on:keydown={handleInputKeydown}
+    onblur={handleInputBlur}
+    onkeydown={handleInputKeydown}
   />
 </Label>

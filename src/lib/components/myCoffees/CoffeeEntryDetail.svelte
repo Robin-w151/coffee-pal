@@ -10,7 +10,7 @@
   import { faFaceSadCry } from '@fortawesome/free-solid-svg-icons';
   import { getModalStore, getToastStore } from '@skeletonlabs/skeleton';
   import { Subject, takeUntil, tap } from 'rxjs';
-  import { onDestroy, onMount } from 'svelte';
+  import { onDestroy, onMount, untrack } from 'svelte';
   import { Icon } from 'svelte-awesome';
   import { v4 as uuid } from 'uuid';
   import Actions from '../shared/elements/form/Actions.svelte';
@@ -27,14 +27,18 @@
   import Trader from './detail/Trader.svelte';
   import Variety from './detail/Variety.svelte';
 
-  export let id: string | undefined = undefined;
+  interface Props {
+    id?: string | undefined;
+  }
+
+  let { id = undefined }: Props = $props();
 
   const modalHelper = new ModalHelper(getModalStore());
   const toastStore = getToastStore();
   const toastHelper = new ToastHelper(toastStore);
   const destroy = new Subject<void>();
 
-  let entry: Partial<ActiveCoffeeEntry> = {
+  let entry: Partial<ActiveCoffeeEntry> = $state({
     name: '',
     origin: undefined,
     process: undefined,
@@ -46,18 +50,24 @@
     description: undefined,
     createdAt: '',
     updatedAt: '',
-  };
-  let originalEntry: Partial<ActiveCoffeeEntry> = structuredClone(entry);
-  let unknown = false;
-  let isLoading = true;
-  let shouldGoBack = true;
+  });
+  let originalEntry: Partial<ActiveCoffeeEntry> = $state(
+    structuredClone(untrack(() => $state.snapshot(entry))),
+  );
+  let unknown = $state(false);
+  let isLoading = $state(true);
+  let hasChanged = $state(false);
+  let shouldGoBack = false;
   let updateInfoToast: string | undefined;
 
-  let nameInputValid: boolean;
+  let nameInputValid = $state(true);
+  let formValid = $derived(nameInputValid);
 
-  $: entryTitle = getTitle(unknown, entry);
-  $: formValid = nameInputValid;
-  $: hasChanged = !isEqualCoffeeEntry(entry, originalEntry);
+  let entryTitle = $derived(getTitle(unknown, entry));
+
+  $effect(() => {
+    hasChanged = !isEqualCoffeeEntry(entry, originalEntry);
+  });
 
   onMount(async () => {
     pauseScheduledSync();
@@ -129,7 +139,7 @@
   });
 
   function handleSave(): void {
-    const sanitizedEntry = sanitizeEntry(entry);
+    const sanitizedEntry = sanitizeEntry($state.snapshot(entry));
     originalEntry = structuredClone(sanitizedEntry);
     scheduleSync();
 
@@ -236,7 +246,7 @@
   }
 </script>
 
-<PageHeader title={entryTitle} {isLoading} showBack on:back={handleBack} />
+<PageHeader title={entryTitle} {isLoading} showBack onBack={handleBack} />
 <PageCard>
   {#if unknown}
     <p class="flex justify-center items-center gap-4">
@@ -266,8 +276,8 @@
             edit={!!id}
             {formValid}
             hasChanged={id ? hasChanged : undefined}
-            on:save={handleSave}
-            on:remove={handleRemove}
+            onSave={handleSave}
+            onRemove={handleRemove}
           />
         </div>
       </Form>

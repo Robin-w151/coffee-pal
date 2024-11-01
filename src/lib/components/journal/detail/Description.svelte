@@ -1,7 +1,11 @@
 <script lang="ts">
   import Label from '$lib/components/shared/elements/form/Label.svelte';
 
-  export let description: string | undefined;
+  interface Props {
+    description?: string;
+  }
+
+  let { description = $bindable() }: Props = $props();
 
   function handleInputKeydown(event: KeyboardEvent): void {
     const { key } = event;
@@ -17,6 +21,6 @@
     rows={4}
     placeholder="Description..."
     bind:value={description}
-    on:keydown={handleInputKeydown}
-  />
+    onkeydown={handleInputKeydown}
+  ></textarea>
 </Label>

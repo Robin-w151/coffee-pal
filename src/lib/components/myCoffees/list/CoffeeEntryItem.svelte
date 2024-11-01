@@ -1,7 +1,11 @@
 <script lang="ts">
   import { getCoffeeLabel, type ActiveCoffeeEntry } from '$lib/models/myCoffees';
 
-  export let entry: ActiveCoffeeEntry;
+  interface Props {
+    entry: ActiveCoffeeEntry;
+  }
+
+  let { entry }: Props = $props();
 
   function title(entry: ActiveCoffeeEntry): string {
     return getCoffeeLabel(entry)!;

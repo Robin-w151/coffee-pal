@@ -1,21 +1,24 @@
 <script lang="ts">
   import { faPlus, faRotate } from '@fortawesome/free-solid-svg-icons';
-  import { createEventDispatcher } from 'svelte';
   import { Icon } from 'svelte-awesome';
   import Spinner from '../Spinner.svelte';
 
-  export let isSyncEnabled = false;
-  export let isSynchronizing = false;
+  interface Props {
+    isSyncEnabled?: boolean;
+    isSynchronizing?: boolean;
+    onAdd?: () => void;
+    onSynchronize?: () => void;
+  }
 
-  const dispatch = createEventDispatcher();
+  let { isSyncEnabled = false, isSynchronizing = false, onAdd, onSynchronize }: Props = $props();
 
   function handleAddClick(): void {
-    dispatch('add');
+    onAdd?.();
   }
 
   function handleSyncClick(): void {
     if (isSyncEnabled && !isSynchronizing) {
-      dispatch('synchronize');
+      onSynchronize?.();
     }
   }
 </script>
@@ -25,7 +28,7 @@
     <button
       class="btn btn-icon btn-icon-lg variant-filled-primary shadow-xl"
       title="Synchronize data"
-      on:click={handleSyncClick}
+      onclick={handleSyncClick}
     >
       {#if isSynchronizing}
         <Spinner color="white" />
@@ -38,7 +41,7 @@
   <button
     class="btn btn-icon btn-icon-xl variant-filled-primary shadow-xl"
     title="Add new entry"
-    on:click={handleAddClick}
+    onclick={handleAddClick}
   >
     <Icon data={faPlus} scale={1.5} />
     <span class="sr-only">Add new entry</span>

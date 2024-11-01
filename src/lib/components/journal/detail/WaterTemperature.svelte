@@ -5,10 +5,15 @@
   import type { Measurement } from '$lib/models/measurement';
   import { settingsStore } from '$lib/stores/settings';
   import { getPreferredTemperatureUnit } from '$lib/shared/units';
-  import { createEventDispatcher } from 'svelte';
+  import { untrack } from 'svelte';
 
-  export let waterTemperature: number | undefined;
-  export let valid = false;
+  interface Props {
+    waterTemperature?: number;
+    valid?: boolean;
+    onChange?: (waterTemperature: number) => void;
+  }
+
+  let { waterTemperature, valid = $bindable(false), onChange }: Props = $props();
 
   const units = TEMPERATURE_UNITS;
   const preferredUnit = getPreferredTemperatureUnit($settingsStore.preferredUnits);
@@ -16,22 +21,30 @@
     metric: 'water temperature must be greater than 0',
     imperial: 'water temperature must be greater than 32',
   };
-  const dispatch = createEventDispatcher();
 
-  let waterTemperatureMeasurement: Measurement = {
+  let waterTemperatureMeasurement: Measurement = $state({
     value: waterTemperature,
     unit: preferredUnit,
-  };
-  let inputTouched = false;
+  });
+  let inputTouched = $state(false);
+  let showError = $derived(inputTouched && !valid);
+  let errorMessage = $derived(errorMessages[waterTemperatureMeasurement.unit.system]);
 
-  $: handleWaterTemperatureChange(waterTemperature);
-  $: checkValidity(waterTemperature);
-  $: dispatch('change', waterTemperatureMeasurement.value);
-  $: showError = inputTouched && !valid;
-  $: errorMessage = errorMessages[waterTemperatureMeasurement.unit.system];
+  $effect(() => {
+    handleWaterTemperatureChange(waterTemperature);
+    checkValidity(waterTemperature);
+  });
+
+  $effect(() => {
+    if (waterTemperatureMeasurement.value) {
+      onChange?.(waterTemperatureMeasurement.value);
+    }
+  });
 
   function handleWaterTemperatureChange(waterTemperature?: number): void {
-    waterTemperatureMeasurement.value = waterTemperature;
+    untrack(() => {
+      waterTemperatureMeasurement.value = waterTemperature;
+    });
   }
 
   function handleInputBlur(): void {
@@ -59,10 +72,9 @@
   <MeasurementInput
     class={showError ? 'input-error' : ''}
     placeholder="Water temperature, e.g. 98°C"
-    updateValue={false}
     {units}
     bind:measurement={waterTemperatureMeasurement}
-    on:blur={handleInputBlur}
-    on:keydown={handleInputKeydown}
+    onblur={handleInputBlur}
+    onkeydown={handleInputKeydown}
   />
 </Label>

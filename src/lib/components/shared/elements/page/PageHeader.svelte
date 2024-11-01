@@ -1,16 +1,18 @@
 <script lang="ts">
   import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
-  import { createEventDispatcher } from 'svelte';
   import { Icon } from 'svelte-awesome';
 
-  export let title: string;
-  export let isLoading = false;
-  export let showBack = false;
+  interface Props {
+    title: string;
+    isLoading?: boolean;
+    showBack?: boolean;
+    onBack?: () => void;
+  }
 
-  const dispatch = createEventDispatcher();
+  let { title, isLoading = false, showBack = false, onBack }: Props = $props();
 
   function handleBackClick(): void {
-    dispatch('back');
+    onBack?.();
   }
 </script>
 
@@ -18,16 +20,16 @@
   {#if isLoading}
     <div class="flex gap-4 w-full h-10 animate-pulse">
       {#if showBack}
-        <div class="placeholder-circle w-10 h-10" />
+        <div class="placeholder-circle w-10 h-10"></div>
       {/if}
-      <div class="placeholder w-48 h-10" />
+      <div class="placeholder w-48 h-10"></div>
     </div>
   {:else}
     {#if showBack}
       <button
         class="btn btn-icon variant-ghost-primary flex-[0_0_auto]"
         title="Go back"
-        on:click={handleBackClick}
+        onclick={handleBackClick}
       >
         <Icon data={faArrowLeft} />
       </button>

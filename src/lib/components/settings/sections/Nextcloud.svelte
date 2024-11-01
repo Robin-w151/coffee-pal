@@ -22,12 +22,11 @@
   const toastHelper = new ToastHelper(getToastStore());
 
   let url = $syncStore.connection?.server.url;
-  let hostValid = !!url;
-  let isConnecting = false;
+  let hostValid = $state(!!url);
+  let isConnecting = $state(false);
   let pollSubscription: Subscription | undefined;
-
-  $: connected = !!$syncStore.connection;
-  $: showSpinner = isConnecting || $syncStateStore.isSynchronizing;
+  let connected = $derived(!!$syncStore.connection);
+  let showSpinner = $derived(isConnecting || $syncStateStore.isSynchronizing);
 
   onDestroy(() => {
     pollSubscription?.unsubscribe();
@@ -120,7 +119,7 @@
           class="btn variant-filled-error"
           type="button"
           title="Disconnect Nextcloud Sync"
-          on:click={handleDisconnectClick}
+          onclick={handleDisconnectClick}
         >
           Disconnect
         </button>
@@ -128,10 +127,10 @@
           class="btn variant-filled-primary"
           title="Sync app data"
           disabled={!$syncAvailabilityStore.isAvailable}
-          on:click={handleSyncClick}>Sync</button
+          onclick={handleSyncClick}>Sync</button
         >
       {:else if showSpinner}
-        <button class="btn variant-filled-error" title="Cancel Setup" on:click={handleCancelClick}>
+        <button class="btn variant-filled-error" title="Cancel Setup" onclick={handleCancelClick}>
           Cancel
         </button>
       {:else}
@@ -139,7 +138,7 @@
           class="btn variant-filled-primary"
           title="Enable Sync via Nextcloud"
           disabled={!hostValid}
-          on:click={handleConnectClick}
+          onclick={handleConnectClick}
         >
           Connect
         </button>

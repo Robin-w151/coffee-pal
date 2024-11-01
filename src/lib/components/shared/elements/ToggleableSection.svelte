@@ -3,16 +3,22 @@
   import { SlideToggle } from '@skeletonlabs/skeleton';
   import scrollIntoView from 'scroll-into-view-if-needed';
   import { rollDown } from '../transitions/rollDown';
+  import type { Snippet } from 'svelte';
 
-  export let name: string;
-  export let label: string;
-  export let title: string | undefined = undefined;
-  export let active = false;
+  interface Props {
+    name: string;
+    label: string;
+    title?: string;
+    active?: boolean;
+    children?: Snippet;
+  }
 
-  let ref: HTMLDivElement;
+  let { name, label, title = undefined, active = $bindable(false), children }: Props = $props();
+
+  let ref: HTMLDivElement | undefined = $state();
 
   async function handleToggleChange(): Promise<void> {
-    if (active) {
+    if (active && ref) {
       await waitAndTick(150);
       scrollIntoView(ref, {
         scrollMode: 'always',
@@ -35,6 +41,6 @@
 </div>
 {#if active}
   <div transition:rollDown>
-    <slot />
+    {@render children?.()}
   </div>
 {/if}

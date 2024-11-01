@@ -1,7 +1,6 @@
 import type { ActiveJournalEntry, DeletedJournalEntry, JournalEntry } from '$lib/models/journal';
 import type { ActiveCoffeeEntry, CoffeeEntry, DeletedCoffeeEntry } from '$lib/models/myCoffees';
 import type { Connection, SyncClient, SyncResult } from '$lib/models/sync';
-import { onlineStore } from 'svelte-legos';
 import { NextcloudSyncClient } from './nextcloud';
 import { get } from 'svelte/store';
 import { syncStore } from '$lib/stores/sync';
@@ -9,6 +8,7 @@ import { syncStateStore } from '$lib/stores/syncState';
 import { journalStore } from '$lib/stores/journal';
 import { myCoffeesStore } from '$lib/stores/myCoffees';
 import { setupScheduledTask } from '../scheduler/scheduler';
+import { onlineStore } from '$lib/stores/svelte-legos/online';
 
 const SYNC = Symbol('sync');
 const isOnline = onlineStore();

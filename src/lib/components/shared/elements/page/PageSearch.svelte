@@ -1,7 +1,3 @@
-<script lang="ts" context="module">
-  type PageSearchSort = 'asc' | 'desc';
-</script>
-
 <script lang="ts">
   import {
     faArrowUpAZ,
@@ -11,17 +7,32 @@
     faSearch,
   } from '@fortawesome/free-solid-svg-icons';
   import { popup, type PopupSettings } from '@skeletonlabs/skeleton';
-  import { createEventDispatcher, tick } from 'svelte';
+  import { createEventDispatcher, tick, type Snippet } from 'svelte';
   import { Icon } from 'svelte-awesome';
   import { fade } from 'svelte/transition';
   import { scaleX } from '../../transitions/scaleX';
   import Spinner from '../Spinner.svelte';
   import InputWithButton from '../form/InputWithButton.svelte';
 
-  export let title: string;
-  export let search: string | null | undefined = '';
-  export let sort: PageSearchSort | null = 'asc';
-  export let isLoading = false;
+  type PageSearchSort = 'asc' | 'desc';
+
+  interface Props {
+    title: string;
+    search?: string | null;
+    sort?: PageSearchSort | null;
+    isLoading: boolean;
+    popupContent?: Snippet;
+    onSearchChange: (searchInput?: string | null) => void;
+  }
+
+  let {
+    title,
+    search = '',
+    sort = 'asc',
+    isLoading = false,
+    popupContent,
+    onSearchChange,
+  }: Props = $props();
 
   const dispatch = createEventDispatcher();
   const sortPopup: PopupSettings = {
@@ -30,32 +41,37 @@
     placement: 'bottom',
   };
 
-  let searchInputRef: HTMLInputElement;
-  let isSearchActive = !!search;
+  let searchInputRef: HTMLInputElement | undefined = $state();
+  let isSearchActive = $state(!!search);
+  let isChangeSortOrderButtonDisabled = $derived(!!search);
+  let headerSearchActiveClass = $derived(
+    isSearchActive
+      ? 'card flex-col !items-start px-4 py-4 h-auto transition ease-out duration-250'
+      : '',
+  );
+  let changeSortOrderButtonTitle = $derived(
+    isChangeSortOrderButtonDisabled
+      ? 'Sort order is determined by search input'
+      : 'Change sort order',
+  );
 
-  $: handleSearchInputChange(search);
-  $: headerSearchActiveClass = isSearchActive
-    ? 'card flex-col !items-start px-4 py-4 h-auto transition ease-out duration-250'
-    : '';
-
-  $: isChangeSortOrderButtonDisabled = !!search;
-  $: changeSortOrderButtonTitle = isChangeSortOrderButtonDisabled
-    ? 'Sort order is determined by search input'
-    : 'Change sort order';
+  $effect(() => {
+    handleSearchInputChange(search);
+  });
 
   async function handleSearchClick(): Promise<void> {
     isSearchActive = true;
     await tick();
-    searchInputRef.focus();
+    searchInputRef?.focus();
   }
 
   function handleSearchInputChange(searchInput?: string | null): void {
-    dispatch('searchChange', searchInput);
+    onSearchChange(searchInput);
   }
 
   function handleSearchInputClearClick(): void {
     search = '';
-    searchInputRef.focus();
+    searchInputRef?.focus();
   }
 
   function handleSortClick(): void {
@@ -68,7 +84,7 @@
       event.preventDefault();
       isSearchActive = true;
       await tick();
-      searchInputRef.focus();
+      searchInputRef?.focus();
     }
   }
 </script>
@@ -86,7 +102,7 @@
   </div>
   <div class="grid grid-cols-[auto_max-content] items-center gap-2" class:w-full={isSearchActive}>
     {#if isSearchActive}
-      <InputWithButton title="Clear" visible={!!search} on:click={handleSearchInputClearClick}>
+      <InputWithButton title="Clear" visible={!!search} onclick={handleSearchInputClearClick}>
         <input
           class="input"
           type="text"
@@ -95,21 +111,21 @@
           bind:this={searchInputRef}
           in:scaleX={{ direction: 'left', duration: 250 }}
         />
-        <svelte:fragment slot="button-content">
+        {#snippet buttonContent()}
           <Icon data={faClose} />
-        </svelte:fragment>
+        {/snippet}
       </InputWithButton>
     {:else}
       <button
         class="btn btn-icon variant-ghost-secondary"
         title="Search"
-        on:click={handleSearchClick}
+        onclick={handleSearchClick}
         in:fade={{ duration: 250 }}
       >
         <Icon data={faSearch} />
       </button>
     {/if}
-    {#if $$slots.popup}
+    {#if popupContent}
       <button
         class="btn btn-icon {isSearchActive ? 'variant-filled-primary' : 'variant-ghost-secondary'}"
         title={changeSortOrderButtonTitle}
@@ -119,14 +135,14 @@
         <Icon data={faArrowUpWideShort} />
       </button>
       <div class="popup-token" data-popup="sort-popup">
-        <slot name="popup" />
+        {@render popupContent()}
       </div>
     {:else}
       <button
         class="btn btn-icon {isSearchActive ? 'variant-filled-primary' : 'variant-ghost-secondary'}"
         title={changeSortOrderButtonTitle}
         disabled={isChangeSortOrderButtonDisabled}
-        on:click={handleSortClick}
+        onclick={handleSortClick}
       >
         {#if sort === 'asc'}
           <Icon data={faArrowUpAZ} />

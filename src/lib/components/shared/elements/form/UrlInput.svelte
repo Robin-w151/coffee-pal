@@ -5,19 +5,25 @@
   import { createEventDispatcher } from 'svelte';
   import { Icon } from 'svelte-awesome';
 
-  export let url: string | undefined = undefined;
-  export let placeholder: string | undefined = undefined;
-  export let readonly = false;
+  interface Props {
+    url?: string | undefined;
+    placeholder?: string | undefined;
+    readonly?: boolean;
+  }
+
+  let { url = undefined, placeholder = undefined, readonly = false }: Props = $props();
 
   const availableSchemes = ['https:', 'http:'] satisfies Array<Scheme>;
   const dispatch = createEventDispatcher();
 
-  let [scheme, host] = getSchemeAndHost(url);
-  let inputTouched = false;
+  let [scheme, host] = $state(getSchemeAndHost(url));
+  let inputTouched = $state(false);
+  let hostValid = $derived(isHostValid(host));
+  let schemeIcon = $derived(scheme === 'https:' ? faLock : faLockOpen);
 
-  $: hostValid = isHostValid(host);
-  $: schemeIcon = scheme === 'https:' ? faLock : faLockOpen;
-  $: handleChange(scheme, host);
+  $effect(() => {
+    handleChange(scheme, host);
+  });
 
   function handleChange(scheme: Scheme, host: string): void {
     const change = {
@@ -69,7 +75,7 @@
     {placeholder}
     {readonly}
     bind:value={host}
-    on:blur={handleInputBlur}
+    onblur={handleInputBlur}
   />
   {#if host}
     <a class="input-group-shim" href="{scheme}//{host}" target="_blank" title="Open URL">

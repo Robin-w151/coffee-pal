@@ -9,16 +9,20 @@
   import { getModalStore } from '@skeletonlabs/skeleton';
   import { onMount } from 'svelte';
 
-  export let cardClass: string | undefined = '';
+  interface Props {
+    cardClass?: string | undefined;
+  }
+
+  let { cardClass = '' }: Props = $props();
 
   const modalHelper = new ModalHelper(getModalStore());
   const itemClass = 'grid grid-cols-subgrid col-span-full';
 
-  let developerSettingsActive = false;
-  let estimatedStorageUsage: number | undefined = 0;
-  $: estimatedStorageUsageString = estimatedStorageUsage
-    ? humanReadableMemorySize(estimatedStorageUsage)
-    : 'Unbekannt';
+  let developerSettingsActive = $state(false);
+  let estimatedStorageUsage: number | undefined = $state(0);
+  let estimatedStorageUsageString = $derived(
+    estimatedStorageUsage ? humanReadableMemorySize(estimatedStorageUsage) : 'Unbekannt',
+  );
 
   onMount(async () => {
     estimatedStorageUsage = await getEstimatedUsage();
@@ -89,14 +93,14 @@
         <button
           class="btn variant-filled-error"
           title="Clear LocalStorage"
-          on:click={handleResetLocalStorageButtonClick}
+          onclick={handleResetLocalStorageButtonClick}
         >
           Clear LocalStorage
         </button>
         <button
           class="btn variant-filled-error"
           title="Clear LocalStorage"
-          on:click={handleResetIndexedDbButtonClick}
+          onclick={handleResetIndexedDbButtonClick}
         >
           Clear IndexedDB
         </button>

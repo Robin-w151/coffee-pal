@@ -16,16 +16,16 @@
 </script>
 
 <AppBar padding="px-4 md:px-2 py-1 md:py-2" shadow="shadow-xl" regionRowMain="max-md:!gap-2">
-  <svelte:fragment slot="lead">
+  {#snippet lead()}
     <button
       class="btn btn-icon hover:variant-soft-secondary md:hidden"
       title="App menu"
-      on:click={handleMenuClick}
+      onclick={handleMenuClick}
     >
       <Icon data={faBars} scale={1.5} />
       <span class="sr-only">App menu</span>
     </button>
-  </svelte:fragment>
+  {/snippet}
   <a class="flex items-center gap-4 px-2 py-1 md:py-2 w-fit rounded-md" href={mainRoute.href}>
     <span class="hidden md:block">
       <Icon data={faMugHot} scale={1.5} />

@@ -10,13 +10,17 @@
   import { getCoffeeLabel } from '$lib/models/myCoffees';
   import { calculateRatio } from '$lib/shared/math';
 
-  export let entry: ActiveJournalEntry;
+  interface Props {
+    entry: ActiveJournalEntry;
+  }
+
+  let { entry }: Props = $props();
 
   const preferredWeightUnit = getPreferredWeightUnit($settingsStore.preferredUnits);
   const preferredTemperatureUnit = getPreferredTemperatureUnit($settingsStore.preferredUnits);
 
-  $: ratio = calculateRatio(entry.coffee, entry.water);
-  $: coffeeType = getCoffeeLabel(entry.coffeeType);
+  let ratio = $derived(calculateRatio(entry.coffee, entry.water));
+  let coffeeType = $derived(getCoffeeLabel(entry.coffeeType));
 
   function handleEntryClick(): void {
     gotoDetail();
@@ -47,7 +51,7 @@
   }
 </script>
 
-<tr tabindex="0" role="button" on:click={handleEntryClick} on:keydown={handleEntryKeyDown}>
+<tr tabindex="0" role="button" onclick={handleEntryClick} onkeydown={handleEntryKeyDown}>
   <td><span class="badge variant-soft-tertiary w-16">{ratio}</span></td>
   <td>{entry.method}</td>
   <td>{coffeeType ?? 'Unknown'}</td>

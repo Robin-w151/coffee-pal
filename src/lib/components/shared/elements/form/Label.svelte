@@ -1,11 +1,25 @@
 <script lang="ts">
   import { faWarning } from '@fortawesome/free-solid-svg-icons';
+  import type { Snippet } from 'svelte';
   import { Icon } from 'svelte-awesome';
 
-  export let text: string;
-  export let error = false;
-  export let errorMessage: string | undefined = undefined;
-  export let preventDefault = false;
+  interface Props {
+    text: string;
+    error?: boolean;
+    errorMessage?: string;
+    preventDefault?: boolean;
+    class?: string;
+    children?: Snippet;
+  }
+
+  let {
+    text,
+    error = false,
+    errorMessage,
+    preventDefault = false,
+    class: clazz,
+    children,
+  }: Props = $props();
 
   function handleClick(event: Event): void {
     if (preventDefault) {
@@ -14,9 +28,9 @@
   }
 </script>
 
-<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-<!-- svelte-ignore a11y-click-events-have-key-events -->
-<label class="flex flex-col gap-1 @container {$$props.class ?? ''}" on:click={handleClick}>
+<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+<!-- svelte-ignore a11y_click_events_have_key_events -->
+<label class="flex flex-col gap-1 @container {clazz ?? ''}" onclick={handleClick}>
   <div class="flex flex-col @md:flex-row @md:justify-between @md:gap-4 mr-3">
     <span>{text}</span>
     {#if error && errorMessage}
@@ -26,5 +40,5 @@
       </span>
     {/if}
   </div>
-  <slot />
+  {@render children?.()}
 </label>

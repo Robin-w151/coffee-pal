@@ -5,11 +5,15 @@
   import { UNIT_FAHRENHEIT } from '$lib/config/units';
   import { round } from '$lib/shared/math';
 
-  export let temperatureConverter = false;
-  export let cardClass: string | undefined = undefined;
+  interface Props {
+    temperatureConverter?: boolean;
+    cardClass?: string | undefined;
+  }
 
-  let celsius: number | undefined = 100;
-  let fahrenheit: number | undefined = 212;
+  let { temperatureConverter = $bindable(false), cardClass = undefined }: Props = $props();
+
+  let celsius: number | undefined = $state(100);
+  let fahrenheit: number | undefined = $state(212);
 
   function handleCelsiusChange(): void {
     fahrenheit = round(UNIT_FAHRENHEIT.conversion.fromBase(celsius));
@@ -33,12 +37,12 @@
           class="input"
           type="number"
           bind:value={celsius}
-          on:change={handleCelsiusChange}
-          on:blur={handleCelsiusChange}
+          onchange={handleCelsiusChange}
+          onblur={handleCelsiusChange}
         />
       </Label>
       <div class="hidden sm:flex flex-col gap-1">
-        <div class="h-[24px]" />
+        <div class="h-[24px]"></div>
         <hr class="flex-1 divider-vertical" />
       </div>
       <Label text="Fahrenheit">
@@ -46,8 +50,8 @@
           class="input"
           type="number"
           bind:value={fahrenheit}
-          on:change={handleFahrenheitChange}
-          on:blur={handleFahrenheitChange}
+          onchange={handleFahrenheitChange}
+          onblur={handleFahrenheitChange}
         />
       </Label>
     </div>

@@ -9,13 +9,17 @@
   } from '$lib/shared/units';
   import { getCoffeeLabel } from '$lib/models/myCoffees';
 
-  export let entry: ActiveJournalEntry;
+  interface Props {
+    entry: ActiveJournalEntry;
+  }
+
+  let { entry }: Props = $props();
 
   const preferredWeightUnit = getPreferredWeightUnit($settingsStore.preferredUnits);
   const preferredTemperatureUnit = getPreferredTemperatureUnit($settingsStore.preferredUnits);
 
-  $: ratio = calculateRatio(entry.coffee, entry.water);
-  $: coffeeType = getCoffeeLabel(entry.coffeeType);
+  let ratio = $derived(calculateRatio(entry.coffee, entry.water));
+  let coffeeType = $derived(getCoffeeLabel(entry.coffeeType));
 
   function details(entry: ActiveJournalEntry): string {
     const { water, coffee, waterTemperature, grindSettings, description } = entry;

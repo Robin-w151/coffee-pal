@@ -1,41 +1,58 @@
 <script lang="ts">
   import ResponsiveButton from '$lib/components/shared/elements/form/ResponsiveButton.svelte';
   import { faRotateRight, faSave, faTrash } from '@fortawesome/free-solid-svg-icons';
-  import { createEventDispatcher } from 'svelte';
+  import type { Snippet } from 'svelte';
   import { Icon } from 'svelte-awesome';
 
-  export let edit = false;
-  export let formValid = false;
-  export let hasChanged: boolean | undefined = undefined;
-  export let allowCopy = false;
+  interface Props {
+    edit?: boolean;
+    formValid?: boolean;
+    hasChanged?: boolean | undefined;
+    allowCopy?: boolean;
+    beforeContent?: Snippet;
+    afterContent?: Snippet;
+    onRemove?: () => void;
+    onCopy?: () => void;
+    onSave?: () => void;
+  }
 
-  const dispatch = createEventDispatcher();
+  let {
+    edit = false,
+    formValid = false,
+    hasChanged = undefined,
+    allowCopy = false,
+    beforeContent,
+    afterContent,
+    onRemove,
+    onCopy,
+    onSave,
+  }: Props = $props();
 
   function handleRemoveClick(): void {
-    dispatch('remove');
+    onRemove?.();
   }
 
   function handleCopyClick(): void {
-    dispatch('copy');
+    onCopy?.();
   }
 
   function handleSaveClick(): void {
-    dispatch('save');
+    onSave?.();
   }
 </script>
 
 <div class="flex gap-2">
-  <slot name="before" />
+  {@render beforeContent?.()}
   {#if edit}
     <ResponsiveButton
       type="button"
       label="Delete"
       variant="variant-ghost-error"
-      on:click={handleRemoveClick}
+      onclick={handleRemoveClick}
     >
-      <svelte:fragment slot="icon">
+      {#snippet iconContent()}
         <Icon data={faTrash} />
-      </svelte:fragment>
+      {/snippet}
     </ResponsiveButton>
   {/if}
   {#if edit && allowCopy}
@@ -44,22 +61,22 @@
       label="Copy"
       variant="variant-ghost-secondary"
       disabled={!formValid}
-      on:click={handleCopyClick}
+      onclick={handleCopyClick}
     >
-      <svelte:fragment slot="icon">
+      {#snippet iconContent()}
         <Icon data={faRotateRight} />
-      </svelte:fragment>
+      {/snippet}
     </ResponsiveButton>
   {/if}
   <ResponsiveButton
     label="Save"
     variant="variant-filled-primary"
     disabled={!formValid || (hasChanged !== undefined && !hasChanged)}
-    on:click={handleSaveClick}
+    onclick={handleSaveClick}
   >
-    <svelte:fragment slot="icon">
+    {#snippet iconContent()}
       <Icon data={faSave} />
-    </svelte:fragment>
+    {/snippet}
   </ResponsiveButton>
-  <slot name="after" />
+  {@render afterContent?.()}
 </div>

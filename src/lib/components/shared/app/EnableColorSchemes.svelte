@@ -4,7 +4,9 @@
   import { settingsStore } from '$lib/stores/settings';
   import { onDestroy, onMount } from 'svelte';
 
-  $: if (browser) applyColorScheme($settingsStore.colorScheme ?? 'system');
+  $effect(() => {
+    applyColorScheme($settingsStore.colorScheme ?? 'system');
+  });
 
   onMount(() => {
     if (browser) {
