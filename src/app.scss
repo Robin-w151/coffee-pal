@@ -172,7 +172,7 @@ body {
 }
 
 .popup-token {
-  @apply card p-4 bg-surface-200-700-token shadow-xl;
+  @apply card p-4 bg-surface-200-700-token shadow-xl z-10;
 }
 
 .radio-group-token {
