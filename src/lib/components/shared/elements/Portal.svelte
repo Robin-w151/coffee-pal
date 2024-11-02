@@ -1,5 +1,5 @@
-<script lang="ts" context="module">
-  import { tick } from 'svelte';
+<script lang="ts" module>
+  import { tick, type Snippet } from 'svelte';
 
   export function portal(el: HTMLElement, target: HTMLElement | string = 'body') {
     let targetEl;
@@ -44,9 +44,14 @@
 </script>
 
 <script lang="ts">
-  export let target: HTMLElement | string = 'body';
+  interface Props {
+    target?: HTMLElement | string;
+    children?: Snippet;
+  }
+
+  let { target = 'body', children }: Props = $props();
 </script>
 
 <div use:portal={target} hidden>
-  <slot />
+  {@render children?.()}
 </div>

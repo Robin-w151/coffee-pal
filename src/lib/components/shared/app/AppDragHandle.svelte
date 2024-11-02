@@ -4,7 +4,7 @@
   import type { HasEventTargetAddRemove } from 'rxjs/internal/observable/fromEvent';
   import { onMount } from 'svelte';
 
-  let visible = browser ? (navigator.windowControlsOverlay?.visible ?? false) : false;
+  let visible = $state(browser ? (navigator.windowControlsOverlay?.visible ?? false) : false);
 
   onMount(() => {
     if ('windowControlsOverlay' in navigator) {
@@ -25,7 +25,7 @@
   });
 </script>
 
-<div class="drag-handle flex-1 bg-surface-100-800-token" class:visible />
+<div class="drag-handle flex-1 bg-surface-100-800-token" class:visible></div>
 
 <style lang="scss">
   .drag-handle.visible {

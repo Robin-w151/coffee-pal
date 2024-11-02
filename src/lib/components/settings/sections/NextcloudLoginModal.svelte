@@ -1,7 +1,11 @@
 <script lang="ts">
   import { getModalStore } from '@skeletonlabs/skeleton';
 
-  export let loginUrl: string;
+  interface Props {
+    loginUrl: string;
+  }
+
+  let { loginUrl }: Props = $props();
 
   const modalStore = getModalStore();
 
@@ -20,13 +24,13 @@
   <header class="text-2xl font-bold">Finish Setup</header>
   <article>Please press Login to finish Nextcloud synchronization setup.</article>
   <footer class="flex justify-end gap-2">
-    <button class="btn variant-ghost-primary" on:click={handleCancelClick}>Cancel</button>
+    <button class="btn variant-ghost-primary" onclick={handleCancelClick}>Cancel</button>
     <a
       class="btn variant-filled-primary"
       href={loginUrl}
       target="_blank"
       rel="noopener"
-      on:click={handleLoginClick}>Login</a
+      onclick={handleLoginClick}>Login</a
     >
   </footer>
 </div>

@@ -9,7 +9,7 @@ const baseURL = process.env['TEST_BASE_URL'] ?? 'http://localhost:5173';
 export default defineConfig({
   testDir: './tests',
   fullyParallel: true,
-  reporter: isCI ? 'github' : 'html',
+  reporter: 'html',
   use: {
     baseURL,
     trace: 'on-first-retry',

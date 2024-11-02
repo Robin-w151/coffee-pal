@@ -1,7 +1,11 @@
 <script lang="ts">
   import Label from '$lib/components/shared/elements/form/Label.svelte';
 
-  export let roaster: string | undefined;
+  interface Props {
+    roaster?: string;
+  }
+
+  let { roaster = $bindable() }: Props = $props();
 
   function handleInputKeydown(event: KeyboardEvent): void {
     const { key } = event;
@@ -17,6 +21,6 @@
     type="text"
     placeholder="Roaster, e.g. My trendy roaster"
     bind:value={roaster}
-    on:keydown={handleInputKeydown}
+    onkeydown={handleInputKeydown}
   />
 </Label>

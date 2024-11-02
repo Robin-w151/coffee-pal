@@ -3,7 +3,11 @@
   import { installEventHandler } from '$lib/shared/ui/events';
   import { InputChip } from '@skeletonlabs/skeleton';
 
-  export let aromas: Array<string> | undefined;
+  interface Props {
+    aromas?: Array<string>;
+  }
+
+  let { aromas = $bindable() }: Props = $props();
 
   function handleInputKeydown(event: KeyboardEvent): void {
     const { key } = event;

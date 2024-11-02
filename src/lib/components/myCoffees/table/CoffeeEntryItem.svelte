@@ -2,7 +2,11 @@
   import { goto } from '$app/navigation';
   import type { ActiveCoffeeEntry } from '$lib/models/myCoffees';
 
-  export let entry: ActiveCoffeeEntry;
+  interface Props {
+    entry: ActiveCoffeeEntry;
+  }
+
+  let { entry }: Props = $props();
 
   function handleEntryClick(): void {
     gotoDetail();
@@ -21,7 +25,7 @@
   }
 </script>
 
-<tr tabindex="0" role="button" on:click={handleEntryClick} on:keydown={handleEntryKeyDown}>
+<tr tabindex="0" role="button" onclick={handleEntryClick} onkeydown={handleEntryKeyDown}>
   <td>{entry.name}</td>
   <td>{entry.origin ?? 'Unknown'}</td>
   <td>{entry.process ?? 'Unknown'}</td>

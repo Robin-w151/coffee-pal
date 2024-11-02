@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
   import { screens } from '$lib/config/screens';
 
   interface SortOption {
@@ -67,10 +67,9 @@
     },
   ] satisfies Array<SortOption>;
 
-  let selectedSortOption = getActiveSortOption().label;
-  let innerWidth = 0;
-
-  $: paginationSettings = getPaginationSettings($myCoffeesStore);
+  let selectedSortOption = $state(getActiveSortOption().label);
+  let innerWidth = $state(0);
+  let paginationSettings = $derived(getPaginationSettings($myCoffeesStore));
 
   function getActiveSortOption(): SortOption {
     return (
@@ -91,8 +90,8 @@
     };
   }
 
-  function handleSearchChange({ detail: searchInput }: CustomEvent<string>): void {
-    myCoffeesSearchStore.setFilter(searchInput);
+  function handleSearchChange(searchInput?: string | null): void {
+    myCoffeesSearchStore.setFilter(searchInput ?? '');
   }
 
   function handleSortOptionClick(sort: MyCoffeesSort, sortDirection: MyCoffeesSortDirection): void {
@@ -118,35 +117,37 @@
 <PageActions
   isSyncEnabled={$syncAvailabilityStore.isAvailable}
   isSynchronizing={$syncStateStore.isSynchronizing}
-  on:add={handleAddClick}
-  on:synchronize={handleSyncClick}
+  onAdd={handleAddClick}
+  onSynchronize={handleSyncClick}
 />
 <PageSearch
   title="My Coffees"
   search={$myCoffeesSearchStore.filter}
   isLoading={$myCoffeesStore.isLoading}
-  on:searchChange={handleSearchChange}
+  onSearchChange={handleSearchChange}
 >
-  <ListBox slot="popup">
-    {#each sortOptions as { label, icon, sort, sortDirection }}
-      <ListBoxItem
-        name={label}
-        value={label}
-        bind:group={selectedSortOption}
-        on:click={() => handleSortOptionClick(sort, sortDirection)}
-      >
-        <div class="flex justify-between items-center gap-4 w-full min-w-36">
-          <div class="flex items-center gap-2">
-            <Icon data={icon} />
-            <span>{label}</span>
+  {#snippet popupContent()}
+    <ListBox>
+      {#each sortOptions as { label, icon, sort, sortDirection }}
+        <ListBoxItem
+          name={label}
+          value={label}
+          bind:group={selectedSortOption}
+          on:click={() => handleSortOptionClick(sort, sortDirection)}
+        >
+          <div class="flex justify-between items-center gap-4 w-full min-w-36">
+            <div class="flex items-center gap-2">
+              <Icon data={icon} />
+              <span>{label}</span>
+            </div>
+            {#if selectedSortOption === label}
+              <Icon data={faCheck} />
+            {/if}
           </div>
-          {#if selectedSortOption === label}
-            <Icon data={faCheck} />
-          {/if}
-        </div>
-      </ListBoxItem>
-    {/each}
-  </ListBox>
+        </ListBoxItem>
+      {/each}
+    </ListBox>
+  {/snippet}
 </PageSearch>
 <PageCard class="page-with-actions-token">
   {#if innerWidth > screenMd}

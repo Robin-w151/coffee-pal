@@ -1,15 +1,21 @@
 <script lang="ts">
   import Label from '$lib/components/shared/elements/form/Label.svelte';
 
-  export let name: string | undefined;
-  export let valid = false;
+  interface Props {
+    name?: string;
+    valid?: boolean;
+  }
+
+  let { name = $bindable(), valid = $bindable(false) }: Props = $props();
 
   const errorMessage = 'name is required';
 
-  let inputTouched = false;
+  let inputTouched = $state(false);
+  let showError = $derived(inputTouched && !valid);
 
-  $: checkValidity(name);
-  $: showError = inputTouched && !valid;
+  $effect(() => {
+    checkValidity(name);
+  });
 
   function handleInputBlur(): void {
     inputTouched = true;
@@ -34,7 +40,7 @@
     type="text"
     placeholder="Name, e.g. Frutos Rojos"
     bind:value={name}
-    on:blur={handleInputBlur}
-    on:keydown={handleInputKeydown}
+    onblur={handleInputBlur}
+    onkeydown={handleInputKeydown}
   />
 </Label>

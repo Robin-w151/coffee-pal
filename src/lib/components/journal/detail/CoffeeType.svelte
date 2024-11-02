@@ -14,10 +14,14 @@
     type PopupSettings,
   } from '@skeletonlabs/skeleton';
   import { BehaviorSubject, debounceTime, map, switchMap, tap } from 'rxjs';
-  import { onDestroy, onMount } from 'svelte';
+  import { onDestroy, onMount, untrack } from 'svelte';
   import { Icon } from 'svelte-awesome';
 
-  export let coffeeType: string | ActiveCoffeeEntry | undefined;
+  interface Props {
+    coffeeType?: string | ActiveCoffeeEntry;
+  }
+
+  let { coffeeType = $bindable() }: Props = $props();
 
   const filter = new BehaviorSubject<string | undefined>(undefined);
   const popupCoffeeTypeAutocomplete: PopupSettings = {
@@ -25,12 +29,10 @@
     target: 'popupCoffeeTypeAutocomplete',
   };
 
-  let coffeeTypeOptions: Array<AutocompleteOption<ActiveCoffeeEntry>> = [];
-  let coffeeTypeInput = getCoffeeLabel(coffeeType);
-  let inputElementRef: HTMLInputElement;
-
-  $: handleCoffeeTypeChange(coffeeType);
-  $: coffeeTypeId = typeof coffeeType === 'object' ? coffeeType.id : undefined;
+  let coffeeTypeOptions: Array<AutocompleteOption<ActiveCoffeeEntry>> = $state([]);
+  let coffeeTypeInput = $state(getCoffeeLabel(coffeeType));
+  let inputElementRef: HTMLInputElement | undefined = $state();
+  let coffeeTypeId = $derived(typeof coffeeType === 'object' ? coffeeType.id : undefined);
 
   onMount(() => {
     filter
@@ -49,15 +51,21 @@
     filter.complete();
   });
 
+  $effect(() => {
+    handleCoffeeTypeChange(coffeeType);
+  });
+
   function handleCoffeeTypeChange(coffeeType?: string | ActiveCoffeeEntry): void {
-    if (coffeeType) {
-      const label = getCoffeeLabel(coffeeType);
-      if (coffeeTypeInput !== label) {
-        coffeeTypeInput = label;
+    untrack(() => {
+      if (coffeeType) {
+        const label = getCoffeeLabel(coffeeType);
+        if (coffeeTypeInput !== label) {
+          coffeeTypeInput = label;
+        }
+      } else {
+        coffeeTypeInput = undefined;
       }
-    } else {
-      coffeeTypeInput = undefined;
-    }
+    });
   }
 
   function handleCoffeeTypeSelect({
@@ -103,6 +111,7 @@
     <Autocomplete
       options={coffeeTypeOptions}
       filter={() => [...coffeeTypeOptions]}
+      transitions={false}
       on:selection={handleCoffeeTypeSelect}
     />
   </div>
@@ -120,11 +129,11 @@
       bind:this={inputElementRef}
       bind:value={coffeeTypeInput}
       use:popup={popupCoffeeTypeAutocomplete}
-      on:input={handleInputChange}
-      on:keydown={handleInputKeydown}
+      oninput={handleInputChange}
+      onkeydown={handleInputKeydown}
     />
-    <svelte:fragment slot="button-content">
+    {#snippet buttonContent()}
       <Icon data={faArrowUpRightFromSquare} />
-    </svelte:fragment>
+    {/snippet}
   </InputWithButton>
 </Label>

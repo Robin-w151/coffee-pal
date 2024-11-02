@@ -6,50 +6,72 @@
   import { WEIGHT_UNITS, WEIGHT_UNITS_COFFEE } from '$lib/config/units';
   import type { Measurement } from '$lib/models/measurement';
   import type { Recipe } from '$lib/models/recipe';
-  import { settingsStore } from '$lib/stores/settings';
   import { getPreferredWeightUnit } from '$lib/shared/units';
+  import { settingsStore } from '$lib/stores/settings';
   import { SlideToggle } from '@skeletonlabs/skeleton';
-  import { createEventDispatcher } from 'svelte';
+  import { untrack } from 'svelte';
 
-  export let fixedRatio = true;
-  export let recipe: Recipe;
+  interface Props {
+    fixedRatio?: boolean;
+    recipe: Recipe;
+    onCoffeeChange: (coffee: number) => void;
+    onWaterChange: (water: number) => void;
+    onOutputChange: (output: number) => void;
+  }
 
-  const dispatch = createEventDispatcher();
+  let {
+    fixedRatio = $bindable(true),
+    recipe,
+    onCoffeeChange,
+    onWaterChange,
+    onOutputChange,
+  }: Props = $props();
+
   const units = WEIGHT_UNITS;
   const units_coffee = WEIGHT_UNITS_COFFEE;
   const preferredUnit = getPreferredWeightUnit($settingsStore.preferredUnits);
 
-  let coffeeMeasurement: Measurement = {
+  let coffeeMeasurement: Measurement = $state({
     value: recipe.coffee,
     unit: preferredUnit,
-  };
-  let waterMeasurement: Measurement = {
+  });
+  let waterMeasurement: Measurement = $state({
     value: recipe.water,
     unit: preferredUnit,
-  };
-  let outputMeasurement: Measurement = {
+  });
+  let outputMeasurement: Measurement = $state({
     value: recipe.output,
     unit: preferredUnit,
-  };
+  });
 
-  $: handleRecipeChange(recipe);
+  $effect(() => {
+    handleRecipeChange(recipe);
+  });
 
-  function handleRecipeChange(recipe: Recipe): void {
-    coffeeMeasurement.value = recipe.coffee;
-    waterMeasurement.value = recipe.water;
-    outputMeasurement.value = recipe.output;
+  function handleRecipeChange(newRecipe: Recipe): void {
+    untrack(() => {
+      coffeeMeasurement.value = newRecipe.coffee;
+      waterMeasurement.value = newRecipe.water;
+      outputMeasurement.value = newRecipe.output;
+    });
   }
 
   function handleCoffeeChange(): void {
-    dispatch('coffeeChange', coffeeMeasurement.value);
+    if (coffeeMeasurement.value !== undefined) {
+      onCoffeeChange(coffeeMeasurement.value);
+    }
   }
 
   function handleWaterChange(): void {
-    dispatch('waterChange', waterMeasurement.value);
+    if (waterMeasurement.value !== undefined) {
+      onWaterChange(waterMeasurement.value);
+    }
   }
 
   function handleOutputChange(): void {
-    dispatch('outputChange', outputMeasurement.value);
+    if (outputMeasurement.value !== undefined) {
+      onOutputChange(outputMeasurement.value);
+    }
   }
 </script>
 
@@ -70,24 +92,24 @@
       <MeasurementInput
         {units}
         bind:measurement={waterMeasurement}
-        on:change={handleWaterChange}
-        on:blur={handleWaterChange}
+        onValueChange={handleWaterChange}
+        onblur={handleWaterChange}
       />
     </Label>
     <Label text="Amount of coffee">
       <MeasurementInput
         units={units_coffee}
         bind:measurement={coffeeMeasurement}
-        on:change={handleCoffeeChange}
-        on:blur={handleCoffeeChange}
+        onValueChange={handleCoffeeChange}
+        onblur={handleCoffeeChange}
       />
     </Label>
     <Label text="Amount of brewed coffee">
       <MeasurementInput
         {units}
         bind:measurement={outputMeasurement}
-        on:change={handleOutputChange}
-        on:blur={handleOutputChange}
+        onValueChange={handleOutputChange}
+        onblur={handleOutputChange}
       />
     </Label>
   </Form>

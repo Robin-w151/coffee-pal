@@ -18,10 +18,9 @@
 
   const toastHelper = new ToastHelper(getToastStore());
 
-  let files: FileList | undefined;
-  let isImporting = false;
-
-  $: fileSelected = files?.length && files.length > 0;
+  let files: FileList | undefined = $state();
+  let isImporting = $state(false);
+  let fileSelected = $derived(files?.length && files.length > 0);
 
   async function handleExportClick(): Promise<void> {
     const journalEntries = await journalStore.loadAll();
@@ -84,30 +83,32 @@
   </div>
   <Form>
     <FileDropzone name="import-file-input" accept="application/json" bind:files>
-      <svelte:fragment slot="lead">
+      {#snippet lead()}
         <Icon data={faFileArrowUp} scale={1.5} />
-      </svelte:fragment>
-      <svelte:fragment slot="message">
+      {/snippet}
+      {#snippet message()}
         {#if fileSelected}
           <span>{files?.[0].name}</span>
         {:else}
           <span>Click to select file or drag and drop</span>
         {/if}
-      </svelte:fragment>
-      <svelte:fragment slot="meta">Allowed type: JSON</svelte:fragment>
+      {/snippet}
+      {#snippet meta()}
+        Allowed type: JSON
+      {/snippet}
     </FileDropzone>
     <div class="flex justify-end gap-2">
       <button
         class="btn variant-ghost-primary"
         type="button"
         title="Export Data"
-        on:click={handleExportClick}>Export</button
+        onclick={handleExportClick}>Export</button
       >
       <button
         class="btn variant-filled-primary"
         title="Import Data"
         disabled={!fileSelected}
-        on:click={handleImportClick}>Import</button
+        onclick={handleImportClick}>Import</button
       >
     </div>
   </Form>

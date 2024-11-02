@@ -11,8 +11,12 @@
     type PopupSettings,
   } from '@skeletonlabs/skeleton';
 
-  export let method: string | undefined;
-  export let valid = false;
+  interface Props {
+    method?: string;
+    valid?: boolean;
+  }
+
+  let { method = $bindable(), valid = $bindable(false) }: Props = $props();
 
   const errorMessage = 'brew method is required';
   const popupMethodAutocomplete: PopupSettings = {
@@ -25,12 +29,14 @@
     },
   };
 
-  let inputTouched = false;
-  let autocompleteTouched = false;
-  let inputElementRef: HTMLInputElement;
+  let inputTouched = $state(false);
+  let autocompleteTouched = $state(false);
+  let inputElementRef: HTMLInputElement | undefined = $state();
+  let showError = $derived(inputTouched && autocompleteTouched && !valid);
 
-  $: checkValidity(method);
-  $: showError = inputTouched && autocompleteTouched && !valid;
+  $effect(() => {
+    checkValidity(method);
+  });
 
   function handleMethodSelect({ detail }: CustomEvent<AutocompleteOption>): void {
     method = detail.label;
@@ -60,7 +66,12 @@
     data-popup="popupMethodAutocomplete"
     use:focusTrap={true}
   >
-    <Autocomplete options={methodOptions} bind:input={method} on:selection={handleMethodSelect} />
+    <Autocomplete
+      options={methodOptions}
+      input={method}
+      transitions={false}
+      on:selection={handleMethodSelect}
+    />
   </div>
 </Portal>
 <Label text="Brew method *" error={showError} {errorMessage} class="relative">
@@ -72,7 +83,7 @@
     bind:this={inputElementRef}
     bind:value={method}
     use:popup={popupMethodAutocomplete}
-    on:blur={handleInputBlur}
-    on:keydown={handleInputKeydown}
+    onblur={handleInputBlur}
+    onkeydown={handleInputKeydown}
   />
 </Label>

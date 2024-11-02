@@ -2,32 +2,35 @@
   import { HOST_REGEXP } from '$lib/config/regexp';
   import type { Scheme, UrlInputChange } from '$lib/models/urlInput';
   import { faArrowUpRightFromSquare, faLock, faLockOpen } from '@fortawesome/free-solid-svg-icons';
-  import { createEventDispatcher } from 'svelte';
   import { Icon } from 'svelte-awesome';
 
-  export let url: string | undefined = undefined;
-  export let placeholder: string | undefined = undefined;
-  export let readonly = false;
+  interface Props {
+    url?: string | undefined;
+    placeholder?: string | undefined;
+    readonly?: boolean;
+    onChange?: (urlInputChange: UrlInputChange) => void;
+  }
+
+  let { url = undefined, placeholder = undefined, readonly = false, onChange }: Props = $props();
 
   const availableSchemes = ['https:', 'http:'] satisfies Array<Scheme>;
-  const dispatch = createEventDispatcher();
 
-  let [scheme, host] = getSchemeAndHost(url);
-  let inputTouched = false;
+  let [scheme, host] = $state(getSchemeAndHost(url));
+  let inputTouched = $state(false);
+  let hostValid = $derived(isHostValid(host));
+  let schemeIcon = $derived(scheme === 'https:' ? faLock : faLockOpen);
 
-  $: hostValid = isHostValid(host);
-  $: schemeIcon = scheme === 'https:' ? faLock : faLockOpen;
-  $: handleChange(scheme, host);
+  $effect(() => {
+    handleChange(scheme, host);
+  });
 
   function handleChange(scheme: Scheme, host: string): void {
-    const change = {
+    onChange?.({
       url: `${scheme}//${host}`,
       scheme,
       host,
       hostValid,
-    } satisfies UrlInputChange;
-
-    dispatch('change', change);
+    });
   }
 
   function handleInputBlur(): void {
@@ -66,10 +69,11 @@
   <input
     style="min-width: 6rem !important"
     type="text"
+    autocapitalize="off"
     {placeholder}
     {readonly}
     bind:value={host}
-    on:blur={handleInputBlur}
+    onblur={handleInputBlur}
   />
   {#if host}
     <a class="input-group-shim" href="{scheme}//{host}" target="_blank" title="Open URL">

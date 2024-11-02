@@ -5,8 +5,12 @@
   import JournalEntryItem from './JournalEntryItem.svelte';
   import JournalEntryPlaceholder from './JournalEntryPlaceholder.svelte';
 
-  export let entries: Array<ActiveJournalEntry>;
-  export let isLoading = false;
+  interface Props {
+    entries: Array<ActiveJournalEntry>;
+    isLoading?: boolean;
+  }
+
+  let { entries, isLoading = false }: Props = $props();
 
   function hasEntries(entries?: Array<ActiveJournalEntry>): boolean {
     return !!entries && entries.length > 0;

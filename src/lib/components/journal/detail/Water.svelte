@@ -5,10 +5,15 @@
   import type { Measurement } from '$lib/models/measurement';
   import { settingsStore } from '$lib/stores/settings';
   import { getPreferredWeightUnit } from '$lib/shared/units';
-  import { createEventDispatcher } from 'svelte';
+  import { untrack } from 'svelte';
 
-  export let water: number | undefined;
-  export let valid = false;
+  interface Props {
+    water?: number;
+    valid?: boolean;
+    onChange?: (water: number) => void;
+  }
+
+  let { water, valid = $bindable(false), onChange }: Props = $props();
 
   const units = WEIGHT_UNITS;
   const preferredUnit = getPreferredWeightUnit($settingsStore.preferredUnits);
@@ -16,22 +21,33 @@
     required: 'amount of water is required',
     negative: 'amount of water must be greater than 0',
   };
-  const dispatch = createEventDispatcher();
 
-  let waterMeasurement: Measurement = {
+  let waterMeasurement: Measurement = $state({
     value: water,
     unit: preferredUnit,
-  };
-  let errorMessage: string | undefined;
-  let inputTouched = false;
+  });
+  let errorMessage: string | undefined = $state();
+  let inputTouched = $state(false);
+  let showError = $derived(inputTouched && !valid);
 
-  $: handleWaterChange(water);
-  $: checkValidity(waterMeasurement.value);
-  $: dispatch('change', waterMeasurement.value);
-  $: showError = inputTouched && !valid;
+  $effect(() => {
+    handleWaterChange(water);
+  });
+
+  $effect(() => {
+    checkValidity(waterMeasurement.value);
+  });
+
+  $effect(() => {
+    if (waterMeasurement.value) {
+      onChange?.(waterMeasurement.value);
+    }
+  });
 
   function handleWaterChange(water?: number): void {
-    waterMeasurement.value = water;
+    untrack(() => {
+      waterMeasurement.value = water;
+    });
   }
 
   function handleInputBlur(): void {
@@ -69,7 +85,7 @@
     placeholder="Amount of water, e.g. 200"
     {units}
     bind:measurement={waterMeasurement}
-    on:blur={handleInputBlur}
-    on:keydown={handleInputKeydown}
+    onblur={handleInputBlur}
+    onkeydown={handleInputKeydown}
   />
 </Label>

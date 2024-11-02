@@ -4,17 +4,25 @@
   import { clsx } from '$lib/shared/ui/clsx';
   import Card from '../shared/elements/Card.svelte';
 
-  export let dropsPerMinute = 0;
-  export let isWithinRange = false;
+  interface Props {
+    dropsPerMinute?: number;
+    isWithinRange?: boolean;
+  }
 
-  let timestamps: Array<number> = [];
+  let { dropsPerMinute = $bindable(0), isWithinRange = false }: Props = $props();
 
-  $: dropsPerMinute = calculateDripRate(timestamps);
-  $: dropsPerMinuteVariantClass = clsx(
-    !dropsPerMinute && 'variant-soft-tertiary',
-    dropsPerMinute && isWithinRange && 'variant-filled-primary',
-    dropsPerMinute && !isWithinRange && 'variant-filled-warning',
+  let timestamps: Array<number> = $state([]);
+  let dropsPerMinuteVariantClass = $derived(
+    clsx(
+      !dropsPerMinute && 'variant-soft-tertiary',
+      dropsPerMinute && isWithinRange && 'variant-filled-primary',
+      dropsPerMinute && !isWithinRange && 'variant-filled-warning',
+    ),
   );
+
+  $effect(() => {
+    dropsPerMinute = calculateDripRate(timestamps);
+  });
 
   function handleCountClick(): void {
     timestamps = [...timestamps.slice(-DRIP_INSTANTS_COUNT), performance.now()];
@@ -39,12 +47,12 @@
       <button
         class="btn btn-xl variant-filled-primary w-40 @md:w-64 max-w-full aspect-square rounded-full"
         title="Tap to count drop rate"
-        on:click={handleCountClick}>Tap</button
+        onclick={handleCountClick}>Tap</button
       >
       <button
         class="btn variant-filled-secondary w-20 @md:w-32 max-w-full aspect-square rounded-full"
         title="Reset counter"
-        on:click={handleResetClick}>Reset</button
+        onclick={handleResetClick}>Reset</button
       >
     </div>
   </div>

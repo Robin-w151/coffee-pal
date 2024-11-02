@@ -11,25 +11,36 @@
   import { settingsStore } from '$lib/stores/settings';
   import { RangeSlider } from '@skeletonlabs/skeleton';
 
-  export let water: number;
-  export let iced = false;
-  export let iceRatio = 30;
-  export let cardClass: string | undefined = undefined;
+  interface Props {
+    water: number;
+    iced?: boolean;
+    iceRatio?: number;
+    cardClass?: string | undefined;
+  }
+
+  let {
+    water,
+    iced = $bindable(false),
+    iceRatio = $bindable(30),
+    cardClass = undefined,
+  }: Props = $props();
 
   const units = WEIGHT_UNITS;
   const preferredUnit = getPreferredWeightUnit($settingsStore.preferredUnits);
 
-  let brewWaterMeasurement: Measurement = {
+  let brewWaterMeasurement: Measurement = $state({
     value: getBrewWater(water, iceRatio),
     unit: preferredUnit,
-  };
-  let iceMeasurement: Measurement = {
+  });
+  let iceMeasurement: Measurement = $state({
     value: getIce(water, iceRatio),
     unit: preferredUnit,
-  };
+  });
 
-  $: brewWaterMeasurement.value = getBrewWater(water, iceRatio);
-  $: iceMeasurement.value = getIce(water, iceRatio);
+  $effect(() => {
+    brewWaterMeasurement.value = getBrewWater(water, iceRatio);
+    iceMeasurement.value = getIce(water, iceRatio);
+  });
 
   function getBrewWater(water: number, iceRatio: number): number {
     return sanitize((water * (100 - iceRatio)) / 100);
@@ -65,7 +76,7 @@
           <MeasurementInput readonly {units} bind:measurement={brewWaterMeasurement} />
         </Label>
         <div class="hidden sm:flex flex-col gap-1">
-          <div class="h-[24px]" />
+          <div class="h-[24px]"></div>
           <hr class="flex-1 divider-vertical" />
         </div>
         <Label text="Amount of ice">

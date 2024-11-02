@@ -28,7 +28,7 @@
     storePopup,
   } from '@skeletonlabs/skeleton';
   import type { AfterNavigate } from '@sveltejs/kit';
-  import { onMount, type ComponentEvents } from 'svelte';
+  import { onMount, type ComponentEvents, type Snippet } from 'svelte';
   import { pwaInfo } from 'virtual:pwa-info';
   import '../../../../app.scss';
   import EnableUpdateListener from './EnableUpdateListener.svelte';
@@ -36,13 +36,18 @@
   import { get } from 'svelte/store';
   import { syncStore } from '$lib/stores/sync';
   import { DateTime } from 'luxon';
+  interface Props {
+    children?: Snippet;
+  }
+
+  let { children }: Props = $props();
 
   initializeStores();
   storePopup.set({ computePosition, autoUpdate, offset, shift, flip, arrow, size, inline });
 
   const drawerStore = getDrawerStore();
 
-  $: webManifestLink = pwaInfo ? pwaInfo.webManifest.linkTag : '';
+  let webManifestLink = $derived(pwaInfo ? pwaInfo.webManifest.linkTag : '');
 
   onMount(() => {
     document.documentElement.setAttribute('data-test', 'ready');
@@ -88,15 +93,17 @@
   regionPage="outline-offset-[-3px]"
   on:scroll={handleAppShellScroll}
 >
-  <svelte:fragment slot="header">
+  {#snippet header()}
     <AppBar />
-  </svelte:fragment>
-  <div class="hidden md:block h-full" slot="sidebarLeft">
-    <AppRail />
-  </div>
+  {/snippet}
+  {#snippet sidebarLeft()}
+    <div class="hidden md:block h-full">
+      <AppRail />
+    </div>
+  {/snippet}
   <div class="flex justify-center p-4">
     <div class="flex flex-col items-center gap-4 w-full max-w-screen-lg">
-      <slot />
+      {@render children?.()}
     </div>
   </div>
 </AppShell>

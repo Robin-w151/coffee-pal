@@ -3,7 +3,11 @@
   import { appStore } from '$lib/stores/app';
   import { PUBLIC_APP_MODE } from '$env/static/public';
 
-  export let cardClass: string | undefined = '';
+  interface Props {
+    cardClass?: string;
+  }
+
+  let { cardClass = '' }: Props = $props();
 
   const appVersion = import.meta.env.APP_VERSION;
   const appCommitHash = import.meta.env.APP_COMMIT_HASH;
@@ -50,7 +54,7 @@
       <button
         class="btn variant-filled-primary"
         title="Install App on the system"
-        on:click={handleInstallClick}>Install App</button
+        onclick={handleInstallClick}>Install App</button
       >
     {/if}
   </div>

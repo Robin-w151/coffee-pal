@@ -10,29 +10,34 @@
   import Label from '../shared/elements/form/Label.svelte';
   import MeasurementInput from '../shared/elements/form/MeasurementInput.svelte';
 
-  export let dropsPerMinute: number;
-  export let isWithinRange = false;
+  interface Props {
+    dropsPerMinute: number;
+    isWithinRange?: boolean;
+  }
+
+  let { dropsPerMinute, isWithinRange = $bindable(false) }: Props = $props();
 
   const units = WEIGHT_UNITS;
   const preferredUnit = getPreferredWeightUnit($settingsStore.preferredUnits);
 
-  let waterMeasurement: Measurement = {
+  let waterMeasurement: Measurement = $state({
     value: 500,
     unit: preferredUnit,
-  };
-  let targetDropsPerMinute = 60;
-
-  $: targetTime = calculateTime(waterMeasurement.value, targetDropsPerMinute);
-  $: estimatedTime = calculateTime(waterMeasurement.value, dropsPerMinute);
-  $: {
-    isWithinRange = Math.abs(dropsPerMinute - targetDropsPerMinute) < targetDropsPerMinute * 0.1;
-  }
-
-  $: estimatedTimeVariantClass = clsx(
-    !dropsPerMinute && 'variant-soft-tertiary',
-    dropsPerMinute && isWithinRange && 'variant-filled-primary',
-    dropsPerMinute && !isWithinRange && 'variant-filled-warning',
+  });
+  let targetDropsPerMinute = $state(60);
+  let targetTime = $derived(calculateTime(waterMeasurement.value, targetDropsPerMinute));
+  let estimatedTime = $derived(calculateTime(waterMeasurement.value, dropsPerMinute));
+  let estimatedTimeVariantClass = $derived(
+    clsx(
+      !dropsPerMinute && 'variant-soft-tertiary',
+      dropsPerMinute && isWithinRange && 'variant-filled-primary',
+      dropsPerMinute && !isWithinRange && 'variant-filled-warning',
+    ),
   );
+
+  $effect(() => {
+    isWithinRange = Math.abs(dropsPerMinute - targetDropsPerMinute) < targetDropsPerMinute * 0.1;
+  });
 
   function calculateTime(
     water?: number | null,

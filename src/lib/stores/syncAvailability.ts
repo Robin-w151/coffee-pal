@@ -1,7 +1,7 @@
 import type { SyncAvailability } from '$lib/models/sync';
-import { onlineStore } from 'svelte-legos';
 import { derived, type Readable } from 'svelte/store';
 import { syncStore, type SyncStore } from './sync';
+import { onlineStore } from './svelte-legos/online';
 
 const initialState: SyncAvailability = { isAvailable: false };
 const { subscribe } = derived<[SyncStore, Readable<boolean>], SyncAvailability>(

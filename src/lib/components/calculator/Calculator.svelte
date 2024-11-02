@@ -5,6 +5,7 @@
   import type { Ratio } from '$lib/models/ratio';
   import type { Recipe as IRecipe } from '$lib/models/recipe';
   import { round, sanitize } from '$lib/shared/math';
+  import { untrack } from 'svelte';
   import PageCard from '../shared/elements/page/PageCard.svelte';
   import PageHeader from '../shared/elements/page/PageHeader.svelte';
   import Iced from './sections/Iced.svelte';
@@ -12,11 +13,11 @@
   import Recipe from './sections/Recipe.svelte';
   import TemperatureConverter from './sections/TemperatureConverter.svelte';
 
-  let preset: Preset = presets.find((p) => p.label === 'Orea') ?? presets[0];
-  let recipe: IRecipe = calculateRecipe(preset);
-  let fixedRatio = true;
-  let iceRatio: number | undefined = undefined;
-  let showBack = false;
+  let preset: Preset = $state(presets.find((p) => p.label === 'Orea') ?? presets[0]);
+  let recipe: IRecipe = $state(calculateRecipe(untrack(() => preset)));
+  let fixedRatio = $state(true);
+  let iceRatio: number | undefined = $state(undefined);
+  let showBack = $state(false);
 
   afterNavigate(({ to }) => {
     const searchParams = to?.url.searchParams;
@@ -60,14 +61,14 @@
     history.back();
   }
 
-  function handlePresetSelect({ detail: newPreset }: { detail: Preset }): void {
+  function handlePresetSelect(newPreset: Preset): void {
     preset = newPreset;
     recipe = calculateRecipe(newPreset);
     fixedRatio = true;
     iceRatio = newPreset.iceRatio;
   }
 
-  function handleRatioChange({ detail: ratio }: { detail: Ratio }): void {
+  function handleRatioChange(ratio: Ratio): void {
     const factor = calculateFactor(ratio);
     preset = {
       label: 'Custom',
@@ -78,7 +79,7 @@
     fixedRatio = true;
   }
 
-  function handleCoffeeChange({ detail: coffee }: { detail: number }): void {
+  function handleCoffeeChange(coffee: number): void {
     if (fixedRatio) {
       const water = calculateWater(coffee, preset.ratio);
       const output = calculateOutput(coffee, water);
@@ -97,7 +98,7 @@
     }
   }
 
-  function handleWaterChange({ detail: water }: { detail: number }): void {
+  function handleWaterChange(water: number): void {
     if (fixedRatio) {
       const coffee = calculateCoffee(water, preset.ratio);
       const output = calculateOutput(coffee, water);
@@ -116,7 +117,7 @@
     }
   }
 
-  function handleOutputChange({ detail: output }: { detail: number }): void {
+  function handleOutputChange(output: number): void {
     if (fixedRatio) {
       const water = calculateWaterFromOutput(output, preset.ratio);
       const coffee = calculateCoffeeFromOutput(output, preset.ratio);
@@ -200,20 +201,20 @@
   }
 </script>
 
-<PageHeader title="Brewing Calculator" {showBack} on:back={handleBackClick} />
+<PageHeader title="Brewing Calculator" {showBack} onBack={handleBackClick} />
 <PageCard display="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-4">
   <Ratios
     ratio={preset.ratio}
-    on:presetSelect={handlePresetSelect}
-    on:ratioChange={handleRatioChange}
+    onPresetSelect={handlePresetSelect}
+    onRatioChange={handleRatioChange}
   />
   <hr class="md:divider-vertical md:h-full" />
   <Recipe
     {recipe}
     bind:fixedRatio
-    on:coffeeChange={handleCoffeeChange}
-    on:waterChange={handleWaterChange}
-    on:outputChange={handleOutputChange}
+    onCoffeeChange={handleCoffeeChange}
+    onWaterChange={handleWaterChange}
+    onOutputChange={handleOutputChange}
   />
   <hr class="col-span-full" />
   <Iced cardClass="col-span-full" water={recipe.water} iced={!!iceRatio} {iceRatio} />

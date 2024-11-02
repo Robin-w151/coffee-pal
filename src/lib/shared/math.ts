@@ -23,9 +23,9 @@ export function sanitize(value?: number | null): number {
 }
 
 export function round(value?: number, precision = 2): number | undefined {
-  if (value == null) {
+  if (value === undefined || value === null) {
     return;
   }
 
-  return parseFloat(value.toFixed(precision));
+  return parseFloat((+value).toFixed(precision));
 }

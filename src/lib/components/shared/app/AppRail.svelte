@@ -24,12 +24,12 @@
     <AppRailAnchor
       href={route.href}
       title={route.label}
-      selected={isSelected(route, $page.url.pathname)}
+      selected={isSelected(route, $page?.url?.pathname)}
       regionLabel="px-1"
     >
-      <svelte:fragment slot="lead">
+      {#snippet lead()}
         <Icon data={route.icon} scale={1.5} />
-      </svelte:fragment>
+      {/snippet}
       <span class="break-words">{route.label}</span>
     </AppRailAnchor>
   {/each}

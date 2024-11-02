@@ -7,7 +7,7 @@
 
   const toastHelper = new ToastHelper(getToastStore());
 
-  let isRestarting = false;
+  let isRestarting = $state(false);
 
   onMount(async () => {
     listenForUpdates(({ restart }) => {
@@ -35,6 +35,6 @@
   >
     <div
       class="w-24 h-24 border-8 border-surface-800-100-token !border-t-transparent rounded-full animate-spin"
-    />
+    ></div>
   </div>
 {/if}

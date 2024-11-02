@@ -1,10 +1,15 @@
 <script lang="ts">
   import { ConicGradient } from '@skeletonlabs/skeleton';
 
-  export let width = 'w-6';
-  export let color = 'rgb(var(--color-primary-500))';
+  interface Props {
+    width?: string;
+    color?: string;
+    class?: string;
+  }
 
-  $: stops = conicStops(color);
+  let { width = 'w-6', color = 'rgb(var(--color-primary-500))', class: clazz }: Props = $props();
+
+  let stops = $derived(conicStops(color));
 
   function conicStops(color: string) {
     return [
@@ -14,4 +19,4 @@
   }
 </script>
 
-<ConicGradient class={$$props.class ?? undefined} {stops} {width} spin />
+<ConicGradient class={clazz ?? undefined} {stops} {width} spin />

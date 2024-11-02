@@ -4,8 +4,8 @@
   import Counter from './Counter.svelte';
   import Estimation from './Estimation.svelte';
 
-  let dropsPerMinute: number;
-  let isWithinRange: boolean;
+  let dropsPerMinute: number = $state(0);
+  let isWithinRange: boolean = $state(false);
 </script>
 
 <PageHeader title="Drip Counter" />

@@ -5,9 +5,11 @@
   import Label from '../../shared/elements/form/Label.svelte';
   import Card from '$lib/components/shared/elements/Card.svelte';
 
-  let colorScheme: ColorScheme = $settingsStore.colorScheme;
+  let colorScheme: ColorScheme = $state($settingsStore.colorScheme);
 
-  $: handleAppThemeChange(colorScheme);
+  $effect(() => {
+    handleAppThemeChange(colorScheme);
+  });
 
   function handleAppThemeChange(colorScheme: ColorScheme): void {
     settingsStore.setColorScheme(colorScheme);

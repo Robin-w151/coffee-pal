@@ -4,19 +4,24 @@
   import Label from '$lib/components/shared/elements/form/Label.svelte';
   import type { Preset } from '$lib/models/preset';
   import type { Ratio } from '$lib/models/ratio';
-  import { createEventDispatcher } from 'svelte';
 
-  export let ratio: Ratio | undefined;
+  interface Props {
+    ratio: Ratio | undefined;
+    onPresetSelect: (preset: Preset) => void;
+    onRatioChange: (ratio: Ratio) => void;
+  }
 
-  const dispatch = createEventDispatcher();
+  let { ratio, onPresetSelect, onRatioChange }: Props = $props();
 
-  let coffee: number;
-  let water: number;
+  let coffee: number = $state(0);
+  let water: number = $state(0);
 
-  $: handleRatioChange(ratio);
+  $effect(() => {
+    handleRatioChange(ratio);
+  });
 
   function handlePresetClick(preset: Preset): void {
-    dispatch('presetSelect', preset);
+    onPresetSelect(preset);
   }
 
   function handleRatioChange(ratio?: Ratio): void {
@@ -25,11 +30,11 @@
   }
 
   function handleCoffeeChange(): void {
-    dispatch('ratioChange', { ...ratio, coffee });
+    onRatioChange({ water: 0, ...ratio, coffee });
   }
 
   function handleWaterChange(): void {
-    dispatch('ratioChange', { ...ratio, water });
+    onRatioChange({ coffee: 0, ...ratio, water });
   }
 </script>
 
@@ -39,7 +44,7 @@
     <span>Suggestions</span>
     <div class="flex flex-wrap gap-2">
       {#each presets as preset}
-        <button class="chip-interactive-token" on:click={() => handlePresetClick(preset)}>
+        <button class="chip-interactive-token" onclick={() => handlePresetClick(preset)}>
           <span class="font-normal">{preset.label}</span>
           <span>{preset.ratio.coffee}:{preset.ratio.water}</span>
         </button>
@@ -52,12 +57,12 @@
         class="input"
         type="number"
         bind:value={coffee}
-        on:change={handleCoffeeChange}
-        on:blur={handleCoffeeChange}
+        onchange={handleCoffeeChange}
+        onblur={handleCoffeeChange}
       />
     </Label>
     <div class="flex flex-col">
-      <div class="flex-1 max-h-[24px]" />
+      <div class="flex-1 max-h-[24px]"></div>
       <div class="flex-1 flex justify-center items-center font-bold text-2xl">:</div>
     </div>
     <Label text="Water">
@@ -65,8 +70,8 @@
         class="input"
         type="number"
         bind:value={water}
-        on:change={handleWaterChange}
-        on:blur={handleWaterChange}
+        onchange={handleWaterChange}
+        onblur={handleWaterChange}
       />
     </Label>
   </div>

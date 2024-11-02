@@ -5,8 +5,12 @@
   import CoffeeEntryItem from './CoffeeEntryItem.svelte';
   import CoffeeEntryPlaceholder from './CoffeeEntryPlaceholder.svelte';
 
-  export let entries: Array<ActiveCoffeeEntry>;
-  export let isLoading = false;
+  interface Props {
+    entries: Array<ActiveCoffeeEntry>;
+    isLoading?: boolean;
+  }
+
+  let { entries, isLoading = false }: Props = $props();
 </script>
 
 <dl class="list-dl">

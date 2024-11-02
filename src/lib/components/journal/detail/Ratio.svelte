@@ -1,8 +1,12 @@
 <script lang="ts">
   import { calculateRatio } from '$lib/shared/math';
 
-  export let coffee: number | undefined;
-  export let water: number | undefined;
+  interface Props {
+    coffee?: number;
+    water?: number;
+  }
+
+  let { coffee, water }: Props = $props();
 </script>
 
 <div class="flex items-center gap-2">

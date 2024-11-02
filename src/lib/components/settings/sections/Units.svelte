@@ -5,9 +5,11 @@
   import Label from '../../shared/elements/form/Label.svelte';
   import Card from '$lib/components/shared/elements/Card.svelte';
 
-  let preferredUnits: MeasurementSystem = $settingsStore.preferredUnits;
+  let preferredUnits: MeasurementSystem = $state($settingsStore.preferredUnits);
 
-  $: settingsStore.setPreferredUnits(preferredUnits);
+  $effect(() => {
+    settingsStore.setPreferredUnits(preferredUnits);
+  });
 </script>
 
 <Card>

@@ -11,7 +11,7 @@
   import { faCalculator, faFaceSadCry } from '@fortawesome/free-solid-svg-icons';
   import { getModalStore, getToastStore } from '@skeletonlabs/skeleton';
   import { Subject, takeUntil, tap } from 'rxjs';
-  import { onDestroy, onMount } from 'svelte';
+  import { onDestroy, onMount, untrack } from 'svelte';
   import { Icon } from 'svelte-awesome';
   import { v4 as uuid } from 'uuid';
   import Actions from '../shared/elements/form/Actions.svelte';
@@ -29,14 +29,18 @@
   import WaterTemperature from './detail/WaterTemperature.svelte';
   import ResponsiveButton from '../shared/elements/form/ResponsiveButton.svelte';
 
-  export let id: string | undefined = undefined;
+  interface Props {
+    id?: string | undefined;
+  }
+
+  let { id = undefined }: Props = $props();
 
   const modalHelper = new ModalHelper(getModalStore());
   const toastStore = getToastStore();
   const toastHelper = new ToastHelper(toastStore);
   const destroy = new Subject<void>();
 
-  let entry: Partial<ActiveJournalEntry> = {
+  let entry: Partial<ActiveJournalEntry> = $state({
     method: '',
     water: undefined,
     waterTemperature: undefined,
@@ -47,21 +51,27 @@
     description: undefined,
     createdAt: '',
     updatedAt: '',
-  };
-  let originalEntry: Partial<ActiveJournalEntry> = structuredClone(entry);
-  let unknown = false;
-  let isLoading = true;
+  });
+  let originalEntry: Partial<ActiveJournalEntry> = $state(
+    structuredClone(untrack(() => $state.snapshot(entry))),
+  );
+  let unknown = $state(false);
+  let isLoading = $state(true);
+  let hasChanged = $state(false);
   let shouldGoBack = false;
   let updateInfoToast: string | undefined;
 
-  let methodInputValid: boolean;
-  let waterInputValid: boolean;
-  let coffeeInputValid: boolean;
-  let waterTemperatureValid: boolean;
+  let methodInputValid = $state(true);
+  let waterInputValid = $state(true);
+  let coffeeInputValid = $state(true);
+  let waterTemperatureValid = $state(true);
+  let formValid = $derived(methodInputValid && waterInputValid && coffeeInputValid);
 
-  $: entryTitle = getTitle(unknown, entry);
-  $: formValid = methodInputValid && waterInputValid && coffeeInputValid;
-  $: hasChanged = !isEqualJournalEntry(entry, originalEntry);
+  let entryTitle = $derived(getTitle(unknown, entry));
+
+  $effect(() => {
+    hasChanged = !isEqualJournalEntry(entry, originalEntry);
+  });
 
   onMount(async () => {
     pauseScheduledSync();
@@ -133,7 +143,7 @@
   });
 
   function handleSave(): void {
-    const sanitizedEntry = sanitizeEntry(entry);
+    const sanitizedEntry = sanitizeEntry($state.snapshot(entry));
     originalEntry = structuredClone(sanitizedEntry);
     scheduleSync();
 
@@ -148,7 +158,7 @@
   }
 
   async function handleCopy(): Promise<void> {
-    const sanitizedEntry = sanitizeEntry(entry);
+    const sanitizedEntry = sanitizeEntry($state.snapshot(entry));
     const newId = uuid();
     journalStore.add({ ...sanitizedEntry, id: newId });
     hasChanged = false;
@@ -197,17 +207,15 @@
     goto(`/calculator?${new URLSearchParams(recipe).toString()}`);
   }
 
-  function handleCoffeeChange({ detail: coffee }: CustomEvent<number | undefined>): void {
+  function handleCoffeeChange(coffee: number | undefined): void {
     entry.coffee = coffee;
   }
 
-  function handleWaterChange({ detail: water }: CustomEvent<number | undefined>): void {
+  function handleWaterChange(water: number | undefined): void {
     entry.water = water;
   }
 
-  function handleWaterTemperatureChange({
-    detail: waterTemperature,
-  }: CustomEvent<number | undefined>): void {
+  function handleWaterTemperatureChange(waterTemperature: number | undefined): void {
     entry.waterTemperature = waterTemperature;
   }
 
@@ -264,7 +272,7 @@
   }
 </script>
 
-<PageHeader title={entryTitle} {isLoading} showBack on:back={handleBack} />
+<PageHeader title={entryTitle} {isLoading} showBack onBack={handleBack} />
 <PageCard>
   {#if unknown}
     <p class="flex justify-center items-center gap-4">
@@ -278,16 +286,12 @@
       <Form class="@3xl:grid @3xl:grid-cols-2">
         <Method bind:method={entry.method} bind:valid={methodInputValid} />
         <CoffeeType bind:coffeeType={entry.coffeeType} />
-        <Water water={entry.water} bind:valid={waterInputValid} on:change={handleWaterChange} />
-        <Coffee
-          coffee={entry.coffee}
-          bind:valid={coffeeInputValid}
-          on:change={handleCoffeeChange}
-        />
+        <Water water={entry.water} bind:valid={waterInputValid} onChange={handleWaterChange} />
+        <Coffee coffee={entry.coffee} bind:valid={coffeeInputValid} onChange={handleCoffeeChange} />
         <WaterTemperature
           waterTemperature={entry.waterTemperature}
           bind:valid={waterTemperatureValid}
-          on:change={handleWaterTemperatureChange}
+          onChange={handleWaterTemperatureChange}
         />
         <GrindSettings bind:grindSettings={entry.grindSettings} />
         <Rating bind:rating={entry.rating} />
@@ -301,23 +305,23 @@
             {formValid}
             hasChanged={id ? hasChanged : undefined}
             allowCopy
-            on:save={handleSave}
-            on:copy={handleCopy}
-            on:remove={handleRemove}
+            onSave={handleSave}
+            onCopy={handleCopy}
+            onRemove={handleRemove}
           >
-            <svelte:fragment slot="before">
+            {#snippet beforeContent()}
               <ResponsiveButton
                 type="button"
                 label="Open in calculator"
                 variant="variant-ghost-tertiary"
                 disabled={!formValid}
-                on:click={handleOpenInCalculator}
+                onclick={handleOpenInCalculator}
               >
-                <svelte:fragment slot="icon">
+                {#snippet iconContent()}
                   <Icon data={faCalculator} />
-                </svelte:fragment>
+                {/snippet}
               </ResponsiveButton>
-            </svelte:fragment>
+            {/snippet}
           </Actions>
         </div>
       </Form>
