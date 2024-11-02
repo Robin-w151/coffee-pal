@@ -32,7 +32,7 @@
     pollSubscription?.unsubscribe();
   });
 
-  function handleUrlChange({ detail: change }: CustomEvent<UrlInputChange>): void {
+  function handleUrlChange(change: UrlInputChange): void {
     url = change.url;
     hostValid = change.hostValid;
   }
@@ -110,7 +110,7 @@
         url={$syncStore.connection?.server.url}
         placeholder="Nextcloud Server URL, e.g. example.nextcloud.com"
         readonly={connected}
-        on:change={handleUrlChange}
+        onChange={handleUrlChange}
       />
     </Label>
     <div class="flex justify-end gap-2">

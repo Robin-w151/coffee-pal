@@ -7,7 +7,7 @@
     faSearch,
   } from '@fortawesome/free-solid-svg-icons';
   import { popup, type PopupSettings } from '@skeletonlabs/skeleton';
-  import { createEventDispatcher, tick, type Snippet } from 'svelte';
+  import { tick, type Snippet } from 'svelte';
   import { Icon } from 'svelte-awesome';
   import { fade } from 'svelte/transition';
   import { scaleX } from '../../transitions/scaleX';
@@ -22,7 +22,8 @@
     sort?: PageSearchSort | null;
     isLoading: boolean;
     popupContent?: Snippet;
-    onSearchChange: (searchInput?: string | null) => void;
+    onSearchChange?: (searchInput?: string | null) => void;
+    onSortToggle?: () => void;
   }
 
   let {
@@ -32,9 +33,9 @@
     isLoading = false,
     popupContent,
     onSearchChange,
+    onSortToggle,
   }: Props = $props();
 
-  const dispatch = createEventDispatcher();
   const sortPopup: PopupSettings = {
     event: 'click',
     target: 'sort-popup',
@@ -66,7 +67,7 @@
   }
 
   function handleSearchInputChange(searchInput?: string | null): void {
-    onSearchChange(searchInput);
+    onSearchChange?.(searchInput);
   }
 
   function handleSearchInputClearClick(): void {
@@ -75,7 +76,7 @@
   }
 
   function handleSortClick(): void {
-    dispatch('sortToggle');
+    onSortToggle?.();
   }
 
   async function handleKeyDown(event: KeyboardEvent): Promise<void> {

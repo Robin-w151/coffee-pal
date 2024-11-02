@@ -2,19 +2,18 @@
   import { HOST_REGEXP } from '$lib/config/regexp';
   import type { Scheme, UrlInputChange } from '$lib/models/urlInput';
   import { faArrowUpRightFromSquare, faLock, faLockOpen } from '@fortawesome/free-solid-svg-icons';
-  import { createEventDispatcher } from 'svelte';
   import { Icon } from 'svelte-awesome';
 
   interface Props {
     url?: string | undefined;
     placeholder?: string | undefined;
     readonly?: boolean;
+    onChange?: (urlInputChange: UrlInputChange) => void;
   }
 
-  let { url = undefined, placeholder = undefined, readonly = false }: Props = $props();
+  let { url = undefined, placeholder = undefined, readonly = false, onChange }: Props = $props();
 
   const availableSchemes = ['https:', 'http:'] satisfies Array<Scheme>;
-  const dispatch = createEventDispatcher();
 
   let [scheme, host] = $state(getSchemeAndHost(url));
   let inputTouched = $state(false);
@@ -26,14 +25,12 @@
   });
 
   function handleChange(scheme: Scheme, host: string): void {
-    const change = {
+    onChange?.({
       url: `${scheme}//${host}`,
       scheme,
       host,
       hostValid,
-    } satisfies UrlInputChange;
-
-    dispatch('change', change);
+    });
   }
 
   function handleInputBlur(): void {
