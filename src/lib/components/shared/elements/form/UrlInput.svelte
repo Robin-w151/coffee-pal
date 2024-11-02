@@ -72,6 +72,7 @@
   <input
     style="min-width: 6rem !important"
     type="text"
+    autocapitalize="off"
     {placeholder}
     {readonly}
     bind:value={host}
