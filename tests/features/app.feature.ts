@@ -1,6 +1,6 @@
 import type { ActiveJournalEntry } from '$lib/models/journal';
 import type { ActiveCoffeeEntry } from '$lib/models/myCoffees';
-import type { Locator, Page } from 'playwright/test';
+import type { Locator, Page } from '@playwright/test';
 
 export class AppPage {
   constructor(private readonly page: Page) {}
