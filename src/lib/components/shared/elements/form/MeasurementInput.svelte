@@ -2,7 +2,11 @@
   import type { Measurement, Unit } from '$lib/models/measurement';
   import { round } from '$lib/shared/math';
   import { untrack } from 'svelte';
-  import type { FocusEventHandler, KeyboardEventHandler } from 'svelte/elements';
+  import type {
+    ChangeEventHandler,
+    FocusEventHandler,
+    KeyboardEventHandler,
+  } from 'svelte/elements';
 
   interface Props {
     measurement: Measurement;
@@ -11,7 +15,7 @@
     disabled?: boolean;
     readonly?: boolean;
     class?: string;
-    onValueChange?: (value?: number) => void;
+    onchange?: ChangeEventHandler<HTMLInputElement>;
     onfocus?: FocusEventHandler<HTMLInputElement>;
     onblur?: FocusEventHandler<HTMLInputElement>;
     onkeydown?: KeyboardEventHandler<HTMLInputElement>;
@@ -25,7 +29,7 @@
     disabled = false,
     readonly = false,
     class: clazz,
-    onValueChange,
+    onchange,
     onfocus,
     onblur,
     onkeydown,
@@ -40,17 +44,20 @@
     handleMeasurementChange(measurement);
   });
 
-  function handleInputChange(): void {
-    updateMeasurement(value, {
-      callback: onValueChange,
-    });
-  }
+  $effect(() => {
+    handleInputChange(value);
+  });
 
-  function handleInputBlur(event: Event): void {
-    updateMeasurement(value, {
-      callback: onblur,
-      args: [event],
-    });
+  function handleInputChange(newValue: number | undefined): void {
+    const { unit } = untrack(() => measurement);
+    if (previousValue !== newValue) {
+      const baseValue = round(unit.conversion.toBase(newValue));
+      previousValue = baseValue;
+      measurement = {
+        unit,
+        value: baseValue,
+      };
+    }
   }
 
   function handleMeasurementChange(newMeasurement: Measurement): void {
@@ -66,31 +73,6 @@
       value = round(newUnit.conversion.fromBase(measurement.value));
     }
   }
-
-  function updateMeasurement(
-    newValue: number | undefined,
-    options?: {
-      callback?: (...args: any[]) => void;
-      args?: unknown[];
-    },
-  ): void {
-    const { unit } = untrack(() => measurement);
-    const { callback, args } = options ?? {};
-    if (previousValue !== newValue) {
-      const baseValue = round(unit.conversion.toBase(newValue));
-      previousValue = baseValue;
-      measurement = {
-        unit,
-        value: baseValue,
-      };
-
-      if (args) {
-        callback?.(...args);
-      } else {
-        callback?.(baseValue);
-      }
-    }
-  }
 </script>
 
 <div class="input-group input-group-divider measurement-input grid-cols-[1fr_auto] {clazz ?? ''}">
@@ -101,9 +83,9 @@
     {disabled}
     {readonly}
     bind:value
-    onchange={handleInputChange}
+    {onchange}
     {onfocus}
-    onblur={handleInputBlur}
+    {onblur}
     {onkeydown}
     {onkeyup}
   />

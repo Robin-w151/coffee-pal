@@ -10,7 +10,7 @@
   interface Props {
     coffee: number | undefined;
     valid?: boolean;
-    onChange: (coffee: number) => void;
+    onChange?: (coffee?: number) => void;
   }
 
   let { coffee, valid = $bindable(false), onChange }: Props = $props();
@@ -36,9 +36,7 @@
   });
 
   $effect(() => {
-    if (coffeeMeasurement.value !== undefined) {
-      onChange(coffeeMeasurement.value);
-    }
+    onChange?.(coffeeMeasurement.value);
   });
 
   function handleCoffeeChange(coffee?: number): void {

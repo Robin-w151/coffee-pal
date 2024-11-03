@@ -10,7 +10,7 @@
   interface Props {
     water?: number;
     valid?: boolean;
-    onChange?: (water: number) => void;
+    onChange?: (water?: number) => void;
   }
 
   let { water, valid = $bindable(false), onChange }: Props = $props();
@@ -32,16 +32,11 @@
 
   $effect(() => {
     handleWaterChange(water);
+    checkValidity(water);
   });
 
   $effect(() => {
-    checkValidity(waterMeasurement.value);
-  });
-
-  $effect(() => {
-    if (waterMeasurement.value) {
-      onChange?.(waterMeasurement.value);
-    }
+    onChange?.(waterMeasurement.value);
   });
 
   function handleWaterChange(water?: number): void {

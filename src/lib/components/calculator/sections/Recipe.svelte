@@ -92,7 +92,7 @@
       <MeasurementInput
         {units}
         bind:measurement={waterMeasurement}
-        onValueChange={handleWaterChange}
+        onchange={handleWaterChange}
         onblur={handleWaterChange}
       />
     </Label>
@@ -100,7 +100,7 @@
       <MeasurementInput
         units={units_coffee}
         bind:measurement={coffeeMeasurement}
-        onValueChange={handleCoffeeChange}
+        onchange={handleCoffeeChange}
         onblur={handleCoffeeChange}
       />
     </Label>
@@ -108,7 +108,7 @@
       <MeasurementInput
         {units}
         bind:measurement={outputMeasurement}
-        onValueChange={handleOutputChange}
+        onchange={handleOutputChange}
         onblur={handleOutputChange}
       />
     </Label>
