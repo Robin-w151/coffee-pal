@@ -7,7 +7,7 @@
   import { humanReadableMemorySize } from '$lib/shared/ui/formatting';
   import { ModalHelper } from '$lib/shared/ui/modal';
   import { getModalStore } from '@skeletonlabs/skeleton';
-  import { onMount } from 'svelte';
+  import { onDestroy, onMount } from 'svelte';
 
   interface Props {
     cardClass?: string | undefined;
@@ -21,11 +21,21 @@
   let developerSettingsActive = $state(false);
   let estimatedStorageUsage: number | undefined = $state(0);
   let estimatedStorageUsageString = $derived(
-    estimatedStorageUsage ? humanReadableMemorySize(estimatedStorageUsage) : 'Unbekannt',
+    estimatedStorageUsage ? humanReadableMemorySize(estimatedStorageUsage) : 'Unknown',
   );
+  let estimatedStorageUsageInterval: unknown;
 
   onMount(async () => {
     estimatedStorageUsage = await getEstimatedUsage();
+    estimatedStorageUsageInterval = setInterval(async () => {
+      estimatedStorageUsage = await getEstimatedUsage();
+    }, 5_000);
+  });
+
+  onDestroy(() => {
+    if (estimatedStorageUsageInterval && typeof estimatedStorageUsageInterval === 'number') {
+      clearInterval(estimatedStorageUsageInterval);
+    }
   });
 
   async function handleResetLocalStorageButtonClick() {
@@ -85,7 +95,7 @@
     <div class="flex flex-col justify-between gap-4">
       <ul class="grid grid-cols-[max-content_max-content] gap-x-8 gap-y-2">
         <li class={itemClass}>
-          <span>Storage use</span>
+          <span>Storage usage</span>
           <strong>{estimatedStorageUsageString}</strong>
         </li>
       </ul>
