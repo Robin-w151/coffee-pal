@@ -17,10 +17,6 @@ function createAppStore(): AppStore {
       event.preventDefault();
       update((app) => ({ ...app, installEvent: event as InstallEvent }));
     });
-
-    navigator.storage
-      .persisted()
-      .then((persisted) => update((app) => ({ ...app, persistentStorage: persisted })));
   }
 
   async function requestAppInstall(): Promise<void> {
