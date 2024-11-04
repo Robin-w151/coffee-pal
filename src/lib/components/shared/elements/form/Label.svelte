@@ -30,7 +30,7 @@
 
 <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 <!-- svelte-ignore a11y_click_events_have_key_events -->
-<label class="flex flex-col gap-1 @container {clazz ?? ''}" onclick={handleClick}>
+<label class="flex flex-col gap-1 w-full @container {clazz ?? ''}" onclick={handleClick}>
   <div class="flex flex-col @md:flex-row @md:justify-between @md:gap-4 mr-3">
     <span>{text}</span>
     {#if error && errorMessage}
