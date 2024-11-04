@@ -17,6 +17,7 @@
   import Label from '../../shared/elements/form/Label.svelte';
   import UrlInput from '../../shared/elements/form/UrlInput.svelte';
   import NextcloudLoginModal from './NextcloudLoginModal.svelte';
+  import { DateTime } from 'luxon';
 
   const modalHelper = new ModalHelper(getModalStore());
   const toastHelper = new ToastHelper(getToastStore());
@@ -27,6 +28,19 @@
   let pollSubscription: Subscription | undefined;
   let connected = $derived(!!$syncStore.connection);
   let showSpinner = $derived(isConnecting || $syncStateStore.isSynchronizing);
+  let lastSyncText = $derived.by(() => {
+    const lastSync = $syncStore.connection?.lastSync;
+    if (!lastSync) {
+      return;
+    }
+
+    const parsedLastSync = DateTime.fromISO(lastSync);
+    if (!parsedLastSync.isValid) {
+      return;
+    }
+
+    return `Last sync: ${parsedLastSync.toFormat('dd.MM.yyyy, HH:mm')}`;
+  });
 
   onDestroy(() => {
     pollSubscription?.unsubscribe();
@@ -125,7 +139,7 @@
         </button>
         <button
           class="btn variant-filled-primary"
-          title="Sync app data"
+          title="Synchronize data{lastSyncText ? `\n${lastSyncText}` : ''}"
           disabled={!$syncAvailabilityStore.isAvailable}
           onclick={handleSyncClick}>Sync</button
         >

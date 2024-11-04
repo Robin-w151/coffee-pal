@@ -39,6 +39,7 @@
   import PageSearch from '../shared/elements/page/PageSearch.svelte';
   import CoffeeEntries from './list/CoffeeEntries.svelte';
   import CoffeeEntriesTable from './table/CoffeeEntriesTable.svelte';
+  import { syncStore } from '$lib/stores/sync';
 
   const sortOptions = [
     {
@@ -117,6 +118,7 @@
 <PageActions
   isSyncEnabled={$syncAvailabilityStore.isAvailable}
   isSynchronizing={$syncStateStore.isSynchronizing}
+  lastSync={$syncStore.connection?.lastSync}
   onAdd={handleAddClick}
   onSynchronize={handleSyncClick}
 />

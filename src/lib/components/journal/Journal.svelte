@@ -35,6 +35,7 @@
   import PageSearch from '../shared/elements/page/PageSearch.svelte';
   import JournalEntries from './list/JournalEntries.svelte';
   import JournalEntriesTable from './table/JournalEntriesTable.svelte';
+  import { syncStore } from '$lib/stores/sync';
 
   const sortOptions = [
     {
@@ -112,6 +113,7 @@
 <PageActions
   isSyncEnabled={$syncAvailabilityStore.isAvailable}
   isSynchronizing={$syncStateStore.isSynchronizing}
+  lastSync={$syncStore.connection?.lastSync}
   onAdd={handleAddClick}
   onSynchronize={handleSyncClick}
 />
