@@ -39,10 +39,18 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Test",
+      "name": "Test Unit",
       "cwd": "${workspaceFolder}",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["test:ui"]
+      "runtimeArgs": ["test:unit:watch"]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Test E2E",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["test:e2e:ui"]
     },
     {
       "type": "node",

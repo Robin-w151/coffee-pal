@@ -1,12 +1,7 @@
-export function gcd(a: number, b: number): number {
-  if (!b) {
-    return a;
-  }
-
-  return gcd(b, a % b);
-}
-
-export function calculateRatio(coffee?: number, water?: number): string | undefined {
+export function calculateRatio(
+  coffee: number | undefined,
+  water: number | undefined,
+): string | undefined {
   if (!coffee || coffee <= 0 || !water || water <= 0) {
     return;
   }
@@ -14,7 +9,7 @@ export function calculateRatio(coffee?: number, water?: number): string | undefi
   return `1:${round(water / coffee, 1)}`;
 }
 
-export function sanitize(value?: number | null): number {
+export function sanitize(value: number | null | undefined): number {
   if (!value || value < 0) {
     return 0;
   }
@@ -22,7 +17,7 @@ export function sanitize(value?: number | null): number {
   return round(value)!;
 }
 
-export function round(value?: number, precision = 2): number | undefined {
+export function round(value: number | undefined, precision = 2): number | undefined {
   if (value === undefined || value === null) {
     return;
   }
