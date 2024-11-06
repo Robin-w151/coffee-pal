@@ -74,7 +74,7 @@
     "rxjs": "7.8.1",
     "sass": "1.80.6",
     "scroll-into-view-if-needed": "3.1.0",
-    "semantic-release": "24.2.0",
+    "semantic-release": "23.1.1",
     "source-map-explorer": "2.5.3",
     "svelte": "5.1.11",
     "svelte-adapter-bun": "0.5.2",
