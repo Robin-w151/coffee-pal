@@ -4,6 +4,7 @@
     [
       "@semantic-release/commit-analyzer",
       {
+        "preset": "conventionalcommits",
         "releaseRules": [
           {
             "type": "chore",
@@ -13,7 +14,19 @@
         ]
       }
     ],
-    "@semantic-release/release-notes-generator",
+    [
+      "@semantic-release/release-notes-generator",
+      {
+        "preset": "conventionalcommits",
+        "presetConfig": {
+          "types": [
+            { "type": "feat", "section": "Features" },
+            { "type": "fix", "section": "Bug Fixes" },
+            { "type": "chore", "scope": "deps", "section": "Dependencies" }
+          ]
+        }
+      }
+    ],
     [
       "@semantic-release/npm",
       {
