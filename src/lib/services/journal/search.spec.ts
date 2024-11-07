@@ -107,7 +107,7 @@ describe('search', () => {
       filter: 'pckpack',
       expectedMethod: 'PuckPuck',
     },
-  ])('search $filter finds $expectedMethod', ({ filter, expectedMethod }) => {
+  ])('$filter finds $expectedMethod', ({ filter, expectedMethod }) => {
     const result = search(testJournalEntries, filter);
     expect(result[0].method).toBe(expectedMethod);
   });
@@ -146,7 +146,7 @@ describe('sort', () => {
       expectedMethods: ['Aeropress', 'PuckPuck', 'V60 Switch'],
     },
   ])(
-    'sort $sortType/$sortDirection finds $expectedMethods',
+    '$sortType/$sortDirection finds $expectedMethods',
     ({ sortType, sortDirection, expectedMethods }) => {
       const result = sort(
         testJournalEntries,
