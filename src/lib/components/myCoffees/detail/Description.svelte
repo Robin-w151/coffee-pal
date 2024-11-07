@@ -1,5 +1,6 @@
 <script lang="ts">
   import Label from '$lib/components/shared/elements/form/Label.svelte';
+  import { defaultTextAreaRows } from '$lib/shared/ui/styles';
 
   interface Props {
     description?: string;
@@ -18,7 +19,7 @@
 <Label text="Description">
   <textarea
     class="textarea"
-    rows={4}
+    rows={defaultTextAreaRows}
     placeholder="Description..."
     bind:value={description}
     onkeydown={handleInputKeydown}
