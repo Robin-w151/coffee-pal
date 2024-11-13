@@ -1,4 +1,5 @@
-FROM mcr.microsoft.com/playwright:v1.43.1-jammy
+ARG tag=latest
+FROM mcr.microsoft.com/playwright:v${tag}
 
 RUN npm i -g playwright @playwright/test
 

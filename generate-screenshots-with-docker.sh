@@ -12,6 +12,7 @@ checkIsInstalled docker
 
 dockerfileName=d.screenshots.Dockerfile
 imageName=coffee-pal-screenshots
+playwrightVersion=$(node -p "require('@playwright/test/package.json').version")
 
-docker build -t $imageName -f $dockerfileName .
+docker build -t $imageName -f $dockerfileName --pull --build-arg tag="${playwrightVersion}" .
 docker run -it --rm -v './static/screenshots:/app/screenshots' $imageName

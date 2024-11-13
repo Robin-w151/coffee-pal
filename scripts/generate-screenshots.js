@@ -170,6 +170,7 @@ async function addJournalEntry(
   }
 
   await clickSaveButton();
+  await clickGoBackButton();
   await page.waitForTimeout(250);
 }
 
@@ -202,6 +203,7 @@ async function addCoffeeEntry({
   await page.getByLabel('description').fill(description);
 
   await clickSaveButton();
+  await clickGoBackButton();
   await page.waitForTimeout(250);
 }
 
@@ -211,6 +213,10 @@ async function clickAddButton() {
 
 async function clickSaveButton() {
   await page.getByTitle('save').click();
+}
+
+async function clickGoBackButton() {
+  await page.getByTitle('go back').click();
 }
 
 async function takeScreenshot(name) {
