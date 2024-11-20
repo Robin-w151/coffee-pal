@@ -1,46 +1,75 @@
-import { expect, test } from 'vitest';
+import { describe, expect, test } from 'vitest';
 import { calculateRatio, round, sanitize } from './math';
 
-test('calculateRatio no coffee', () => {
-  expect(calculateRatio(undefined, 200)).toBe(undefined);
+describe('calculateRatio', () => {
+  test.each([
+    {
+      coffee: undefined,
+      water: 200,
+      expected: undefined,
+    },
+    {
+      coffee: 12,
+      water: undefined,
+      expected: undefined,
+    },
+    {
+      coffee: 0,
+      water: 200,
+      expected: undefined,
+    },
+    {
+      coffee: 12,
+      water: 0,
+      expected: undefined,
+    },
+    {
+      coffee: 12,
+      water: 200,
+      expected: '1:16.7',
+    },
+  ])('$coffee/$water == $expected', ({ coffee, water, expected }) => {
+    expect(calculateRatio(coffee, water)).toBe(expected);
+  });
 });
 
-test('calculateRatio no water', () => {
-  expect(calculateRatio(12, undefined)).toBe(undefined);
+describe('sanitize', () => {
+  test.each([
+    {
+      value: undefined,
+      expected: 0,
+    },
+    {
+      value: -2.98,
+      expected: 0,
+    },
+    {
+      value: 16.66667,
+      expected: 16.67,
+    },
+  ])('$value -> $expected', ({ value, expected }) => {
+    expect(sanitize(value)).toBe(expected);
+  });
 });
 
-test('calculateRatio coffee <= 0', () => {
-  expect(calculateRatio(0, 200)).toBe(undefined);
-});
-
-test('calculateRatio water <= 0', () => {
-  expect(calculateRatio(12, 0)).toBe(undefined);
-});
-
-test('calculateRatio 12/200', () => {
-  expect(calculateRatio(12, 200)).toBe('1:16.7');
-});
-
-test('sanitize no value', () => {
-  expect(sanitize(undefined)).toBe(0);
-});
-
-test('sanitize value <= 0', () => {
-  expect(sanitize(-2.98)).toBe(0);
-});
-
-test('sanitize 16.66667', () => {
-  expect(sanitize(16.66667)).toBe(16.67);
-});
-
-test('round no value', () => {
-  expect(round(undefined)).toBe(undefined);
-});
-
-test('round 13.33333 to default precision', () => {
-  expect(round(13.33333)).toBe(13.33);
-});
-
-test('round 13.33333 to 1 decimal place', () => {
-  expect(round(13.33333, 1)).toBe(13.3);
+describe('round', () => {
+  test.each([
+    {
+      value: undefined,
+      precision: undefined,
+      expected: undefined,
+    },
+    {
+      value: 13.33333,
+      precision: undefined,
+      expected: 13.33,
+    },
+    {
+      value: 13.33333,
+      precision: 1,
+      expected: 13.3,
+    },
+  ])('$value to precision $precision -> $expected', ({ value, precision, expected }) => {
+    expect(round(value, precision)).toBe(expected);
+  });
 });
