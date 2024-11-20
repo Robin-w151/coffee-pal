@@ -74,7 +74,7 @@
     "rxjs": "7.8.1",
     "sass": "1.81.0",
     "scroll-into-view-if-needed": "3.1.0",
-    "semantic-release": "23.1.1",
+    "semantic-release": "24.2.0",
     "source-map-explorer": "2.5.3",
     "svelte": "5.2.4",
     "svelte-adapter-bun": "0.5.2",
@@ -92,6 +92,11 @@
     "webdav": "5.7.1",
     "workbox-precaching": "7.3.0",
     "zod": "3.23.8"
+  },
+  "pnpm": {
+    "overrides": {
+      "conventional-changelog-conventionalcommits": ">=8.0.0"
+    }
   },
   "type": "module",
   "packageManager": "pnpm@9.14.2+sha256.06e65a4965baff6d6097f9c8f75c35f6d420974dbc03d775009056a69edfd271"
