@@ -32,5 +32,11 @@
   <td>{entry.variety ?? 'Unknown'}</td>
   <td>{entry.roaster ?? 'Unknown'}</td>
   <td>{entry.trader ?? 'Unknown'}</td>
-  <td>{entry.aromas.join(', ')}</td>
+  <td>
+    <div class="flex gap-1">
+      {#each entry.aromas as aroma}
+        <span class="chip variant-filled-primary px-2 py-1">{aroma}</span>
+      {/each}
+    </div>
+  </td>
 </tr>
