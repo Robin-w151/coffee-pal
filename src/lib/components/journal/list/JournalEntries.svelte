@@ -15,7 +15,7 @@
 
 <dl class="list-dl">
   {#if isLoading && (!entries || entries.length === 0)}
-    {#each { length: 3 } as _}
+    {#each { length: 3 }}
       <JournalEntryPlaceholder />
     {/each}
   {:else}
