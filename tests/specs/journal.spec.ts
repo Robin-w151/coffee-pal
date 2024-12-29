@@ -227,3 +227,25 @@ test('entry change detail without save, navigate to calculator', async ({
   await expect(calculatorPage.waterAmountInput).toHaveValue('200');
   await expect(calculatorPage.coffeeAmountInput).toHaveValue('14');
 });
+
+test('entry add new entry and navigate to calculator', async ({
+  page,
+  journalPage,
+  journalEntryDetailPage,
+  calculatorPage,
+}) => {
+  await journalPage.goto();
+  await page.waitForTimeout(500);
+
+  await journalPage.clickAddButton();
+  await journalEntryDetailPage.methodInput.fill('V60');
+  await journalEntryDetailPage.waterInput.fill('250');
+  await journalEntryDetailPage.coffeeInput.fill('16.67');
+  await journalEntryDetailPage.clickSaveButton();
+  await journalEntryDetailPage.clickOpenInCalculatorButton();
+
+  await expect(calculatorPage.coffeeRatioInput).toHaveValue('1');
+  await expect(calculatorPage.waterRatioInput).toHaveValue('15');
+  await expect(calculatorPage.waterAmountInput).toHaveValue('250');
+  await expect(calculatorPage.coffeeAmountInput).toHaveValue('16.67');
+});

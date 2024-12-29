@@ -34,7 +34,7 @@
 
     showBack = true;
 
-    if (water === recipe.water || coffee === recipe.coffee) {
+    if (water === recipe.water && coffee === recipe.coffee) {
       return;
     }
 
