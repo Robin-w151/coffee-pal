@@ -1,10 +1,9 @@
 <script lang="ts">
   import { WEIGHT_UNITS } from '$lib/config/units';
   import type { Measurement } from '$lib/models/measurement';
-  import { settingsStore } from '$lib/stores/settings';
   import { round } from '$lib/shared/math';
-  import { clsx } from '$lib/shared/ui/clsx';
   import { getPreferredWeightUnit } from '$lib/shared/units';
+  import { settingsStore } from '$lib/stores/settings';
   import Card from '../shared/elements/Card.svelte';
   import Form from '../shared/elements/form/Form.svelte';
   import Label from '../shared/elements/form/Label.svelte';
@@ -27,13 +26,6 @@
   let targetDropsPerMinute = $state(60);
   let targetTime = $derived(calculateTime(waterMeasurement.value, targetDropsPerMinute));
   let estimatedTime = $derived(calculateTime(waterMeasurement.value, dropsPerMinute));
-  let estimatedTimeVariantClass = $derived(
-    clsx(
-      !dropsPerMinute && 'variant-soft-tertiary',
-      dropsPerMinute && isWithinRange && 'variant-filled-primary',
-      dropsPerMinute && !isWithinRange && 'variant-filled-warning',
-    ),
-  );
 
   $effect(() => {
     isWithinRange = Math.abs(dropsPerMinute - targetDropsPerMinute) < targetDropsPerMinute * 0.1;
@@ -65,8 +57,14 @@
 <Card class="@container">
   <h3 class="h3">Estimation</h3>
   <div class="flex flex-col @md:flex-row justify-between gap-4">
-    <span class="badge {estimatedTimeVariantClass} px-4 py-2 text-base"
-      >Estimated time: {formatTime(estimatedTime)}</span
+    <span
+      class={[
+        'badge',
+        'px-4 py-2 text-base',
+        !dropsPerMinute && 'variant-soft-tertiary',
+        dropsPerMinute && isWithinRange && 'variant-filled-primary',
+        dropsPerMinute && !isWithinRange && 'variant-filled-warning',
+      ]}>Estimated time: {formatTime(estimatedTime)}</span
     >
     <span class="badge variant-soft-primary px-4 py-2 text-base"
       >Target time: {formatTime(targetTime)}</span
