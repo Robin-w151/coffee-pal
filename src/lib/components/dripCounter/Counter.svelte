@@ -1,7 +1,6 @@
 <script lang="ts">
   import { DRIP_INSTANTS_COUNT } from '$lib/config/dripCounter';
   import { calculateDripRate } from '$lib/services/dripCounter/dripRate';
-  import { clsx } from '$lib/shared/ui/clsx';
   import Card from '../shared/elements/Card.svelte';
 
   interface Props {
@@ -12,13 +11,6 @@
   let { dropsPerMinute = $bindable(0), isWithinRange = false }: Props = $props();
 
   let timestamps: Array<number> = $state([]);
-  let dropsPerMinuteVariantClass = $derived(
-    clsx(
-      !dropsPerMinute && 'variant-soft-tertiary',
-      dropsPerMinute && isWithinRange && 'variant-filled-primary',
-      dropsPerMinute && !isWithinRange && 'variant-filled-warning',
-    ),
-  );
 
   $effect(() => {
     dropsPerMinute = calculateDripRate(timestamps);
@@ -36,7 +28,15 @@
 <Card class="@container">
   <h3 class="h3">Counter</h3>
   <div class="flex flex-1 flex-col gap-4">
-    <span class="badge {dropsPerMinuteVariantClass} @md:self-start px-4 py-2 text-base">
+    <span
+      class={[
+        'badge',
+        '@md:self-start px-4 py-2 text-base',
+        !dropsPerMinute && 'variant-soft-tertiary',
+        dropsPerMinute && isWithinRange && 'variant-filled-primary',
+        dropsPerMinute && !isWithinRange && 'variant-filled-warning',
+      ]}
+    >
       {#if timestamps.length > 0}
         {dropsPerMinute} drops/min
       {:else}
