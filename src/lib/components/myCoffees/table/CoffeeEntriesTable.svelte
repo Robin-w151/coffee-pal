@@ -32,7 +32,7 @@
     </thead>
     <tbody>
       {#if isLoading && !hasEntries(entries)}
-        {#each { length: 5 } as _}
+        {#each { length: 5 }}
           <CoffeeEntryPlaceholder />
         {/each}
       {:else}
