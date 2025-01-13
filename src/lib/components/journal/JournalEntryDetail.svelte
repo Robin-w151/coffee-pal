@@ -310,17 +310,19 @@
             onRemove={handleRemove}
           >
             {#snippet beforeContent()}
-              <ResponsiveButton
-                type="button"
-                label="Open in calculator"
-                variant="variant-ghost-tertiary"
-                disabled={!formValid}
-                onclick={handleOpenInCalculator}
-              >
-                {#snippet iconContent()}
-                  <Icon data={faCalculator} />
-                {/snippet}
-              </ResponsiveButton>
+              {#if id}
+                <ResponsiveButton
+                  type="button"
+                  label="Open in calculator"
+                  variant="variant-ghost-tertiary"
+                  disabled={!formValid}
+                  onclick={handleOpenInCalculator}
+                >
+                  {#snippet iconContent()}
+                    <Icon data={faCalculator} />
+                  {/snippet}
+                </ResponsiveButton>
+              {/if}
             {/snippet}
           </Actions>
         </div>
