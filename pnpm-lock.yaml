@@ -106,8 +106,8 @@ importers:
         specifier: 10.0.1
         version: 10.0.1(eslint@9.19.0(jiti@2.4.2))
       eslint-plugin-svelte:
-        specifier: 3.0.0-next.15
-        version: 3.0.0-next.15(eslint@9.19.0(jiti@2.4.2))(svelte@5.19.3)
+        specifier: 3.0.0-next.16
+        version: 3.0.0-next.16(eslint@9.19.0(jiti@2.4.2))(svelte@5.19.3)
       file-saver:
         specifier: 2.0.5
         version: 2.0.5
@@ -2269,8 +2269,8 @@ packages:
     peerDependencies:
       eslint: '>=7.0.0'
 
-  eslint-plugin-svelte@3.0.0-next.15:
-    resolution: {integrity: sha512-EocAk0ngTma6EivkPtTz8SiCjiYk0x9j09Y7x/eyq1EsMtldFPPE/Njhg44xFYaDSk3UEUPjqt+ddD/oqCkp9g==}
+  eslint-plugin-svelte@3.0.0-next.16:
+    resolution: {integrity: sha512-/sA5tMPT661j3hc8GdQpalwWdpsC+tWzXnbU6fGO+Pixet9/4nY2o8bT0j0NZCjaPPftTnXN/s1lrfyj06+AFQ==}
     engines: {node: ^18.20.4 || ^20.18.0 || >=22.10.0}
     peerDependencies:
       eslint: ^8.57.1 || ^9.0.0
@@ -6968,7 +6968,7 @@ snapshots:
     dependencies:
       eslint: 9.19.0(jiti@2.4.2)
 
-  eslint-plugin-svelte@3.0.0-next.15(eslint@9.19.0(jiti@2.4.2))(svelte@5.19.3):
+  eslint-plugin-svelte@3.0.0-next.16(eslint@9.19.0(jiti@2.4.2))(svelte@5.19.3):
     dependencies:
       '@eslint-community/eslint-utils': 4.4.1(eslint@9.19.0(jiti@2.4.2))
       '@jridgewell/sourcemap-codec': 1.5.0

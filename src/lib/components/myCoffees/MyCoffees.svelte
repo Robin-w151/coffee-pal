@@ -130,7 +130,7 @@
 >
   {#snippet popupContent()}
     <ListBox>
-      {#each sortOptions as { label, icon, sort, sortDirection }}
+      {#each sortOptions as { label, icon, sort, sortDirection } (label)}
         <ListBoxItem
           name={label}
           value={label}
