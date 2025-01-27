@@ -61,7 +61,7 @@
     </div>
   {:else}
     <select bind:value={scheme}>
-      {#each availableSchemes as availableScheme}
+      {#each availableSchemes as availableScheme (availableScheme)}
         <option value={availableScheme}>{availableScheme}//</option>
       {/each}
     </select>

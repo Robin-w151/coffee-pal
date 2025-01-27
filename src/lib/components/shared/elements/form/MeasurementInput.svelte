@@ -90,7 +90,7 @@
     {onkeyup}
   />
   <select class="focus:bg-surface-300 dark:focus:bg-surface-500" bind:value={measurement.unit}>
-    {#each units as unit}
+    {#each units as unit (unit.label)}
       <option value={unit}>{unit.label}</option>
     {/each}
   </select>
