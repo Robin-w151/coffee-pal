@@ -34,7 +34,7 @@
   <td>{entry.trader ?? 'Unknown'}</td>
   <td>
     <div class="flex flex-wrap gap-1 w-full">
-      {#each entry.aromas as aroma}
+      {#each entry.aromas as aroma (aroma)}
         <span class="chip variant-filled-primary px-2 py-1">{aroma}</span>
       {/each}
     </div>
