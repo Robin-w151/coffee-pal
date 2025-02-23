@@ -1,6 +1,6 @@
 <script lang="ts">
   import ResponsiveButton from '$lib/components/shared/elements/form/ResponsiveButton.svelte';
-  import { faRotateRight, faSave, faTrash } from '@fortawesome/free-solid-svg-icons';
+  import { faClone, faSave, faTrash } from '@fortawesome/free-solid-svg-icons';
   import type { Snippet } from 'svelte';
   import { Icon } from 'svelte-awesome';
 
@@ -43,6 +43,19 @@
 
 <div class="flex gap-2">
   {@render beforeContent?.()}
+  {#if edit && allowCopy}
+    <ResponsiveButton
+      type="button"
+      label="Copy"
+      variant="variant-ghost-tertiary"
+      disabled={!formValid}
+      onclick={handleCopyClick}
+    >
+      {#snippet iconContent()}
+        <Icon data={faClone} />
+      {/snippet}
+    </ResponsiveButton>
+  {/if}
   {#if edit}
     <ResponsiveButton
       type="button"
@@ -52,19 +65,6 @@
     >
       {#snippet iconContent()}
         <Icon data={faTrash} />
-      {/snippet}
-    </ResponsiveButton>
-  {/if}
-  {#if edit && allowCopy}
-    <ResponsiveButton
-      type="button"
-      label="Copy"
-      variant="variant-ghost-secondary"
-      disabled={!formValid}
-      onclick={handleCopyClick}
-    >
-      {#snippet iconContent()}
-        <Icon data={faRotateRight} />
       {/snippet}
     </ResponsiveButton>
   {/if}
