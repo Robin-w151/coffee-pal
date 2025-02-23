@@ -12,21 +12,28 @@ jobs:
     permissions:
       packages: write
     steps:
-      - uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4.1.4
+      - name: Checkout repository
+        uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4.1.4
         with:
           ref: main
           fetch-depth: 0
-      - run: echo "APP_VERSION=$(git describe --tags --abbrev=0 | sed -r 's/^v(.*)$/\1/')" >> "$GITHUB_OUTPUT"
+      - name: Set version from git tag
+        run: echo "APP_VERSION=$(git describe --tags --abbrev=0 | sed -r 's/^v(.*)$/\1/')" >> "$GITHUB_OUTPUT"
         id: set-version
-      - run: git checkout v${{ steps.set-version.outputs.APP_VERSION }}
-      - uses: docker/setup-qemu-action@68827325e0b33c7199eb31dd4e31fbe9023e06e3 # v3.0.0
-      - uses: docker/setup-buildx-action@d70bba72b1f3fd22344832f00baa16ece964efeb # v3.3.0
-      - uses: docker/login-action@e92390c5fb421da1463c202d546fed0ec5c39f20 # v3.1.0
+      - name: Checkout version tag
+        run: git checkout v${{ steps.set-version.outputs.APP_VERSION }}
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@68827325e0b33c7199eb31dd4e31fbe9023e06e3 # v3.0.0
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@d70bba72b1f3fd22344832f00baa16ece964efeb # v3.3.0
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@e92390c5fb421da1463c202d546fed0ec5c39f20 # v3.1.0
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - uses: docker/build-push-action@2cdde995de11925a030ce8070c3d77a52ffcf1c0 # v5.3.0
+      - name: Build and push Docker image
+        uses: docker/build-push-action@2cdde995de11925a030ce8070c3d77a52ffcf1c0 # v5.3.0
         with:
           file: ./d.build.Dockerfile
           context: .
