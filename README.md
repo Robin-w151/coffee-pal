@@ -48,9 +48,15 @@ pnpm lint
 pnpm check
 ```
 
+### Run unit tests
+
+```shell
+pnpm test:unit
+```
+
 ### Run playwright tests
 
 ```shell
 npx playwright install
-pnpm test
+pnpm test:e2e
 ```
