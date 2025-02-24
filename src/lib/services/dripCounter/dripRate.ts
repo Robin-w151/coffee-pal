@@ -5,11 +5,17 @@ export function calculateDripRate(timestamps: Array<number>): number {
     return 0;
   }
 
-  const differences = [];
+  const differences: number[] = [];
+  const weights: number[] = [];
+
   for (let i = 0; i < timestamps.length - 1; i++) {
     differences.push(timestamps[i + 1] - timestamps[i]);
+    weights.push(Math.exp(i / Math.max(timestamps.length - 2, 0.001)));
   }
 
-  const meanDifference = differences.reduce((d1, d2) => d1 + d2, 0) / differences.length;
-  return round(60_000 / meanDifference, 0)!;
+  const weightedSum = differences.reduce((sum, diff, i) => sum + diff * weights[i], 0);
+  const weightSum = weights.reduce((sum, weight) => sum + weight, 0);
+  const weightedMeanDifference = weightedSum / weightSum;
+
+  return round(60_000 / weightedMeanDifference, 0)!;
 }
