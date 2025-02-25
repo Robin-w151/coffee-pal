@@ -1,5 +1,6 @@
 <script lang="ts">
   import Label from '$lib/components/shared/elements/form/Label.svelte';
+  import { getAromaColor } from '$lib/services/myCoffees/colors/colors';
   import { installEventHandler } from '$lib/shared/ui/events';
   import { InputChip } from '@skeletonlabs/skeleton';
 
@@ -8,6 +9,25 @@
   }
 
   let { aromas = $bindable() }: Props = $props();
+  let inputChipRef = $state<HTMLDivElement>();
+
+  $effect(() => {
+    if (inputChipRef) {
+      const chips = [
+        ...(inputChipRef?.querySelectorAll('button.chip') ?? []),
+      ] as Array<HTMLButtonElement>;
+      aromas?.forEach((aroma) => {
+        const chip = chips.find((chip) =>
+          chip.textContent?.toLowerCase().includes(aroma.toLowerCase()),
+        );
+        if (chip) {
+          const color = getAromaColor(aroma);
+          chip.style.color = color.color;
+          chip.style.backgroundColor = color.backgroundColor;
+        }
+      });
+    }
+  });
 
   function handleInputKeydown(event: KeyboardEvent): void {
     const { key } = event;
@@ -19,6 +39,7 @@
 
 <Label text="Aromas">
   <div
+    bind:this={inputChipRef}
     use:installEventHandler={{
       selector: 'input',
       event: 'keydown',
@@ -30,7 +51,6 @@
       placeholder="Aromas, e.g. Nutty, Dried Fruit"
       padding="px-3 py-2"
       regionInput="focus:!outline-none"
-      chips="variant-filled-primary"
       bind:value={aromas}
       on:keydown={handleInputKeydown}
     />

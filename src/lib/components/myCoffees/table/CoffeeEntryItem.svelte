@@ -1,6 +1,7 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
   import type { ActiveCoffeeEntry } from '$lib/models/myCoffees';
+  import { getAromaColor } from '$lib/services/myCoffees/colors/colors';
 
   interface Props {
     entry: ActiveCoffeeEntry;
@@ -35,7 +36,11 @@
   <td>
     <div class="flex flex-wrap gap-1 w-full">
       {#each entry.aromas as aroma (aroma)}
-        <span class="chip variant-filled-primary px-2 py-1">{aroma}</span>
+        {@const { color, backgroundColor } = getAromaColor(aroma)}
+        <span
+          class="chip variant-filled-primary px-2 py-1"
+          style={`color: ${color}; background-color: ${backgroundColor}`}>{aroma}</span
+        >
       {/each}
     </div>
   </td>
