@@ -35,14 +35,14 @@ jobs:
         run: npx playwright test
         env:
           TEST_BASE_URL: ${{ github.event.deployment_status.target_url || github.event.inputs.URL || 'https://coffee-pal.vercel.app' }}
-      - name: Upload test results
+      - name: Upload test report
         uses: actions/upload-artifact@50769540e7f4bd5e21e526ee35c689e35e0d6874 # v4.4.0
         if: ${{ !cancelled() }}
         with:
           name: playwright-report
           path: playwright-report/
           retention-days: 30
-      - name: Upload Playwright traces
+      - name: Upload playwright traces
         uses: actions/upload-artifact@50769540e7f4bd5e21e526ee35c689e35e0d6874 # v4.4.0
         if: ${{ !cancelled() }}
         with:
