@@ -29,6 +29,10 @@ const FUSE_OPTIONS = {
       weight: 2,
     },
     {
+      name: 'altitude',
+      weight: 1,
+    },
+    {
       name: 'roaster',
       weight: 2,
     },
@@ -78,6 +82,33 @@ export function sort(
 ): Array<ActiveCoffeeEntry> {
   const reverse = (entries: Array<ActiveCoffeeEntry>) =>
     sortDirection === 'asc' ? entries : entries.reverse();
+
+  if (sort === 'altitude') {
+    const sorted = entries.sort((e1: ActiveCoffeeEntry, e2: ActiveCoffeeEntry) => {
+      if (e1.altitude === undefined && e2.altitude === undefined) {
+        return 0;
+      } else if (e1.altitude === undefined) {
+        return 1;
+      } else if (e2.altitude === undefined) {
+        return -1;
+      } else {
+        return e1.altitude - e2.altitude;
+      }
+    });
+
+    return reverse(sorted).sort((e1, e2) => {
+      if (e1.altitude === undefined && e2.altitude === undefined) {
+        return 0;
+      } else if (e1.altitude === undefined) {
+        return 1;
+      } else if (e2.altitude === undefined) {
+        return -1;
+      } else {
+        return 0;
+      }
+    });
+  }
+
   return reverse(
     entries.sort((e1: ActiveCoffeeEntry, e2: ActiveCoffeeEntry) => {
       switch (sort) {
@@ -95,6 +126,8 @@ export function sort(
           }
         case 'updated_at':
           return e1.updatedAt.localeCompare(e2.updatedAt);
+        default:
+          return 0;
       }
     }),
   );

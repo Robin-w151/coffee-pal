@@ -25,6 +25,8 @@
   import { syncStateStore } from '$lib/stores/syncState';
   import { scrollToTop } from '$lib/shared/ui/scroll';
   import {
+    faArrowUp19,
+    faArrowUp91,
     faArrowUpAZ,
     faArrowUpZA,
     faCalendarDays,
@@ -64,6 +66,18 @@
       label: 'Z-A',
       icon: faArrowUpZA,
       sort: 'name_origin',
+      sortDirection: 'desc',
+    },
+    {
+      label: 'Low Altitude',
+      icon: faArrowUp19,
+      sort: 'altitude',
+      sortDirection: 'asc',
+    },
+    {
+      label: 'High Altitude',
+      icon: faArrowUp91,
+      sort: 'altitude',
       sortDirection: 'desc',
     },
   ] satisfies Array<SortOption>;

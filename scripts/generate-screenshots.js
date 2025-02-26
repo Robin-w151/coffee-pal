@@ -39,6 +39,7 @@ const testCoffeeEntries = [
     origin: 'Colombia',
     process: 'Washed',
     variety: 'Arabica Castillo',
+    altitude: 2000,
     roaster: 'Alt Wien',
     trader: 'Alt Wien',
     aromas: [
@@ -57,6 +58,7 @@ const testCoffeeEntries = [
     origin: 'Ethiopia',
     process: 'Natural',
     variety: 'Arabica Heirloom',
+    altitude: 1500,
     roaster: 'DAK',
     trader: 'TGCS',
     aromas: ['lime', 'sugarcane'],
@@ -67,6 +69,7 @@ const testCoffeeEntries = [
     origin: 'Indonesia',
     process: 'Washed',
     variety: 'Robusta',
+    altitude: 800,
     roaster: 'Rösterei',
     trader: 'Rösterei',
     aromas: ['nutty', 'smokey', 'stone fruits', 'tropical'],
@@ -179,6 +182,7 @@ async function addCoffeeEntry({
   origin,
   process,
   variety,
+  altitude,
   roaster,
   trader,
   aromas,
@@ -191,6 +195,7 @@ async function addCoffeeEntry({
   await page.getByLabel('origin').fill(origin);
   await page.getByLabel('process').fill(process);
   await page.getByLabel('variety').fill(variety);
+  await page.getByLabel('altitude').fill(altitude);
   await page.getByLabel('roaster').fill(roaster);
   await page.getByLabel('trader').fill(trader);
 

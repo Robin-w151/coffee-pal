@@ -23,6 +23,10 @@ export class MyCoffeesEntryDetailPage {
     return this.page.getByPlaceholder('Variety');
   }
 
+  get altitudeInput(): Locator {
+    return this.page.getByPlaceholder('Altitude');
+  }
+
   get roasterInput(): Locator {
     return this.page.getByPlaceholder('Roaster');
   }
