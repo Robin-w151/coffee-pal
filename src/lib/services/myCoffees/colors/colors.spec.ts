@@ -63,8 +63,8 @@ describe('getAromaColor', () => {
 
   it('should return default color pair for unmatched aromas', () => {
     const defaultColorPair: ColorPair = {
-      color: 'white',
-      backgroundColor: 'rgb(105, 42, 25)',
+      color: 'black',
+      backgroundColor: 'rgb(215, 136, 35)',
     };
 
     expect(getAromaColor('nonexistent')).toEqual(defaultColorPair);
