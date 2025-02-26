@@ -12,7 +12,7 @@ import {
   type MyCoffeesState,
 } from '$lib/models/myCoffees';
 import type { SyncResult } from '$lib/models/sync';
-import { loadPage, quickSearch, sortOrSearch } from '$lib/services/myCoffees/wrapper';
+import { loadPage, quickSearch, sortOrSearch } from '$lib/services/myCoffees/search/wrapper';
 import Dexie, { liveQuery, type Observable as DxObservable, type Table } from 'dexie';
 import { DateTime } from 'luxon';
 import { BehaviorSubject, debounceTime, switchMap, tap, type Observable } from 'rxjs';
