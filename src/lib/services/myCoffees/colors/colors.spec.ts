@@ -107,4 +107,34 @@ describe('getAromaColor', () => {
       backgroundColor: 'rgb(100, 105, 176)',
     });
   });
+
+  it('should have acceptable performance', () => {
+    const testAromas = [
+      'chocolate',
+      'vanilla',
+      'berry',
+      'nonexistent',
+      'floral notes',
+      'dark chocolate with berry',
+      'sweet caramel',
+      'roasted nuts and citrus',
+    ];
+
+    const iterations = 1000;
+    const startTime = performance.now();
+
+    for (let i = 0; i < iterations; i++) {
+      const aroma = testAromas[Math.floor(Math.random() * testAromas.length)];
+      getAromaColor(aroma);
+    }
+
+    const endTime = performance.now();
+    const totalTime = endTime - startTime;
+    const avgTimePerSearch = totalTime / iterations;
+
+    console.log(`Performed ${iterations} searches in ${totalTime.toFixed(2)}ms`);
+    console.log(`Average time per search: ${avgTimePerSearch.toFixed(2)}ms`);
+
+    expect(avgTimePerSearch).toBeLessThan(10);
+  });
 });
