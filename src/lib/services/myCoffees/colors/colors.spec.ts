@@ -132,9 +132,6 @@ describe('getAromaColor', () => {
     const totalTime = endTime - startTime;
     const avgTimePerSearch = totalTime / iterations;
 
-    console.log(`Performed ${iterations} searches in ${totalTime.toFixed(2)}ms`);
-    console.log(`Average time per search: ${avgTimePerSearch.toFixed(2)}ms`);
-
     expect(avgTimePerSearch).toBeLessThan(10);
   });
 });
