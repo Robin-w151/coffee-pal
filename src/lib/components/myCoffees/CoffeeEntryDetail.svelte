@@ -279,7 +279,9 @@
         />
         <Roaster bind:roaster={entry.roaster} />
         <Trader bind:trader={entry.trader} />
-        <Rating bind:rating={entry.rating} />
+        <div class="col-span-full">
+          <Rating bind:rating={entry.rating} />
+        </div>
         <div class="col-span-full">
           <Aromas bind:aromas={entry.aromas} />
         </div>
