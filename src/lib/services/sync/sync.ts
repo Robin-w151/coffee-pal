@@ -1,14 +1,25 @@
-import type { ActiveJournalEntry, DeletedJournalEntry, JournalEntry } from '$lib/models/journal';
-import type { ActiveCoffeeEntry, CoffeeEntry, DeletedCoffeeEntry } from '$lib/models/myCoffees';
+import {
+  Journal,
+  type ActiveJournalEntry,
+  type DeletedJournalEntry,
+  type JournalEntry,
+} from '$lib/models/journal';
+import {
+  MyCoffees,
+  type ActiveCoffeeEntry,
+  type CoffeeEntry,
+  type DeletedCoffeeEntry,
+} from '$lib/models/myCoffees';
 import type { Connection, SyncClient, SyncResult } from '$lib/models/sync';
-import { NextcloudSyncClient } from './nextcloud';
-import { get } from 'svelte/store';
-import { syncStore } from '$lib/stores/sync';
-import { syncStateStore } from '$lib/stores/syncState';
 import { journalStore } from '$lib/stores/journal';
 import { myCoffeesStore } from '$lib/stores/myCoffees';
-import { setupScheduledTask } from '../scheduler/scheduler';
 import { onlineStore } from '$lib/stores/svelte-legos/online';
+import { syncStore } from '$lib/stores/sync';
+import { syncStateStore } from '$lib/stores/syncState';
+import { get } from 'svelte/store';
+import { setupScheduledTask } from '../scheduler/scheduler';
+import { NextcloudSyncClient } from './nextcloud';
+import { toastHelper } from '$lib/shared/ui/toast';
 
 const SYNC = Symbol('sync');
 const isOnline = onlineStore();
@@ -42,11 +53,18 @@ export async function sync(): Promise<void> {
     const applyResults = [];
     if (journalSyncResult.status === 'fulfilled') {
       applyResults.push(journalStore.apply(journalSyncResult.value));
+    } else {
+      console.error(journalSyncResult.reason);
+      toastHelper.triggerError('Failed to sync journal!');
     }
 
     if (myCoffeesSyncResult.status === 'fulfilled') {
       applyResults.push(myCoffeesStore.apply(myCoffeesSyncResult.value));
+    } else {
+      console.error(myCoffeesSyncResult.reason);
+      toastHelper.triggerError('Failed to sync myCoffees!');
     }
+
     await Promise.all(applyResults);
 
     syncStore.updateLastSync();
@@ -67,7 +85,11 @@ async function syncJournal(
   entries: Array<JournalEntry>,
 ): Promise<SyncResult<ActiveJournalEntry, DeletedJournalEntry>> {
   const client = await initSyncClient(connection);
-  return await client.sync<ActiveJournalEntry, DeletedJournalEntry>({ entries }, 'journal');
+  return await client.sync<ActiveJournalEntry, DeletedJournalEntry>(
+    { entries },
+    'journal',
+    Journal,
+  );
 }
 
 async function syncMyCoffees(
@@ -75,7 +97,11 @@ async function syncMyCoffees(
   entries: Array<CoffeeEntry>,
 ): Promise<SyncResult<ActiveCoffeeEntry, DeletedCoffeeEntry>> {
   const client = await initSyncClient(connection);
-  return await client.sync<ActiveCoffeeEntry, DeletedCoffeeEntry>({ entries }, 'my-coffees');
+  return await client.sync<ActiveCoffeeEntry, DeletedCoffeeEntry>(
+    { entries },
+    'my-coffees',
+    MyCoffees,
+  );
 }
 
 async function initSyncClient(connection: Connection): Promise<SyncClient> {
