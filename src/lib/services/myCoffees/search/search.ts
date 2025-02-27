@@ -80,55 +80,49 @@ export function sort(
   sort: MyCoffeesSort = 'updated_at',
   sortDirection: MyCoffeesSortDirection = 'desc',
 ): Array<ActiveCoffeeEntry> {
-  const reverse = (entries: Array<ActiveCoffeeEntry>) =>
-    sortDirection === 'asc' ? entries : entries.reverse();
+  const compareWithUndefinedLast = <T>(
+    a: T | undefined,
+    b: T | undefined,
+    compareFn: (a: T, b: T) => number,
+  ): number => {
+    if (a === undefined && b === undefined) {
+      return 0;
+    } else if (a === undefined) {
+      return 1;
+    } else if (b === undefined) {
+      return -1;
+    } else {
+      const result = compareFn(a, b);
+      return sortDirection === 'asc' ? result : -result;
+    }
+  };
 
-  if (sort === 'altitude') {
-    const sorted = entries.sort((e1: ActiveCoffeeEntry, e2: ActiveCoffeeEntry) => {
-      if (e1.altitude === undefined && e2.altitude === undefined) {
-        return 0;
-      } else if (e1.altitude === undefined) {
-        return 1;
-      } else if (e2.altitude === undefined) {
-        return -1;
-      } else {
-        return e1.altitude - e2.altitude;
+  return entries.toSorted((e1: ActiveCoffeeEntry, e2: ActiveCoffeeEntry) => {
+    switch (sort) {
+      case 'name_origin': {
+        const nameOrigin1 = `${e1.name}-${e1.origin ?? ''}`;
+        const nameOrigin2 = `${e2.name}-${e2.origin ?? ''}`;
+        if (sortDirection === 'asc') {
+          return nameOrigin1.localeCompare(nameOrigin2);
+        } else {
+          return nameOrigin2.localeCompare(nameOrigin1);
+        }
       }
-    });
-
-    return reverse(sorted).sort((e1, e2) => {
-      if (e1.altitude === undefined && e2.altitude === undefined) {
-        return 0;
-      } else if (e1.altitude === undefined) {
-        return 1;
-      } else if (e2.altitude === undefined) {
-        return -1;
-      } else {
-        return 0;
+      case 'altitude': {
+        return compareWithUndefinedLast(e1.altitude, e2.altitude, (a, b) => a - b);
       }
-    });
-  }
-
-  return reverse(
-    entries.sort((e1: ActiveCoffeeEntry, e2: ActiveCoffeeEntry) => {
-      switch (sort) {
-        case 'name_origin':
-          return `${e1.name}-${e1.origin ?? ''}`.localeCompare(`${e2.name}-${e2.origin ?? ''}`);
-        case 'rating':
-          if (e1.rating === undefined && e2.rating === undefined) {
-            return 0;
-          } else if (e1.rating === undefined) {
-            return -1;
-          } else if (e2.rating === undefined) {
-            return 1;
-          } else {
-            return e1.rating - e2.rating;
-          }
-        case 'updated_at':
+      case 'rating': {
+        const rating1 = e1.rating ?? 0;
+        const rating2 = e2.rating ?? 0;
+        return sortDirection === 'asc' ? rating1 - rating2 : rating2 - rating1;
+      }
+      case 'updated_at': {
+        if (sortDirection === 'asc') {
           return e1.updatedAt.localeCompare(e2.updatedAt);
-        default:
-          return 0;
+        } else {
+          return e2.updatedAt.localeCompare(e1.updatedAt);
+        }
       }
-    }),
-  );
+    }
+  });
 }
