@@ -195,7 +195,7 @@ async function addCoffeeEntry({
   await page.getByLabel('origin').fill(origin);
   await page.getByLabel('process').fill(process);
   await page.getByLabel('variety').fill(variety);
-  await page.getByLabel('altitude').fill(altitude);
+  await page.getByLabel('altitude').fill(`${altitude}`);
   await page.getByLabel('roaster').fill(roaster);
   await page.getByLabel('trader').fill(trader);
 
