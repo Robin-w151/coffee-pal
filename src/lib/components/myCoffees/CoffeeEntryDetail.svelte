@@ -202,6 +202,10 @@
       sanitizedEntry.variety = undefined;
     }
 
+    if (!sanitizedEntry.altitude) {
+      sanitizedEntry.altitude = undefined;
+    }
+
     if (!sanitizedEntry.roaster) {
       sanitizedEntry.roaster = undefined;
     }
