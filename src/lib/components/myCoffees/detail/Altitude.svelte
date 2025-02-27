@@ -17,10 +17,7 @@
 
   const units = LENGTH_UNITS;
   const preferredUnit = getPreferredLengthUnit($settingsStore.preferredUnits);
-  const errorMessages: { [key: string]: string } = {
-    metric: 'altitude must be greater than 0',
-    imperial: 'altitude must be greater than 0',
-  };
+  const errorMessage = 'altitude must be greater than or equal to 0';
 
   let altitudeMeasurement: Measurement = $state({
     value: altitude,
@@ -28,7 +25,6 @@
   });
   let inputTouched = $state(false);
   let showError = $derived(inputTouched && !valid);
-  let errorMessage = $derived(errorMessages[altitudeMeasurement.unit.system]);
 
   $effect(() => {
     handleAltitudeChange(altitude);
