@@ -65,6 +65,26 @@ test('sort Z-A', async ({ myCoffeesPage }) => {
   await expect(myCoffeesPage.getCoffeeEntryTitle(0)).toHaveText('Wiedner Mischung (Alt Wien)');
 });
 
+test('sort Low Altitude', async ({ myCoffeesPage }) => {
+  await expect(myCoffeesPage.getCoffeeEntryTitle(0)).toHaveText('Rwanda Kamajumba (Drip Roasters)');
+
+  await myCoffeesPage.clickSortButton();
+  await myCoffeesPage.clickSortOption('Low Altitude');
+
+  await expect(myCoffeesPage.getCoffeeEntryTitle(0)).toHaveText('Terroir PAN (Rösterei)');
+  await expect(myCoffeesPage.getCoffeeEntryTitle(2)).toHaveText('Rwanda Kamajumba (Drip Roasters)');
+});
+
+test('sort High Altitude', async ({ myCoffeesPage }) => {
+  await expect(myCoffeesPage.getCoffeeEntryTitle(0)).toHaveText('Rwanda Kamajumba (Drip Roasters)');
+
+  await myCoffeesPage.clickSortButton();
+  await myCoffeesPage.clickSortOption('High Altitude');
+
+  await expect(myCoffeesPage.getCoffeeEntryTitle(0)).toHaveText('Wiedner Mischung (Alt Wien)');
+  await expect(myCoffeesPage.getCoffeeEntryTitle(2)).toHaveText('Rwanda Kamajumba (Drip Roasters)');
+});
+
 test('entry add', async ({ myCoffeesPage, myCoffeesEntryDetailPage }) => {
   await myCoffeesPage.clickAddButton();
   await expect(myCoffeesEntryDetailPage.header).toBeVisible();
@@ -73,6 +93,7 @@ test('entry add', async ({ myCoffeesPage, myCoffeesEntryDetailPage }) => {
   await myCoffeesEntryDetailPage.originInput.fill('Brazil/Ethiopia');
   await myCoffeesEntryDetailPage.processInput.fill('Washed');
   await myCoffeesEntryDetailPage.varietyInput.fill('Arabica');
+  await myCoffeesEntryDetailPage.altitudeInput.fill('1500');
   await myCoffeesEntryDetailPage.roasterInput.fill('Tovolea');
   await myCoffeesEntryDetailPage.traderInput.fill('Tovolea');
   const aromasInput = myCoffeesEntryDetailPage.aromasInput;
@@ -88,7 +109,7 @@ test('entry add', async ({ myCoffeesPage, myCoffeesEntryDetailPage }) => {
   const entry = myCoffeesPage.getCoffeeEntry(0);
   await expect(myCoffeesPage.getCoffeeEntryTitle(entry)).toHaveText('Tovolea Classic (Tovolea)');
   await expect(myCoffeesPage.getCoffeeEntryDetail(entry)).toHaveText(
-    'Brazil/Ethiopia | Washed | Arabica',
+    'Brazil/Ethiopia | Washed | Arabica | 1500m',
   );
 });
 
@@ -98,7 +119,7 @@ test('entry edit', async ({ myCoffeesPage, myCoffeesEntryDetailPage }) => {
   await myCoffeesEntryDetailPage.clickSaveButton();
   await myCoffeesEntryDetailPage.clickBackButton();
 
-  await expect(myCoffeesPage.getCoffeeEntryDetail(0)).toHaveText('Panama | Washed | SL34');
+  await expect(myCoffeesPage.getCoffeeEntryDetail(0)).toHaveText('Panama | Washed | SL34 | 1000m');
 });
 
 test('entry edit cancel', async ({ appPage, myCoffeesPage, myCoffeesEntryDetailPage }) => {
@@ -107,7 +128,7 @@ test('entry edit cancel', async ({ appPage, myCoffeesPage, myCoffeesEntryDetailP
   await myCoffeesEntryDetailPage.clickBackButton();
   await appPage.clickWarningConfirmButton();
 
-  await expect(myCoffeesPage.getCoffeeEntryDetail(1)).toHaveText('Panama | Washed');
+  await expect(myCoffeesPage.getCoffeeEntryDetail(1)).toHaveText('Panama | Washed | 1000m');
 });
 
 test('entry edit without changes', async ({ myCoffeesPage, myCoffeesEntryDetailPage }) => {

@@ -59,6 +59,7 @@ function generateCoffeeEntry() {
     origin: chance.country(),
     variety: chance.word(),
     process: chance.word(),
+    altitude: chance.integer({ min: 0, max: 3000 }),
     roaster: chance.name(),
     trader: chance.name(),
     aromas: Array.from({ length: chance.integer({ min: 2, max: 5 }) }, () => chance.word()),

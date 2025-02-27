@@ -7,6 +7,7 @@ export const ActiveCoffeeEntry = z.object({
   origin: z.string().optional(),
   variety: z.string().optional(),
   process: z.string().optional(),
+  altitude: z.number().optional(),
   roaster: z.string().optional(),
   trader: z.string().optional(),
   aromas: z.array(z.string()),
@@ -44,7 +45,7 @@ export interface MyCoffeesSearchState {
   sortDirection?: MyCoffeesSortDirection | null;
 }
 
-export type MyCoffeesSort = 'name_origin' | 'rating' | 'updated_at';
+export type MyCoffeesSort = 'name_origin' | 'altitude' | 'rating' | 'updated_at';
 
 export type MyCoffeesSortDirection = 'asc' | 'desc';
 

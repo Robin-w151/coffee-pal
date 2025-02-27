@@ -26,6 +26,7 @@
   import Roaster from './detail/Roaster.svelte';
   import Trader from './detail/Trader.svelte';
   import Variety from './detail/Variety.svelte';
+  import Altitude from './detail/Altitude.svelte';
 
   interface Props {
     id?: string | undefined;
@@ -61,7 +62,8 @@
   let updateInfoToast: string | undefined;
 
   let nameInputValid = $state(true);
-  let formValid = $derived(nameInputValid);
+  let altitudeInputValid = $state(true);
+  let formValid = $derived(nameInputValid && altitudeInputValid);
 
   let entryTitle = $derived(getTitle(unknown, entry));
 
@@ -181,6 +183,10 @@
     goBack();
   }
 
+  function handleAltitudeChange(altitude?: number): void {
+    entry.altitude = altitude;
+  }
+
   function sanitizeEntry(entry: Partial<ActiveCoffeeEntry>): ActiveCoffeeEntry {
     const sanitizedEntry = { ...entry };
 
@@ -194,6 +200,10 @@
 
     if (!sanitizedEntry.variety) {
       sanitizedEntry.variety = undefined;
+    }
+
+    if (!sanitizedEntry.altitude) {
+      sanitizedEntry.altitude = undefined;
     }
 
     if (!sanitizedEntry.roaster) {
@@ -262,9 +272,16 @@
         <Origin bind:origin={entry.origin} />
         <Process bind:process={entry.process} />
         <Variety bind:variety={entry.variety} />
+        <Altitude
+          altitude={entry.altitude}
+          bind:valid={altitudeInputValid}
+          onChange={handleAltitudeChange}
+        />
         <Roaster bind:roaster={entry.roaster} />
         <Trader bind:trader={entry.trader} />
-        <Rating bind:rating={entry.rating} />
+        <div class="col-span-full">
+          <Rating bind:rating={entry.rating} />
+        </div>
         <div class="col-span-full">
           <Aromas bind:aromas={entry.aromas} />
         </div>

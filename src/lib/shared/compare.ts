@@ -41,6 +41,7 @@ export function isEqualCoffeeEntry(
     isLooslyEqual(entry?.origin, other?.origin) &&
     isLooslyEqual(entry?.variety, other?.variety) &&
     isLooslyEqual(entry?.process, other?.process) &&
+    isLooslyEqual(entry?.altitude, other?.altitude) &&
     isLooslyEqual(entry?.roaster, other?.roaster) &&
     isLooslyEqual(entry?.trader, other?.trader) &&
     isEqual(entry?.aromas, other?.aromas) &&

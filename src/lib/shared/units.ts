@@ -1,6 +1,8 @@
 import {
+  DEFAULT_LENGTH_UNIT,
   DEFAULT_TEMPERATURE_UNIT,
   DEFAULT_WEIGHT_UNIT,
+  LENGTH_UNITS,
   TEMPERATURE_UNITS,
   WEIGHT_UNITS,
 } from '$lib/config/units';
@@ -17,6 +19,10 @@ export function getPreferredWeightUnit(system: MeasurementSystem): Unit {
 
 export function getPreferredTemperatureUnit(system: MeasurementSystem): Unit {
   return getPreferredUnit(TEMPERATURE_UNITS, system) ?? DEFAULT_TEMPERATURE_UNIT;
+}
+
+export function getPreferredLengthUnit(system: MeasurementSystem): Unit {
+  return getPreferredUnit(LENGTH_UNITS, system) ?? DEFAULT_LENGTH_UNIT;
 }
 
 export function getDisplayValue(value: number, unit: Unit, addSpace = false): string {

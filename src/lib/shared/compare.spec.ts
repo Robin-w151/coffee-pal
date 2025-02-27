@@ -322,6 +322,22 @@ describe('isEqualCoffeeEntry', () => {
     expect(isEqualCoffeeEntry({ process: undefined }, { process: undefined })).toBe(true);
   });
 
+  test('altitude 1000 == 1000', () => {
+    expect(isEqualCoffeeEntry({ altitude: 1000 }, { altitude: 1000 })).toBe(true);
+  });
+
+  test('altitude 1000 != 2000', () => {
+    expect(isEqualCoffeeEntry({ altitude: 1000 }, { altitude: 2000 })).toBe(false);
+  });
+
+  test('altitude undefined != 1000', () => {
+    expect(isEqualCoffeeEntry({ altitude: undefined }, { altitude: 1000 })).toBe(false);
+  });
+
+  test('altitude undefined == undefined', () => {
+    expect(isEqualCoffeeEntry({ altitude: undefined }, { altitude: undefined })).toBe(true);
+  });
+
   test('roaster "roaster" == "roaster"', () => {
     expect(isEqualCoffeeEntry({ roaster: 'roaster' }, { roaster: 'roaster' })).toBe(true);
   });

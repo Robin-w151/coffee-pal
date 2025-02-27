@@ -44,7 +44,9 @@ export class MyCoffeesPage {
     await this.page.getByRole('button', { name: 'Change sort order' }).click();
   }
 
-  async clickSortOption(option: 'A-Z' | 'Z-A' | 'Latest' | 'Best'): Promise<void> {
+  async clickSortOption(
+    option: 'A-Z' | 'Z-A' | 'Latest' | 'Best' | 'Low Altitude' | 'High Altitude',
+  ): Promise<void> {
     await this.page.getByRole('option', { name: option }).click();
   }
 

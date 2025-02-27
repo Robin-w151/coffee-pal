@@ -1,5 +1,7 @@
 <script lang="ts">
   import { getCoffeeLabel, type ActiveCoffeeEntry } from '$lib/models/myCoffees';
+  import { getDisplayValue, getPreferredLengthUnit } from '$lib/shared/units';
+  import { settingsStore } from '$lib/stores/settings';
 
   interface Props {
     entry: ActiveCoffeeEntry;
@@ -7,13 +9,16 @@
 
   let { entry }: Props = $props();
 
+  const preferredLengthUnit = getPreferredLengthUnit($settingsStore.preferredUnits);
+
   function title(entry: ActiveCoffeeEntry): string {
     return getCoffeeLabel(entry)!;
   }
 
   function details(entry: ActiveCoffeeEntry): string {
-    const { origin, variety, process } = entry;
-    return [origin, process, variety].filter((s) => !!s).join(' | ');
+    const { origin, variety, process, altitude } = entry;
+    const altitudeStr = altitude ? `${getDisplayValue(altitude, preferredLengthUnit)}` : undefined;
+    return [origin, process, variety, altitudeStr].filter((s) => !!s).join(' | ');
   }
 </script>
 
