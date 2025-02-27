@@ -8,15 +8,16 @@
   import { scheduleSync } from '$lib/services/sync/sync';
   import { rememberScrollPosition, scrollToLastKnownPosition } from '$lib/shared/ui/scroll';
   import '$lib/stores/app';
+  import { syncStore } from '$lib/stores/sync';
   import {
     arrow,
     autoUpdate,
     computePosition,
     flip,
+    inline,
     offset,
     shift,
     size,
-    inline,
   } from '@floating-ui/dom';
   import {
     AppShell,
@@ -28,14 +29,15 @@
     storePopup,
   } from '@skeletonlabs/skeleton';
   import type { AfterNavigate } from '@sveltejs/kit';
+  import { DateTime } from 'luxon';
   import { onMount, type ComponentEvents, type Snippet } from 'svelte';
+  import { get } from 'svelte/store';
   import { pwaInfo } from 'virtual:pwa-info';
   import '../../../../app.scss';
-  import EnableUpdateListener from './EnableUpdateListener.svelte';
+  import EnableGlobalMessages from './EnableGlobalMessages.svelte';
   import EnableShortcuts from './EnableShortcuts.svelte';
-  import { get } from 'svelte/store';
-  import { syncStore } from '$lib/stores/sync';
-  import { DateTime } from 'luxon';
+  import EnableUpdateListener from './EnableUpdateListener.svelte';
+
   interface Props {
     children?: Snippet;
   }
@@ -77,8 +79,9 @@
 </svelte:head>
 
 <EnableColorSchemes />
-<EnableUpdateListener />
+<EnableGlobalMessages />
 <EnableShortcuts />
+<EnableUpdateListener />
 
 <Modal />
 <Toast />

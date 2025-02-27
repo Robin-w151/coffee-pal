@@ -1,3 +1,5 @@
+import type { ZodSchema } from 'zod';
+
 export interface Sync {
   connection?: Connection;
 }
@@ -33,6 +35,7 @@ export interface SyncClient {
   sync: <A extends ActiveSyncableEntry, D extends DeletedSyncableEntry>(
     syncable: any,
     syncableName: SyncableName,
+    schema: ZodSchema,
   ) => Promise<SyncResult<A, D>>;
 }
 

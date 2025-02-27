@@ -1,9 +1,9 @@
 <script lang="ts">
-  import type { Backup } from '$lib/models/backup';
+  import { Backup } from '$lib/models/backup';
   import type { ActiveJournalEntry, DeletedJournalEntry } from '$lib/models/journal';
   import type { ActiveCoffeeEntry, DeletedCoffeeEntry } from '$lib/models/myCoffees';
   import { merge } from '$lib/services/sync/merge';
-  import { isValidBackup } from '$lib/services/validation/backup';
+  import { isValid } from '$lib/services/validation/validation';
   import { journalStore } from '$lib/stores/journal';
   import { myCoffeesStore } from '$lib/stores/myCoffees';
   import { readJsonFile, writeJsonFile } from '$lib/shared/file';
@@ -68,7 +68,7 @@
   }
 
   async function validateBackup(backup: Backup): Promise<void> {
-    if (!(await isValidBackup(backup))) {
+    if (!(await isValid(Backup, backup))) {
       throw new Error('Backup data is invalid!');
     }
   }

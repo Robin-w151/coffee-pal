@@ -26,6 +26,8 @@ import {
 } from 'rxjs';
 import { fromFetch } from 'rxjs/fetch';
 import type { WebDAVClient } from 'webdav';
+import type { ZodSchema } from 'zod';
+import { isValid } from '../validation/validation';
 
 const SYNC_DIR = 'CoffeePal';
 
@@ -105,9 +107,14 @@ export class NextcloudSyncClient implements SyncClient {
   public async sync<A extends ActiveSyncableEntry, D extends DeletedSyncableEntry>(
     syncable: Syncable<A | D>,
     syncableName: SyncableName,
+    schema: ZodSchema,
   ): Promise<SyncResult<A, D>> {
     if (await this.existsSyncable(syncableName)) {
       const remoteSyncable = await this.readSyncable<A, D>(syncableName);
+      if (!(await isValid(schema, remoteSyncable))) {
+        throw new Error(`Remote syncable '${syncableName}' is invalid!`);
+      }
+
       const {
         localChanges,
         remoteChanges,
