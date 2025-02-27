@@ -94,7 +94,7 @@
     "zod": "3.24.2"
   },
   "engines": {
-    "node": ">=20 <22"
+    "node": ">=22 <24"
   },
   "pnpm": {
     "overrides": {
@@ -104,5 +104,5 @@
     }
   },
   "type": "module",
-  "packageManager": "pnpm@9.15.0+sha256.09a8fe31a34fda706354680619f4002f4ccef6dadff93240d24ef6c831f0fd28"
+  "packageManager": "pnpm@10.5.2+sha512.da9dc28cd3ff40d0592188235ab25d3202add8a207afbedc682220e4a0029ffbff4562102b9e6e46b4e3f9e8bd53e6d05de48544b0c57d4b0179e22c76d1199b"
 }
