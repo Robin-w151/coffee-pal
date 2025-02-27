@@ -99,7 +99,8 @@
   "pnpm": {
     "overrides": {
       "@sveltejs/kit>cookie": ">=0.7.0 <1.0.0",
-      "conventional-changelog-conventionalcommits": ">=8.0.0"
+      "conventional-changelog-conventionalcommits": ">=8.0.0",
+      "esbuild": ">=0.25.0"
     }
   },
   "type": "module",
