@@ -55,14 +55,18 @@ export async function sync(): Promise<void> {
       applyResults.push(journalStore.apply(journalSyncResult.value));
     } else {
       console.error(journalSyncResult.reason);
-      toastHelper.triggerError('Failed to sync journal!');
+      toastHelper.triggerError(
+        'Failed to sync journal - remote data is corrupted or in an unexpected format',
+      );
     }
 
     if (myCoffeesSyncResult.status === 'fulfilled') {
       applyResults.push(myCoffeesStore.apply(myCoffeesSyncResult.value));
     } else {
       console.error(myCoffeesSyncResult.reason);
-      toastHelper.triggerError('Failed to sync myCoffees!');
+      toastHelper.triggerError(
+        'Failed to sync myCoffees - remote data is corrupted or in an unexpected format',
+      );
     }
 
     await Promise.all(applyResults);

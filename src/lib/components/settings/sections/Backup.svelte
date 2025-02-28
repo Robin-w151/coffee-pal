@@ -68,8 +68,10 @@
   }
 
   async function validateBackup(backup: Backup): Promise<void> {
-    if (!(await isValid(Backup, backup))) {
-      throw new Error('Backup data is invalid!');
+    if ((await isValid(Backup, backup)) !== true) {
+      throw new Error(
+        'The backup file contains invalid or corrupted data. Please make sure you selected a valid backup file.',
+      );
     }
   }
 </script>

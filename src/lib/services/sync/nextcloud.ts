@@ -111,7 +111,7 @@ export class NextcloudSyncClient implements SyncClient {
   ): Promise<SyncResult<A, D>> {
     if (await this.existsSyncable(syncableName)) {
       const remoteSyncable = await this.readSyncable<A, D>(syncableName);
-      if (!(await isValid(schema, remoteSyncable))) {
+      if ((await isValid(schema, remoteSyncable)) !== true) {
         throw new Error(`Remote syncable '${syncableName}' is invalid!`);
       }
 
