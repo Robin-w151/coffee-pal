@@ -1,4 +1,5 @@
 export interface App {
+  updateCheckAvailable: boolean;
   installEvent?: InstallEvent;
 }
 

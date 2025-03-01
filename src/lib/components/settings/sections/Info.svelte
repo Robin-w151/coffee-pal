@@ -16,6 +16,10 @@
   function handleInstallClick(): void {
     appStore.requestAppInstall();
   }
+
+  function handleUpdateClick(): void {
+    appStore.requestAppUpdate();
+  }
 </script>
 
 <Card class={cardClass}>
@@ -50,12 +54,21 @@
         >
       </li>
     </ul>
-    {#if $appStore.installEvent}
-      <button
-        class="btn variant-filled-primary"
-        title="Install App on the system"
-        onclick={handleInstallClick}>Install App</button
-      >
-    {/if}
+    <div class="flex flex-wrap gap-2">
+      {#if $appStore.installEvent}
+        <button
+          class="btn variant-filled-primary"
+          title="Install App on the system"
+          onclick={handleInstallClick}>Install App</button
+        >
+      {/if}
+      {#if $appStore.updateCheckAvailable}
+        <button
+          class="btn variant-filled-primary"
+          title="Check if there is an update available"
+          onclick={handleUpdateClick}>Check for Updates</button
+        >
+      {/if}
+    </div>
   </div>
 </Card>
