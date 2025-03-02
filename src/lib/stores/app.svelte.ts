@@ -1,8 +1,7 @@
 import { browser } from '$app/environment';
 import type { App, InstallEvent } from '$lib/models/app';
-import { writable, type Readable, get } from 'svelte/store';
 
-export interface AppStore extends Readable<App> {
+export interface AppStore extends App {
   requestAppInstall: () => Promise<void>;
   requestAppUpdate: () => Promise<void>;
 }
@@ -10,47 +9,56 @@ export interface AppStore extends Readable<App> {
 export const appStore = createAppStore();
 
 function createAppStore(): AppStore {
-  const initialState: App = {
-    updateCheckAvailable: false,
-    checkForUpdateInProgress: false,
-  };
-  const { subscribe, update } = writable<App>(initialState);
+  let updateCheckAvailable = $state(false);
+  let checkForUpdateInProgress = $state(false);
+  let installAvailable = $state(false);
+  let installEvent: InstallEvent | undefined;
 
   if (browser) {
     window.addEventListener('beforeinstallprompt', (event) => {
       event.preventDefault();
-      update((app) => ({ ...app, installEvent: event as InstallEvent }));
+      installAvailable = true;
+      installEvent = event as InstallEvent;
     });
 
     if ('serviceWorker' in navigator && navigator.serviceWorker) {
       navigator.serviceWorker.ready.then(() => {
-        update((app) => ({
-          ...app,
-          updateCheckAvailable: true,
-        }));
+        updateCheckAvailable = true;
       });
     }
   }
 
   async function requestAppInstall(): Promise<void> {
-    const { outcome } = (await get(appStore).installEvent?.prompt()) ?? { outcome: 'dismissed' };
+    const { outcome } = (await installEvent?.prompt()) ?? { outcome: 'dismissed' };
     if (outcome === 'accepted') {
-      update((app) => ({ ...app, installEvent: undefined }));
+      installEvent = undefined;
     }
   }
 
   async function requestAppUpdate(): Promise<void> {
     if ('serviceWorker' in navigator && navigator.serviceWorker) {
-      update((app) => ({ ...app, checkForUpdateInProgress: true }));
+      checkForUpdateInProgress = true;
 
       const registration = await navigator.serviceWorker.ready;
       try {
         await registration.update();
       } finally {
-        update((app) => ({ ...app, checkForUpdateInProgress: false }));
+        checkForUpdateInProgress = false;
       }
     }
   }
 
-  return { subscribe, requestAppInstall, requestAppUpdate };
+  return {
+    get updateCheckAvailable() {
+      return updateCheckAvailable;
+    },
+    get checkForUpdateInProgress() {
+      return checkForUpdateInProgress;
+    },
+    get installAvailable() {
+      return installAvailable;
+    },
+    requestAppInstall,
+    requestAppUpdate,
+  };
 }
