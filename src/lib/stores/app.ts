@@ -4,12 +4,16 @@ import { writable, type Readable, get } from 'svelte/store';
 
 export interface AppStore extends Readable<App> {
   requestAppInstall: () => Promise<void>;
+  requestAppUpdate: () => Promise<void>;
 }
 
 export const appStore = createAppStore();
 
 function createAppStore(): AppStore {
-  const initialState = {} as App;
+  const initialState: App = {
+    updateCheckAvailable: false,
+    checkForUpdateInProgress: false,
+  };
   const { subscribe, update } = writable<App>(initialState);
 
   if (browser) {
@@ -17,6 +21,15 @@ function createAppStore(): AppStore {
       event.preventDefault();
       update((app) => ({ ...app, installEvent: event as InstallEvent }));
     });
+
+    if ('serviceWorker' in navigator && navigator.serviceWorker) {
+      navigator.serviceWorker.ready.then(() => {
+        update((app) => ({
+          ...app,
+          updateCheckAvailable: true,
+        }));
+      });
+    }
   }
 
   async function requestAppInstall(): Promise<void> {
@@ -26,5 +39,18 @@ function createAppStore(): AppStore {
     }
   }
 
-  return { subscribe, requestAppInstall };
+  async function requestAppUpdate(): Promise<void> {
+    if ('serviceWorker' in navigator && navigator.serviceWorker) {
+      update((app) => ({ ...app, checkForUpdateInProgress: true }));
+
+      const registration = await navigator.serviceWorker.ready;
+      try {
+        await registration.update();
+      } finally {
+        update((app) => ({ ...app, checkForUpdateInProgress: false }));
+      }
+    }
+  }
+
+  return { subscribe, requestAppInstall, requestAppUpdate };
 }
