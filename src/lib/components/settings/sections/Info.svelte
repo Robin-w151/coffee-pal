@@ -2,6 +2,7 @@
   import Card from '$lib/components/shared/elements/Card.svelte';
   import { appStore } from '$lib/stores/app';
   import { PUBLIC_APP_MODE } from '$env/static/public';
+  import Spinner from '$lib/components/shared/elements/Spinner.svelte';
 
   interface Props {
     cardClass?: string;
@@ -13,6 +14,8 @@
   const appCommitHash = import.meta.env.APP_COMMIT_HASH;
   const itemClass = 'grid grid-cols-subgrid col-span-full';
 
+  let showSpinner = $derived($appStore.checkForUpdateInProgress);
+
   function handleInstallClick(): void {
     appStore.requestAppInstall();
   }
@@ -23,7 +26,12 @@
 </script>
 
 <Card class={cardClass}>
-  <h3 class="h3">Info</h3>
+  <div class="flex justify-between items-center">
+    <h3 class="h3">Info</h3>
+    {#if showSpinner}
+      <Spinner />
+    {/if}
+  </div>
   <div class="flex flex-col sm:flex-row justify-between sm:items-end gap-4">
     <ul class="grid grid-cols-[max-content_max-content] gap-x-8 gap-y-2">
       <li class={itemClass}>

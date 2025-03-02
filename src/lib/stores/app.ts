@@ -12,6 +12,7 @@ export const appStore = createAppStore();
 function createAppStore(): AppStore {
   const initialState: App = {
     updateCheckAvailable: false,
+    checkForUpdateInProgress: false,
   };
   const { subscribe, update } = writable<App>(initialState);
 
@@ -40,8 +41,14 @@ function createAppStore(): AppStore {
 
   async function requestAppUpdate(): Promise<void> {
     if ('serviceWorker' in navigator && navigator.serviceWorker) {
+      update((app) => ({ ...app, checkForUpdateInProgress: true }));
+
       const registration = await navigator.serviceWorker.ready;
-      registration.update();
+      try {
+        await registration.update();
+      } finally {
+        update((app) => ({ ...app, checkForUpdateInProgress: false }));
+      }
     }
   }
 

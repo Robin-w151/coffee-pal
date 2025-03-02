@@ -10,9 +10,16 @@ export async function listenForUpdates(callback: (actions: UpdateActions) => voi
       if (isRefreshing) {
         return;
       }
-
       isRefreshing = true;
-      window.location.reload();
+
+      const refresh = () => {
+        window.location.reload();
+      };
+
+      refresh();
+      setTimeout(() => {
+        refresh();
+      }, 3000);
     });
 
     const registration = await navigator.serviceWorker.ready;
