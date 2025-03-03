@@ -7,7 +7,7 @@
   import EnableColorSchemes from '$lib/components/shared/app/EnableColorSchemes.svelte';
   import { scheduleSync } from '$lib/services/sync/sync';
   import { rememberScrollPosition, scrollToLastKnownPosition } from '$lib/shared/ui/scroll';
-  import '$lib/stores/app';
+  import '$lib/stores/app.svelte';
   import { syncStore } from '$lib/stores/sync';
   import {
     arrow,

@@ -1,7 +1,7 @@
 export interface App {
   updateCheckAvailable: boolean;
   checkForUpdateInProgress: boolean;
-  installEvent?: InstallEvent;
+  installAvailable: boolean;
 }
 
 export interface InstallEvent extends Event {

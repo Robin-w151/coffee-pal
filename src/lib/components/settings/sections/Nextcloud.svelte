@@ -7,8 +7,8 @@
   import { ModalHelper } from '$lib/shared/ui/modal';
   import { ToastHelper } from '$lib/shared/ui/toast';
   import { syncStore } from '$lib/stores/sync';
-  import { syncAvailabilityStore } from '$lib/stores/syncAvailability';
-  import { syncStateStore } from '$lib/stores/syncState';
+  import { syncAvailabilityStore } from '$lib/stores/syncAvailability.svelte';
+  import { syncStateStore } from '$lib/stores/syncState.svelte';
   import { getModalStore, getToastStore } from '@skeletonlabs/skeleton';
   import { catchError, finalize, of, tap, type Subscription } from 'rxjs';
   import { onDestroy } from 'svelte';
@@ -27,7 +27,7 @@
   let isConnecting = $state(false);
   let pollSubscription: Subscription | undefined;
   let connected = $derived(!!$syncStore.connection);
-  let showSpinner = $derived(isConnecting || $syncStateStore.isSynchronizing);
+  let showSpinner = $derived(isConnecting || syncStateStore.isSynchronizing);
   let lastSyncText = $derived.by(() => {
     const lastSync = $syncStore.connection?.lastSync;
     if (!lastSync) {
@@ -140,7 +140,7 @@
         <button
           class="btn variant-filled-primary"
           title="Synchronize data{lastSyncText ? `\n${lastSyncText}` : ''}"
-          disabled={!$syncAvailabilityStore.isAvailable}
+          disabled={!syncAvailabilityStore.isAvailable}
           onclick={handleSyncClick}>Sync</button
         >
       {:else if showSpinner}

@@ -1,6 +1,6 @@
 <script lang="ts">
   import Card from '$lib/components/shared/elements/Card.svelte';
-  import { appStore } from '$lib/stores/app';
+  import { appStore } from '$lib/stores/app.svelte';
   import { PUBLIC_APP_MODE } from '$env/static/public';
   import Spinner from '$lib/components/shared/elements/Spinner.svelte';
 
@@ -14,7 +14,7 @@
   const appCommitHash = import.meta.env.APP_COMMIT_HASH;
   const itemClass = 'grid grid-cols-subgrid col-span-full';
 
-  let showSpinner = $derived($appStore.checkForUpdateInProgress);
+  let showSpinner = $derived(appStore.checkForUpdateInProgress);
 
   function handleInstallClick(): void {
     appStore.requestAppInstall();
@@ -63,14 +63,14 @@
       </li>
     </ul>
     <div class="flex flex-wrap gap-2">
-      {#if $appStore.installEvent}
+      {#if appStore.installAvailable}
         <button
           class="btn variant-filled-primary"
           title="Install App on the system"
           onclick={handleInstallClick}>Install App</button
         >
       {/if}
-      {#if $appStore.updateCheckAvailable}
+      {#if appStore.updateCheckAvailable}
         <button
           class="btn variant-filled-primary"
           title="Check if there is an update available"
