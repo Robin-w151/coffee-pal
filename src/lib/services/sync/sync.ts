@@ -15,7 +15,7 @@ import { journalStore } from '$lib/stores/journal';
 import { myCoffeesStore } from '$lib/stores/myCoffees';
 import { onlineStore } from '$lib/stores/svelte-legos/online';
 import { syncStore } from '$lib/stores/sync';
-import { syncStateStore } from '$lib/stores/syncState';
+import { syncStateStore } from '$lib/stores/syncState.svelte';
 import { get } from 'svelte/store';
 import { setupScheduledTask } from '../scheduler/scheduler';
 import { NextcloudSyncClient } from './nextcloud';

@@ -17,8 +17,8 @@
   import type { JournalSort, JournalSortDirection, JournalState } from '$lib/models/journal';
   import { sync } from '$lib/services/sync/sync';
   import { journalSearchStore, journalStore } from '$lib/stores/journal';
-  import { syncAvailabilityStore } from '$lib/stores/syncAvailability';
-  import { syncStateStore } from '$lib/stores/syncState';
+  import { syncAvailabilityStore } from '$lib/stores/syncAvailability.svelte';
+  import { syncStateStore } from '$lib/stores/syncState.svelte';
   import { scrollToTop } from '$lib/shared/ui/scroll';
   import {
     faArrowUpAZ,
@@ -111,8 +111,8 @@
 <svelte:window bind:innerWidth />
 
 <PageActions
-  isSyncEnabled={$syncAvailabilityStore.isAvailable}
-  isSynchronizing={$syncStateStore.isSynchronizing}
+  isSyncEnabled={syncAvailabilityStore.isAvailable}
+  isSynchronizing={syncStateStore.isSynchronizing}
   lastSync={$syncStore.connection?.lastSync}
   onAdd={handleAddClick}
   onSynchronize={handleSyncClick}

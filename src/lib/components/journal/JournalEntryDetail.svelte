@@ -7,7 +7,7 @@
   import { ModalHelper } from '$lib/shared/ui/modal';
   import { ToastHelper } from '$lib/shared/ui/toast';
   import { journalStore } from '$lib/stores/journal';
-  import { syncStateEvents } from '$lib/stores/syncState';
+  import { syncStateEvents } from '$lib/stores/syncState.svelte';
   import { faCalculator, faFaceSadCry } from '@fortawesome/free-solid-svg-icons';
   import { getModalStore, getToastStore } from '@skeletonlabs/skeleton';
   import { Subject, takeUntil, tap } from 'rxjs';
