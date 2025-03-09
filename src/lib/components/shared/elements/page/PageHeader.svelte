@@ -1,5 +1,6 @@
 <script lang="ts">
   import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+  import { tick } from 'svelte';
   import { Icon } from 'svelte-awesome';
 
   interface Props {
@@ -10,6 +11,15 @@
   }
 
   let { title, isLoading = false, showBack = false, onBack }: Props = $props();
+
+  let backButton = $state<HTMLButtonElement | undefined>(undefined);
+
+  export async function focusBackButton(): Promise<void> {
+    if (showBack) {
+      await tick();
+      backButton?.focus();
+    }
+  }
 
   function handleBackClick(): void {
     onBack?.();
@@ -29,6 +39,7 @@
       <button
         class="btn btn-icon variant-ghost-primary flex-[0_0_auto]"
         title="Go back"
+        bind:this={backButton}
         onclick={handleBackClick}
       >
         <Icon data={faArrowLeft} />

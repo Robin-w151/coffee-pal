@@ -65,6 +65,7 @@
   let altitudeInputValid = $state(true);
   let formValid = $derived(nameInputValid && altitudeInputValid);
 
+  let pageHeader = $state<PageHeader | undefined>(undefined);
   let entryTitle = $derived(getTitle(unknown, entry));
 
   $effect(() => {
@@ -110,6 +111,8 @@
       }
     }
     isLoading = false;
+
+    pageHeader?.focusBackButton();
   });
 
   onDestroy(() => {
@@ -256,7 +259,7 @@
   }
 </script>
 
-<PageHeader title={entryTitle} {isLoading} showBack onBack={handleBack} />
+<PageHeader title={entryTitle} {isLoading} showBack bind:this={pageHeader} onBack={handleBack} />
 <PageCard>
   {#if unknown}
     <p class="flex justify-center items-center gap-4">
