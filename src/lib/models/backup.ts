@@ -1,9 +1,9 @@
-import { z } from 'zod';
+import { type } from 'arktype';
 import { Journal } from './journal';
 import { MyCoffees } from './myCoffees';
 
-export const Backup = z.object({
+export const Backup = type({
   journal: Journal.optional(),
   myCoffees: MyCoffees.optional(),
 });
-export type Backup = z.infer<typeof Backup>;
+export type Backup = typeof Backup.infer;

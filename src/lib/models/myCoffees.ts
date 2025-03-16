@@ -1,36 +1,36 @@
+import { type } from 'arktype';
 import type { CachedSearchResult } from './cachedSearch';
-import { z } from 'zod';
 
-export const ActiveCoffeeEntry = z.object({
-  id: z.string(),
-  name: z.string(),
-  origin: z.string().optional(),
-  variety: z.string().optional(),
-  process: z.string().optional(),
-  altitude: z.number().optional(),
-  roaster: z.string().optional(),
-  trader: z.string().optional(),
-  aromas: z.array(z.string()),
-  rating: z.number().optional(),
-  description: z.string().optional(),
-  createdAt: z.string().datetime({ offset: true }),
-  updatedAt: z.string().datetime({ offset: true }),
+export const ActiveCoffeeEntry = type({
+  id: 'string',
+  name: 'string',
+  origin: 'string?',
+  variety: 'string?',
+  process: 'string?',
+  altitude: 'number?',
+  roaster: 'string?',
+  trader: 'string?',
+  aromas: 'string[]',
+  rating: 'number?',
+  description: 'string?',
+  createdAt: 'string.date.iso',
+  updatedAt: 'string.date.iso',
 });
-export type ActiveCoffeeEntry = z.infer<typeof ActiveCoffeeEntry>;
+export type ActiveCoffeeEntry = typeof ActiveCoffeeEntry.infer;
 
-export const DeletedCoffeeEntry = z.object({
-  id: z.string(),
-  deletedAt: z.string().datetime({ offset: true }),
+export const DeletedCoffeeEntry = type({
+  id: 'string',
+  deletedAt: 'string.date.iso',
 });
-export type DeletedCoffeeEntry = z.infer<typeof DeletedCoffeeEntry>;
+export type DeletedCoffeeEntry = typeof DeletedCoffeeEntry.infer;
 
-export const CoffeeEntry = z.union([ActiveCoffeeEntry, DeletedCoffeeEntry]);
-export type CoffeeEntry = z.infer<typeof CoffeeEntry>;
+export const CoffeeEntry = type(ActiveCoffeeEntry).or(DeletedCoffeeEntry);
+export type CoffeeEntry = typeof CoffeeEntry.infer;
 
-export const MyCoffees = z.object({
-  entries: z.array(CoffeeEntry),
+export const MyCoffees = type({
+  entries: type(CoffeeEntry).array(),
 });
-export type MyCoffees = z.infer<typeof MyCoffees>;
+export type MyCoffees = typeof MyCoffees.infer;
 
 export interface MyCoffeesState extends MyCoffees {
   entries: Array<ActiveCoffeeEntry>;

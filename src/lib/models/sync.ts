@@ -1,4 +1,4 @@
-import type { ZodSchema } from 'zod';
+import { scope, type } from 'arktype';
 
 export interface Sync {
   connection?: Connection;
@@ -35,27 +35,36 @@ export interface SyncClient {
   sync: <A extends ActiveSyncableEntry, D extends DeletedSyncableEntry>(
     syncable: any,
     syncableName: SyncableName,
-    schema: ZodSchema,
+    schema: type,
   ) => Promise<SyncResult<A, D>>;
 }
 
 export type SyncableName = 'journal' | 'my-coffees';
 
+export const ActiveSyncableEntry = type({
+  id: 'string',
+  createdAt: 'string.date.iso',
+  updatedAt: 'string.date.iso',
+});
+export type ActiveSyncableEntry = typeof ActiveSyncableEntry.infer;
+
+export const DeletedSyncableEntry = type({
+  id: 'string',
+  deletedAt: 'string.date.iso',
+});
+export type DeletedSyncableEntry = typeof DeletedSyncableEntry.infer;
+
+export const SyncableEntry = type(ActiveSyncableEntry).or(DeletedSyncableEntry);
+export type SyncableEntry = typeof SyncableEntry.infer;
+
+const syncableScope = scope({
+  SyncableEntry,
+});
+export const Syncable = syncableScope.type('<T extends SyncableEntry>', {
+  entries: 'T[]',
+});
 export interface Syncable<T extends SyncableEntry> {
-  entries: Array<T>;
-}
-
-export type SyncableEntry = ActiveSyncableEntry | DeletedSyncableEntry;
-
-export interface ActiveSyncableEntry {
-  id: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface DeletedSyncableEntry {
-  id: string;
-  deletedAt: string;
+  entries: T[];
 }
 
 export interface SyncResult<A extends ActiveSyncableEntry, D extends DeletedSyncableEntry> {

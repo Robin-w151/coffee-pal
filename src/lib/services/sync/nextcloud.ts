@@ -1,5 +1,6 @@
 import type { Credentials, LoginPoll } from '$lib/models/nextcloud';
 import {
+  Syncable,
   isActiveSyncableEntry,
   isDeletedSyncableEntry,
   type ActiveSyncableEntry,
@@ -7,11 +8,11 @@ import {
   type DeletedSyncableEntry,
   type SyncClient,
   type SyncResult,
-  type Syncable,
   type SyncableName,
 } from '$lib/models/sync';
 import { merge } from '$lib/services/sync/merge';
 import { isPresent } from '$lib/shared/observables';
+import { ArkErrors, type } from 'arktype';
 import {
   catchError,
   filter,
@@ -26,8 +27,6 @@ import {
 } from 'rxjs';
 import { fromFetch } from 'rxjs/fetch';
 import type { WebDAVClient } from 'webdav';
-import type { ZodSchema } from 'zod';
-import { isValid } from '../validation/validation';
 
 const SYNC_DIR = 'CoffeePal';
 
@@ -107,21 +106,18 @@ export class NextcloudSyncClient implements SyncClient {
   public async sync<A extends ActiveSyncableEntry, D extends DeletedSyncableEntry>(
     syncable: Syncable<A | D>,
     syncableName: SyncableName,
-    schema: ZodSchema,
+    schema: type,
   ): Promise<SyncResult<A, D>> {
     if (await this.existsSyncable(syncableName)) {
-      const remoteSyncable = await this.readSyncable<A, D>(syncableName);
-      if ((await isValid(schema, remoteSyncable)) !== true) {
+      const remoteSyncableData = (await this.readSyncable<A, D>(syncableName)) as unknown;
+      const remoteSyncable = schema(remoteSyncableData) as Syncable<A | D> | ArkErrors;
+      if (remoteSyncable instanceof type.errors) {
         throw new Error(`Remote syncable '${syncableName}' is invalid!`);
       }
 
-      const {
-        localChanges,
-        remoteChanges,
-        merged: mergedJournal,
-      } = merge<A, D>(syncable, remoteSyncable);
+      const { localChanges, remoteChanges, merged } = merge<A, D>(syncable, remoteSyncable);
       if (this.hasChanges(remoteChanges)) {
-        await this.writeSyncable(mergedJournal, syncableName);
+        await this.writeSyncable(merged, syncableName);
       }
       return localChanges;
     } else {
