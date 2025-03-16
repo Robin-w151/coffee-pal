@@ -1,35 +1,35 @@
+import { type } from 'arktype';
 import type { CachedSearchResult } from './cachedSearch';
 import { ActiveCoffeeEntry } from './myCoffees';
-import { z } from 'zod';
 
-export const ActiveJournalEntry = z.object({
-  id: z.string(),
-  method: z.string(),
-  water: z.number(),
-  waterTemperature: z.number().optional(),
-  coffee: z.number(),
-  coffeeType: z.union([z.string(), ActiveCoffeeEntry]).optional(),
-  grindSettings: z.string().optional(),
-  rating: z.number().optional(),
-  description: z.string().optional(),
-  createdAt: z.string().datetime({ offset: true }),
-  updatedAt: z.string().datetime({ offset: true }),
+export const ActiveJournalEntry = type({
+  id: 'string',
+  method: 'string',
+  water: 'number',
+  waterTemperature: 'number?',
+  coffee: 'number',
+  coffeeType: type('string').or(ActiveCoffeeEntry).optional(),
+  grindSettings: 'string?',
+  rating: 'number?',
+  description: 'string?',
+  createdAt: 'string.date.iso',
+  updatedAt: 'string.date.iso',
 });
-export type ActiveJournalEntry = z.infer<typeof ActiveJournalEntry>;
+export type ActiveJournalEntry = typeof ActiveJournalEntry.infer;
 
-export const DeletedJournalEntry = z.object({
-  id: z.string(),
-  deletedAt: z.string().datetime({ offset: true }),
+export const DeletedJournalEntry = type({
+  id: 'string',
+  deletedAt: 'string.date.iso',
 });
-export type DeletedJournalEntry = z.infer<typeof DeletedJournalEntry>;
+export type DeletedJournalEntry = typeof DeletedJournalEntry.infer;
 
-export const JournalEntry = z.union([ActiveJournalEntry, DeletedJournalEntry]);
-export type JournalEntry = z.infer<typeof JournalEntry>;
+export const JournalEntry = type(ActiveJournalEntry).or(DeletedJournalEntry);
+export type JournalEntry = typeof JournalEntry.infer;
 
-export const Journal = z.object({
-  entries: z.array(JournalEntry),
+export const Journal = type({
+  entries: type(JournalEntry).array(),
 });
-export type Journal = z.infer<typeof Journal>;
+export type Journal = typeof Journal.infer;
 
 export interface JournalState {
   entries: Array<ActiveJournalEntry>;
