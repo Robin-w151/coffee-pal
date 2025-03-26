@@ -53,7 +53,7 @@ export const journalSearchStore = createJournalSearchStore();
 export const journalStore = createJournalStore(journalSearchStore);
 
 function createJournalSearchStore(): JournalSearchStore {
-  const initialState: JournalSearchState = { sort: 'updated_at', sortDirection: 'desc' };
+  const initialState: JournalSearchState = { sort: 'created_at', sortDirection: 'desc' };
   const subject = new BehaviorSubject<JournalSearchState>(initialState);
 
   function setFilter(filter: string): void {

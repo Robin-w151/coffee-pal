@@ -45,7 +45,7 @@ export interface MyCoffeesSearchState {
   sortDirection?: MyCoffeesSortDirection | null;
 }
 
-export type MyCoffeesSort = 'name_origin' | 'altitude' | 'rating' | 'updated_at';
+export type MyCoffeesSort = 'name_origin' | 'altitude' | 'rating' | 'created_at' | 'updated_at';
 
 export type MyCoffeesSortDirection = 'asc' | 'desc';
 

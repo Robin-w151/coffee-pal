@@ -44,7 +44,7 @@ export interface JournalSearchState {
   sortDirection?: JournalSortDirection | null;
 }
 
-export type JournalSort = 'method_coffee_type' | 'rating' | 'updated_at';
+export type JournalSort = 'method_coffee_type' | 'rating' | 'created_at' | 'updated_at';
 
 export type JournalSortDirection = 'asc' | 'desc';
 

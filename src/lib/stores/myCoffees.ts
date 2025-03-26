@@ -53,7 +53,7 @@ export const myCoffeesSearchStore = createMyCoffeesSearchStore();
 export const myCoffeesStore = createMyCoffeesStore(myCoffeesSearchStore);
 
 function createMyCoffeesSearchStore(): MyCoffeesSearchStore {
-  const initialState: MyCoffeesSearchState = { sort: 'updated_at', sortDirection: 'desc' };
+  const initialState: MyCoffeesSearchState = { sort: 'created_at', sortDirection: 'desc' };
   const subject = new BehaviorSubject<MyCoffeesSearchState>(initialState);
 
   function setFilter(filter: string): void {

@@ -147,6 +147,16 @@ describe('sort', () => {
       expectedNames: ['Terroir PAN', 'Wiedner Mischung', 'Rwanda Kamajumba'],
     },
     {
+      sortType: 'created_at',
+      sortDirection: 'asc',
+      expectedNames: ['Terroir PAN', 'Rwanda Kamajumba', 'Wiedner Mischung'],
+    },
+    {
+      sortType: 'created_at',
+      sortDirection: 'desc',
+      expectedNames: ['Wiedner Mischung', 'Rwanda Kamajumba', 'Terroir PAN'],
+    },
+    {
       sortType: 'updated_at',
       sortDirection: 'asc',
       expectedNames: ['Wiedner Mischung', 'Terroir PAN', 'Rwanda Kamajumba'],

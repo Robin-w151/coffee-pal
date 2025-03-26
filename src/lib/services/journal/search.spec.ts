@@ -136,6 +136,16 @@ describe('sort', () => {
       expectedMethods: ['V60 Switch', 'Aeropress', 'PuckPuck'],
     },
     {
+      sortType: 'created_at',
+      sortDirection: 'asc',
+      expectedMethods: ['PuckPuck', 'Aeropress', 'V60 Switch'],
+    },
+    {
+      sortType: 'created_at',
+      sortDirection: 'desc',
+      expectedMethods: ['V60 Switch', 'Aeropress', 'PuckPuck'],
+    },
+    {
       sortType: 'updated_at',
       sortDirection: 'asc',
       expectedMethods: ['V60 Switch', 'PuckPuck', 'Aeropress'],

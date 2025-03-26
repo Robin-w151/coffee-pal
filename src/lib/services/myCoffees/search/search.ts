@@ -116,6 +116,13 @@ export function sort(
         const rating2 = e2.rating ?? 0;
         return sortDirection === 'asc' ? rating1 - rating2 : rating2 - rating1;
       }
+      case 'created_at': {
+        if (sortDirection === 'asc') {
+          return e1.createdAt.localeCompare(e2.createdAt);
+        } else {
+          return e2.createdAt.localeCompare(e1.createdAt);
+        }
+      }
       case 'updated_at': {
         if (sortDirection === 'asc') {
           return e1.updatedAt.localeCompare(e2.updatedAt);

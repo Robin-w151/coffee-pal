@@ -29,13 +29,24 @@ test('search clear', async ({ journalPage }) => {
   await expect(journalPage.journalList).toHaveCount(3);
 });
 
-test('sort Latest', async ({ journalPage }) => {
+test('sort Recently Added', async ({ journalPage }) => {
   await expect(journalPage.getJournalEntryTitle(0)).toHaveText(
     'Aeropress - Terroir PAN (Rösterei)',
   );
 
   await journalPage.clickSortButton();
-  await journalPage.clickSortOption('Latest');
+  await journalPage.clickSortOption('Recently Added');
+
+  await expect(journalPage.getJournalEntryTitle(0)).toHaveText('V60 Switch - Honeymoon');
+});
+
+test('sort Recently Updated', async ({ journalPage }) => {
+  await expect(journalPage.getJournalEntryTitle(0)).toHaveText(
+    'Aeropress - Terroir PAN (Rösterei)',
+  );
+
+  await journalPage.clickSortButton();
+  await journalPage.clickSortOption('Recently Updated');
 
   await expect(journalPage.getJournalEntryTitle(0)).toHaveText(
     'Aeropress - Terroir PAN (Rösterei)',

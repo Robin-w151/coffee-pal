@@ -126,6 +126,9 @@ export function sort(
           }
         case 'updated_at':
           return e1.updatedAt.localeCompare(e2.updatedAt);
+        case 'created_at':
+        default:
+          return e1.createdAt.localeCompare(e2.createdAt);
       }
     }),
   );

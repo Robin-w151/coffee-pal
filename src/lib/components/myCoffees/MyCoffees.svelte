@@ -45,7 +45,13 @@
 
   const sortOptions = [
     {
-      label: 'Latest',
+      label: 'Recently Added',
+      icon: faCalendarDays,
+      sort: 'created_at',
+      sortDirection: 'desc',
+    },
+    {
+      label: 'Recently Updated',
       icon: faCalendarDays,
       sort: 'updated_at',
       sortDirection: 'desc',

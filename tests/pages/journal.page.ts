@@ -1,4 +1,4 @@
-import type { Locator, Page } from '@playwright/test';
+import { expect, type Locator, type Page } from '@playwright/test';
 
 export class JournalPage {
   constructor(private readonly page: Page) {}
@@ -25,6 +25,8 @@ export class JournalPage {
 
   async goto(): Promise<void> {
     await this.page.goto('/');
+    await this.clickSortButton();
+    await this.clickSortOption('Recently Updated');
   }
 
   async clickAddButton(): Promise<void> {
@@ -42,9 +44,12 @@ export class JournalPage {
 
   async clickSortButton(): Promise<void> {
     await this.page.getByRole('button', { name: 'Change sort order' }).click();
+    await expect(this.page.getByRole('option', { name: 'Recently Added' })).toBeVisible();
   }
 
-  async clickSortOption(option: 'A-Z' | 'Z-A' | 'Latest' | 'Best'): Promise<void> {
+  async clickSortOption(
+    option: 'A-Z' | 'Z-A' | 'Best' | 'Recently Added' | 'Recently Updated',
+  ): Promise<void> {
     await this.page.getByRole('option', { name: option }).click();
   }
 

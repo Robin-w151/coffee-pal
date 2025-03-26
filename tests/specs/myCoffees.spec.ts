@@ -29,11 +29,20 @@ test('search clear', async ({ myCoffeesPage }) => {
   await expect(myCoffeesPage.coffeeList).toHaveCount(3);
 });
 
-test('sort Latest', async ({ myCoffeesPage }) => {
+test('sort Recently Added', async ({ myCoffeesPage }) => {
   await expect(myCoffeesPage.getCoffeeEntryTitle(0)).toHaveText('Rwanda Kamajumba (Drip Roasters)');
 
   await myCoffeesPage.clickSortButton();
-  await myCoffeesPage.clickSortOption('Latest');
+  await myCoffeesPage.clickSortOption('Recently Added');
+
+  await expect(myCoffeesPage.getCoffeeEntryTitle(0)).toHaveText('Wiedner Mischung (Alt Wien)');
+});
+
+test('sort Recently Updated', async ({ myCoffeesPage }) => {
+  await expect(myCoffeesPage.getCoffeeEntryTitle(0)).toHaveText('Rwanda Kamajumba (Drip Roasters)');
+
+  await myCoffeesPage.clickSortButton();
+  await myCoffeesPage.clickSortOption('Recently Updated');
 
   await expect(myCoffeesPage.getCoffeeEntryTitle(0)).toHaveText('Rwanda Kamajumba (Drip Roasters)');
 });
