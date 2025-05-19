@@ -57,7 +57,7 @@
   );
   let unknown = $state(false);
   let isLoading = $state(true);
-  let hasChanged = $state(false);
+  let hasChanged = $derived(!isEqualJournalEntry(entry, originalEntry));
   let shouldGoBack = false;
   let updateInfoToast: string | undefined;
 
@@ -69,10 +69,6 @@
 
   let pageHeader = $state<PageHeader | undefined>(undefined);
   let entryTitle = $derived(getTitle(unknown, entry));
-
-  $effect(() => {
-    hasChanged = !isEqualJournalEntry(entry, originalEntry);
-  });
 
   onMount(async () => {
     pauseScheduledSync();

@@ -57,7 +57,7 @@
   );
   let unknown = $state(false);
   let isLoading = $state(true);
-  let hasChanged = $state(false);
+  let hasChanged = $derived(!isEqualCoffeeEntry(entry, originalEntry));
   let shouldGoBack = false;
   let updateInfoToast: string | undefined;
 
@@ -67,10 +67,6 @@
 
   let pageHeader = $state<PageHeader | undefined>(undefined);
   let entryTitle = $derived(getTitle(unknown, entry));
-
-  $effect(() => {
-    hasChanged = !isEqualCoffeeEntry(entry, originalEntry);
-  });
 
   onMount(async () => {
     pauseScheduledSync();
