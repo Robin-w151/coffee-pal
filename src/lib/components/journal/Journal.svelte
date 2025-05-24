@@ -117,7 +117,7 @@
 <svelte:window bind:innerWidth />
 
 <PageActions
-  isSyncEnabled={syncAvailabilityStore.isAvailable}
+  isSyncEnabled={$syncAvailabilityStore.isAvailable}
   isSynchronizing={syncStateStore.isSynchronizing}
   lastSync={$syncStore.connection?.lastSync}
   onAdd={handleAddClick}

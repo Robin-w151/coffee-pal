@@ -140,7 +140,7 @@
         <button
           class="btn variant-filled-primary"
           title="Synchronize data{lastSyncText ? `\n${lastSyncText}` : ''}"
-          disabled={!syncAvailabilityStore.isAvailable}
+          disabled={!$syncAvailabilityStore.isAvailable}
           onclick={handleSyncClick}>Sync</button
         >
       {:else if showSpinner}
