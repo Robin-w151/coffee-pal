@@ -1,5 +1,6 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
+  import { resolve } from '$app/paths';
   import type { ActiveCoffeeEntry } from '$lib/models/myCoffees';
   import { getAromaColor } from '$lib/services/myCoffees/colors/colors';
   import { getDisplayValue, getPreferredLengthUnit } from '$lib/shared/units';
@@ -26,7 +27,7 @@
   }
 
   function gotoDetail(): void {
-    goto(`/my-coffees/${entry.id}`);
+    goto(resolve(`/my-coffees/[id]`, { id: entry.id }));
   }
 
   function altitudeDisplayValue(altitude: number): string {

@@ -1,5 +1,6 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
+  import { resolve } from '$app/paths';
   import { routes } from '$lib/config/routes';
 
   function handleKeyDown(event: KeyboardEvent): void {
@@ -10,7 +11,7 @@
       const route = routes[num - 1]?.href;
 
       if (route) {
-        goto(route);
+        goto(resolve(route, {}));
       }
     }
   }

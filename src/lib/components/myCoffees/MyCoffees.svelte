@@ -42,6 +42,7 @@
   import CoffeeEntries from './list/CoffeeEntries.svelte';
   import CoffeeEntriesTable from './table/CoffeeEntriesTable.svelte';
   import { syncStore } from '$lib/stores/sync';
+  import { resolve } from '$app/paths';
 
   const sortOptions = [
     {
@@ -125,7 +126,7 @@
   }
 
   function handleAddClick(): void {
-    goto('/my-coffees/new');
+    goto(resolve(`/my-coffees/new`, {}));
   }
 
   function handleSyncClick(): void {

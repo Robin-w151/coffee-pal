@@ -27,6 +27,7 @@
   import Trader from './detail/Trader.svelte';
   import Variety from './detail/Variety.svelte';
   import Altitude from './detail/Altitude.svelte';
+  import { resolve } from '$app/paths';
 
   interface Props {
     id?: string | undefined;
@@ -131,7 +132,7 @@
         if (shouldGoBack) {
           history.back();
         } else {
-          goto(`${to.url.pathname}${to.url.search}`);
+          goto(resolve(`${to.url.pathname}${to.url.search}`, {}));
         }
       } else {
         shouldGoBack = false;
@@ -234,7 +235,7 @@
   }
 
   function goToEntry(id: string): void {
-    goto(`/my-coffees/${id}`, { replaceState: true });
+    goto(resolve(`/my-coffees/[id]`, { id }), { replaceState: true });
   }
 
   function getTitle(unknown: boolean, entry?: Partial<ActiveCoffeeEntry>): string {
@@ -262,7 +263,10 @@
       <span class="flex items-center">
         <Icon data={faFaceSadCry} />
       </span>
-      <span>Could not find any entry! Go back to the <a href="/my-coffees">overview</a></span>
+      <span
+        >Could not find any entry! Go back to the <a href={resolve(`/my-coffees`, {})}>overview</a
+        ></span
+      >
     </p>
   {:else}
     <div class="@container">

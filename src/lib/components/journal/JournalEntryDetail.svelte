@@ -28,6 +28,7 @@
   import Water from './detail/Water.svelte';
   import WaterTemperature from './detail/WaterTemperature.svelte';
   import ResponsiveButton from '../shared/elements/form/ResponsiveButton.svelte';
+  import { resolve } from '$app/paths';
 
   interface Props {
     id?: string | undefined;
@@ -133,7 +134,7 @@
         if (shouldGoBack) {
           history.back();
         } else {
-          goto(`${to.url.pathname}${to.url.search}`);
+          goto(resolve(`${to.url.pathname}${to.url.search}`, {}));
         }
       } else {
         shouldGoBack = false;
@@ -203,7 +204,7 @@
       coffee: `${entry.coffee}`,
     };
 
-    goto(`/calculator?${new URLSearchParams(recipe).toString()}`);
+    goto(resolve(`/calculator?${new URLSearchParams(recipe).toString()}`, {}));
   }
 
   function handleCoffeeChange(coffee: number | undefined): void {
@@ -249,7 +250,7 @@
   }
 
   function goToEntry(id: string): void {
-    goto(`/journal/${id}`, { replaceState: true });
+    goto(resolve(`/journal/[id]`, { id }), { replaceState: true });
   }
 
   function getTitle(unknown: boolean, entry?: Partial<ActiveJournalEntry>): string {
@@ -278,7 +279,7 @@
       <span class="flex items-center">
         <Icon data={faFaceSadCry} />
       </span>
-      <span>Could not find any entry! Go back to the <a href="/">overview</a></span>
+      <span>Could not find any entry! Go back to the <a href={resolve('/', {})}>overview</a></span>
     </p>
   {:else}
     <div class="@container">

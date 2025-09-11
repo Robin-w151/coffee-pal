@@ -20,6 +20,7 @@
   }
 </script>
 
+<!-- eslint-disable svelte/no-navigation-without-resolve -->
 <div class="card flex flex-col gap-4 w-full max-w-screen-sm p-4">
   <header class="text-2xl font-bold">Finish Setup</header>
   <article>Please press Login to finish Nextcloud synchronization setup.</article>

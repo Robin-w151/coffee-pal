@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { resolve } from '$app/paths';
   import { mainRoute } from '$lib/config/routes';
   import { faBars, faMugHot } from '@fortawesome/free-solid-svg-icons';
   import { AppBar, getDrawerStore, type DrawerSettings } from '@skeletonlabs/skeleton';
@@ -26,7 +27,10 @@
       <span class="sr-only">App menu</span>
     </button>
   {/snippet}
-  <a class="flex items-center gap-4 px-2 py-1 md:py-2 w-fit rounded-md" href={mainRoute.href}>
+  <a
+    class="flex items-center gap-4 px-2 py-1 md:py-2 w-fit rounded-md"
+    href={resolve(mainRoute.href, {})}
+  >
     <span class="hidden md:block">
       <Icon data={faMugHot} scale={1.5} />
     </span>

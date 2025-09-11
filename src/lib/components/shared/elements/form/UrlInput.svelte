@@ -76,6 +76,7 @@
     onblur={handleInputBlur}
   />
   {#if host}
+    <!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
     <a class="input-group-shim" href="{scheme}//{host}" target="_blank" title="Open URL">
       <Icon data={faArrowUpRightFromSquare} />
     </a>
