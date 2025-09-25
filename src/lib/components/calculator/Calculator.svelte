@@ -12,6 +12,7 @@
   import Ratios from './sections/Ratios.svelte';
   import Recipe from './sections/Recipe.svelte';
   import TemperatureConverter from './sections/TemperatureConverter.svelte';
+  import { resolve } from '$app/paths';
 
   let preset: Preset = $state(presets.find((p) => p.label === 'Orea') ?? presets[0]);
   let recipe: IRecipe = $state(calculateRecipe(untrack(() => preset)));
@@ -54,7 +55,7 @@
     fixedRatio = true;
     iceRatio = undefined;
 
-    goto(`?`, { replaceState: true });
+    goto(resolve(`/calculator?`, {}), { replaceState: true });
   });
 
   function handleBackClick(): void {

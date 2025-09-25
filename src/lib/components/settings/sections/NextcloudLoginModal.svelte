@@ -25,6 +25,7 @@
   <article>Please press Login to finish Nextcloud synchronization setup.</article>
   <footer class="flex justify-end gap-2">
     <button class="btn variant-ghost-primary" onclick={handleCancelClick}>Cancel</button>
+    <!-- eslint-disable svelte/no-navigation-without-resolve -->
     <a
       class="btn variant-filled-primary"
       href={loginUrl}
