@@ -1,10 +1,9 @@
 import { sveltekit } from '@sveltejs/kit/vite';
-import { defineConfig } from 'vite';
 import { SvelteKitPWA } from '@vite-pwa/sveltekit';
-import manifest from './src/assets/manifest';
-import { purgeCss } from 'vite-plugin-tailwind-purgecss';
 import { execSync } from 'child_process';
 import dotenv from 'dotenv-flow';
+import { defineConfig } from 'vite';
+import manifest from './src/assets/manifest';
 
 dotenv.config({ silent: true });
 
@@ -16,7 +15,6 @@ export default defineConfig({
   },
   plugins: [
     sveltekit(),
-    purgeCss(),
     SvelteKitPWA({
       strategies: 'injectManifest',
       manifest,
