@@ -26,8 +26,8 @@
     "postpack": "pinst --enable"
   },
   "devDependencies": {
-    "@commitlint/cli": "19.8.1",
-    "@commitlint/config-conventional": "19.8.1",
+    "@commitlint/cli": "20.0.0",
+    "@commitlint/config-conventional": "20.0.0",
     "@eslint/js": "9.36.0",
     "@floating-ui/dom": "1.7.4",
     "@fortawesome/free-brands-svg-icons": "7.0.1",
