@@ -9,6 +9,7 @@
   } from '$lib/shared/units';
   import { getCoffeeLabel } from '$lib/models/myCoffees';
   import { calculateRatio } from '$lib/shared/math';
+  import { resolve } from '$app/paths';
 
   interface Props {
     entry: ActiveJournalEntry;
@@ -35,7 +36,7 @@
   }
 
   function gotoDetail(): void {
-    goto(`/journal/${entry.id}`);
+    goto(resolve(`./journal/${entry.id}`, {}));
   }
 
   function waterDisplayValue(water: number): string {

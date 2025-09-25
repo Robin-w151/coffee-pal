@@ -36,6 +36,7 @@
   import JournalEntries from './list/JournalEntries.svelte';
   import JournalEntriesTable from './table/JournalEntriesTable.svelte';
   import { syncStore } from '$lib/stores/sync';
+  import { resolve } from '$app/paths';
 
   const sortOptions = [
     {
@@ -106,7 +107,7 @@
   }
 
   function handleAddClick(): void {
-    goto('journal/new');
+    goto(resolve('./journal/new', {}));
   }
 
   function handleSyncClick(): void {

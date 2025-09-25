@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { resolve } from '$app/paths';
   import { page } from '$app/stores';
   import { routes } from '$lib/config/routes';
   import type { Route } from '$lib/models/route';
@@ -39,7 +40,7 @@
         <li>
           <a
             class="!grid grid-cols-[1.25rem_1fr] {routeActiveClass(route)}"
-            href={route.href}
+            href={resolve(route.href, {})}
             onclick={handleClick}
           >
             <span class="flex items-center justify-self-center">
