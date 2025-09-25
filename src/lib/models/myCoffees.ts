@@ -13,8 +13,8 @@ export const ActiveCoffeeEntry = z.object({
   aromas: z.array(z.string()),
   rating: z.number().optional(),
   description: z.string().optional(),
-  createdAt: z.string().datetime({ offset: true }),
-  updatedAt: z.string().datetime({ offset: true }),
+  createdAt: z.iso.datetime({ offset: true }),
+  updatedAt: z.iso.datetime({ offset: true }),
 });
 export type ActiveCoffeeEntry = z.infer<typeof ActiveCoffeeEntry>;
 
