@@ -134,7 +134,7 @@
         if (shouldGoBack) {
           history.back();
         } else {
-          goto(resolve(`./${to.url.pathname}${to.url.search}`, {}));
+          goto(resolve(`${to.url.pathname}${to.url.search}`, {}));
         }
       } else {
         shouldGoBack = false;
