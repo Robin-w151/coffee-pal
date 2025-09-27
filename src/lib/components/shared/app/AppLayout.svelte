@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { afterNavigate } from '$app/navigation';
+  import { afterNavigate, onNavigate } from '$app/navigation';
   import { page } from '$app/stores';
   import AppBar from '$lib/components/shared/app/AppBar.svelte';
   import AppMenu from '$lib/components/shared/app/AppMenu.svelte';
@@ -37,6 +37,7 @@
   import EnableGlobalMessages from './EnableGlobalMessages.svelte';
   import EnableShortcuts from './EnableShortcuts.svelte';
   import EnableUpdateListener from './EnableUpdateListener.svelte';
+  import { runViewTransition } from '$lib/shared/viewTransition';
 
   interface Props {
     children?: Snippet;
@@ -58,6 +59,15 @@
     if (!lastSync || DateTime.now().diff(DateTime.fromISO(lastSync), 'minutes').minutes > 15) {
       scheduleSync();
     }
+  });
+
+  onNavigate((navigation) => {
+    return new Promise((resolve) => {
+      runViewTransition(async () => {
+        resolve();
+        await navigation.complete;
+      });
+    });
   });
 
   afterNavigate((params: AfterNavigate) => {

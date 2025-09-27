@@ -3,10 +3,19 @@
 @tailwind utilities;
 @tailwind variants;
 
+// Global variables
+:root {
+  --coffee-view-transition-duration: 100ms;
+}
+
 // Theme overrides
 
-[data-theme='coffee'] h2,
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
 [data-theme='coffee'] h1,
+[data-theme='coffee'] h2,
 [data-theme='coffee'] h3,
 [data-theme='coffee'] h4,
 [data-theme='coffee'] h5,
@@ -14,10 +23,6 @@
 [data-theme='coffee'] a,
 [data-theme='coffee'] button {
   font-weight: bold;
-}
-
-* {
-  -webkit-tap-highlight-color: transparent;
 }
 
 /* Mesh generator: https://csshero.org/mesher/ */
@@ -187,4 +192,11 @@ body {
 
 .slide-toggle-active-token {
   @apply bg-primary-500 dark:bg-primary-600;
+}
+
+// View transition
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: var(--coffee-view-transition-duration);
+  animation-timing-function: ease-out;
 }
