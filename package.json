@@ -63,7 +63,7 @@
     "globals": "16.4.0",
     "husky": "9.1.7",
     "kolorist": "1.8.0",
-    "lint-staged": "16.2.1",
+    "lint-staged": "16.2.3",
     "lodash-es": "4.17.21",
     "luxon": "3.7.2",
     "pinst": "3.0.0",
