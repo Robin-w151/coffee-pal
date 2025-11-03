@@ -25,6 +25,7 @@
   });
 </script>
 
+<!-- eslint-disable svelte/no-navigation-without-resolve -->
 <div class="flex items-center relative" bind:this={wrapper}>
   {@render children?.()}
   {#if visible}
