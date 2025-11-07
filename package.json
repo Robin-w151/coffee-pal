@@ -37,7 +37,7 @@
     "@semantic-release/git": "10.0.1",
     "@skeletonlabs/skeleton": "2.11.0",
     "@skeletonlabs/tw-plugin": "0.4.1",
-    "@sveltejs/adapter-auto": "6.1.1",
+    "@sveltejs/adapter-auto": "7.0.0",
     "@sveltejs/kit": "2.48.4",
     "@sveltejs/vite-plugin-svelte": "6.2.1",
     "@tailwindcss/container-queries": "0.1.1",
