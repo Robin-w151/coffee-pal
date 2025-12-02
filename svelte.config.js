@@ -15,6 +15,13 @@ const config = {
       $lib: resolve('./src/lib'),
     },
   },
+  onwarn: (warning, handler) => {
+    if (warning.code === 'state_referenced_locally') {
+      return;
+    }
+
+    handler(warning);
+  },
 };
 
 export default config;

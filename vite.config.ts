@@ -1,7 +1,7 @@
 import { sveltekit } from '@sveltejs/kit/vite';
 import { SvelteKitPWA } from '@vite-pwa/sveltekit';
-import { execSync } from 'child_process';
 import dotenv from 'dotenv-flow';
+import { execSync } from 'node:child_process';
 import { defineConfig } from 'vite';
 import manifest from './src/assets/manifest';
 

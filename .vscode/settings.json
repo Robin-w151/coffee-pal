@@ -3,5 +3,8 @@
   "search.exclude": {
     "**/.svelte-kit": true,
     "**/node_modules": true
+  },
+  "svelte.plugin.svelte.compilerWarnings": {
+    "state_referenced_locally": "ignore"
   }
 }
