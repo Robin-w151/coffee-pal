@@ -98,7 +98,8 @@
   "pnpm": {
     "overrides": {
       "@sveltejs/kit>cookie": ">=0.7.0 <1.0.0",
-      "conventional-changelog-conventionalcommits": ">=8.0.0"
+      "conventional-changelog-conventionalcommits": ">=8.0.0",
+      "glob": ">=10.5.0"
     },
     "onlyBuiltDependencies": [
       "@parcel/watcher",
