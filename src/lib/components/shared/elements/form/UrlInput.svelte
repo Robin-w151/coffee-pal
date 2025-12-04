@@ -57,7 +57,7 @@
 >
   {#if readonly}
     <div class="input-group-shim">
-      <Icon data={schemeIcon} />
+      <Icon data={schemeIcon} class="overflow-visible" />
     </div>
   {:else}
     <select bind:value={scheme}>
@@ -78,7 +78,7 @@
   {#if host}
     <!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
     <a class="input-group-shim" href="{scheme}//{host}" target="_blank" title="Open URL">
-      <Icon data={faArrowUpRightFromSquare} />
+      <Icon data={faArrowUpRightFromSquare} class="overflow-visible" />
     </a>
   {/if}
 </div>
