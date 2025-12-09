@@ -15,6 +15,9 @@ const config = {
       $lib: resolve('./src/lib'),
     },
   },
+  vitePlugin: {
+    inspector: true,
+  },
   onwarn: (warning, handler) => {
     if (warning.code === 'state_referenced_locally') {
       return;
