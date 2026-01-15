@@ -76,7 +76,7 @@
     "scroll-into-view-if-needed": "3.1.0",
     "semantic-release": "25.0.2",
     "source-map-explorer": "2.5.3",
-    "svelte": "5.46.1",
+    "svelte": "5.46.4",
     "svelte-adapter-bun": "1.0.1",
     "svelte-awesome": "3.3.5",
     "svelte-check": "4.3.5",
