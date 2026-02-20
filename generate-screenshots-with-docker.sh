@@ -1,14 +1,16 @@
 #!/bin/sh
 
-checkIsInstalled() {
+check_is_installed() {
   program="$1"
   if ! command -v "$program"; then
     echo "$program is not installed!"
     exit 1
   fi
+
+  return 0
 }
 
-checkIsInstalled docker
+check_is_installed docker
 
 dockerfileName=d.screenshots.Dockerfile
 imageName=coffee-pal-screenshots

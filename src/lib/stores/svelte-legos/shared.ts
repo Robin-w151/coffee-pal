@@ -7,8 +7,8 @@ export interface ConfigurableWindow {
   window?: Window;
 }
 
-export const isClient = typeof window !== 'undefined';
-export const defaultWindow = isClient ? window : undefined;
+export const isClient = typeof globalThis.window !== 'undefined';
+export const defaultWindow = isClient ? globalThis.window : undefined;
 
 export function tryOnDestroy(_fn: () => void) {
   // NOT IMPLEMENTED

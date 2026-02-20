@@ -22,5 +22,5 @@ export function round(value: number | undefined, precision = 2): number | undefi
     return;
   }
 
-  return parseFloat((+value).toFixed(precision));
+  return Number.parseFloat((+value).toFixed(precision));
 }

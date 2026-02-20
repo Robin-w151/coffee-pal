@@ -25,7 +25,7 @@ export class AppPage {
     await this.page.evaluate(async (entries) => {
       return new Promise((resolve, reject) => {
         console.log(entries);
-        const openRequest = window.indexedDB.open('journal');
+        const openRequest = globalThis.indexedDB.open('journal');
         openRequest.onsuccess = (event: any) => {
           const db = event.target.result as IDBDatabase;
           const tx = db.transaction(['entries'], 'readwrite');
@@ -44,7 +44,7 @@ export class AppPage {
   async addCoffeeEntries(entries: Array<ActiveCoffeeEntry>): Promise<void> {
     await this.page.evaluate(async (entries) => {
       return new Promise((resolve, reject) => {
-        const openRequest = window.indexedDB.open('my-coffees');
+        const openRequest = globalThis.indexedDB.open('my-coffees');
         openRequest.onsuccess = (event: any) => {
           const db = event.target.result as IDBDatabase;
           const tx = db.transaction(['entries'], 'readwrite');

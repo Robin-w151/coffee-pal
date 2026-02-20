@@ -31,7 +31,7 @@ import { isValid } from '../validation/validation';
 
 const SYNC_DIR = 'CoffeePal';
 
-const createClient = (async () => (await import('webdav')).createClient)();
+const { createClient } = await import('webdav');
 
 export class NextcloudLoginClient {
   /* https://docs.nextcloud.com/server/latest/developer_manual/client_apis/LoginFlow/index.html#login-flow-v2 */
@@ -100,7 +100,7 @@ export class NextcloudSyncClient implements SyncClient {
   public async init(): Promise<void> {
     const webdavUrl = new URL(this.connection.server.url);
     webdavUrl.pathname = '/remote.php/dav';
-    this.client = (await createClient)(webdavUrl.href, this.connection.credentials);
+    this.client = createClient(webdavUrl.href, this.connection.credentials);
     await this.initSyncDir();
   }
 

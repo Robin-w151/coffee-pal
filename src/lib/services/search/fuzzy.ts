@@ -12,7 +12,7 @@ export function buildFuseQuery(
 
 function normalizeAndSplit(filter: string): Array<string> {
   return filter
-    .replace(/[/|\\()[\]{}<>!?"'$@€#%&~+\-_*]/g, '')
+    .replaceAll(/[/|\\()[\]{}<>!?"'$@€#%&~+\-_*]/g, '')
     .split(' ')
     .filter((token) => !!token);
 }

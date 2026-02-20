@@ -1,7 +1,7 @@
 import { skeleton } from '@skeletonlabs/tw-plugin';
 import forms from '@tailwindcss/forms';
 import containerQueries from '@tailwindcss/container-queries';
-import { join } from 'path';
+import { join } from 'node:path';
 import type { Config } from 'tailwindcss/types/config';
 import { coffeeTheme } from './theme';
 import { screens } from './src/lib/config/screens';

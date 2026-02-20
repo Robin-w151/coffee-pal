@@ -32,7 +32,7 @@ export function scaleX(
     css: (_t: number, u: number) => {
       const scale = 1 - sd * u;
       return `
-			transform: ${transform} ${translateX(direction, parseInt(style.width), scale)} scaleX(${scale});
+			transform: ${transform} ${translateX(direction, Number.parseInt(style.width), scale)} scaleX(${scale});
 			opacity: ${target_opacity - od * u}
 		`;
     },

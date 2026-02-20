@@ -13,7 +13,7 @@ export async function listenForUpdates(callback: (actions: UpdateActions) => voi
       isRefreshing = true;
 
       const refresh = () => {
-        window.location.reload();
+        globalThis.location.reload();
       };
 
       refresh();

@@ -1,7 +1,7 @@
 import { Chance } from 'chance';
 import { DateTime } from 'luxon';
 import { v4 as uuid } from 'uuid';
-import { writeFileSync } from 'fs';
+import { writeFileSync } from 'node:fs';
 
 const numberOfEntries = 10_000;
 const chance = new Chance();

@@ -1,6 +1,6 @@
 import { chromium } from 'playwright';
 import { expect } from '@playwright/test';
-import { join } from 'path';
+import { join } from 'node:path';
 
 const baseUrl = process.env.BASE_URL ?? 'https://coffee-pal.vercel.app';
 const screenshotsDir = process.env.SCREENSHOTS_DIR ?? 'screenshots';
@@ -80,7 +80,7 @@ const testCoffeeEntries = [
 let page;
 let category;
 
-generateScreenshots().catch(console.error);
+await generateScreenshots();
 
 async function generateScreenshots() {
   const browser = await chromium.launch();

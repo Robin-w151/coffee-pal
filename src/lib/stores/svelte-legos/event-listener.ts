@@ -57,16 +57,19 @@ export function eventListenerStore<
   const listener: typeof handler = (event) => handler(event);
 
   function start() {
-    const targetElement: T | Window = element ?? window;
-    if (targetElement && targetElement.addEventListener) {
+    const targetElement: T | Window | undefined =
+      element ?? (typeof globalThis.window === 'undefined' ? undefined : globalThis.window);
+    if (targetElement?.addEventListener) {
       targetElement.addEventListener(eventName, listener, options);
     }
   }
 
   function stop() {
-    const targetElement: T | Window = element ?? window;
-    if (!(targetElement && targetElement.addEventListener)) return;
-    targetElement.removeEventListener(eventName, listener, options);
+    const targetElement: T | Window | undefined =
+      element ?? (typeof globalThis.window === 'undefined' ? undefined : globalThis.window);
+    if (targetElement?.addEventListener) {
+      targetElement.removeEventListener(eventName, listener, options);
+    }
   }
 
   start();

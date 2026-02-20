@@ -23,12 +23,12 @@ test('estimation', async ({ page, dripCounterPage }) => {
     await dripCounterPage.clickTapButton();
   }
 
-  const dropsPerMinute = parseInt(
+  const dropsPerMinute = Number.parseInt(
     /(?<dpm>\d+) drops\/min/.exec((await dripCounterPage.dropsPerMinute.textContent())!)?.groups
       ?.dpm ?? '0',
   );
 
-  const estimatedTimeInMinutes = round(500 / (dropsPerMinute * 0.05), 0)!;
+  const estimatedTimeInMinutes = round(500 / (dropsPerMinute * 0.05), 0);
   const estimatedTimeInHours = Math.floor(estimatedTimeInMinutes / 60);
   const restTimeInMinutes = estimatedTimeInMinutes % 60;
 
@@ -45,5 +45,5 @@ test('target time', async ({ dripCounterPage }) => {
 });
 
 export function round(value: number, precision = 0): number {
-  return parseFloat(value.toFixed(precision));
+  return Number.parseFloat(value.toFixed(precision));
 }

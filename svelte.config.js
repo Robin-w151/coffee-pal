@@ -1,7 +1,7 @@
 import adapterAuto from '@sveltejs/adapter-auto';
 import adapterBun from 'svelte-adapter-bun';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
-import { resolve } from 'path';
+import { resolve } from 'node:path';
 
 const useAdapterBun = process.env['USE_ADAPTER_BUN'] === 'true';
 

@@ -4,7 +4,7 @@ let isViewTransitionInProgress = false;
 
 export function runViewTransition(
   fn: () => void | Promise<void>,
-  { useReducedMotion }: { useReducedMotion: boolean } = { useReducedMotion: false },
+  { useReducedMotion = false }: { useReducedMotion?: boolean } = {},
 ): void {
   if (isViewTransitionAvailable() && !useReducedMotion) {
     if (isViewTransitionInProgress) {

@@ -12,7 +12,7 @@
     %sveltekit.head%
     <script>
       const { colorScheme } = JSON.parse(localStorage.getItem('settings') ?? '{}');
-      const prefersDarkColorScheme = window.matchMedia('(prefers-color-scheme: dark)')?.matches;
+      const prefersDarkColorScheme = globalThis.matchMedia('(prefers-color-scheme: dark)')?.matches;
       if (
         colorScheme === 'dark' ||
         ((!colorScheme || colorScheme === 'system') && prefersDarkColorScheme)

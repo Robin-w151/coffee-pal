@@ -15,7 +15,7 @@ function createAppStore(): AppStore {
   let installEvent: InstallEvent | undefined;
 
   if (browser) {
-    window.addEventListener('beforeinstallprompt', (event) => {
+    globalThis.addEventListener('beforeinstallprompt', (event) => {
       event.preventDefault();
       installAvailable = true;
       installEvent = event as InstallEvent;
