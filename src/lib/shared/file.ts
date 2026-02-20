@@ -9,7 +9,7 @@ export async function readJsonFile(file: File): Promise<any> {
   try {
     const text = await file.text();
     return JSON.parse(text);
-  } catch (_error) {
-    throw new Error('Failed to read file!');
+  } catch (error) {
+    throw new Error('Failed to read file!', { cause: error });
   }
 }
