@@ -6,5 +6,9 @@
   },
   "svelte.plugin.svelte.compilerWarnings": {
     "state_referenced_locally": "ignore"
+  },
+  "sonarlint.connectedMode.project": {
+    "connectionId": "sonarcloud",
+    "projectKey": "Robin-w151_coffee-pal"
   }
 }
