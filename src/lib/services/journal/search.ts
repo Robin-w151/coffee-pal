@@ -106,9 +106,9 @@ export function sort(
   sortDirection: JournalSortDirection = 'desc',
 ): Array<ActiveJournalEntry> {
   const reverse = (entries: Array<ActiveJournalEntry>) =>
-    sortDirection === 'asc' ? entries : entries.reverse();
+    sortDirection === 'asc' ? entries : entries.toReversed();
   return reverse(
-    entries.sort((e1: ActiveJournalEntry, e2: ActiveJournalEntry) => {
+    entries.toSorted((e1: ActiveJournalEntry, e2: ActiveJournalEntry) => {
       switch (sort) {
         case 'method_coffee_type':
           return `${e1.method}-${getCoffeeLabel(e1.coffeeType) ?? ''}`.localeCompare(

@@ -12,7 +12,7 @@ function isMainBranch() {
 
 function isReleaseCommit() {
   const message = getCurrentCommitMessage();
-  return message && /^chore\(release\):/.test(message);
+  return message && message.startsWith('chore(release):');
 }
 
 if (isMainBranch() && !isReleaseCommit()) {

@@ -33,11 +33,11 @@ export interface MyCoffeesStore {
   loadPage: (page: number) => Promise<void>;
   loadOne: (id: string) => Promise<ActiveCoffeeEntry | undefined>;
   quickSearch: (filter?: string) => Promise<Array<ActiveCoffeeEntry>>;
-  add: (entry: ActiveCoffeeEntry) => void;
-  update: (entry: ActiveCoffeeEntry) => void;
+  add: (entry: ActiveCoffeeEntry) => Promise<void>;
+  update: (entry: ActiveCoffeeEntry) => Promise<void>;
   remove: (id: string) => Promise<void>;
-  undo: (id: string) => void;
-  apply: (syncResult: SyncResult<ActiveCoffeeEntry, DeletedCoffeeEntry>) => void;
+  undo: (id: string) => Promise<void>;
+  apply: (syncResult: SyncResult<ActiveCoffeeEntry, DeletedCoffeeEntry>) => Promise<void>;
 }
 
 class MyCoffeesDb extends Dexie {
