@@ -31,7 +31,11 @@ import { isValid } from '../validation/validation';
 
 const SYNC_DIR = 'CoffeePal';
 
-const { createClient } = await import('webdav');
+/**
+ * Don't use top level await as it is not supported in Safari yet (as of March 2026).
+ * https://caniuse.com/wf-top-level-await
+ */
+const createClient = (async () => (await import('webdav')).createClient)();
 
 export class NextcloudLoginClient {
   /* https://docs.nextcloud.com/server/latest/developer_manual/client_apis/LoginFlow/index.html#login-flow-v2 */
@@ -100,7 +104,7 @@ export class NextcloudSyncClient implements SyncClient {
   public async init(): Promise<void> {
     const webdavUrl = new URL(this.connection.server.url);
     webdavUrl.pathname = '/remote.php/dav';
-    this.client = createClient(webdavUrl.href, this.connection.credentials);
+    this.client = (await createClient)(webdavUrl.href, this.connection.credentials);
     await this.initSyncDir();
   }
 
