@@ -3,6 +3,10 @@ import type { CachedSearchResult } from '$lib/models/cachedSearch';
 import type { ActiveCoffeeEntry, MyCoffeesSearchState } from '$lib/models/myCoffees';
 import { wrap } from 'comlink';
 
+/**
+ * Don't use top level await as it is not supported in Safari yet (as of March 2026).
+ * https://caniuse.com/wf-top-level-await
+ */
 const worker: any = browser
   ? import('./worker?worker').then((w) => wrap(new w.default()))
   : undefined;

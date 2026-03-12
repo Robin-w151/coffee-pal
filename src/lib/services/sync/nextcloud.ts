@@ -31,6 +31,10 @@ import { isValid } from '../validation/validation';
 
 const SYNC_DIR = 'CoffeePal';
 
+/**
+ * Don't use top level await as it is not supported in Safari yet (as of March 2026).
+ * https://caniuse.com/wf-top-level-await
+ */
 const createClient = (async () => (await import('webdav')).createClient)();
 
 export class NextcloudLoginClient {
