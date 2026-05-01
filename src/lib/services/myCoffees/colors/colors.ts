@@ -238,11 +238,15 @@ const colorFuseOptions = {
 const colorIndex = Fuse.createIndex(colorFuseKeys, colorMappings);
 const colorSearch = new Fuse(colorMappings, colorFuseOptions, colorIndex);
 
-export function getAromaColor(aroma: string): ColorPair {
+export function getAromaColor(aroma: string | undefined): ColorPair {
   const defaultColorPair = {
     color: 'black',
     backgroundColor: 'rgb(215, 136, 35)',
   };
+
+  if (!aroma) {
+    return defaultColorPair;
+  }
 
   const wholeStringResults = colorSearch.search(aroma.trim());
 
