@@ -107,7 +107,7 @@
   }
 
   function handleAddClick(): void {
-    goto(resolve('./journal/new', {}));
+    goto(resolve('/journal/new', {}));
   }
 
   function handleSyncClick(): void {

@@ -36,7 +36,7 @@
   }
 
   function gotoDetail(): void {
-    goto(resolve(`./journal/${entry.id}`, {}));
+    goto(resolve(`/journal/${entry.id}`, {}));
   }
 
   function waterDisplayValue(water: number): string {

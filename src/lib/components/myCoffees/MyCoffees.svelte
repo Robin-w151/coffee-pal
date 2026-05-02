@@ -126,7 +126,7 @@
   }
 
   function handleAddClick(): void {
-    goto(resolve('./my-coffees/new', {}));
+    goto(resolve('/my-coffees/new', {}));
   }
 
   function handleSyncClick(): void {

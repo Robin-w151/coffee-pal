@@ -235,7 +235,7 @@
   }
 
   function goToEntry(id: string): void {
-    goto(resolve(`./my-coffees/${id}`, {}), { replaceState: true });
+    goto(resolve(`/my-coffees/${id}`, {}), { replaceState: true });
   }
 
   function getTitle(unknown: boolean, entry?: Partial<ActiveCoffeeEntry>): string {
