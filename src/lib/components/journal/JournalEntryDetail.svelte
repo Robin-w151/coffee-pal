@@ -134,7 +134,7 @@
         if (shouldGoBack) {
           history.back();
         } else {
-          goto(resolve(`${to.url.pathname}${to.url.search}`, {}));
+          goto(`${to.url.pathname}${to.url.search}`);
         }
       } else {
         shouldGoBack = false;
@@ -204,7 +204,7 @@
       coffee: `${entry.coffee}`,
     };
 
-    goto(resolve(`/calculator?${new URLSearchParams(recipe).toString()}`, {}));
+    goto(`/calculator?${new URLSearchParams(recipe).toString()}`);
   }
 
   function handleCoffeeChange(coffee: number | undefined): void {
@@ -250,7 +250,7 @@
   }
 
   function goToEntry(id: string): void {
-    goto(resolve(`/journal/${id}`, {}), { replaceState: true });
+    goto(resolve('/journal/[id]', { id }), { replaceState: true });
   }
 
   function getTitle(unknown: boolean, entry?: Partial<ActiveJournalEntry>): string {

@@ -25,7 +25,7 @@
 
 <a
   class="block min-w-0 flex-1 px-3 py-2 hover:bg-primary-500/10 rounded-md transition ease-out"
-  href={resolve(`/my-coffees/${entry.id}`, {})}
+  href={resolve('/my-coffees/[id]', { id: entry.id })}
 >
   <dt class="overflow-hidden text-ellipsis whitespace-nowrap">
     <span>{title(entry)}</span>
