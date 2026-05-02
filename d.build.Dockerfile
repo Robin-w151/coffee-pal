@@ -4,7 +4,7 @@ RUN apt update && apt install -yq git && apt-get clean
 
 WORKDIR /app/
 
-COPY package.json pnpm-lock.yaml .npmrc /app/
+COPY package.json pnpm-lock.yaml /app/
 
 RUN bun install
 

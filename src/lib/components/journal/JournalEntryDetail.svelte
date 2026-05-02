@@ -250,7 +250,7 @@
   }
 
   function goToEntry(id: string): void {
-    goto(resolve(`./journal/${id}`, {}), { replaceState: true });
+    goto(resolve(`/journal/${id}`, {}), { replaceState: true });
   }
 
   function getTitle(unknown: boolean, entry?: Partial<ActiveJournalEntry>): string {

@@ -27,7 +27,7 @@
   }
 
   function gotoDetail(): void {
-    goto(resolve(`./my-coffees/${entry.id}`, {}));
+    goto(resolve(`/my-coffees/${entry.id}`, {}));
   }
 
   function altitudeDisplayValue(altitude: number): string {
