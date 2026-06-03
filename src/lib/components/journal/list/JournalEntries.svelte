@@ -11,10 +11,14 @@
   }
 
   let { entries, isLoading = false }: Props = $props();
+
+  function hasEntries(entries?: Array<ActiveJournalEntry>): boolean {
+    return !!entries && entries.length > 0;
+  }
 </script>
 
 <dl class="list-dl">
-  {#if isLoading && (!entries || entries.length === 0)}
+  {#if isLoading && !hasEntries(entries)}
     {#each { length: 3 }}
       <JournalEntryPlaceholder />
     {/each}
