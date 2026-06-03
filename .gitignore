@@ -15,20 +15,13 @@
 
 .DS_Store
 node_modules
+/.pnpm-store/
 /build
 /.svelte-kit
 /package
 .env*.local
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
-
-.yarn/*
-!.yarn/releases
-!.yarn/patches
-!.yarn/plugins
-!.yarn/sdks
-!.yarn/versions
-!.yarn/cache
 
 .vercel/
 /test-results/
