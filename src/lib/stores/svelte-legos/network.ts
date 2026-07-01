@@ -5,14 +5,7 @@ import type { ConfigurableWindow } from './shared';
 
 /* this implementation is original ported from https://vueuse.org/useNetwork */
 export type NetworkType =
-  | 'bluetooth'
-  | 'cellular'
-  | 'ethernet'
-  | 'none'
-  | 'wifi'
-  | 'wimax'
-  | 'other'
-  | 'unknown';
+  'bluetooth' | 'cellular' | 'ethernet' | 'none' | 'wifi' | 'wimax' | 'other' | 'unknown';
 
 export type NetworkEffectiveType = 'slow-2g' | '2g' | '3g' | '4g' | undefined;
 
