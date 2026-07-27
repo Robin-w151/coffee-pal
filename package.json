@@ -68,7 +68,7 @@
     "luxon": "3.7.2",
     "pinst": "3.0.0",
     "playwright": "1.61.1",
-    "postcss": "8.5.16",
+    "postcss": "8.5.18",
     "prettier": "3.9.3",
     "prettier-plugin-svelte": "3.5.2",
     "rxjs": "7.8.2",
