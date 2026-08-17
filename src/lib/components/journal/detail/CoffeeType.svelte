@@ -78,8 +78,16 @@
     }
   }
 
-  function handleInputValueChange(details: { inputValue: string }): void {
+  function handleInputValueChange(details: { inputValue: string; reason?: string }): void {
     coffeeTypeInput = details.inputValue;
+
+    // Only typing produces a free-text value. Selecting a suggestion, clicking
+    // away and programmatic updates all rewrite the input too, and must not
+    // downgrade the stored entry back to a plain string.
+    if (details.reason !== 'input-change') {
+      return;
+    }
+
     coffeeType = details.inputValue;
     filter.next(details.inputValue);
   }
@@ -113,7 +121,7 @@
       </Combobox.Control>
       <Portal>
         <Combobox.Positioner>
-          <Combobox.Content class="autocomplete-token">
+          <Combobox.Content class="autocomplete-token" data-testid="coffee-type-suggestions">
             {#each coffeeTypeOptions as item (item.value.id)}
               <Combobox.Item {item}>
                 <Combobox.ItemText>{item.label}</Combobox.ItemText>

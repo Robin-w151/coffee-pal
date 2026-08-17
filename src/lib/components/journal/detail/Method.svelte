@@ -65,7 +65,7 @@
     </Combobox.Control>
     <Portal>
       <Combobox.Positioner>
-        <Combobox.Content class="autocomplete-token">
+        <Combobox.Content class="autocomplete-token" data-testid="method-suggestions">
           {#each items as item (item.label)}
             <Combobox.Item {item}>
               <Combobox.ItemText>{item.label}</Combobox.ItemText>
