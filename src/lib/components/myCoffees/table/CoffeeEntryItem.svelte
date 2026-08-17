@@ -47,7 +47,7 @@
       {#each entry.aromas as aroma (aroma)}
         {@const { color, backgroundColor } = getAromaColor(aroma)}
         <span
-          class="chip variant-filled-primary px-2 py-1"
+          class="chip preset-filled-primary-500 px-2 py-1"
           style={`color: ${color}; background-color: ${backgroundColor}`}>{aroma}</span
         >
       {/each}

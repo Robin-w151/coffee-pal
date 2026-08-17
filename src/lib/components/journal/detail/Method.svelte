@@ -1,15 +1,8 @@
 <script lang="ts">
   import Label from '$lib/components/shared/elements/form/Label.svelte';
-  import Portal from '$lib/components/shared/elements/Portal.svelte';
   import { methodOptions } from '$lib/config/brewMethods';
-  import { autocompletePopupBaseSettings } from '$lib/shared/ui/autocomplete';
-  import {
-    Autocomplete,
-    focusTrap,
-    popup,
-    type AutocompleteOption,
-    type PopupSettings,
-  } from '@skeletonlabs/skeleton';
+  import { matchesAutocompleteOption, type AutocompleteOption } from '$lib/models/autocomplete';
+  import { Combobox, Portal, useListCollection } from '@skeletonlabs/skeleton-svelte';
 
   interface Props {
     method?: string;
@@ -19,38 +12,33 @@
   let { method = $bindable(), valid = $bindable(false) }: Props = $props();
 
   const errorMessage = 'brew method is required';
-  const popupMethodAutocomplete: PopupSettings = {
-    ...autocompletePopupBaseSettings,
-    target: 'popupMethodAutocomplete',
-    state: ({ state }) => {
-      if (!state) {
-        autocompleteTouched = true;
-      }
-    },
-  };
 
   let inputTouched = $state(false);
-  let autocompleteTouched = $state(false);
-  let inputElementRef: HTMLInputElement | undefined = $state();
-  let showError = $derived(inputTouched && autocompleteTouched && !valid);
+  let showError = $derived(inputTouched && !valid);
+
+  let items = $derived(
+    methodOptions.filter((option) => matchesAutocompleteOption(option, method ?? '')),
+  );
+
+  const collection = $derived(
+    useListCollection<AutocompleteOption>({
+      items,
+      itemToString: (item) => item.label,
+      itemToValue: (item) => item.label,
+    }),
+  );
 
   $effect(() => {
     checkValidity(method);
   });
 
-  function handleMethodSelect({ detail }: CustomEvent<AutocompleteOption>): void {
-    method = detail.label;
-    inputElementRef?.focus();
+  function handleInputValueChange(details: { inputValue: string }): void {
+    method = details.inputValue;
   }
 
-  function handleInputBlur(): void {
-    inputTouched = true;
-  }
-
-  function handleInputKeydown(event: KeyboardEvent): void {
-    const { key } = event;
-    if (key === 'Escape') {
-      event.stopPropagation();
+  function handleOpenChange(details: { open: boolean }): void {
+    if (!details.open) {
+      inputTouched = true;
     }
   }
 
@@ -59,31 +47,33 @@
   }
 </script>
 
-<Portal target="body">
-  <div
-    class="autocomplete-token"
-    tabindex="-1"
-    data-popup="popupMethodAutocomplete"
-    use:focusTrap={true}
-  >
-    <Autocomplete
-      options={methodOptions}
-      input={method}
-      transitions={false}
-      on:selection={handleMethodSelect}
-    />
-  </div>
-</Portal>
 <Label text="Brew method *" error={showError} {errorMessage} class="relative">
-  <input
-    class="input autocomplete"
-    class:input-error={showError}
-    type="text"
-    placeholder="Brew method, e.g. V60"
-    bind:this={inputElementRef}
-    bind:value={method}
-    use:popup={popupMethodAutocomplete}
-    onblur={handleInputBlur}
-    onkeydown={handleInputKeydown}
-  />
+  <Combobox
+    {collection}
+    inputValue={method ?? ''}
+    allowCustomValue
+    openOnClick
+    onInputValueChange={handleInputValueChange}
+    onOpenChange={handleOpenChange}
+  >
+    <Combobox.Control>
+      <Combobox.Input
+        class="input {showError ? 'input-error' : ''}"
+        placeholder="Brew method, e.g. V60"
+        onblur={() => (inputTouched = true)}
+      />
+    </Combobox.Control>
+    <Portal>
+      <Combobox.Positioner>
+        <Combobox.Content class="autocomplete-token" data-testid="method-suggestions">
+          {#each items as item (item.label)}
+            <Combobox.Item {item}>
+              <Combobox.ItemText>{item.label}</Combobox.ItemText>
+              <Combobox.ItemIndicator />
+            </Combobox.Item>
+          {/each}
+        </Combobox.Content>
+      </Combobox.Positioner>
+    </Portal>
+  </Combobox>
 </Label>

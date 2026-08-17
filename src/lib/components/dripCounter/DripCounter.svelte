@@ -11,6 +11,6 @@
 <PageHeader title="Drip Counter" />
 <PageCard display="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-4">
   <Counter {isWithinRange} bind:dropsPerMinute />
-  <hr class="md:divider-vertical md:h-full" />
+  <hr class="md:vr md:h-full" />
   <Estimation {dropsPerMinute} bind:isWithinRange />
 </PageCard>

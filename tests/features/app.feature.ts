@@ -6,7 +6,7 @@ export class AppPage {
   constructor(private readonly page: Page) {}
 
   get warningDialog(): Locator {
-    return this.page.locator('.modal');
+    return this.page.locator('[data-testid="modal"]');
   }
 
   async goto(): Promise<void> {

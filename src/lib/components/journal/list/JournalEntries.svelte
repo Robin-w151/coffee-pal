@@ -17,7 +17,7 @@
   }
 </script>
 
-<dl class="list-dl">
+<dl class="flex flex-col" data-loading={isLoading}>
   {#if isLoading && !hasEntries(entries)}
     {#each { length: 3 }}
       <JournalEntryPlaceholder />

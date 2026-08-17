@@ -9,7 +9,7 @@
   import { sanitize } from '$lib/shared/math';
   import { getPreferredWeightUnit } from '$lib/shared/units';
   import { settingsStore } from '$lib/stores/settings';
-  import { RangeSlider } from '@skeletonlabs/skeleton';
+  import { Slider } from '@skeletonlabs/skeleton-svelte';
 
   interface Props {
     water: number;
@@ -59,25 +59,33 @@
     bind:active={iced}
   >
     <Form>
-      <RangeSlider
+      <Slider
         name="ice-ratio"
         min={0}
         max={100}
-        accent="range-slider-accent-token"
-        bind:value={iceRatio}
+        value={[iceRatio]}
+        onValueChange={(details) => (iceRatio = details.value[0])}
       >
-        <div class="flex justify-between items-center">
+        <Slider.Label class="flex justify-between items-center w-full">
           <span>Ice Ratio</span>
           <span>{iceRatio} %</span>
-        </div>
-      </RangeSlider>
+        </Slider.Label>
+        <Slider.Control>
+          <Slider.Track>
+            <Slider.Range />
+          </Slider.Track>
+          <Slider.Thumb index={0}>
+            <Slider.HiddenInput />
+          </Slider.Thumb>
+        </Slider.Control>
+      </Slider>
       <div class="grid sm:grid-cols-[1fr_auto_1fr] gap-4 w-full">
         <Label text="Amount of brewing water">
           <MeasurementInput readonly {units} bind:measurement={brewWaterMeasurement} />
         </Label>
         <div class="hidden sm:flex flex-col gap-1">
           <div class="h-[24px]"></div>
-          <hr class="flex-1 divider-vertical" />
+          <hr class="flex-1 vr" />
         </div>
         <Label text="Amount of ice">
           <MeasurementInput readonly {units} bind:measurement={iceMeasurement} />

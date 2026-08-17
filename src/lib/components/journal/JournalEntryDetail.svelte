@@ -4,12 +4,11 @@
   import { getCoffeeLabel } from '$lib/models/myCoffees';
   import { pauseScheduledSync, resumeScheduledSync, scheduleSync } from '$lib/services/sync/sync';
   import { isEqualJournalEntry } from '$lib/shared/compare';
-  import { ModalHelper } from '$lib/shared/ui/modal';
-  import { ToastHelper } from '$lib/shared/ui/toast';
+  import { modalHelper } from '$lib/shared/ui/modal.svelte';
+  import { toastHelper } from '$lib/shared/ui/toast';
   import { journalStore } from '$lib/stores/journal';
   import { syncStateEvents } from '$lib/stores/syncState.svelte';
   import { faCalculator, faFaceSadCry } from '@fortawesome/free-solid-svg-icons';
-  import { getModalStore, getToastStore } from '@skeletonlabs/skeleton';
   import { Subject, takeUntil, tap } from 'rxjs';
   import { onDestroy, onMount, untrack } from 'svelte';
   import { Icon } from 'svelte-awesome';
@@ -35,10 +34,6 @@
   }
 
   let { id = undefined }: Props = $props();
-
-  const modalHelper = new ModalHelper(getModalStore());
-  const toastStore = getToastStore();
-  const toastHelper = new ToastHelper(toastStore);
   const destroy = new Subject<void>();
 
   let entry: Partial<ActiveJournalEntry> = $state({
@@ -120,7 +115,7 @@
     destroy.complete();
 
     if (updateInfoToast) {
-      toastStore.close(updateInfoToast);
+      toastHelper.close(updateInfoToast);
     }
   });
 
@@ -178,7 +173,7 @@
           },
         },
         callback: (response) => {
-          if (response.status === 'closed') {
+          if (response.status === 'unmounted') {
             scheduleSync();
           }
         },
@@ -314,7 +309,7 @@
                 <ResponsiveButton
                   type="button"
                   label="Open in calculator"
-                  variant="variant-ghost-tertiary"
+                  variant="preset-outlined-tertiary-500"
                   disabled={!formValid}
                   onclick={handleOpenInCalculator}
                 >

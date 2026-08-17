@@ -7,20 +7,18 @@
   import { journalStore } from '$lib/stores/journal';
   import { myCoffeesStore } from '$lib/stores/myCoffees';
   import { readJsonFile, writeJsonFile } from '$lib/shared/file';
-  import { ToastHelper } from '$lib/shared/ui/toast';
+  import { toastHelper } from '$lib/shared/ui/toast';
   import { faFileArrowUp } from '@fortawesome/free-solid-svg-icons';
-  import { FileDropzone, getToastStore } from '@skeletonlabs/skeleton';
+  import { FileUpload } from '@skeletonlabs/skeleton-svelte';
   import { DateTime } from 'luxon';
   import { Icon } from 'svelte-awesome';
   import Spinner from '../../shared/elements/Spinner.svelte';
   import Form from '../../shared/elements/form/Form.svelte';
   import Card from '$lib/components/shared/elements/Card.svelte';
 
-  const toastHelper = new ToastHelper(getToastStore());
-
-  let files: FileList | undefined = $state();
+  let files: Array<File> = $state([]);
   let isImporting = $state(false);
-  let fileSelected = $derived(files?.length && files.length > 0);
+  let fileSelected = $derived(files.length > 0);
 
   async function handleExportClick(): Promise<void> {
     const journalEntries = await journalStore.loadAll();
@@ -34,7 +32,7 @@
   }
 
   async function handleImportClick(): Promise<void> {
-    if (!files?.length) {
+    if (!files.length) {
       return;
     }
 
@@ -58,7 +56,7 @@
         myCoffeesStore.apply(result.localChanges);
       }
 
-      files = undefined;
+      files = [];
       toastHelper.triggerInfo('Importing backup data was successful');
     } catch (error: unknown) {
       toastHelper.triggerError(`Importing backup data failed. ${(error as Error).message}`);
@@ -84,30 +82,33 @@
     {/if}
   </div>
   <Form>
-    <FileDropzone name="import-file-input" accept="application/json" bind:files>
-      {#snippet lead()}
+    <FileUpload
+      name="import-file-input"
+      accept="application/json"
+      maxFiles={1}
+      acceptedFiles={files}
+      onFileChange={(details) => (files = details.acceptedFiles)}
+    >
+      <FileUpload.Dropzone class="flex flex-col items-center gap-2">
         <Icon data={faFileArrowUp} scale={1.5} />
-      {/snippet}
-      {#snippet message()}
         {#if fileSelected}
-          <span>{files?.[0].name}</span>
+          <span>{files[0].name}</span>
         {:else}
           <span>Click to select file or drag and drop</span>
         {/if}
-      {/snippet}
-      {#snippet meta()}
-        Allowed type: JSON
-      {/snippet}
-    </FileDropzone>
+        <span class="text-xs opacity-60">Allowed type: JSON</span>
+        <FileUpload.HiddenInput />
+      </FileUpload.Dropzone>
+    </FileUpload>
     <div class="flex justify-end gap-2">
       <button
-        class="btn variant-ghost-primary"
+        class="btn preset-outlined-primary-500"
         type="button"
         title="Export Data"
         onclick={handleExportClick}>Export</button
       >
       <button
-        class="btn variant-filled-primary"
+        class="btn preset-filled-primary-500"
         title="Import Data"
         disabled={!fileSelected}
         onclick={handleImportClick}>Import</button

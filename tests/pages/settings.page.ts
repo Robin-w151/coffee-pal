@@ -6,13 +6,13 @@ export class SettingsPage {
   get activeAppearenceOption(): Locator {
     return this.page
       .getByText('System Light Dark')
-      .locator('div[data-testid="radio-item"][aria-checked="true"]');
+      .locator('[data-testid="radio-item"][data-state="checked"]');
   }
 
   get activeUnitsOption(): Locator {
     return this.page
       .getByText('Metric Imperial')
-      .locator('div[data-testid="radio-item"][aria-checked="true"]');
+      .locator('[data-testid="radio-item"][data-state="checked"]');
   }
 
   getAppearenceOption(option: 'System' | 'Light' | 'Dark'): Locator {

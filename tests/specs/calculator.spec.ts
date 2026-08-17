@@ -40,30 +40,30 @@ test('recipe output amount', async ({ calculatorPage }) => {
 });
 
 test('iced toggle', async ({ calculatorPage }) => {
-  await calculatorPage.icedCoffeeToggle.check();
+  await calculatorPage.setIcedCoffee(true);
 
   await expect(calculatorPage.brewWaterAmountInput).toHaveValue('168');
   await expect(calculatorPage.iceAmountInput).toHaveValue('72');
 });
 
 test('iced ratio 25%', async ({ calculatorPage }) => {
-  await calculatorPage.icedCoffeeToggle.check();
-  await calculatorPage.iceRatioRange.fill('25');
+  await calculatorPage.setIcedCoffee(true);
+  await calculatorPage.setIceRatio(25);
 
   await expect(calculatorPage.brewWaterAmountInput).toHaveValue('180');
   await expect(calculatorPage.iceAmountInput).toHaveValue('60');
 });
 
 test('iced ratio 50%', async ({ calculatorPage }) => {
-  await calculatorPage.icedCoffeeToggle.check();
-  await calculatorPage.iceRatioRange.fill('50');
+  await calculatorPage.setIcedCoffee(true);
+  await calculatorPage.setIceRatio(50);
 
   await expect(calculatorPage.brewWaterAmountInput).toHaveValue('120');
   await expect(calculatorPage.iceAmountInput).toHaveValue('120');
 });
 
 test('variable ratio change water', async ({ calculatorPage }) => {
-  await calculatorPage.fixedRatioToggle.uncheck();
+  await calculatorPage.setFixedRatio(false);
   await calculatorPage.waterAmountInput.fill('272');
   await calculatorPage.waterAmountInput.press('Enter');
 
@@ -74,7 +74,7 @@ test('variable ratio change water', async ({ calculatorPage }) => {
 });
 
 test('variable ratio change coffee', async ({ calculatorPage }) => {
-  await calculatorPage.fixedRatioToggle.uncheck();
+  await calculatorPage.setFixedRatio(false);
   await calculatorPage.coffeeAmountInput.fill('20');
   await calculatorPage.coffeeAmountInput.press('Enter');
 
@@ -85,7 +85,7 @@ test('variable ratio change coffee', async ({ calculatorPage }) => {
 });
 
 test('variable ratio change output', async ({ calculatorPage }) => {
-  await calculatorPage.fixedRatioToggle.uncheck();
+  await calculatorPage.setFixedRatio(false);
   await calculatorPage.outputAmountInput.fill('300');
   await calculatorPage.outputAmountInput.press('Enter');
 
@@ -96,7 +96,7 @@ test('variable ratio change output', async ({ calculatorPage }) => {
 });
 
 test('select preset', async ({ calculatorPage }) => {
-  await calculatorPage.fixedRatioToggle.uncheck();
+  await calculatorPage.setFixedRatio(false);
   await calculatorPage.getPreset('Aeropress 7:100').click();
 
   await expect(calculatorPage.fixedRatioToggle).toBeChecked();
@@ -107,20 +107,20 @@ test('select preset with ice ratio', async ({ calculatorPage }) => {
 
   await expect(calculatorPage.icedCoffeeToggle).toBeChecked();
 
-  await expect(calculatorPage.iceRatioRange).toHaveValue('30');
+  await expect(calculatorPage.iceRatioSlider).toHaveAttribute('aria-valuenow', '30');
   await expect(calculatorPage.brewWaterAmountInput).toHaveValue('140');
   await expect(calculatorPage.iceAmountInput).toHaveValue('60');
 });
 
 test('temperature converter toggle', async ({ calculatorPage }) => {
-  await calculatorPage.temperatureConverterToggle.check();
+  await calculatorPage.setTemperatureConverter(true);
 
   await expect(calculatorPage.temperatureCelsiusInput).toHaveValue('100');
   await expect(calculatorPage.temperatureFahrenheitInput).toHaveValue('212');
 });
 
 test('convert celsius to fahrenheit', async ({ calculatorPage }) => {
-  await calculatorPage.temperatureConverterToggle.check();
+  await calculatorPage.setTemperatureConverter(true);
   await calculatorPage.temperatureCelsiusInput.fill('20');
   await calculatorPage.temperatureCelsiusInput.press('Enter');
 
@@ -128,7 +128,7 @@ test('convert celsius to fahrenheit', async ({ calculatorPage }) => {
 });
 
 test('convert fahrenheit to celsius', async ({ calculatorPage }) => {
-  await calculatorPage.temperatureConverterToggle.check();
+  await calculatorPage.setTemperatureConverter(true);
   await calculatorPage.temperatureFahrenheitInput.fill('176');
   await calculatorPage.temperatureFahrenheitInput.press('Enter');
 

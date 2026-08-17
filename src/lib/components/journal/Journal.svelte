@@ -14,7 +14,7 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
   import { JOURNAL_PAGE_SIZE } from '$lib/config/journal';
-  import type { JournalSort, JournalSortDirection, JournalState } from '$lib/models/journal';
+  import type { JournalSort, JournalSortDirection } from '$lib/models/journal';
   import { sync } from '$lib/services/sync/sync';
   import { journalSearchStore, journalStore } from '$lib/stores/journal';
   import { syncAvailabilityStore } from '$lib/stores/syncAvailability.svelte';
@@ -28,7 +28,7 @@
     faStar,
     type IconDefinition,
   } from '@fortawesome/free-solid-svg-icons';
-  import { ListBox, ListBoxItem, Paginator, type PaginationSettings } from '@skeletonlabs/skeleton';
+  import Paginator from '../shared/elements/Paginator.svelte';
   import { Icon } from 'svelte-awesome';
   import PageActions from '../shared/elements/page/PageActions.svelte';
   import PageCard from '../shared/elements/page/PageCard.svelte';
@@ -73,7 +73,6 @@
 
   let selectedSortOption = $state(getActiveSortOption().label);
   let innerWidth = $state(0);
-  let paginationSettings = $derived(getPaginationSettings($journalStore));
 
   function getActiveSortOption(): SortOption {
     return (
@@ -84,24 +83,20 @@
     );
   }
 
-  function getPaginationSettings({ page, totalEntries }: JournalState): PaginationSettings {
-    return {
-      page,
-      limit: JOURNAL_PAGE_SIZE,
-      size: totalEntries,
-      amounts: [],
-    };
-  }
-
   function handleSearchChange(searchInput?: string | null): void {
     journalSearchStore.setFilter(searchInput ?? '');
   }
 
-  function handleSortOptionClick(sort: JournalSort, sortDirection: JournalSortDirection): void {
+  function handleSortOptionClick(
+    label: string,
+    sort: JournalSort,
+    sortDirection: JournalSortDirection,
+  ): void {
+    selectedSortOption = label;
     journalSearchStore.setSort(sort, sortDirection);
   }
 
-  function handlePageChange({ detail: page }: CustomEvent<number>): void {
+  function handlePageChange(page: number): void {
     journalStore.loadPage(page);
     scrollToTop();
   }
@@ -130,27 +125,35 @@
   isLoading={$journalStore.isLoading}
   onSearchChange={handleSearchChange}
 >
-  {#snippet popupContent()}
-    <ListBox>
+  {#snippet popupContent(closePopup: () => void)}
+    <ul class="flex flex-col gap-1" role="listbox">
       {#each sortOptions as { label, icon, sort, sortDirection } (label)}
-        <ListBoxItem
-          name={label}
-          value={label}
-          bind:group={selectedSortOption}
-          on:click={() => handleSortOptionClick(sort, sortDirection)}
-        >
-          <div class="flex justify-between items-center gap-4 w-full min-w-48">
-            <div class="flex items-center gap-2">
-              <Icon data={icon} />
-              <span>{label}</span>
+        <li role="presentation">
+          <button
+            type="button"
+            role="option"
+            class="btn justify-start w-full {selectedSortOption === label
+              ? 'preset-filled-primary-500'
+              : 'hover:preset-tonal'}"
+            aria-selected={selectedSortOption === label}
+            onclick={() => {
+              handleSortOptionClick(label, sort, sortDirection);
+              closePopup();
+            }}
+          >
+            <div class="flex justify-between items-center gap-4 w-full min-w-48">
+              <div class="flex items-center gap-2">
+                <Icon data={icon} />
+                <span>{label}</span>
+              </div>
+              {#if selectedSortOption === label}
+                <Icon data={faCheck} />
+              {/if}
             </div>
-            {#if selectedSortOption === label}
-              <Icon data={faCheck} />
-            {/if}
-          </div>
-        </ListBoxItem>
+          </button>
+        </li>
       {/each}
-    </ListBox>
+    </ul>
   {/snippet}
 </PageSearch>
 <PageCard class="page-with-actions-token">
@@ -161,11 +164,10 @@
   {/if}
   {#if $journalStore.totalEntries}
     <Paginator
-      settings={paginationSettings}
-      showFirstLastButtons
-      showPreviousNextButtons
-      justify="justify-center"
-      on:page={handlePageChange}
+      page={$journalStore.page}
+      pageSize={JOURNAL_PAGE_SIZE}
+      count={$journalStore.totalEntries}
+      onPageChange={handlePageChange}
     />
   {/if}
 </PageCard>

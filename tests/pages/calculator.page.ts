@@ -12,7 +12,7 @@ export class CalculatorPage {
   }
 
   get fixedRatioToggle(): Locator {
-    return this.page.getByLabel('Fixed Ratio').locator('label');
+    return this.page.getByLabel('Fixed Ratio');
   }
 
   get waterAmountInput(): Locator {
@@ -28,11 +28,11 @@ export class CalculatorPage {
   }
 
   get icedCoffeeToggle(): Locator {
-    return this.page.getByLabel('Iced Coffee').locator('label');
+    return this.page.getByLabel('Iced Coffee');
   }
 
-  get iceRatioRange(): Locator {
-    return this.page.getByLabel('Ice Ratio');
+  get iceRatioSlider(): Locator {
+    return this.page.getByRole('slider');
   }
 
   get brewWaterAmountInput(): Locator {
@@ -44,7 +44,7 @@ export class CalculatorPage {
   }
 
   get temperatureConverterToggle(): Locator {
-    return this.page.getByLabel('Temperature Converter').locator('label');
+    return this.page.getByLabel('Temperature Converter');
   }
 
   get temperatureCelsiusInput(): Locator {
@@ -59,7 +59,50 @@ export class CalculatorPage {
     return this.page.getByRole('button', { name, exact: true });
   }
 
+  async setFixedRatio(checked: boolean): Promise<void> {
+    await this.setSwitch('Fixed Ratio', this.fixedRatioToggle, checked);
+  }
+
+  async setIcedCoffee(checked: boolean): Promise<void> {
+    await this.setSwitch('Iced Coffee', this.icedCoffeeToggle, checked);
+  }
+
+  async setTemperatureConverter(checked: boolean): Promise<void> {
+    await this.setSwitch('Temperature Converter', this.temperatureConverterToggle, checked);
+  }
+
+  /**
+   * Drives the slider with the keyboard. Its underlying input is visually
+   * hidden, so it cannot be filled directly.
+   */
+  async setIceRatio(value: number): Promise<void> {
+    const slider = this.iceRatioSlider;
+    await slider.focus();
+
+    for (let i = 0; i < 200; i++) {
+      const current = Number(await slider.getAttribute('aria-valuenow'));
+      if (current === value) {
+        return;
+      }
+      await slider.press(current < value ? 'ArrowRight' : 'ArrowLeft');
+    }
+
+    throw new Error(`Could not set ice ratio to ${value}`);
+  }
+
   async goto(): Promise<void> {
     await this.page.goto('/calculator');
+  }
+
+  /**
+   * Skeleton v5 switches render a visually hidden checkbox inside a label, so
+   * the label is the click target while the checkbox carries the state.
+   */
+  private async setSwitch(name: string, checkbox: Locator, checked: boolean): Promise<void> {
+    if ((await checkbox.isChecked()) === checked) {
+      return;
+    }
+
+    await this.page.locator('label[data-scope="switch"]').filter({ hasText: name }).click();
   }
 }

@@ -15,6 +15,22 @@ export class JournalEntryDetailPage {
     return this.page.getByLabel('Type of coffee');
   }
 
+  get openCoffeeEntryButton(): Locator {
+    return this.page.getByTitle('Open coffee entry');
+  }
+
+  getCoffeeTypeSuggestion(name: string): Locator {
+    return this.page
+      .getByTestId('coffee-type-suggestions')
+      .locator('[data-part="item"]', { hasText: name });
+  }
+
+  /** Types into the coffee type field so the suggestion list actually opens. */
+  async searchCoffeeType(search: string): Promise<void> {
+    await this.coffeeTypeInput.click();
+    await this.coffeeTypeInput.pressSequentially(search, { delay: 50 });
+  }
+
   get waterInput(): Locator {
     return this.page.getByLabel('Amount of water');
   }
@@ -44,7 +60,7 @@ export class JournalEntryDetailPage {
   }
 
   async clickDeleteButton(): Promise<void> {
-    await this.page.getByRole('button', { name: 'Delete' }).click();
+    await this.page.getByRole('button', { name: 'Delete', exact: true }).click();
   }
 
   async clickBackButton(): Promise<void> {

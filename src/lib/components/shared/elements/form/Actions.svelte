@@ -47,7 +47,7 @@
     <ResponsiveButton
       type="button"
       label="Copy"
-      variant="variant-ghost-tertiary"
+      variant="preset-outlined-tertiary-500"
       disabled={!formValid}
       onclick={handleCopyClick}
     >
@@ -60,7 +60,7 @@
     <ResponsiveButton
       type="button"
       label="Delete"
-      variant="variant-ghost-error"
+      variant="preset-outlined-error-500"
       onclick={handleRemoveClick}
     >
       {#snippet iconContent()}
@@ -70,7 +70,7 @@
   {/if}
   <ResponsiveButton
     label="Save"
-    variant="variant-filled-primary"
+    variant="preset-filled-primary-500"
     disabled={!formValid || (hasChanged !== undefined && !hasChanged)}
     onclick={handleSaveClick}
   >

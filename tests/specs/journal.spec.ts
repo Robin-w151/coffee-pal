@@ -112,6 +112,20 @@ test('entry add', async ({ journalPage, journalEntryDetailPage }) => {
   );
 });
 
+test('entry add with coffee type from suggestions', async ({
+  journalPage,
+  journalEntryDetailPage,
+}) => {
+  await journalPage.clickAddButton();
+  await journalEntryDetailPage.searchCoffeeType('Terroir');
+  await journalEntryDetailPage.getCoffeeTypeSuggestion('Terroir PAN').click();
+
+  await expect(journalEntryDetailPage.coffeeTypeInput).toHaveValue('Terroir PAN (Rösterei)');
+  // Selecting a suggestion has to store the coffee entry itself, not just its
+  // label, which is what makes this link appear.
+  await expect(journalEntryDetailPage.openCoffeeEntryButton).toBeVisible();
+});
+
 test('entry edit', async ({ journalPage, journalEntryDetailPage }) => {
   await journalPage.clickJournalEntry(0);
   await journalEntryDetailPage.methodInput.fill('Aeropress Clear');

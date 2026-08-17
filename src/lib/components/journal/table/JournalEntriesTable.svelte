@@ -18,7 +18,7 @@
 </script>
 
 <div class="overflow-auto">
-  <table class="table {hasEntries(entries) ? 'table-interactive' : ''}">
+  <table class="table {hasEntries(entries) ? 'table-zebra' : ''}" data-loading={isLoading}>
     <thead>
       <tr>
         <th>Ratio</th>

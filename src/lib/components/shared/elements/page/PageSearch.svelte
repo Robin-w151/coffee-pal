@@ -6,7 +6,7 @@
     faClose,
     faSearch,
   } from '@fortawesome/free-solid-svg-icons';
-  import { popup, type PopupSettings } from '@skeletonlabs/skeleton';
+  import { Popover, Portal } from '@skeletonlabs/skeleton-svelte';
   import { tick, type Snippet } from 'svelte';
   import { Icon } from 'svelte-awesome';
   import { fade } from 'svelte/transition';
@@ -21,7 +21,8 @@
     search?: string | null;
     sort?: PageSearchSort | null;
     isLoading: boolean;
-    popupContent?: Snippet;
+    /** Receives a callback that closes the popover, e.g. once an option is picked. */
+    popupContent?: Snippet<[() => void]>;
     onSearchChange?: (searchInput?: string | null) => void;
     onSortToggle?: () => void;
   }
@@ -36,13 +37,8 @@
     onSortToggle,
   }: Props = $props();
 
-  const sortPopup: PopupSettings = {
-    event: 'click',
-    target: 'sort-popup',
-    placement: 'bottom',
-  };
-
   let searchInputRef: HTMLInputElement | undefined = $state();
+  let isSortPopupOpen = $state(false);
   let isSearchActive = $state(!!search);
   let isChangeSortOrderButtonDisabled = $derived(!!search);
   let headerSearchActiveClass = $derived(
@@ -90,7 +86,7 @@
   }
 </script>
 
-<svelte:window on:keydown={handleKeyDown} />
+<svelte:window onkeydown={handleKeyDown} />
 
 <header class="flex justify-between items-center gap-4 px-2 w-full h-12 {headerSearchActiveClass}">
   <div class="flex items-center gap-4 w-full">
@@ -118,7 +114,7 @@
       </InputWithButton>
     {:else}
       <button
-        class="btn btn-icon variant-ghost-secondary"
+        class="btn btn-icon preset-outlined-secondary-500"
         title="Search"
         onclick={handleSearchClick}
         in:fade={{ duration: 250 }}
@@ -127,20 +123,33 @@
       </button>
     {/if}
     {#if popupContent}
-      <button
-        class="btn btn-icon {isSearchActive ? 'variant-filled-primary' : 'variant-ghost-secondary'}"
-        title={changeSortOrderButtonTitle}
-        disabled={isChangeSortOrderButtonDisabled}
-        use:popup={sortPopup}
+      <Popover
+        open={isSortPopupOpen}
+        onOpenChange={(details) => (isSortPopupOpen = details.open)}
+        positioning={{ placement: 'bottom-end' }}
       >
-        <Icon data={faArrowUpWideShort} />
-      </button>
-      <div class="popup-token" data-popup="sort-popup">
-        {@render popupContent()}
-      </div>
+        <Popover.Trigger
+          class="btn btn-icon {isSearchActive
+            ? 'preset-filled-primary-500'
+            : 'preset-outlined-secondary-500'}"
+          title={changeSortOrderButtonTitle}
+          disabled={isChangeSortOrderButtonDisabled}
+        >
+          <Icon data={faArrowUpWideShort} />
+        </Popover.Trigger>
+        <Portal>
+          <Popover.Positioner>
+            <Popover.Content class="popup-token">
+              {@render popupContent(() => (isSortPopupOpen = false))}
+            </Popover.Content>
+          </Popover.Positioner>
+        </Portal>
+      </Popover>
     {:else}
       <button
-        class="btn btn-icon {isSearchActive ? 'variant-filled-primary' : 'variant-ghost-secondary'}"
+        class="btn btn-icon {isSearchActive
+          ? 'preset-filled-primary-500'
+          : 'preset-outlined-secondary-500'}"
         title={changeSortOrderButtonTitle}
         disabled={isChangeSortOrderButtonDisabled}
         onclick={handleSortClick}

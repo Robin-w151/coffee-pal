@@ -2,28 +2,28 @@
   import Label from '$lib/components/shared/elements/form/Label.svelte';
   import { getAromaColor } from '$lib/services/myCoffees/colors/colors';
   import { installEventHandler } from '$lib/shared/ui/events';
-  import { InputChip } from '@skeletonlabs/skeleton';
+  import { TagsInput } from '@skeletonlabs/skeleton-svelte';
 
   interface Props {
     aromas?: Array<string>;
   }
 
   let { aromas = $bindable() }: Props = $props();
-  let inputChipRef = $state<HTMLDivElement>();
+  let tagsInputRef = $state<HTMLDivElement>();
 
   $effect(() => {
-    if (inputChipRef) {
-      const chips = [
-        ...(inputChipRef?.querySelectorAll('button.chip') ?? []),
-      ] as Array<HTMLButtonElement>;
+    if (tagsInputRef) {
+      const items = [
+        ...(tagsInputRef?.querySelectorAll('[data-part="item-preview"]') ?? []),
+      ] as Array<HTMLElement>;
       aromas?.forEach((aroma) => {
-        const chip = chips.find((chip) =>
-          chip.textContent?.toLowerCase().includes(aroma.toLowerCase()),
+        const item = items.find((item) =>
+          item.textContent?.toLowerCase().includes(aroma.toLowerCase()),
         );
-        if (chip) {
+        if (item) {
           const color = getAromaColor(aroma);
-          chip.style.color = color.color;
-          chip.style.backgroundColor = color.backgroundColor;
+          item.style.color = color.color;
+          item.style.backgroundColor = color.backgroundColor;
         }
       });
     }
@@ -39,20 +39,31 @@
 
 <Label text="Aromas">
   <div
-    bind:this={inputChipRef}
+    bind:this={tagsInputRef}
     use:installEventHandler={{
       selector: 'input',
       event: 'keydown',
       handler: handleInputKeydown,
     }}
   >
-    <InputChip
+    <TagsInput
       name="aromas"
-      placeholder="Aromas, e.g. Nutty, Dried Fruit"
-      padding="px-3 py-2"
-      regionInput="focus:!outline-none"
-      bind:value={aromas}
-      on:keydown={handleInputKeydown}
-    />
+      value={aromas ?? []}
+      onValueChange={(details) => (aromas = details.value)}
+    >
+      <TagsInput.Control>
+        {#each aromas ?? [] as aroma, index (`${aroma}-${index}`)}
+          <TagsInput.Item {index} value={aroma}>
+            <TagsInput.ItemPreview>
+              <TagsInput.ItemText>{aroma}</TagsInput.ItemText>
+              <TagsInput.ItemDeleteTrigger />
+            </TagsInput.ItemPreview>
+            <TagsInput.ItemInput />
+          </TagsInput.Item>
+        {/each}
+        <TagsInput.Input placeholder="Aromas, e.g. Nutty, Dried Fruit" />
+      </TagsInput.Control>
+      <TagsInput.HiddenInput />
+    </TagsInput>
   </div>
 </Label>

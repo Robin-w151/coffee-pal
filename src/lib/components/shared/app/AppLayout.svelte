@@ -8,35 +8,18 @@
   import { scheduleSync } from '$lib/services/sync/sync';
   import { rememberScrollPosition, scrollToLastKnownPosition } from '$lib/shared/ui/scroll';
   import '$lib/stores/app.svelte';
+  import { appMenu } from '$lib/stores/appMenu.svelte';
   import { syncStore } from '$lib/stores/sync';
-  import {
-    arrow,
-    autoUpdate,
-    computePosition,
-    flip,
-    inline,
-    offset,
-    shift,
-    size,
-  } from '@floating-ui/dom';
-  import {
-    AppShell,
-    Drawer,
-    Modal,
-    Toast,
-    getDrawerStore,
-    initializeStores,
-    storePopup,
-  } from '@skeletonlabs/skeleton';
+  import { Dialog, Portal } from '@skeletonlabs/skeleton-svelte';
   import type { AfterNavigate } from '@sveltejs/kit';
   import { DateTime } from 'luxon';
-  import { onMount, type ComponentEvents, type Snippet } from 'svelte';
+  import { onMount, type Snippet } from 'svelte';
   import { get } from 'svelte/store';
   import { pwaInfo } from 'virtual:pwa-info';
-  import '../../../../app.scss';
-  import EnableGlobalMessages from './EnableGlobalMessages.svelte';
   import EnableShortcuts from './EnableShortcuts.svelte';
   import EnableUpdateListener from './EnableUpdateListener.svelte';
+  import GlobalDialog from './GlobalDialog.svelte';
+  import GlobalToaster from './GlobalToaster.svelte';
   import { runViewTransition } from '$lib/shared/viewTransition';
 
   interface Props {
@@ -45,12 +28,10 @@
 
   let { children }: Props = $props();
 
-  initializeStores();
-  storePopup.set({ computePosition, autoUpdate, offset, shift, flip, arrow, size, inline });
-
-  const drawerStore = getDrawerStore();
-
   let webManifestLink = $derived(pwaInfo ? pwaInfo.webManifest.linkTag : '');
+
+  const drawerAnimation =
+    'transition transition-discrete opacity-0 -translate-x-full starting:data-[state=open]:opacity-0 starting:data-[state=open]:-translate-x-full data-[state=open]:opacity-100 data-[state=open]:translate-x-0';
 
   onMount(() => {
     document.documentElement.setAttribute('data-test', 'ready');
@@ -78,7 +59,7 @@
     }
   });
 
-  function handleAppShellScroll(event: ComponentEvents<AppShell>['scroll']): void {
+  function handlePageScroll(event: Event): void {
     rememberScrollPosition($page.url.pathname, (event.currentTarget as HTMLElement)?.scrollTop);
   }
 </script>
@@ -89,34 +70,39 @@
 </svelte:head>
 
 <EnableColorSchemes />
-<EnableGlobalMessages />
 <EnableShortcuts />
 <EnableUpdateListener />
 
-<Modal />
-<Toast />
-<Drawer>
-  {#if $drawerStore.id === 'app-menu'}
-    <AppMenu />
-  {/if}
-</Drawer>
+<GlobalDialog />
+<GlobalToaster />
 
-<AppShell
-  scrollbarGutter="stable"
-  regionPage="outline-offset-[-3px]"
-  on:scroll={handleAppShellScroll}
->
-  {#snippet header()}
-    <AppBar />
-  {/snippet}
-  {#snippet sidebarLeft()}
-    <div class="hidden md:block h-full">
+<Dialog open={appMenu.open} onOpenChange={(details) => (appMenu.open = details.open)}>
+  <Portal>
+    <Dialog.Backdrop class="fixed inset-0 z-50 bg-surface-50-950/50" />
+    <Dialog.Positioner class="fixed inset-0 z-50 flex justify-start">
+      <Dialog.Content class="h-full w-72 max-w-[80vw] shadow-xl {drawerAnimation}">
+        <AppMenu />
+      </Dialog.Content>
+    </Dialog.Positioner>
+  </Portal>
+</Dialog>
+
+<div class="h-full grid grid-rows-[auto_1fr] overflow-hidden">
+  <AppBar />
+  <div class="grid md:grid-cols-[auto_1fr] overflow-hidden">
+    <aside class="hidden md:block h-full">
       <AppRail />
-    </div>
-  {/snippet}
-  <div class="flex justify-center p-4">
-    <div class="flex flex-col items-center gap-4 w-full max-w-screen-lg">
-      {@render children?.()}
-    </div>
+    </aside>
+    <main
+      id="page"
+      class="overflow-y-auto outline-offset-[-3px] [scrollbar-gutter:stable]"
+      onscroll={handlePageScroll}
+    >
+      <div class="flex justify-center p-4">
+        <div class="flex flex-col items-center gap-4 w-full max-w-(--breakpoint-lg)">
+          {@render children?.()}
+        </div>
+      </div>
+    </main>
   </div>
-</AppShell>
+</div>
