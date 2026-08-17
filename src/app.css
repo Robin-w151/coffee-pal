@@ -1,14 +1,16 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-@tailwind variants;
+@import 'tailwindcss';
+@plugin '@tailwindcss/forms';
+@custom-variant dark (&:where(.dark, .dark *));
+@import '@skeletonlabs/skeleton';
+@import '@skeletonlabs/skeleton-svelte';
+@import './theme.css';
 
-// Global variables
+/* Global variables */
 :root {
   --coffee-view-transition-duration: 100ms;
 }
 
-// Theme overrides
+/* Theme overrides */
 
 * {
   -webkit-tap-highlight-color: transparent;
@@ -40,7 +42,7 @@
   background-size: cover;
 }
 
-.dark [data-theme='coffee'] {
+.dark[data-theme='coffee'] {
   background-color: hsla(223, 73%, 16%, 1);
   background-image:
     radial-gradient(at 27% 15%, hsla(182, 96%, 18%, 0.3) 0px, transparent 50%),
@@ -54,115 +56,54 @@
   background-size: cover;
 }
 
-// AppShell overrides
+/* Layout */
 
 html,
 body {
-  @apply h-full overflow-hidden;
+  height: 100%;
+  overflow: hidden;
 }
 
 body {
-  @apply bg-surface-50-900-token;
+  background-color: var(--color-surface-50-950);
 }
 
-.app-rail-anchor {
-  @apply block overflow-hidden rounded-md;
-}
-
-// Autocomplete overrides
+/* Autocomplete overrides */
 
 .autocomplete-button {
   text-align: start;
 }
 
-// Input group overrides
+/* Field group overrides */
 
-.input-group.measurement-input {
+.field-group.measurement-input {
   input {
     min-width: 10rem !important;
   }
 
   select,
-  .input-group-shim {
+  .label-text {
     min-width: 6rem !important;
   }
 }
 
-// Modal overrides
-
-.modal-backdrop {
-  @apply overflow-hidden;
-}
-
-.modal-transition {
-  @apply h-full;
-}
-
-.modal.dangerous {
-  .modal-footer {
-    button:not(:last-child) {
-      @apply variant-ghost-surface;
-    }
-
-    button:last-child {
-      @apply variant-filled-error;
-    }
-  }
-}
-
-.modal-footer {
-  button:not(:last-child) {
-    @apply variant-ghost-primary;
-  }
-
-  button:last-child {
-    @apply variant-filled-primary;
-  }
-}
-
-// Snackbar overrides
-
-.snackbar {
-  @apply px-8;
-}
-
-// Table overrides
+/* Table overrides */
 
 .table {
-  @apply rounded-md;
-
-  tbody {
-    tr:nth-child(2n) {
-      @apply bg-surface-200-700-token;
-    }
-  }
-
-  &.table-interactive tbody tr {
-    @apply transition ease-out;
-  }
+  border-radius: var(--radius-base);
 }
 
-// Toast overrides
+/* Custom design tokens */
 
-.toast {
-  @apply flex-col sm:flex-row gap-4;
-
-  .toast-actions {
-    margin-left: 0 !important;
-  }
+@utility autocomplete-token {
+  @apply card z-10 p-4 max-h-48 bg-surface-200-800 overflow-y-auto shadow-xl;
 }
 
-// Custom design tokens
-
-.autocomplete-token {
-  @apply card z-10 p-4 max-h-48 bg-surface-200-700-token overflow-y-auto shadow-xl;
+@utility chip-interactive-token {
+  @apply chip preset-tonal-secondary hover:preset-filled-secondary-500;
 }
 
-.chip-interactive-token {
-  @apply chip variant-soft-secondary hover:variant-filled-secondary;
-}
-
-.page-header-title {
+@utility page-header-title {
   @apply h2 flex items-center overflow-hidden;
 
   span {
@@ -170,31 +111,28 @@ body {
   }
 }
 
-.page-with-actions-token {
+@utility page-with-actions-token {
   @apply mb-24;
 }
 
-.page-actions-token {
+@utility page-actions-token {
   @apply flex items-end gap-4 fixed z-10 bottom-8 right-8;
 }
 
-.popup-token {
-  @apply card p-4 bg-surface-200-700-token shadow-xl z-10;
+@utility popup-token {
+  @apply card p-4 bg-surface-200-800 shadow-xl z-10;
 }
 
-.radio-group-token {
+@utility radio-group-token {
   @apply flex-col sm:flex-row sm:min-w-[24rem];
 }
 
-.range-slider-accent-token {
-  @apply accent-primary-500 dark:accent-primary-600;
+@utility input-error {
+  border-color: var(--color-error-500);
+  --tw-ring-color: var(--color-error-500);
 }
 
-.slide-toggle-active-token {
-  @apply bg-primary-500 dark:bg-primary-600;
-}
-
-// View transition
+/* View transition */
 ::view-transition-old(root),
 ::view-transition-new(root) {
   animation-duration: var(--coffee-view-transition-duration);

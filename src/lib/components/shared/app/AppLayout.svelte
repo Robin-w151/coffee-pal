@@ -33,7 +33,6 @@
   import { onMount, type ComponentEvents, type Snippet } from 'svelte';
   import { get } from 'svelte/store';
   import { pwaInfo } from 'virtual:pwa-info';
-  import '../../../../app.scss';
   import EnableGlobalMessages from './EnableGlobalMessages.svelte';
   import EnableShortcuts from './EnableShortcuts.svelte';
   import EnableUpdateListener from './EnableUpdateListener.svelte';
