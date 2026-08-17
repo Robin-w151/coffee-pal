@@ -21,7 +21,7 @@
     max={5}
     interactive
     justify="justify-start"
-    text="text-tertiary-600-300-token"
+    text="text-tertiary-600-400"
     on:icon={handleRatingChange}
   >
     {#snippet empty()}

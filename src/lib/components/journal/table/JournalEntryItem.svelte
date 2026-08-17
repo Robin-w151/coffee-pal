@@ -53,7 +53,7 @@
 </script>
 
 <tr tabindex="0" role="button" onclick={handleEntryClick} onkeydown={handleEntryKeyDown}>
-  <td><span class="badge variant-soft-tertiary w-16">{ratio}</span></td>
+  <td><span class="badge preset-tonal-tertiary w-16">{ratio}</span></td>
   <td>{entry.method}</td>
   <td>{coffeeType ?? 'Unknown'}</td>
   <td>{waterDisplayValue(entry.water)}/{coffeeDisplayValue(entry.coffee)}</td>

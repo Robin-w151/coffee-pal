@@ -15,7 +15,7 @@
 </script>
 
 <AppRail
-  background="bg-surface-50-900-token"
+  background="bg-surface-50-950"
   regionDefault="p-1 space-y-1"
   hover="bg-primary-hover-token"
   active="bg-primary-active-token"

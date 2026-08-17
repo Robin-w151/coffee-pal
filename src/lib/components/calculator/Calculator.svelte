@@ -209,7 +209,7 @@
     onPresetSelect={handlePresetSelect}
     onRatioChange={handleRatioChange}
   />
-  <hr class="md:divider-vertical md:h-full" />
+  <hr class="md:vr md:h-full" />
   <Recipe
     {recipe}
     bind:fixedRatio

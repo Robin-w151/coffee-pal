@@ -34,7 +34,7 @@
   <div class="flex flex-col @md:flex-row @md:justify-between @md:gap-4 mr-3">
     <span>{text}</span>
     {#if error && errorMessage}
-      <span class="flex items-center gap-2 text-error-600-300-token">
+      <span class="flex items-center gap-2 text-error-600-400">
         <Icon data={faWarning} />
         {errorMessage}
       </span>

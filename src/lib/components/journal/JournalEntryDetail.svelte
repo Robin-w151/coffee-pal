@@ -314,7 +314,7 @@
                 <ResponsiveButton
                   type="button"
                   label="Open in calculator"
-                  variant="variant-ghost-tertiary"
+                  variant="preset-outlined-tertiary-500"
                   disabled={!formValid}
                   onclick={handleOpenInCalculator}
                 >

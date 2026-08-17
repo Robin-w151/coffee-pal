@@ -47,7 +47,7 @@
 <div class="page-actions-token">
   {#if isSyncEnabled}
     <button
-      class="btn btn-icon btn-icon-lg variant-filled-primary shadow-xl"
+      class="btn btn-icon btn-icon-lg preset-filled-primary-500 shadow-xl"
       title="Synchronize data{lastSyncText ? `\n${lastSyncText}` : ''}"
       onclick={handleSyncClick}
     >
@@ -64,7 +64,7 @@
     </button>
   {/if}
   <button
-    class="btn btn-icon btn-icon-xl variant-filled-primary shadow-xl"
+    class="btn btn-icon btn-icon-xl preset-filled-primary-500 shadow-xl"
     title="Add new entry"
     onclick={handleAddClick}
   >

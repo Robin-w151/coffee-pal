@@ -65,14 +65,14 @@
     <div class="flex flex-wrap gap-2">
       {#if appStore.installAvailable}
         <button
-          class="btn variant-filled-primary"
+          class="btn preset-filled-primary-500"
           title="Install App on the system"
           onclick={handleInstallClick}>Install App</button
         >
       {/if}
       {#if appStore.updateCheckAvailable}
         <button
-          class="btn variant-filled-primary"
+          class="btn preset-filled-primary-500"
           title="Check if there is an update available"
           onclick={handleUpdateClick}>Check for Updates</button
         >

@@ -34,7 +34,7 @@
     class="flex justify-center items-center fixed top-0 bottom-0 left-0 right-0 z-[9999] bg-surface-100/50 backdrop-blur-sm"
   >
     <div
-      class="w-24 h-24 border-8 border-surface-800-100-token !border-t-transparent rounded-full animate-spin"
+      class="w-24 h-24 border-8 border-surface-800-200 !border-t-transparent rounded-full animate-spin"
     ></div>
   </div>
 {/if}

@@ -37,7 +37,7 @@
   {:else}
     {#if showBack}
       <button
-        class="btn btn-icon variant-ghost-primary flex-[0_0_auto]"
+        class="btn btn-icon preset-outlined-primary-500 flex-[0_0_auto]"
         title="Go back"
         bind:this={backButton}
         onclick={handleBackClick}

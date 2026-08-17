@@ -118,7 +118,7 @@
       </InputWithButton>
     {:else}
       <button
-        class="btn btn-icon variant-ghost-secondary"
+        class="btn btn-icon preset-outlined-secondary-500"
         title="Search"
         onclick={handleSearchClick}
         in:fade={{ duration: 250 }}
@@ -128,7 +128,9 @@
     {/if}
     {#if popupContent}
       <button
-        class="btn btn-icon {isSearchActive ? 'variant-filled-primary' : 'variant-ghost-secondary'}"
+        class="btn btn-icon {isSearchActive
+          ? 'preset-filled-primary-500'
+          : 'preset-outlined-secondary-500'}"
         title={changeSortOrderButtonTitle}
         disabled={isChangeSortOrderButtonDisabled}
         use:popup={sortPopup}
@@ -140,7 +142,9 @@
       </div>
     {:else}
       <button
-        class="btn btn-icon {isSearchActive ? 'variant-filled-primary' : 'variant-ghost-secondary'}"
+        class="btn btn-icon {isSearchActive
+          ? 'preset-filled-primary-500'
+          : 'preset-outlined-secondary-500'}"
         title={changeSortOrderButtonTitle}
         disabled={isChangeSortOrderButtonDisabled}
         onclick={handleSortClick}

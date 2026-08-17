@@ -75,8 +75,9 @@
   }
 </script>
 
-<div class="input-group input-group-divider measurement-input grid-cols-[1fr_auto] {clazz ?? ''}">
+<div class="field-group measurement-input grid-cols-[1fr_auto] {clazz ?? ''}">
   <input
+    class="input"
     type="number"
     step="0.1"
     {placeholder}
@@ -89,7 +90,10 @@
     {onkeydown}
     {onkeyup}
   />
-  <select class="focus:bg-surface-300 dark:focus:bg-surface-500" bind:value={measurement.unit}>
+  <select
+    class="select focus:bg-surface-300 dark:focus:bg-surface-500"
+    bind:value={measurement.unit}
+  >
     {#each units as unit (unit.label)}
       <option value={unit}>{unit.label}</option>
     {/each}

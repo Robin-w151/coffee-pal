@@ -19,7 +19,7 @@ export class ToastHelper {
     return this.store!.trigger({
       ...options,
       message,
-      background: 'variant-filled-primary',
+      background: 'preset-filled-primary-500',
     });
   }
 
@@ -29,7 +29,7 @@ export class ToastHelper {
     return this.store!.trigger({
       ...options,
       message,
-      background: 'variant-filled-error',
+      background: 'preset-filled-error-500',
     });
   }
 

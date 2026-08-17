@@ -101,14 +101,14 @@
       </ul>
       <div class="flex flex-col @md:flex-row gap-2 w-full">
         <button
-          class="btn variant-filled-error"
+          class="btn preset-filled-error-500"
           title="Clear LocalStorage"
           onclick={handleResetLocalStorageButtonClick}
         >
           Clear LocalStorage
         </button>
         <button
-          class="btn variant-filled-error"
+          class="btn preset-filled-error-500"
           title="Clear LocalStorage"
           onclick={handleResetIndexedDbButtonClick}
         >

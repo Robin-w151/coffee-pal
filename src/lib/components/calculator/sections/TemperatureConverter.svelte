@@ -43,7 +43,7 @@
       </Label>
       <div class="hidden sm:flex flex-col gap-1">
         <div class="h-[24px]"></div>
-        <hr class="flex-1 divider-vertical" />
+        <hr class="flex-1 vr" />
       </div>
       <Label text="Fahrenheit">
         <input
