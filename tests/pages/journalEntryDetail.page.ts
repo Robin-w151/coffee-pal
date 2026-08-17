@@ -44,7 +44,7 @@ export class JournalEntryDetailPage {
   }
 
   async clickDeleteButton(): Promise<void> {
-    await this.page.getByRole('button', { name: 'Delete' }).click();
+    await this.page.getByRole('button', { name: 'Delete', exact: true }).click();
   }
 
   async clickBackButton(): Promise<void> {
