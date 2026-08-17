@@ -1,9 +1,11 @@
+/* @import rules have to precede every other statement. */
 @import 'tailwindcss';
-@plugin '@tailwindcss/forms';
-@custom-variant dark (&:where(.dark, .dark *));
 @import '@skeletonlabs/skeleton';
 @import '@skeletonlabs/skeleton-svelte';
 @import './theme.css';
+
+@plugin '@tailwindcss/forms';
+@custom-variant dark (&:where(.dark, .dark *));
 
 /* Global variables */
 :root {
