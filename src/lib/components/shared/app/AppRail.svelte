@@ -1,36 +1,23 @@
 <script lang="ts">
+  import { resolve } from '$app/paths';
   import { page } from '$app/stores';
   import { routes } from '$lib/config/routes';
-  import type { Route } from '$lib/models/route';
-  import { AppRail, AppRailAnchor } from '@skeletonlabs/skeleton';
+  import { isRouteSelected } from '$lib/shared/ui/route';
+  import { Navigation } from '@skeletonlabs/skeleton-svelte';
   import { Icon } from 'svelte-awesome';
-
-  function isSelected(route: Route, pathname: string): boolean {
-    if (route.match) {
-      return route.match.test(pathname);
-    } else {
-      return route.href === pathname;
-    }
-  }
 </script>
 
-<AppRail
-  background="bg-surface-50-950"
-  regionDefault="p-1 space-y-1"
-  hover="bg-primary-hover-token"
-  active="bg-primary-active-token"
->
-  {#each routes as route (route.href)}
-    <AppRailAnchor
-      href={route.href}
-      title={route.label}
-      selected={isSelected(route, $page?.url?.pathname)}
-      regionLabel="px-1"
-    >
-      {#snippet lead()}
+<Navigation layout="rail" class="h-full">
+  <Navigation.Menu>
+    {#each routes as route (route.href)}
+      <Navigation.TriggerAnchor
+        href={resolve(route.href, {})}
+        title={route.label}
+        class={isRouteSelected(route, $page?.url?.pathname) ? 'preset-tonal-primary' : ''}
+      >
         <Icon data={route.icon} scale={1.5} />
-      {/snippet}
-      <span class="break-words">{route.label}</span>
-    </AppRailAnchor>
-  {/each}
-</AppRail>
+        <Navigation.TriggerText class="break-words">{route.label}</Navigation.TriggerText>
+      </Navigation.TriggerAnchor>
+    {/each}
+  </Navigation.Menu>
+</Navigation>

@@ -2,54 +2,40 @@
   import { resolve } from '$app/paths';
   import { page } from '$app/stores';
   import { routes } from '$lib/config/routes';
-  import type { Route } from '$lib/models/route';
+  import { isRouteSelected } from '$lib/shared/ui/route';
+  import { appMenu } from '$lib/stores/appMenu.svelte';
   import { faClose } from '@fortawesome/free-solid-svg-icons';
-  import { getDrawerStore } from '@skeletonlabs/skeleton';
+  import { Navigation } from '@skeletonlabs/skeleton-svelte';
   import { Icon } from 'svelte-awesome';
-
-  const drawerStore = getDrawerStore();
-
-  let routeActiveClass = $derived((route: Route) =>
-    isSelected(route, $page.url.pathname) ? 'bg-primary-active-token' : '',
-  );
-
-  function handleClick(): void {
-    drawerStore.close();
-  }
-
-  function isSelected(route: Route, pathname: string): boolean {
-    if (route.match) {
-      return route.match.test(pathname);
-    } else {
-      return route.href === pathname;
-    }
-  }
 </script>
 
-<section class="flex flex-col gap-4 p-4">
-  <div class="flex justify-between items-center">
+<Navigation layout="sidebar" class="h-full">
+  <Navigation.Header class="flex justify-between items-center">
     <h2 class="h2">Coffee Pal</h2>
-    <button class="btn btn-icon hover:preset-tonal-secondary" onclick={handleClick}>
+    <button
+      class="btn btn-icon hover:preset-tonal-secondary"
+      title="Close menu"
+      onclick={() => appMenu.hide()}
+    >
       <Icon data={faClose} />
+      <span class="sr-only">Close menu</span>
     </button>
-  </div>
-  <hr />
-  <nav class="list-nav">
-    <ul>
+  </Navigation.Header>
+  <hr class="hr" />
+  <Navigation.Content>
+    <Navigation.Menu>
       {#each routes as route (route.href)}
-        <li>
-          <a
-            class="!grid grid-cols-[1.25rem_1fr] {routeActiveClass(route)}"
-            href={resolve(route.href, {})}
-            onclick={handleClick}
-          >
-            <span class="flex items-center justify-self-center">
-              <Icon data={route.icon} />
-            </span>
-            <span>{route.label}</span>
-          </a>
-        </li>
+        <Navigation.TriggerAnchor
+          href={resolve(route.href, {})}
+          class={isRouteSelected(route, $page?.url?.pathname) ? 'preset-tonal-primary' : ''}
+          onclick={() => appMenu.hide()}
+        >
+          <span class="flex items-center justify-center w-5">
+            <Icon data={route.icon} />
+          </span>
+          <Navigation.TriggerText>{route.label}</Navigation.TriggerText>
+        </Navigation.TriggerAnchor>
       {/each}
-    </ul>
-  </nav>
-</section>
+    </Navigation.Menu>
+  </Navigation.Content>
+</Navigation>
