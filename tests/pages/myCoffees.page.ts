@@ -1,4 +1,5 @@
 import { expect, type Locator, type Page } from '@playwright/test';
+import { waitForListLoaded, waitForTestReady } from './ready';
 
 export class MyCoffeesPage {
   constructor(private readonly page: Page) {}
@@ -25,6 +26,7 @@ export class MyCoffeesPage {
 
   async goto(): Promise<void> {
     await this.page.goto('/my-coffees');
+    await waitForTestReady(this.page);
     await this.clickSortButton();
     await this.clickSortOption('Recently Updated');
   }
@@ -58,6 +60,7 @@ export class MyCoffeesPage {
       | 'Recently Updated',
   ): Promise<void> {
     await this.page.getByRole('option', { name: option }).click();
+    await waitForListLoaded(this.page);
   }
 
   async clickUndoButton(): Promise<void> {

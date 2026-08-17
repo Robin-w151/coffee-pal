@@ -21,7 +21,8 @@
     search?: string | null;
     sort?: PageSearchSort | null;
     isLoading: boolean;
-    popupContent?: Snippet;
+    /** Receives a callback that closes the popover, e.g. once an option is picked. */
+    popupContent?: Snippet<[() => void]>;
     onSearchChange?: (searchInput?: string | null) => void;
     onSortToggle?: () => void;
   }
@@ -37,6 +38,7 @@
   }: Props = $props();
 
   let searchInputRef: HTMLInputElement | undefined = $state();
+  let isSortPopupOpen = $state(false);
   let isSearchActive = $state(!!search);
   let isChangeSortOrderButtonDisabled = $derived(!!search);
   let headerSearchActiveClass = $derived(
@@ -121,7 +123,11 @@
       </button>
     {/if}
     {#if popupContent}
-      <Popover positioning={{ placement: 'bottom-end' }}>
+      <Popover
+        open={isSortPopupOpen}
+        onOpenChange={(details) => (isSortPopupOpen = details.open)}
+        positioning={{ placement: 'bottom-end' }}
+      >
         <Popover.Trigger
           class="btn btn-icon {isSearchActive
             ? 'preset-filled-primary-500'
@@ -134,7 +140,7 @@
         <Portal>
           <Popover.Positioner>
             <Popover.Content class="popup-token">
-              {@render popupContent()}
+              {@render popupContent(() => (isSortPopupOpen = false))}
             </Popover.Content>
           </Popover.Positioner>
         </Portal>

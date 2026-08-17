@@ -1,4 +1,4 @@
-import { test as base, expect, type Page } from '@playwright/test';
+import { test as base, expect } from '@playwright/test';
 import { AppPage, testCoffeeEntries, testJournalEntries } from './features/app.feature';
 import { CalculatorPage } from './pages/calculator.page';
 import { DripCounterPage } from './pages/dripCounter.page';
@@ -7,6 +7,7 @@ import { JournalEntryDetailPage } from './pages/journalEntryDetail.page';
 import { MyCoffeesPage } from './pages/myCoffees.page';
 import { MyCoffeesEntryDetailPage } from './pages/myCoffeesEntryDetail.page';
 import { SettingsPage } from './pages/settings.page';
+import { waitForTestReady } from './pages/ready';
 
 interface TestFixtures {
   appPage: AppPage;
@@ -82,7 +83,3 @@ export const test = base.extend<TestFixtures>({
     await use(settingsPage);
   },
 });
-
-async function waitForTestReady(page: Page): Promise<void> {
-  await expect(page.locator('html')).toHaveAttribute('data-test', 'ready');
-}

@@ -125,17 +125,21 @@
   isLoading={$journalStore.isLoading}
   onSearchChange={handleSearchChange}
 >
-  {#snippet popupContent()}
-    <ul class="flex flex-col gap-1">
+  {#snippet popupContent(closePopup: () => void)}
+    <ul class="flex flex-col gap-1" role="listbox">
       {#each sortOptions as { label, icon, sort, sortDirection } (label)}
-        <li>
+        <li role="presentation">
           <button
             type="button"
+            role="option"
             class="btn justify-start w-full {selectedSortOption === label
               ? 'preset-filled-primary-500'
               : 'hover:preset-tonal'}"
-            aria-pressed={selectedSortOption === label}
-            onclick={() => handleSortOptionClick(label, sort, sortDirection)}
+            aria-selected={selectedSortOption === label}
+            onclick={() => {
+              handleSortOptionClick(label, sort, sortDirection);
+              closePopup();
+            }}
           >
             <div class="flex justify-between items-center gap-4 w-full min-w-48">
               <div class="flex items-center gap-2">
