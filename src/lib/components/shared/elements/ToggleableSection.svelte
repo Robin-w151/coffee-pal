@@ -17,11 +17,20 @@
 
   let ref: HTMLDivElement | undefined = $state();
 
-  async function handleCheckedChange(details: { checked: boolean }): Promise<void> {
+  function handleCheckedChange(details: { checked: boolean }): void {
     active = details.checked;
 
-    if (active && ref) {
-      await waitAndTick(150);
+    if (active) {
+      // onCheckedChange expects a void return, so the scroll is deliberately
+      // not awaited here.
+      void scrollSectionIntoView();
+    }
+  }
+
+  async function scrollSectionIntoView(): Promise<void> {
+    await waitAndTick(150);
+
+    if (ref) {
       scrollIntoView(ref, {
         scrollMode: 'always',
         behavior: 'smooth',

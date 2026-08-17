@@ -45,7 +45,9 @@ export class ToastHelper {
     return toaster.create({
       type,
       description: message,
-      duration: autohide === false ? Number.MAX_SAFE_INTEGER : timeout,
+      // Infinity is the only value zag treats as "never dismiss on its own";
+      // any finite duration schedules a timer.
+      duration: autohide === false ? Infinity : timeout,
       action: action ? { label: action.label, onClick: action.response } : undefined,
       onStatusChange: callback ? (details) => callback({ status: details.status }) : undefined,
     });
