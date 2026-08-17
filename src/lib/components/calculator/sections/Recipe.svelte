@@ -8,7 +8,7 @@
   import type { Recipe } from '$lib/models/recipe';
   import { getPreferredWeightUnit } from '$lib/shared/units';
   import { settingsStore } from '$lib/stores/settings';
-  import { SlideToggle } from '@skeletonlabs/skeleton';
+  import { Switch } from '@skeletonlabs/skeleton-svelte';
   import { untrack } from 'svelte';
 
   interface Props {
@@ -79,13 +79,17 @@
   <h3 class="h3">Recipe</h3>
   <Form>
     <div class="flex items-center gap-2">
-      <SlideToggle
+      <Switch
         name="fixed-ratio"
-        label="Fixed Ratio"
-        size="sm"
-        active="slide-toggle-active-token"
-        bind:checked={fixedRatio}
-      />
+        checked={fixedRatio}
+        onCheckedChange={(details) => (fixedRatio = details.checked)}
+      >
+        <Switch.Control>
+          <Switch.Thumb />
+        </Switch.Control>
+        <Switch.Label class="sr-only">Fixed Ratio</Switch.Label>
+        <Switch.HiddenInput />
+      </Switch>
       <span>Fixed Ratio</span>
     </div>
     <Label text="Amount of water">

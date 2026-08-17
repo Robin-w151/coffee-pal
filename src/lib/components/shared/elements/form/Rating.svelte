@@ -1,7 +1,7 @@
 <script lang="ts">
   import { faStar as faStarRegular } from '@fortawesome/free-regular-svg-icons';
   import { faStar } from '@fortawesome/free-solid-svg-icons';
-  import { Ratings } from '@skeletonlabs/skeleton';
+  import { RatingGroup } from '@skeletonlabs/skeleton-svelte';
   import { Icon } from 'svelte-awesome';
 
   interface Props {
@@ -10,25 +10,33 @@
 
   let { rating = $bindable(0) }: Props = $props();
 
-  function handleRatingChange({ detail }: CustomEvent<{ index: number }>): void {
-    rating = rating === detail.index ? 0 : detail.index;
+  const MAX_RATING = 5;
+
+  function handleValueChange(details: { value: number }): void {
+    // Selecting the current rating again clears it, as it did before.
+    rating = rating === details.value ? 0 : details.value;
   }
 </script>
 
 <div class="py-2">
-  <Ratings
+  <RatingGroup
+    count={MAX_RATING}
     value={rating}
-    max={5}
-    interactive
-    justify="justify-start"
-    text="text-tertiary-600-400"
-    on:icon={handleRatingChange}
+    onValueChange={handleValueChange}
+    class="text-tertiary-600-400"
   >
-    {#snippet empty()}
-      <Icon data={faStarRegular} scale={2} />
-    {/snippet}
-    {#snippet full()}
-      <Icon data={faStar} scale={2} />
-    {/snippet}
-  </Ratings>
+    <RatingGroup.Control>
+      {#each { length: MAX_RATING } as _, index (index)}
+        <RatingGroup.Item index={index + 1}>
+          {#snippet empty()}
+            <Icon data={faStarRegular} scale={2} />
+          {/snippet}
+          {#snippet full()}
+            <Icon data={faStar} scale={2} />
+          {/snippet}
+        </RatingGroup.Item>
+      {/each}
+    </RatingGroup.Control>
+    <RatingGroup.HiddenInput />
+  </RatingGroup>
 </div>

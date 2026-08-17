@@ -14,11 +14,7 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
   import { MY_COFFEES_PAGE_SIZE } from '$lib/config/myCoffees';
-  import type {
-    MyCoffeesSort,
-    MyCoffeesSortDirection,
-    MyCoffeesState,
-  } from '$lib/models/myCoffees';
+  import type { MyCoffeesSort, MyCoffeesSortDirection } from '$lib/models/myCoffees';
   import { sync } from '$lib/services/sync/sync';
   import { myCoffeesSearchStore, myCoffeesStore } from '$lib/stores/myCoffees';
   import { syncAvailabilityStore } from '$lib/stores/syncAvailability.svelte';
@@ -34,7 +30,7 @@
     faStar,
     type IconDefinition,
   } from '@fortawesome/free-solid-svg-icons';
-  import { ListBox, ListBoxItem, Paginator, type PaginationSettings } from '@skeletonlabs/skeleton';
+  import Paginator from '../shared/elements/Paginator.svelte';
   import { Icon } from 'svelte-awesome';
   import PageActions from '../shared/elements/page/PageActions.svelte';
   import PageCard from '../shared/elements/page/PageCard.svelte';
@@ -91,7 +87,6 @@
 
   let selectedSortOption = $state(getActiveSortOption().label);
   let innerWidth = $state(0);
-  let paginationSettings = $derived(getPaginationSettings($myCoffeesStore));
 
   function getActiveSortOption(): SortOption {
     return (
@@ -103,24 +98,20 @@
     );
   }
 
-  function getPaginationSettings({ page, totalEntries }: MyCoffeesState): PaginationSettings {
-    return {
-      page,
-      limit: MY_COFFEES_PAGE_SIZE,
-      size: totalEntries,
-      amounts: [],
-    };
-  }
-
   function handleSearchChange(searchInput?: string | null): void {
     myCoffeesSearchStore.setFilter(searchInput ?? '');
   }
 
-  function handleSortOptionClick(sort: MyCoffeesSort, sortDirection: MyCoffeesSortDirection): void {
+  function handleSortOptionClick(
+    label: string,
+    sort: MyCoffeesSort,
+    sortDirection: MyCoffeesSortDirection,
+  ): void {
+    selectedSortOption = label;
     myCoffeesSearchStore.setSort(sort, sortDirection);
   }
 
-  function handlePageChange({ detail: page }: CustomEvent<number>): void {
+  function handlePageChange(page: number): void {
     myCoffeesStore.loadPage(page);
     scrollToTop();
   }
@@ -150,26 +141,30 @@
   onSearchChange={handleSearchChange}
 >
   {#snippet popupContent()}
-    <ListBox>
+    <ul class="flex flex-col gap-1">
       {#each sortOptions as { label, icon, sort, sortDirection } (label)}
-        <ListBoxItem
-          name={label}
-          value={label}
-          bind:group={selectedSortOption}
-          on:click={() => handleSortOptionClick(sort, sortDirection)}
-        >
-          <div class="flex justify-between items-center gap-4 w-full min-w-48">
-            <div class="flex items-center gap-2">
-              <Icon data={icon} />
-              <span>{label}</span>
+        <li>
+          <button
+            type="button"
+            class="btn justify-start w-full {selectedSortOption === label
+              ? 'preset-filled-primary-500'
+              : 'hover:preset-tonal'}"
+            aria-pressed={selectedSortOption === label}
+            onclick={() => handleSortOptionClick(label, sort, sortDirection)}
+          >
+            <div class="flex justify-between items-center gap-4 w-full min-w-48">
+              <div class="flex items-center gap-2">
+                <Icon data={icon} />
+                <span>{label}</span>
+              </div>
+              {#if selectedSortOption === label}
+                <Icon data={faCheck} />
+              {/if}
             </div>
-            {#if selectedSortOption === label}
-              <Icon data={faCheck} />
-            {/if}
-          </div>
-        </ListBoxItem>
+          </button>
+        </li>
       {/each}
-    </ListBox>
+    </ul>
   {/snippet}
 </PageSearch>
 <PageCard class="page-with-actions-token">
@@ -180,11 +175,10 @@
   {/if}
   {#if $myCoffeesStore.totalEntries}
     <Paginator
-      settings={paginationSettings}
-      showFirstLastButtons
-      showPreviousNextButtons
-      justify="justify-center"
-      on:page={handlePageChange}
+      page={$myCoffeesStore.page}
+      pageSize={MY_COFFEES_PAGE_SIZE}
+      count={$myCoffeesStore.totalEntries}
+      onPageChange={handlePageChange}
     />
   {/if}
 </PageCard>

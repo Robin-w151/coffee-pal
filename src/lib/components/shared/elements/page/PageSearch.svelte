@@ -6,7 +6,7 @@
     faClose,
     faSearch,
   } from '@fortawesome/free-solid-svg-icons';
-  import { popup, type PopupSettings } from '@skeletonlabs/skeleton';
+  import { Popover, Portal } from '@skeletonlabs/skeleton-svelte';
   import { tick, type Snippet } from 'svelte';
   import { Icon } from 'svelte-awesome';
   import { fade } from 'svelte/transition';
@@ -35,12 +35,6 @@
     onSearchChange,
     onSortToggle,
   }: Props = $props();
-
-  const sortPopup: PopupSettings = {
-    event: 'click',
-    target: 'sort-popup',
-    placement: 'bottom',
-  };
 
   let searchInputRef: HTMLInputElement | undefined = $state();
   let isSearchActive = $state(!!search);
@@ -90,7 +84,7 @@
   }
 </script>
 
-<svelte:window on:keydown={handleKeyDown} />
+<svelte:window onkeydown={handleKeyDown} />
 
 <header class="flex justify-between items-center gap-4 px-2 w-full h-12 {headerSearchActiveClass}">
   <div class="flex items-center gap-4 w-full">
@@ -127,19 +121,24 @@
       </button>
     {/if}
     {#if popupContent}
-      <button
-        class="btn btn-icon {isSearchActive
-          ? 'preset-filled-primary-500'
-          : 'preset-outlined-secondary-500'}"
-        title={changeSortOrderButtonTitle}
-        disabled={isChangeSortOrderButtonDisabled}
-        use:popup={sortPopup}
-      >
-        <Icon data={faArrowUpWideShort} />
-      </button>
-      <div class="popup-token" data-popup="sort-popup">
-        {@render popupContent()}
-      </div>
+      <Popover positioning={{ placement: 'bottom-end' }}>
+        <Popover.Trigger
+          class="btn btn-icon {isSearchActive
+            ? 'preset-filled-primary-500'
+            : 'preset-outlined-secondary-500'}"
+          title={changeSortOrderButtonTitle}
+          disabled={isChangeSortOrderButtonDisabled}
+        >
+          <Icon data={faArrowUpWideShort} />
+        </Popover.Trigger>
+        <Portal>
+          <Popover.Positioner>
+            <Popover.Content class="popup-token">
+              {@render popupContent()}
+            </Popover.Content>
+          </Popover.Positioner>
+        </Portal>
+      </Popover>
     {:else}
       <button
         class="btn btn-icon {isSearchActive

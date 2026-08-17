@@ -1,18 +1,11 @@
 <script lang="ts">
   import InputWithButton from '$lib/components/shared/elements/form/InputWithButton.svelte';
   import Label from '$lib/components/shared/elements/form/Label.svelte';
-  import Portal from '$lib/components/shared/elements/Portal.svelte';
+  import type { AutocompleteOption } from '$lib/models/autocomplete';
   import { getCoffeeLabel, type ActiveCoffeeEntry } from '$lib/models/myCoffees';
-  import { autocompletePopupBaseSettings } from '$lib/shared/ui/autocomplete';
   import { myCoffeesStore } from '$lib/stores/myCoffees';
   import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
-  import {
-    Autocomplete,
-    focusTrap,
-    popup,
-    type AutocompleteOption,
-    type PopupSettings,
-  } from '@skeletonlabs/skeleton';
+  import { Combobox, Portal, useListCollection } from '@skeletonlabs/skeleton-svelte';
   import { BehaviorSubject, debounceTime, map, switchMap, tap } from 'rxjs';
   import { onDestroy, onMount, untrack } from 'svelte';
   import { Icon } from 'svelte-awesome';
@@ -24,15 +17,18 @@
   let { coffeeType = $bindable() }: Props = $props();
 
   const filter = new BehaviorSubject<string | undefined>(undefined);
-  const popupCoffeeTypeAutocomplete: PopupSettings = {
-    ...autocompletePopupBaseSettings,
-    target: 'popupCoffeeTypeAutocomplete',
-  };
 
   let coffeeTypeOptions: Array<AutocompleteOption<ActiveCoffeeEntry>> = $state([]);
   let coffeeTypeInput = $state(getCoffeeLabel(coffeeType));
-  let inputElementRef: HTMLInputElement | undefined = $state();
   let coffeeTypeId = $derived(typeof coffeeType === 'object' ? coffeeType.id : undefined);
+
+  const collection = $derived(
+    useListCollection<AutocompleteOption<ActiveCoffeeEntry>>({
+      items: coffeeTypeOptions,
+      itemToString: (item) => item.label,
+      itemToValue: (item) => item.value.id,
+    }),
+  );
 
   onMount(() => {
     filter
@@ -68,70 +64,66 @@
     });
   }
 
-  function handleCoffeeTypeSelect({
-    detail,
-  }: CustomEvent<AutocompleteOption<ActiveCoffeeEntry>>): void {
-    coffeeType = detail.value;
-    coffeeTypeInput = getCoffeeLabel(coffeeType);
-    inputElementRef?.focus();
-  }
-
-  function handleInputChange(): void {
-    coffeeType = coffeeTypeInput;
-    filter.next(coffeeTypeInput);
-  }
-
-  function handleInputKeydown(event: KeyboardEvent): void {
-    const { key } = event;
-    if (key === 'Escape') {
-      event.stopPropagation();
+  /**
+   * Picking a suggestion stores the whole coffee entry, while free text is kept
+   * as a plain string.
+   */
+  function handleValueChange(details: {
+    items: Array<AutocompleteOption<ActiveCoffeeEntry>>;
+  }): void {
+    const selected = details.items[0];
+    if (selected) {
+      coffeeType = selected.value;
+      coffeeTypeInput = selected.label;
     }
+  }
+
+  function handleInputValueChange(details: { inputValue: string }): void {
+    coffeeTypeInput = details.inputValue;
+    coffeeType = details.inputValue;
+    filter.next(details.inputValue);
   }
 
   function getCoffeeTypeOptions(
     entries: Array<ActiveCoffeeEntry>,
   ): Array<AutocompleteOption<ActiveCoffeeEntry>> {
-    return entries.map((entry) => {
-      const option = getCoffeeLabel(entry)!;
-      return {
-        label: option,
-        value: entry,
-      };
-    });
+    return entries.map((entry) => ({
+      label: getCoffeeLabel(entry)!,
+      value: entry,
+    }));
   }
 </script>
 
-<Portal target="body">
-  <div
-    class="autocomplete-token"
-    tabindex="-1"
-    data-popup="popupCoffeeTypeAutocomplete"
-    use:focusTrap={true}
-  >
-    <Autocomplete
-      options={coffeeTypeOptions}
-      filter={() => [...coffeeTypeOptions]}
-      transitions={false}
-      on:selection={handleCoffeeTypeSelect}
-    />
-  </div>
-</Portal>
 <Label text="Type of coffee" class="relative">
   <InputWithButton
     title="Open coffee entry"
     visible={!!coffeeTypeId}
     href="/my-coffees/{coffeeTypeId}"
   >
-    <input
-      class="input autocomplete"
-      type="text"
-      placeholder="Type of coffee, e.g. Some coffee brand"
-      bind:this={inputElementRef}
-      bind:value={coffeeTypeInput}
-      use:popup={popupCoffeeTypeAutocomplete}
-      oninput={handleInputChange}
-      onkeydown={handleInputKeydown}
-    />
+    <Combobox
+      {collection}
+      inputValue={coffeeTypeInput ?? ''}
+      allowCustomValue
+      openOnClick
+      onInputValueChange={handleInputValueChange}
+      onValueChange={handleValueChange}
+    >
+      <Combobox.Control>
+        <Combobox.Input class="input" placeholder="Type of coffee, e.g. Some coffee brand" />
+      </Combobox.Control>
+      <Portal>
+        <Combobox.Positioner>
+          <Combobox.Content class="autocomplete-token">
+            {#each coffeeTypeOptions as item (item.value.id)}
+              <Combobox.Item {item}>
+                <Combobox.ItemText>{item.label}</Combobox.ItemText>
+                <Combobox.ItemIndicator />
+              </Combobox.Item>
+            {/each}
+          </Combobox.Content>
+        </Combobox.Positioner>
+      </Portal>
+    </Combobox>
     {#snippet buttonContent()}
       <Icon data={faArrowUpRightFromSquare} />
     {/snippet}

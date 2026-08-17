@@ -1,4 +1,4 @@
-import type { AutocompleteOption } from '@skeletonlabs/skeleton';
+import type { AutocompleteOption } from '$lib/models/autocomplete';
 
 export const methodOptions: Array<AutocompleteOption> = [
   {
