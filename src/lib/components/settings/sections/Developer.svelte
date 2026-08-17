@@ -5,8 +5,7 @@
   import { JOURNAL_DB_NAME } from '$lib/config/journal';
   import { MY_COFFEES_DB_NAME } from '$lib/config/myCoffees';
   import { humanReadableMemorySize } from '$lib/shared/ui/formatting';
-  import { ModalHelper } from '$lib/shared/ui/modal';
-  import { getModalStore } from '@skeletonlabs/skeleton';
+  import { modalHelper } from '$lib/shared/ui/modal.svelte';
   import { onDestroy, onMount } from 'svelte';
 
   interface Props {
@@ -14,8 +13,6 @@
   }
 
   let { cardClass = '' }: Props = $props();
-
-  const modalHelper = new ModalHelper(getModalStore());
   const itemClass = 'grid grid-cols-subgrid col-span-full';
 
   let developerSettingsActive = $state(false);
@@ -43,7 +40,7 @@
       'Data will be deleted',
       'Are you sure that you want to clear the LocalStorage?',
       {
-        modalClasses: 'dangerous',
+        dangerous: true,
       },
     );
 
@@ -58,7 +55,7 @@
       'Data will be deleted',
       'Are you sure that you want to clear the IndexedDB?',
       {
-        modalClasses: 'dangerous',
+        dangerous: true,
       },
     );
 

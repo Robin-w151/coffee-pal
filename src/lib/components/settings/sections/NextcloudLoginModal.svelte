@@ -1,22 +1,17 @@
 <script lang="ts">
-  import { getModalStore } from '@skeletonlabs/skeleton';
-
   interface Props {
     loginUrl: string;
+    close: (response?: boolean) => void;
   }
 
-  let { loginUrl }: Props = $props();
-
-  const modalStore = getModalStore();
+  let { loginUrl, close }: Props = $props();
 
   function handleLoginClick(): void {
-    $modalStore[0].response?.(true);
-    modalStore.close();
+    close(true);
   }
 
   function handleCancelClick(): void {
-    $modalStore[0].response?.(false);
-    modalStore.close();
+    close(false);
   }
 </script>
 

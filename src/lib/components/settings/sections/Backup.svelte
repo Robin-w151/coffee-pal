@@ -7,16 +7,14 @@
   import { journalStore } from '$lib/stores/journal';
   import { myCoffeesStore } from '$lib/stores/myCoffees';
   import { readJsonFile, writeJsonFile } from '$lib/shared/file';
-  import { ToastHelper } from '$lib/shared/ui/toast';
+  import { toastHelper } from '$lib/shared/ui/toast';
   import { faFileArrowUp } from '@fortawesome/free-solid-svg-icons';
-  import { FileDropzone, getToastStore } from '@skeletonlabs/skeleton';
+  import { FileDropzone } from '@skeletonlabs/skeleton';
   import { DateTime } from 'luxon';
   import { Icon } from 'svelte-awesome';
   import Spinner from '../../shared/elements/Spinner.svelte';
   import Form from '../../shared/elements/form/Form.svelte';
   import Card from '$lib/components/shared/elements/Card.svelte';
-
-  const toastHelper = new ToastHelper(getToastStore());
 
   let files: FileList | undefined = $state();
   let isImporting = $state(false);

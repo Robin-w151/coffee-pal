@@ -1,5 +1,5 @@
 import type { Connection, Sync } from '$lib/models/sync';
-import { localStorageStore } from '@skeletonlabs/skeleton';
+import { persistedStore } from '$lib/stores/persisted';
 import { DateTime } from 'luxon';
 import type { Readable } from 'svelte/store';
 
@@ -12,7 +12,7 @@ export interface SyncStore extends Readable<Sync> {
 const SYNC_STORE_NAME = 'sync';
 
 const initialState: Sync = {};
-const { subscribe, update } = localStorageStore<Sync>(SYNC_STORE_NAME, initialState);
+const { subscribe, update } = persistedStore<Sync>(SYNC_STORE_NAME, initialState);
 
 function setConnection(connection: Connection): void {
   update((sync) => ({ ...sync, connection }));

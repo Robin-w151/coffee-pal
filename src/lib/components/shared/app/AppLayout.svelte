@@ -16,9 +16,10 @@
   import { onMount, type Snippet } from 'svelte';
   import { get } from 'svelte/store';
   import { pwaInfo } from 'virtual:pwa-info';
-  import EnableGlobalMessages from './EnableGlobalMessages.svelte';
   import EnableShortcuts from './EnableShortcuts.svelte';
   import EnableUpdateListener from './EnableUpdateListener.svelte';
+  import GlobalDialog from './GlobalDialog.svelte';
+  import GlobalToaster from './GlobalToaster.svelte';
   import { runViewTransition } from '$lib/shared/viewTransition';
 
   interface Props {
@@ -69,9 +70,11 @@
 </svelte:head>
 
 <EnableColorSchemes />
-<EnableGlobalMessages />
 <EnableShortcuts />
 <EnableUpdateListener />
+
+<GlobalDialog />
+<GlobalToaster />
 
 <Dialog open={appMenu.open} onOpenChange={(details) => (appMenu.open = details.open)}>
   <Portal>

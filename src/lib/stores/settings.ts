@@ -6,7 +6,7 @@ import {
   type Settings,
   isMeasurementSystem,
 } from '$lib/models/settings';
-import { localStorageStore } from '@skeletonlabs/skeleton';
+import { persistedStore } from '$lib/stores/persisted';
 import type { Readable } from 'svelte/store';
 
 export interface SettingsStore extends Readable<Settings> {
@@ -25,7 +25,7 @@ function createSettingsStore(): SettingsStore {
   } satisfies Settings;
 
   sanitizeLocalStorage();
-  const { subscribe, update } = localStorageStore<Settings>(SETTINGS_STORE_NAME, initialState);
+  const { subscribe, update } = persistedStore<Settings>(SETTINGS_STORE_NAME, initialState);
 
   function setColorScheme(colorScheme: ColorScheme): void {
     update((settings) => ({ ...settings, colorScheme }));

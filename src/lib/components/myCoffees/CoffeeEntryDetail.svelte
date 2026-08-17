@@ -3,12 +3,11 @@
   import { getCoffeeLabel, type ActiveCoffeeEntry } from '$lib/models/myCoffees';
   import { pauseScheduledSync, resumeScheduledSync, scheduleSync } from '$lib/services/sync/sync';
   import { isEqualCoffeeEntry } from '$lib/shared/compare';
-  import { ModalHelper } from '$lib/shared/ui/modal';
-  import { ToastHelper } from '$lib/shared/ui/toast';
+  import { modalHelper } from '$lib/shared/ui/modal.svelte';
+  import { toastHelper } from '$lib/shared/ui/toast';
   import { myCoffeesStore } from '$lib/stores/myCoffees';
   import { syncStateEvents } from '$lib/stores/syncState.svelte';
   import { faFaceSadCry } from '@fortawesome/free-solid-svg-icons';
-  import { getModalStore, getToastStore } from '@skeletonlabs/skeleton';
   import { Subject, takeUntil, tap } from 'rxjs';
   import { onDestroy, onMount, untrack } from 'svelte';
   import { Icon } from 'svelte-awesome';
@@ -34,10 +33,6 @@
   }
 
   let { id = undefined }: Props = $props();
-
-  const modalHelper = new ModalHelper(getModalStore());
-  const toastStore = getToastStore();
-  const toastHelper = new ToastHelper(toastStore);
   const destroy = new Subject<void>();
 
   let entry: Partial<ActiveCoffeeEntry> = $state({
@@ -118,7 +113,7 @@
     destroy.complete();
 
     if (updateInfoToast) {
-      toastStore.close(updateInfoToast);
+      toastHelper.close(updateInfoToast);
     }
   });
 
@@ -167,7 +162,7 @@
           },
         },
         callback: (response) => {
-          if (response.status === 'closed') {
+          if (response.status === 'unmounted') {
             scheduleSync();
           }
         },

@@ -1,11 +1,8 @@
 <script lang="ts">
   import { pauseScheduledSync } from '$lib/services/sync/sync';
   import { listenForUpdates } from '$lib/services/updates/updateListener';
-  import { ToastHelper } from '$lib/shared/ui/toast';
-  import { getToastStore } from '@skeletonlabs/skeleton';
+  import { toastHelper } from '$lib/shared/ui/toast';
   import { onMount } from 'svelte';
-
-  const toastHelper = new ToastHelper(getToastStore());
 
   let isRestarting = $state(false);
 
