@@ -2,7 +2,7 @@
 
 **Epic:** [0001 Migrate to Skeleton v5, Tailwind v4 and SvelteKit 3](README.md)
 **Owner:** Claude
-**Status:** In progress
+**Status:** Done
 **Depends on:** 01
 **Size:** M — many small tests in an existing page-object setup; some uncertainty about service-worker and offline testing in Playwright.
 
@@ -33,7 +33,7 @@ Behaviours to cover:
 - [x] All behaviours 1–11 have at least one test; each test fails if the behaviour is removed (check by temporarily breaking one case per area, then revert).
 - [x] No test uses Skeleton class names as selectors: `grep -rnE "['\"\`][^'\"\`]*\.(modal|toast|drawer|app-rail|popup)\b|variant-|-token" tests` → no matches.
 - [x] `pnpm verify` is green; the suite passes 3 consecutive local runs (no flakiness).
-- [ ] The Test workflow passes against the branch's Vercel preview (it runs automatically on each preview deployment), and a plain `pnpm test:e2e` against the dev server still passes: tests that need the local preview are skipped there, not failing.
+- [x] The Test workflow passes against the branch's Vercel preview (it runs automatically on each preview deployment), and a plain `pnpm test:e2e` against the dev server still passes: tests that need the local preview are skipped there, not failing.
 
 ## Technical notes
 

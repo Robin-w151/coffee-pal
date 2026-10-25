@@ -42,7 +42,7 @@ A running log of the migration, written by Claude after each story (see "How Cla
 
 **Tests:** new `tests/specs/appShell.spec.ts` with 18 tests (17 phone, 1 desktop on the new `chromium-desktop` project). The e2e suite is now 81 tests, ~18 s in `vite preview`; `pnpm verify` ~34 s.
 
-**Gates:** `pnpm verify` green 3 times in a row; `appShell.spec.ts` green 10× with `--repeat-each 10` (180/180); plain `pnpm test:e2e` against `vite dev` green 3 times in a row (PWA test skipped). Breaking one behaviour per area (menu close, rail `aria-current`, scroll memory, confirm dialog, delete toast, sort popup, settings persistence, sync disconnect, offline service worker, shortcut mapping) made the matching tests fail; all reverted.
+**Gates:** `pnpm verify` green 3 times in a row; `appShell.spec.ts` green 10× with `--repeat-each 10` (180/180); plain `pnpm test:e2e` against `vite dev` green 3 times in a row (PWA test skipped). Test workflow against the Vercel preview of `4209c05`: 80 passed, 19 skipped (run 40222268139). Breaking one behaviour per area (menu close, rail `aria-current`, scroll memory, confirm dialog, delete toast, sort popup, settings persistence, sync disconnect, offline service worker, shortcut mapping) made the matching tests fail; all reverted.
 
 **Decisions:**
 
