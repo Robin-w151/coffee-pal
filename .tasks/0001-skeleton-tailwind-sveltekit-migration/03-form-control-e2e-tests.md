@@ -2,7 +2,7 @@
 
 **Epic:** [0001 Migrate to Skeleton v5, Tailwind v4 and SvelteKit 3](README.md)
 **Owner:** Claude
-**Status:** In progress
+**Status:** Done
 **Depends on:** 01
 **Size:** M — about ten components, existing page objects, mostly straightforward. Autocomplete and file upload need some care.
 
@@ -35,7 +35,7 @@ Extend the relevant page objects ([tests/pages](../../tests/pages)) instead of p
 - [x] The `data-testid="radio-item"` locators are gone from `tests/`.
 - [x] Tests don't select by Skeleton class names (same grep as story 02).
 - [x] `pnpm verify` is green; 3 consecutive local runs pass.
-- [ ] The Test workflow passes against the branch's Vercel preview, and a plain `pnpm test:e2e` against the dev server passes (or the test is skipped with a clear reason). Any change under `src/` makes the phase 0 merge a `fix:` (see "Releases and deploys" in the epic).
+- [x] The Test workflow passes against the branch's Vercel preview, and a plain `pnpm test:e2e` against the dev server passes (or the test is skipped with a clear reason). Any change under `src/` makes the phase 0 merge a `fix:` (see "Releases and deploys" in the epic).
 
 ## Technical notes
 
