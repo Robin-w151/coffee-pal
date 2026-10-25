@@ -66,6 +66,6 @@ export class MyCoffeesPage {
   }
 
   async clickCoffeeEntry(entry: Locator | number): Promise<void> {
-    return (typeof entry === 'number' ? this.getCoffeeEntry(entry) : entry).click();
+    await (typeof entry === 'number' ? this.getCoffeeEntry(entry) : entry).click();
   }
 }

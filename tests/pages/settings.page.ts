@@ -47,6 +47,6 @@ export class SettingsPage {
   private getCheckedRadio(options: Array<string>): Locator {
     return this.page
       .getByRole('radio', { checked: true })
-      .filter({ hasText: new RegExp(`^\\s*(${options.join('|')})\\s*$`) });
+      .filter({ hasText: new RegExp(String.raw`^\s*(${options.join('|')})\s*$`) });
   }
 }

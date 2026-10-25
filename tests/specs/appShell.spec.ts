@@ -12,15 +12,13 @@ const routes = [
   { label: 'Settings', path: '/settings' },
 ];
 
-const desktopMinWidth = 768;
-
 test.beforeEach(async ({ page }) => {
   await page.addInitScript(countViewTransitions);
 });
 
+// Projects pick tests by tag (see playwright.config.ts): untagged ones run on the phone viewport,
+// @desktop ones on the desktop viewport, @local-preview ones only against `vite preview`.
 test.describe('phone', () => {
-  test.skip(({ viewport }) => (viewport?.width ?? 0) >= desktopMinWidth, 'phone layout only');
-
   test('app bar', async ({ page, appPage }) => {
     await expect(page.getByRole('link', { name: 'Coffee Pal' })).toBeVisible();
     await expect(appPage.menuButton).toBeVisible();
@@ -253,21 +251,23 @@ test.describe('phone', () => {
     await expect(page.getByPlaceholder('Nextcloud Server URL')).toHaveValue('cloud.example.test');
   });
 
-  test('service worker serves the app offline', async ({ page, context, journalPage }) => {
-    test.skip(process.env['TEST_LOCAL_PREVIEW'] !== '1', 'needs the local production preview');
+  test(
+    'service worker serves the app offline',
+    { tag: '@local-preview' },
+    async ({ page, context, journalPage }) => {
+      await expect
+        .poll(() => page.evaluate(() => navigator.serviceWorker.ready.then((r) => !!r.active)))
+        .toBe(true);
 
-    await expect
-      .poll(() => page.evaluate(() => navigator.serviceWorker.ready.then((r) => !!r.active)))
-      .toBe(true);
-
-    await context.setOffline(true);
-    try {
-      await page.reload();
-      await expect(journalPage.journalList).toHaveCount(3);
-    } finally {
-      await context.setOffline(false);
-    }
-  });
+      await context.setOffline(true);
+      try {
+        await page.reload();
+        await expect(journalPage.journalList).toHaveCount(3);
+      } finally {
+        await context.setOffline(false);
+      }
+    },
+  );
 
   test('keyboard shortcuts navigate to the routes in order', async ({ page }) => {
     await gotoReady(page, '/settings');
@@ -278,14 +278,14 @@ test.describe('phone', () => {
     }
 
     await page.keyboard.press(`Control+${routes.length + 1}`);
-    await page.waitForTimeout(500);
+    // Asserting that nothing happens needs an observation window: the app calls preventDefault()
+    // for every Ctrl+digit, so there is no event to wait for.
+    await page.waitForTimeout(500); // NOSONAR(typescript:S2925)
     await expectPath(page, routes.at(-1)!.path);
   });
 });
 
-test.describe('desktop', () => {
-  test.skip(({ viewport }) => (viewport?.width ?? 0) < desktopMinWidth, 'desktop layout only');
-
+test.describe('desktop', { tag: '@desktop' }, () => {
   test('navigation rail navigates and marks the active route', async ({ page, appPage }) => {
     await expect(appPage.navigationRail).toBeVisible();
     await expect(appPage.menuButton).toBeHidden();

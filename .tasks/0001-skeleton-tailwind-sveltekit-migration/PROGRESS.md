@@ -134,3 +134,16 @@ Calculator and drip counter scroll inside `#page`, so these tests grow the viewp
 **Gates:** the new tests green with `--repeat-each 10` (80/80); `pnpm test:visual` green 3 times in a row (64/64); `pnpm lint` green.
 
 **Follow-up (same day):** at the human's request the calculator, drip counter and search states also run on `desktop`, where their layout differs (two-column calculator, counter and estimation side by side, journal table). The search test no longer uses the `journalPage` fixture, which checks the phone list; the phone search screenshots were regenerated accordingly. Inventory now 46 phone + 26 desktop = 72 (~16 MB). Gates: the cross-layout tests green with `--repeat-each 10` (160/160); `pnpm test:visual` green 3 times in a row (72/72).
+
+## 2026-10-25 — Checkpoint 05: SonarCloud findings on PR #186
+
+The quality gate failed on reliability (D) and security (C). Fixed:
+
+- `migration-status.js`: compare function for `sort()` (bug); the three backtracking regexes are now simple candidate regexes plus a `select` filter (output identical: same counts and files in all 12 categories); the `git` PATH lookup is marked `NOSONAR` (local dev script).
+- `generate-backup.js`: `--out` must resolve inside the repository (path traversal). The fixture regenerates byte-identically.
+- `appShell.spec.ts`: no more `test.skip`. Projects select tests by tag: `@desktop` runs only on `chromium-desktop`, `@local-preview` only with `TEST_LOCAL_PREVIEW=1` (see `playwright.config.ts`). The Ctrl+6 "does nothing" check keeps a 500 ms window, marked `NOSONAR`: the app calls `preventDefault()` for every Ctrl+digit, so there's no event to wait for.
+- Smaller smells: `async` without `await` in three page-object methods, `String.raw` in the radio filter, flatter `clearAllEntries`.
+
+Left as is: two "`await` inside a loop" smells in `states.visual.ts` (the drip counter taps have to be sequential).
+
+Gates: `pnpm verify:strict` green (168 unit, 117 e2e, 72 visual); e2e against `pnpm dev` green (116, PWA test excluded).

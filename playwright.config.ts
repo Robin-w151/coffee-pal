@@ -25,11 +25,13 @@ export default defineConfig({
   projects: [
     {
       name: 'chromium',
+      grepInvert: useLocalPreview ? /@desktop/ : /@desktop|@local-preview/,
       use: { ...devices['Desktop Chrome'], viewport: { width: 576, height: 768 } },
     },
     {
       name: 'chromium-desktop',
       testMatch: 'specs/appShell.spec.ts',
+      grep: /@desktop/,
       use: { ...devices['Desktop Chrome'], viewport: { width: 1280, height: 800 } },
     },
   ],

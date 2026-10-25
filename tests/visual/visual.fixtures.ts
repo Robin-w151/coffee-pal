@@ -71,18 +71,19 @@ export async function waitForScrollToSettle(page: Page): Promise<void> {
 }
 
 export async function clearAllEntries(page: Page): Promise<void> {
-  await page.evaluate(async () => {
-    const clear = (dbName: string) =>
-      new Promise<void>((resolve, reject) => {
-        const openRequest = indexedDB.open(dbName);
-        openRequest.onsuccess = () => {
-          const tx = openRequest.result.transaction(['entries'], 'readwrite');
-          tx.objectStore('entries').clear();
-          tx.oncomplete = () => resolve();
-          tx.onerror = reject;
-        };
-        openRequest.onerror = reject;
-      });
-    await Promise.all([clear('journal'), clear('my-coffees')]);
+  await Promise.all(['journal', 'my-coffees'].map((dbName) => page.evaluate(clearStore, dbName)));
+}
+
+// Runs in the browser, so it must not reference anything outside itself.
+function clearStore(dbName: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const openRequest = indexedDB.open(dbName);
+    openRequest.onerror = reject;
+    openRequest.onsuccess = () => {
+      const tx = openRequest.result.transaction(['entries'], 'readwrite');
+      tx.objectStore('entries').clear();
+      tx.oncomplete = () => resolve();
+      tx.onerror = reject;
+    };
   });
 }

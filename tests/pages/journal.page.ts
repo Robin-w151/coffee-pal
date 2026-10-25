@@ -67,6 +67,6 @@ export class JournalPage {
   }
 
   async clickJournalEntry(entry: Locator | number): Promise<void> {
-    return (typeof entry === 'number' ? this.getJournalEntry(entry) : entry).click();
+    await (typeof entry === 'number' ? this.getJournalEntry(entry) : entry).click();
   }
 }

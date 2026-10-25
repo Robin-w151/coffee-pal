@@ -52,7 +52,7 @@ export class AppPage {
     }, items);
   }
 
-  async getLocalStorageItem(key: string): Promise<unknown> {
+  getLocalStorageItem(key: string): Promise<unknown> {
     return this.page.evaluate((key) => {
       const value = localStorage.getItem(key);
       return value === null ? null : JSON.parse(value);

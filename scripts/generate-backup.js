@@ -2,6 +2,7 @@ import { Chance } from 'chance';
 import { DateTime } from 'luxon';
 import { v4 as uuid } from 'uuid';
 import { writeFileSync } from 'node:fs';
+import { relative, resolve } from 'node:path';
 import { parseArgs } from 'node:util';
 
 const { values: args } = parseArgs({
@@ -21,7 +22,7 @@ const chance = seed === undefined ? new Chance() : new Chance(seed);
 const seedBaseDate = DateTime.fromISO('2024-01-01T00:00:00.000Z', { zone: 'utc' });
 
 const backup = generateBackup();
-const backupName = args.out ?? `testdata/backup-${DateTime.now().toISO()}.json`;
+const backupName = resolveOutputPath(args.out ?? `testdata/backup-${DateTime.now().toISO()}.json`);
 
 writeFileSync(backupName, JSON.stringify(backup));
 
@@ -101,4 +102,15 @@ function generateTimestamps() {
   const createdAt = seedBaseDate.plus({ minutes: chance.integer({ min: 0, max: 365 * 24 * 60 }) });
   const updatedAt = createdAt.plus({ minutes: chance.integer({ min: 0, max: 30 * 24 * 60 }) });
   return { createdAt: createdAt.toISO(), updatedAt: updatedAt.toISO() };
+}
+
+// Only write inside the repository, whatever --out says.
+function resolveOutputPath(path) {
+  const root = process.cwd();
+  const target = resolve(root, path);
+  const fromRoot = relative(root, target);
+  if (fromRoot.startsWith('..') || resolve(fromRoot) !== target) {
+    throw new Error(`--out must point inside ${root}: ${path}`);
+  }
+  return target;
 }

@@ -6,12 +6,16 @@ import { parseArgs } from 'node:util';
 const SRC_CODE = 'src/**/*.{ts,js,svelte}';
 const SRC_ALL = 'src/**/*.{ts,js,svelte,html,css,scss}';
 const UI_LAYER = ['src/lib/components/ui/**', 'src/lib/services/ui/**'];
-const SKELETON_V2_JS_IMPORT =
-  /(?:\bfrom\s*|\bimport\s*\(\s*|^\s*import\s+)['"]@skeletonlabs\/skeleton(?:\/[^'"]*)?['"]/gm;
+// The quoted package name only appears in JS imports: v4+ imports its CSS from .css files, which
+// the globs using this don't match.
+const SKELETON_V2_JS_IMPORT = /['"]@skeletonlabs\/skeleton(?:\/[^'"\n]*)?['"]/g;
+const SKELETON_APPLY_CLASS = /\b(?:variant-|btn\b|card\b|chip\b|badge\b|input)|-token\b/;
+const V2_CLASS = /^(?:variant-[a-z]|input-group)|-token$/;
 
 /**
  * Each category consists of rules. A rule matches tracked files via `glob` (minus `exclude`).
- * With `regex`, every match in a file counts; without it, the file's existence counts once.
+ * With `regex`, every match in a file counts (only those passing `select`, if given); without it,
+ * the file's existence counts once. `select` keeps the regexes simple (no backtracking).
  * `unit: 'files'` counts matching files instead of matches.
  */
 const CATEGORIES = [
@@ -54,8 +58,8 @@ const CATEGORIES = [
     rules: [
       {
         glob: 'src/app.{css,scss}',
-        regex:
-          /@apply\b[^;\n]*?(?:\bvariant-[\w-]+|[\w-]+-token\b|\bbtn\b|\bcard\b|\bchip\b|\bbadge\b|\binput[\w-]*)/g,
+        regex: /@apply[^;\n]*/g,
+        select: (match) => SKELETON_APPLY_CLASS.test(match),
       },
     ],
   },
@@ -82,7 +86,7 @@ const CATEGORIES = [
   {
     name: 'v2-classes',
     targetPhase: 2,
-    rules: [{ glob: SRC_ALL, regex: /\bvariant-[a-z][\w-]*|[\w-]+-token\b|\binput-group[\w-]*/g }],
+    rules: [{ glob: SRC_ALL, regex: /[\w-]+/g, select: (word) => V2_CLASS.test(word) }],
   },
   {
     name: 'migration-placeholders',
@@ -142,6 +146,7 @@ if (args.phase !== undefined) {
 }
 
 function listFiles() {
+  // Local dev script: resolving git via the developer's PATH is intended. NOSONAR(javascript:S4036)
   const output = execFileSync('git', ['ls-files', '--cached', '--others', '--exclude-standard'], {
     encoding: 'utf-8',
   });
@@ -151,20 +156,22 @@ function listFiles() {
 function evaluateCategory({ name, targetPhase, unit = 'matches', rules }) {
   const matchesPerFile = new Map();
 
-  for (const { glob, exclude = [], regex } of rules) {
+  for (const { glob, exclude = [], regex, select = () => true } of rules) {
     const ruleFiles = files.filter(
       (file) => matchesGlob(file, glob) && !exclude.some((pattern) => matchesGlob(file, pattern)),
     );
 
     for (const file of ruleFiles) {
-      const count = regex ? (readFileSync(file, 'utf-8').match(regex)?.length ?? 0) : 1;
+      const count = regex
+        ? (readFileSync(file, 'utf-8').match(regex) ?? []).filter(select).length
+        : 1;
       if (count > 0) {
         matchesPerFile.set(file, (matchesPerFile.get(file) ?? 0) + count);
       }
     }
   }
 
-  const matchedFiles = [...matchesPerFile.keys()].sort();
+  const matchedFiles = [...matchesPerFile.keys()].sort((a, b) => a.localeCompare(b));
   const count =
     unit === 'files'
       ? matchedFiles.length
