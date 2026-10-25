@@ -1,14 +1,11 @@
 <script lang="ts">
-  import InputWithButton from '$lib/components/shared/elements/form/InputWithButton.svelte';
   import Label from '$lib/components/shared/elements/form/Label.svelte';
-  import Popover from '$lib/components/ui/Popover.svelte';
+  import Combobox, { type ComboboxOption } from '$lib/components/ui/Combobox.svelte';
   import { getCoffeeLabel, type ActiveCoffeeEntry } from '$lib/models/myCoffees';
   import { myCoffeesStore } from '$lib/stores/myCoffees';
   import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
-  import { Autocomplete, type AutocompleteOption } from '@skeletonlabs/skeleton';
   import { BehaviorSubject, debounceTime, map, switchMap, tap } from 'rxjs';
   import { onDestroy, onMount, untrack } from 'svelte';
-  import { Icon } from 'svelte-awesome';
 
   interface Props {
     coffeeType?: string | ActiveCoffeeEntry;
@@ -18,9 +15,8 @@
 
   const filter = new BehaviorSubject<string | undefined>(undefined);
 
-  let coffeeTypeOptions: Array<AutocompleteOption<ActiveCoffeeEntry>> = $state([]);
+  let coffeeTypeOptions: Array<ComboboxOption<ActiveCoffeeEntry>> = $state([]);
   let coffeeTypeInput = $state(getCoffeeLabel(coffeeType));
-  let inputElementRef: HTMLInputElement | undefined = $state();
   let coffeeTypeId = $derived(typeof coffeeType === 'object' ? coffeeType.id : undefined);
 
   onMount(() => {
@@ -57,12 +53,9 @@
     });
   }
 
-  function handleCoffeeTypeSelect({
-    detail,
-  }: CustomEvent<AutocompleteOption<ActiveCoffeeEntry>>): void {
-    coffeeType = detail.value;
+  function handleCoffeeTypeSelect(option: ComboboxOption<ActiveCoffeeEntry>): void {
+    coffeeType = option.value;
     coffeeTypeInput = getCoffeeLabel(coffeeType);
-    inputElementRef?.focus();
   }
 
   function handleInputChange(): void {
@@ -70,16 +63,9 @@
     filter.next(coffeeTypeInput);
   }
 
-  function handleInputKeydown(event: KeyboardEvent): void {
-    const { key } = event;
-    if (key === 'Escape') {
-      event.stopPropagation();
-    }
-  }
-
   function getCoffeeTypeOptions(
     entries: Array<ActiveCoffeeEntry>,
-  ): Array<AutocompleteOption<ActiveCoffeeEntry>> {
+  ): Array<ComboboxOption<ActiveCoffeeEntry>> {
     return entries.map((entry) => {
       const option = getCoffeeLabel(entry)!;
       return {
@@ -90,36 +76,19 @@
   }
 </script>
 
-<Popover openOn="focus-click" matchWidth portal trapFocus contentClass="autocomplete-token">
-  {#snippet content()}
-    <Autocomplete
-      options={coffeeTypeOptions}
-      filter={() => [...coffeeTypeOptions]}
-      transitions={false}
-      on:selection={handleCoffeeTypeSelect}
-    />
-  {/snippet}
-  {#snippet trigger(triggerProps)}
-    <Label text="Type of coffee" class="relative">
-      <InputWithButton
-        title="Open coffee entry"
-        visible={!!coffeeTypeId}
-        href="/my-coffees/{coffeeTypeId}"
-      >
-        <input
-          class="input autocomplete"
-          type="text"
-          placeholder="Type of coffee, e.g. Some coffee brand"
-          bind:this={inputElementRef}
-          bind:value={coffeeTypeInput}
-          {...triggerProps}
-          oninput={handleInputChange}
-          onkeydown={handleInputKeydown}
-        />
-        {#snippet buttonContent()}
-          <Icon data={faArrowUpRightFromSquare} />
-        {/snippet}
-      </InputWithButton>
-    </Label>
-  {/snippet}
-</Popover>
+<Label text="Type of coffee" class="relative">
+  <Combobox
+    options={coffeeTypeOptions}
+    filter="none"
+    placeholder="Type of coffee, e.g. Some coffee brand"
+    trailLink={{
+      title: 'Open coffee entry',
+      href: `/my-coffees/${coffeeTypeId}`,
+      visible: !!coffeeTypeId,
+      icon: faArrowUpRightFromSquare,
+    }}
+    bind:inputValue={coffeeTypeInput}
+    onSelect={handleCoffeeTypeSelect}
+    onInputChange={handleInputChange}
+  />
+</Label>

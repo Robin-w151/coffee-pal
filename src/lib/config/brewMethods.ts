@@ -1,6 +1,6 @@
-import type { AutocompleteOption } from '@skeletonlabs/skeleton';
+import type { ComboboxOption } from '$lib/components/ui/Combobox.svelte';
 
-export const methodOptions: Array<AutocompleteOption> = [
+export const methodOptions: Array<ComboboxOption<string>> = [
   {
     label: 'Aeropress',
     value: 'aeropress',

@@ -14,7 +14,7 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
   import { JOURNAL_PAGE_SIZE } from '$lib/config/journal';
-  import type { JournalSort, JournalSortDirection, JournalState } from '$lib/models/journal';
+  import type { JournalSort, JournalSortDirection } from '$lib/models/journal';
   import { sync } from '$lib/services/sync/sync';
   import { journalSearchStore, journalStore } from '$lib/stores/journal';
   import { getSyncAvailabilityStore } from '$lib/stores/syncAvailability.svelte';
@@ -24,12 +24,11 @@
     faArrowUpAZ,
     faArrowUpZA,
     faCalendarDays,
-    faCheck,
     faStar,
     type IconDefinition,
   } from '@fortawesome/free-solid-svg-icons';
-  import { ListBox, ListBoxItem, Paginator, type PaginationSettings } from '@skeletonlabs/skeleton';
-  import { Icon } from 'svelte-awesome';
+  import Listbox from '$lib/components/ui/Listbox.svelte';
+  import Pagination from '$lib/components/ui/Pagination.svelte';
   import PageActions from '../shared/elements/page/PageActions.svelte';
   import PageCard from '../shared/elements/page/PageCard.svelte';
   import PageSearch from '../shared/elements/page/PageSearch.svelte';
@@ -76,7 +75,6 @@
 
   let selectedSortOption = $state(getActiveSortOption().label);
   let innerWidth = $state(0);
-  let paginationSettings = $derived(getPaginationSettings($journalStore));
 
   function getActiveSortOption(): SortOption {
     return (
@@ -87,15 +85,6 @@
     );
   }
 
-  function getPaginationSettings({ page, totalEntries }: JournalState): PaginationSettings {
-    return {
-      page,
-      limit: JOURNAL_PAGE_SIZE,
-      size: totalEntries,
-      amounts: [],
-    };
-  }
-
   function handleSearchChange(searchInput?: string | null): void {
     journalSearchStore.setFilter(searchInput ?? '');
   }
@@ -104,7 +93,14 @@
     journalSearchStore.setSort(sort, sortDirection);
   }
 
-  function handlePageChange({ detail: page }: CustomEvent<number>): void {
+  function handleSortOptionSelect(label: string): void {
+    const option = sortOptions.find((sortOption) => sortOption.label === label);
+    if (option) {
+      handleSortOptionClick(option.sort, option.sortDirection);
+    }
+  }
+
+  function handlePageChange(page: number): void {
     journalStore.loadPage(page);
     scrollToTop();
   }
@@ -134,26 +130,11 @@
   onSearchChange={handleSearchChange}
 >
   {#snippet popupContent()}
-    <ListBox>
-      {#each sortOptions as { label, icon, sort, sortDirection } (label)}
-        <ListBoxItem
-          name={label}
-          value={label}
-          bind:group={selectedSortOption}
-          on:click={() => handleSortOptionClick(sort, sortDirection)}
-        >
-          <div class="flex justify-between items-center gap-4 w-full min-w-48">
-            <div class="flex items-center gap-2">
-              <Icon data={icon} />
-              <span>{label}</span>
-            </div>
-            {#if selectedSortOption === label}
-              <Icon data={faCheck} />
-            {/if}
-          </div>
-        </ListBoxItem>
-      {/each}
-    </ListBox>
+    <Listbox
+      options={sortOptions.map(({ label, icon }) => ({ value: label, label, icon }))}
+      bind:value={selectedSortOption}
+      onSelect={handleSortOptionSelect}
+    />
   {/snippet}
 </PageSearch>
 <PageCard class="page-with-actions-token">
@@ -163,12 +144,11 @@
     <JournalEntries entries={$journalStore.entries} isLoading={$journalStore.isLoading} />
   {/if}
   {#if $journalStore.totalEntries}
-    <Paginator
-      settings={paginationSettings}
-      showFirstLastButtons
-      showPreviousNextButtons
-      justify="justify-center"
-      on:page={handlePageChange}
+    <Pagination
+      page={$journalStore.page}
+      pageSize={JOURNAL_PAGE_SIZE}
+      total={$journalStore.totalEntries}
+      onPageChange={handlePageChange}
     />
   {/if}
 </PageCard>

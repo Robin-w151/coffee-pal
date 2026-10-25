@@ -204,3 +204,11 @@ New wrappers `Switch`, `SegmentedControl`, `Slider`, `RatingGroup`, `TagsInput` 
 **Status:** `skeleton-v2-imports-outside-ui` 7, `skeleton-apply-in-app-css` 5.
 
 **Gates:** `pnpm verify:strict` green (194 unit, 120 e2e, 72 visual).
+
+## 2026-10-25 — Story 10: List and navigation wrappers (Done)
+
+`Combobox`, `Listbox`, `Pagination`, `NavRail` and `AppBar` in `src/lib/components/ui/` replace the last v2 components outside `ui/`. These were Method/CoffeeType autocompletes, the sort popups and paginators of Journal and MyCoffees, the rail and the app bar. `brewMethods.ts` uses `ComboboxOption<string>`. The `.autocomplete-button` and `.app-rail-anchor` overrides became utility classes inside the wrappers.
+
+**Status:** `skeleton-v2-imports-outside-ui` 0; no `@skeletonlabs/skeleton` import outside `src/lib/{components,services}/ui/`. Remaining phase 1 categories: `scss` 3, `skeleton-apply-in-app-css` 5 (story 11).
+
+**Gates:** `pnpm verify:strict` green: 194 unit, 121 e2e (new: Combobox Escape keeps focus in the input), 72 visual.

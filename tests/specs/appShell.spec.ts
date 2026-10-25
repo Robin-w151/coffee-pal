@@ -176,6 +176,23 @@ test.describe('phone', () => {
     });
   });
 
+  test('brew method popup closes on Escape and keeps focus in the input', async ({
+    page,
+    journalPage,
+    journalEntryDetailPage,
+  }) => {
+    await journalPage.clickAddButton();
+    await expect(journalEntryDetailPage.header).toBeVisible();
+    const option = autocompleteOption(page, 'Aeropress');
+
+    await refocus(journalEntryDetailPage.methodInput);
+    await expect.poll(() => isShown(option)).toBe(true);
+    await page.keyboard.press('Escape');
+
+    await expect.poll(() => isShown(option)).toBe(false);
+    await expect(journalEntryDetailPage.methodInput).toBeFocused();
+  });
+
   test('coffee type popup opens and closes', async ({
     page,
     journalPage,

@@ -65,16 +65,6 @@ body {
   @apply bg-surface-50-900-token;
 }
 
-.app-rail-anchor {
-  @apply block overflow-hidden rounded-md;
-}
-
-// Autocomplete overrides
-
-.autocomplete-button {
-  text-align: start;
-}
-
 // Input group overrides
 
 .input-group.measurement-input {

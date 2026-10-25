@@ -111,7 +111,7 @@ Decision 2026-10-23: Claude works on the phase branch and stops only at the Huma
 | 07  | [Own app layout instead of AppShell](07-own-app-layout.md)                   | Claude | M    | 05             | Done   |
 | 08  | [Overlay services and hosts](08-overlay-services.md)                         | Claude | L    | 05             | Done   |
 | 09  | [Form control wrappers](09-form-control-wrappers.md)                         | Claude | M    | 05             | Done   |
-| 10  | [List and navigation wrappers](10-list-navigation-wrappers.md)               | Claude | M    | 07, 08         | Todo   |
+| 10  | [List and navigation wrappers](10-list-navigation-wrappers.md)               | Claude | M    | 07, 08         | Done   |
 | 11  | [Stylesheet preparation](11-stylesheet-preparation.md)                       | Claude | M    | 06, 08, 09, 10 | Todo   |
 | 12  | [Merge phase 1 and check production data](12-merge-phase-1.md)               | Human  | S    | 11             | Todo   |
 | 13  | [Tailwind v4 and Skeleton codemods](13-tailwind-v4-and-codemods.md)          | Claude | L    | 11             | Todo   |
