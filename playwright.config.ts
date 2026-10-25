@@ -12,6 +12,7 @@ const baseURL = useLocalPreview
 
 export default defineConfig({
   testDir: './tests',
+  testIgnore: ['visual/**'],
   fullyParallel: true,
   reporter: useLocalPreview ? [['html', { open: 'never' }], ['list']] : 'html',
   use: {

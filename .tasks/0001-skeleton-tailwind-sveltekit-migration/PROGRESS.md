@@ -77,8 +77,44 @@ A running log of the migration, written by Claude after each story (see "How Cla
 | RadioGroup / RadioItem                 |         1 | settings; the 5 existing tests now use `getByRole('radio', { checked })`  |
 | input-group (Measurement, Url, Estim.) |         3 | journal (unit conversion + stored base value), settings, drip counter     |
 
-**Gates:** `pnpm verify` green 3 times in a row; the full e2e suite green with `--repeat-each 5` (495/495); plain `pnpm test:e2e` against `vite dev` green 3 times in a row. Breaking one behaviour per component (autocomplete selection, list box binding, page change, chip colours, file binding, slider binding, rating change, toggle binding, radio binding, unit binding) made the matching tests fail; all reverted.
+**Gates:** `pnpm verify` green 3 times in a row; the full e2e suite green with `--repeat-each 5` (495/495); plain `pnpm test:e2e` against `vite dev` green 3 times in a row; Test workflow against the Vercel preview of `861bc5b`: 98 passed, 19 skipped (run 40223727539). Breaking one behaviour per component (autocomplete selection, list box binding, page change, chip colours, file binding, slider binding, rating change, toggle binding, radio binding, unit binding) made the matching tests fail; all reverted.
 
 **Decisions:** see story 03 → Technical notes → As built (test hooks on Rating and Aromas wrappers, IndexedDB polling after saves, seeded backup generator).
 
 **Open issues:** none new.
+
+## 2026-10-25 — Story 04: Visual and accessibility baseline
+
+**Branch:** `migration/0-safety-net`
+
+**`pnpm migration:status`:** unchanged (no `src/` changes).
+
+**Screenshot inventory** (`tests/visual/__screenshots__/`, macOS, ~9.6 MB):
+
+| Project | Screens (9 × 2 schemes) | States (10 × 2 schemes) | Total |
+| ------- | ----------------------: | ----------------------: | ----: |
+| phone   |                      18 |                      20 |    38 |
+| desktop |                      18 |                       – |    18 |
+
+States (phone): journal list empty, app menu open, sort popup open, toast, brew method suggestions (open and filtered), coffee type suggestions, journal entry validation, coffee validation, dangerous confirm modal.
+
+**A11y baseline** (`tests/a11y/baseline/`, 18 files, axe `wcag2a` + `wcag2aa`), violations by rule, summed over all screens and both schemes:
+
+| Rule                 | Nodes | Where                                                     |
+| -------------------- | ----: | --------------------------------------------------------- |
+| `dlitem`             |    24 | journal and my-coffees lists (`<dt>`/`<dd>` inside `<a>`) |
+| `nested-interactive` |    10 | settings (5 per scheme)                                   |
+| `document-title`     |     8 | journal / my-coffees entry and new pages (no `<title>`)   |
+| `definition-list`    |     4 | journal and my-coffees lists                              |
+| `label`              |     2 | settings (1 per scheme)                                   |
+
+No `color-contrast` violations: axe reports text over the mesh background as "incomplete", not as a violation.
+
+**Gates:** `pnpm verify:strict` green (117 e2e, 56 visual); `pnpm test:visual` green 3 times in a row (and `test:visual:run` 5 times); the e2e suite against `pnpm dev` green 3 times. `A11Y_UPDATE_BASELINE=1 pnpm test:e2e:local` twice with parallel workers: valid JSON, no diff. Wrapping the journal list in an extra `<div>` kept the a11y spec green; removing the menu button's accessible name failed all 18 a11y cases (`button-name`), and a `.h3` colour change failed 2 screenshots.
+
+**Decisions:** see story 04 → Technical notes → As built. New devDependency `@axe-core/playwright@4.14.0`; installing it added a `supports-color@7.2.0` peer suffix to many lockfile entries, with no version changes.
+
+**Open issues for checkpoint 05:**
+
+- `maxDiffPixelRatio: 0.01` lets small text-colour changes through on most screens; the human may want a stricter threshold for phase 1.
+- Known gaps from story 02 (focus return after modal cancel, view transition bug) still apply.

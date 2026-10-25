@@ -15,3 +15,5 @@ yarn.lock
 
 /.vercel
 /testdata
+# Playwright screenshots
+tests/visual/__screenshots__

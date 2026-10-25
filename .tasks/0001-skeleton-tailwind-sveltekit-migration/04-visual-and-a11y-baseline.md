@@ -2,7 +2,7 @@
 
 **Epic:** [0001 Migrate to Skeleton v5, Tailwind v4 and SvelteKit 3](README.md)
 **Owner:** Claude
-**Status:** Todo
+**Status:** Done
 **Depends on:** 01
 **Size:** M — Playwright screenshots and axe are standard, but getting them deterministic (dates, version hash, animations, mesh background) needs iteration.
 
@@ -27,14 +27,14 @@ As Claude, I want screenshots of every screen and state on v2, plus an accessibi
 
 ## Acceptance criteria
 
-- [ ] `pnpm test:visual` passes 3 consecutive runs without updating snapshots.
-- [ ] Every screen × state × scheme listed above has a committed screenshot in `tests/visual/__screenshots__/{phone,desktop}/` (desktop only for screens where layout differs, at least journal list and settings).
-- [ ] `pnpm test:e2e` (CI/Test workflow) doesn't run the visual tests.
-- [ ] The a11y spec passes on today's app; `tests/a11y/baseline/` is committed; introducing a missing label in a test branch makes it fail.
-- [ ] Given a markup change that keeps the same violations (e.g. wrapping an element in an extra `<div>`), when the a11y spec runs, then it still passes.
-- [ ] Given `A11Y_UPDATE_BASELINE=1 pnpm test:e2e:local`, when it runs with several workers, then every baseline file is valid JSON and a second update run produces no diff.
-- [ ] `pnpm verify:strict` is green.
-- [ ] PROGRESS.md lists the screenshot inventory (count per project) and the number of baseline a11y violations by rule.
+- [x] `pnpm test:visual` passes 3 consecutive runs without updating snapshots.
+- [x] Every screen × state × scheme listed above has a committed screenshot in `tests/visual/__screenshots__/{phone,desktop}/` (desktop only for screens where layout differs, at least journal list and settings).
+- [x] `pnpm test:e2e` (CI/Test workflow) doesn't run the visual tests.
+- [x] The a11y spec passes on today's app; `tests/a11y/baseline/` is committed; introducing a missing label in a test branch makes it fail.
+- [x] Given a markup change that keeps the same violations (e.g. wrapping an element in an extra `<div>`), when the a11y spec runs, then it still passes.
+- [x] Given `A11Y_UPDATE_BASELINE=1 pnpm test:e2e:local`, when it runs with several workers, then every baseline file is valid JSON and a second update run produces no diff.
+- [x] `pnpm verify:strict` is green.
+- [x] PROGRESS.md lists the screenshot inventory (count per project) and the number of baseline a11y violations by rule.
 
 ## Technical notes
 
@@ -42,6 +42,16 @@ As Claude, I want screenshots of every screen and state on v2, plus an accessibi
 - The fixed mesh background (`background-attachment: fixed` in [src/app.scss](../../src/app.scss)) is deterministic but large; if diffs show noise there, use `fullPage: false` screenshots.
 - Set the colour scheme with `page.emulateMedia({ colorScheme })` and the default `system` setting, in both the visual and the a11y suite. Persisting the choice in settings is covered by story 02.
 - Make sure [tests/visual](../../tests) isn't matched by the default `testDir: './tests'` of the e2e config: add `testIgnore: ['visual/**']` there.
+
+- **As built (2026-10-25):**
+  - Time: `page.clock.install({ time })` instead of `setFixedTime`. A frozen `Date.now` stalls rxjs `debounceTime`, so lists never load; `install()` starts at a fixed moment and lets time flow.
+  - Every screenshot masks the app version, the storage estimate and the "Install App" / "Check for Updates" buttons (they depend on service worker and install prompt timing). Settings shots also wait for "Check for Updates".
+  - `expectScreenshot()` waits until `#page` keeps the same scroll position over ~450 ms; the Developer section starts a smooth scroll 150 ms after it opens. The modal shot also scrolls `#page` to the bottom first, so the background is identical every run.
+  - Base screens run on `phone` and `desktop`; the states (empty, menu, popups, toast, validation, modal) on `phone` only. The rail is part of every desktop shot. Inventory: 38 phone + 18 desktop = 56 screenshots (~9.6 MB).
+  - The screen list (paths + "rendered" checks) lives in `tests/features/screens.ts` and is shared by the visual suite and `a11y.spec.ts`.
+  - Visual config also pins `locale: en-US` and `timezoneId: Europe/Vienna`.
+  - `APP_VERSION` comes from `npm_package_version`: start the dev server with `pnpm dev`, not `pnpm exec vite dev`, or the empty version link adds a `link-name` violation on settings.
+  - A text-colour change on `.h3` was caught in only 2 of the screenshots that contain one, because small text stays under `maxDiffPixelRatio: 0.01`. Worth keeping in mind when reviewing phase 1 diffs.
 
 ## Testing
 
