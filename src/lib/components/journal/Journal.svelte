@@ -137,7 +137,7 @@
     />
   {/snippet}
 </PageSearch>
-<PageCard class="page-with-actions-token">
+<PageCard class="mb-24">
   {#if innerWidth > screenMd}
     <JournalEntriesTable entries={$journalStore.entries} isLoading={$journalStore.isLoading} />
   {:else}

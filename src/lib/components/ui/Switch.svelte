@@ -17,7 +17,7 @@
   {name}
   {label}
   size="sm"
-  active="slide-toggle-active-token"
+  active="bg-primary-500 dark:bg-primary-600"
   bind:checked
   on:change={() => onCheckedChange?.(checked)}
 />

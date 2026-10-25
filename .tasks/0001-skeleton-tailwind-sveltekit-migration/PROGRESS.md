@@ -212,3 +212,15 @@ New wrappers `Switch`, `SegmentedControl`, `Slider`, `RatingGroup`, `TagsInput` 
 **Status:** `skeleton-v2-imports-outside-ui` 0; no `@skeletonlabs/skeleton` import outside `src/lib/{components,services}/ui/`. Remaining phase 1 categories: `scss` 3, `skeleton-apply-in-app-css` 5 (story 11).
 
 **Gates:** `pnpm verify:strict` green: 194 unit, 121 e2e (new: Combobox Escape keeps focus in the input), 72 visual.
+
+## 2026-10-26 — Story 11: Stylesheet preparation (In progress: PR pending)
+
+`src/app.scss` is now plain `src/app.css`. It keeps only the Tailwind directives, `:root`, the tap highlight, the heading/link/button weight, the mesh background, the `html, body` sizing and the view transitions. Every override and token moved into its owner as classes, wrapper props or plain host CSS (details in the story's "As built"). `PageTitle.svelte` is new. `AppDragHandle` uses plain CSS, `sass` is removed, and the `body` background rule was deleted with no pixel change.
+
+**Status:** `pnpm migration:status --phase 1` exits 0, so every phase 1 category is 0. Phase 4 (`sveltekit-2`) is the only category with large counts left.
+
+**Build size:** CSS 129,452 → 122,398 bytes; client output 6,832 → 6,828 KB.
+
+**Gates:** `pnpm verify:strict` green (194 unit, 121 e2e, 72 visual).
+
+**Open:** the phase 1 PR (`migration/1-decouple → main`, title `fix: decouple app from Skeleton v2 (migration phase 1)`) waits for the human. The `build-feature` batch rules don't let Claude open PRs on its own.

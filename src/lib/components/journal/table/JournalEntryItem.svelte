@@ -54,7 +54,13 @@
   }
 </script>
 
-<tr tabindex="0" role="button" onclick={handleEntryClick} onkeydown={handleEntryKeyDown}>
+<tr
+  class="transition ease-out"
+  tabindex="0"
+  role="button"
+  onclick={handleEntryClick}
+  onkeydown={handleEntryKeyDown}
+>
   <td><span class="badge variant-soft-tertiary w-16">{ratio}</span></td>
   <td>{entry.method}</td>
   <td>{coffeeType ?? 'Unknown'}</td>

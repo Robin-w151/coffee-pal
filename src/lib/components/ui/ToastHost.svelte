@@ -26,6 +26,7 @@
       const storeId = toastStore.trigger({
         message,
         background: BACKGROUNDS[kind],
+        classes: 'flex-col sm:flex-row gap-4',
         // The service owns the timeout, so all toasts close the same way.
         autohide: false,
         action: action && { label: action.label, response: () => toast.runAction(id) },
@@ -48,3 +49,15 @@
 </script>
 
 <Toast />
+
+<style>
+  /* v2 renders these elements; the extra class outranks its utilities regardless of CSS order. */
+  :global(.snackbar-wrapper .snackbar) {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+
+  :global(.toast .toast-actions) {
+    margin-left: 0 !important;
+  }
+</style>

@@ -53,7 +53,7 @@
     matchWidth = false,
     portal = false,
     trapFocus = false,
-    contentClass = 'popup-token',
+    contentClass = 'card p-4 bg-surface-200-700-token shadow-xl z-10',
     // eslint-disable-next-line no-useless-assignment -- bindable prop, read by the parent
     open = $bindable(false),
     onOpenChange,

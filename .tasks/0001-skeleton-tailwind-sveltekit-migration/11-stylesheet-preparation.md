@@ -2,7 +2,7 @@
 
 **Epic:** [0001 Migrate to Skeleton v5, Tailwind v4 and SvelteKit 3](README.md)
 **Owner:** Claude
-**Status:** Todo
+**Status:** In progress
 **Depends on:** 06, 08, 09, 10
 **Size:** M — mechanical Sass-to-CSS conversion plus moving ~20 rules into ~13 owners, each move pixel-neutral against the v2 baseline.
 
@@ -44,16 +44,34 @@ As Claude, I want the global stylesheet to be plain CSS without `@apply` of Skel
 
 ## Acceptance criteria
 
-- [ ] `pnpm migration:status --phase 1` exits 0 (`scss`, `skeleton-apply-in-app-css` and all other phase-1 categories = 0).
-- [ ] `src/app.css` has no `@apply` of Skeleton classes; no `.scss` file or `lang="scss"` remains; `sass` is uninstalled.
-- [ ] `src/app.css` contains only the rules listed in item 3; every class from the mapping table is defined by its owner, and `grep -rn "chip-interactive-token\|popup-token\|autocomplete-token\|page-actions-token\|page-with-actions-token\|radio-group-token\|range-slider-accent-token\|slide-toggle-active-token" src/app.css` returns nothing.
-- [ ] `pnpm verify:strict` is green (pixel-equivalent to the v2 baseline within the threshold).
+- [x] `pnpm migration:status --phase 1` exits 0 (`scss`, `skeleton-apply-in-app-css` and all other phase-1 categories = 0).
+- [x] `src/app.css` has no `@apply` of Skeleton classes; no `.scss` file or `lang="scss"` remains; `sass` is uninstalled.
+- [x] `src/app.css` contains only the rules listed in item 3; every class from the mapping table is defined by its owner, and `grep -rn "chip-interactive-token\|popup-token\|autocomplete-token\|page-actions-token\|page-with-actions-token\|radio-group-token\|range-slider-accent-token\|slide-toggle-active-token" src/app.css` returns nothing.
+- [x] `pnpm verify:strict` is green (pixel-equivalent to the v2 baseline within the threshold).
 - [ ] The phase 1 PR is open and links this epic.
 
 ## Technical notes
 
 - Files: `src/app.css`, [package.json](../../package.json), the owners in the mapping table.
 - `variant-*` / `*-token` classes in markup are **not** in scope: the `skeleton-3` codemod renames `variant-*` (story 13), and story 17 handles the rest.
+
+### As built (2026-10-26)
+
+- Some rules had already moved earlier: `.modal-footer` and `.modal.dangerous` (08), `.app-rail-anchor` and `.autocomplete-button` (10). The rest moved like this:
+  - **Wrapper props/classes:** `.popup-token` → Popover's default `contentClass`; `.autocomplete-token` → Combobox's `contentClass`. `.radio-group-token` → `flexDirection="flex-col sm:flex-row"` plus `class="sm:min-w-[24rem]"`. Using the prop matters: as a class, `flex-col` would compete with v2's built-in `flex-row` utility. `.range-slider-accent-token` → Slider's `accent`; `.slide-toggle-active-token` → Switch's `active`.
+  - **Elements Skeleton renders itself:** `.modal-backdrop` → `regionBackdrop="overflow-hidden"`; `.toast` → the per-toast `classes` setting.
+  - **Plain CSS in the host's `<style>`, for elements with no prop:** `.modal-transition`, `.snackbar`, `.toast-actions`. The selectors carry an extra ancestor class (`.modal-backdrop .modal-transition`, `.snackbar-wrapper .snackbar`), so they outrank v2's utilities however the component CSS is ordered.
+  - **Tables:** `rounded-md`, plus `[&_tbody_tr:nth-child(2n)]:bg-surface-200-700-token` on the `<table>`. That arbitrary variant keeps the original selector and specificity (0,2,2), which beats Skeleton's `.table tbody tr:nth-child(even)`, and its hover rules (0,4,2) still win. `transition ease-out` sits on the entry rows, which only exist when the table is interactive.
+  - **`.input-group.measurement-input`** → `!min-w-[10rem]` / `!min-w-[6rem]` on the input and the select or shim, in MeasurementInput and in Estimation (which had the same markup).
+  - **`.page-header-title`** → a new `PageTitle.svelte`, used by PageHeader and PageSearch.
+  - **Page and chip tokens:** `.page-with-actions-token` → `mb-24` on both PageCards; `.page-actions-token` and `.chip-interactive-token` → classes in PageActions and Ratios.
+- `body { @apply bg-surface-50-900-token }` was deleted without any pixel change (all 72 screenshots match), so it wasn't restored.
+- `html, body` sizing is plain CSS (`height: 100%; overflow: hidden`).
+- Build size:
+  - CSS: 129,452 → 122,398 bytes.
+  - Client output: 6,832 → 6,828 KB.
+- `--fail-on-warnings` was already on since story 01 (`check:strict` in `verify`).
+- **PR not opened by Claude:** the batch rules of the `build-feature` run forbid creating PRs without an explicit request, so the PR criterion waits for the human (checkpoint).
 
 ## Testing
 

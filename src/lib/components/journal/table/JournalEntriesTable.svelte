@@ -18,7 +18,11 @@
 </script>
 
 <div class="overflow-auto">
-  <table class="table {hasEntries(entries) ? 'table-interactive' : ''}">
+  <table
+    class="table rounded-md [&_tbody_tr:nth-child(2n)]:bg-surface-200-700-token {hasEntries(entries)
+      ? 'table-interactive'
+      : ''}"
+  >
     <thead>
       <tr>
         <th>Ratio</th>

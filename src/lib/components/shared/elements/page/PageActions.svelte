@@ -44,7 +44,7 @@
   }
 </script>
 
-<div class="page-actions-token">
+<div class="flex items-end gap-4 fixed z-10 bottom-8 right-8">
   {#if isSyncEnabled}
     <button
       class="btn btn-icon btn-icon-lg variant-filled-primary shadow-xl"

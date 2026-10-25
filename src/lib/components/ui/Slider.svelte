@@ -15,6 +15,6 @@
   let { value = $bindable(), min, max, name, children }: Props = $props();
 </script>
 
-<RangeSlider {name} {min} {max} accent="range-slider-accent-token" bind:value>
+<RangeSlider {name} {min} {max} accent="accent-primary-500 dark:accent-primary-600" bind:value>
   {@render children?.()}
 </RangeSlider>

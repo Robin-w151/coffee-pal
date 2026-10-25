@@ -71,6 +71,14 @@
 </script>
 
 <Modal
+  regionBackdrop="overflow-hidden"
   buttonNeutral={dangerous ? 'variant-ghost-surface' : 'variant-ghost-primary'}
   buttonPositive={dangerous ? 'variant-filled-error' : 'variant-filled-primary'}
 />
+
+<style>
+  /* v2 renders this layer with h-fit; the extra class outranks it regardless of CSS order. */
+  :global(.modal-backdrop .modal-transition) {
+    height: 100%;
+  }
+</style>

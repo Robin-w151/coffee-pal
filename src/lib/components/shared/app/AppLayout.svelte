@@ -18,7 +18,7 @@
   import { DateTime } from 'luxon';
   import { onMount, type Snippet } from 'svelte';
   import { pwaInfo } from 'virtual:pwa-info';
-  import '../../../../app.scss';
+  import '../../../../app.css';
   import EnableShortcuts from './EnableShortcuts.svelte';
   import EnableUpdateListener from './EnableUpdateListener.svelte';
   import { runViewTransition } from '$lib/shared/viewTransition';

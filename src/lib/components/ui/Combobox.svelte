@@ -72,7 +72,7 @@
   matchWidth
   portal
   trapFocus
-  contentClass="autocomplete-token"
+  contentClass="card z-10 p-4 max-h-48 bg-surface-200-700-token overflow-y-auto shadow-xl"
   {onOpenChange}
 >
   {#snippet content()}

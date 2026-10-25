@@ -3,12 +3,12 @@
 @tailwind utilities;
 @tailwind variants;
 
-// Global variables
+/* Global variables */
 :root {
   --coffee-view-transition-duration: 100ms;
 }
 
-// Theme overrides
+/* Theme overrides */
 
 * {
   -webkit-tap-highlight-color: transparent;
@@ -54,115 +54,15 @@
   background-size: cover;
 }
 
-// Layout
+/* Layout */
 
 html,
 body {
-  @apply h-full overflow-hidden;
+  height: 100%;
+  overflow: hidden;
 }
 
-body {
-  @apply bg-surface-50-900-token;
-}
-
-// Input group overrides
-
-.input-group.measurement-input {
-  input {
-    min-width: 10rem !important;
-  }
-
-  select,
-  .input-group-shim {
-    min-width: 6rem !important;
-  }
-}
-
-// Modal overrides
-
-.modal-backdrop {
-  @apply overflow-hidden;
-}
-
-.modal-transition {
-  @apply h-full;
-}
-
-// Snackbar overrides
-
-.snackbar {
-  @apply px-8;
-}
-
-// Table overrides
-
-.table {
-  @apply rounded-md;
-
-  tbody {
-    tr:nth-child(2n) {
-      @apply bg-surface-200-700-token;
-    }
-  }
-
-  &.table-interactive tbody tr {
-    @apply transition ease-out;
-  }
-}
-
-// Toast overrides
-
-.toast {
-  @apply flex-col sm:flex-row gap-4;
-
-  .toast-actions {
-    margin-left: 0 !important;
-  }
-}
-
-// Custom design tokens
-
-.autocomplete-token {
-  @apply card z-10 p-4 max-h-48 bg-surface-200-700-token overflow-y-auto shadow-xl;
-}
-
-.chip-interactive-token {
-  @apply chip variant-soft-secondary hover:variant-filled-secondary;
-}
-
-.page-header-title {
-  @apply h2 flex items-center overflow-hidden;
-
-  span {
-    @apply leading-[1.3] overflow-hidden text-ellipsis whitespace-nowrap;
-  }
-}
-
-.page-with-actions-token {
-  @apply mb-24;
-}
-
-.page-actions-token {
-  @apply flex items-end gap-4 fixed z-10 bottom-8 right-8;
-}
-
-.popup-token {
-  @apply card p-4 bg-surface-200-700-token shadow-xl z-10;
-}
-
-.radio-group-token {
-  @apply flex-col sm:flex-row sm:min-w-[24rem];
-}
-
-.range-slider-accent-token {
-  @apply accent-primary-500 dark:accent-primary-600;
-}
-
-.slide-toggle-active-token {
-  @apply bg-primary-500 dark:bg-primary-600;
-}
-
-// View transition
+/* View transition */
 ::view-transition-old(root),
 ::view-transition-new(root) {
   animation-duration: var(--coffee-view-transition-duration);

@@ -37,7 +37,13 @@
   }
 </script>
 
-<tr tabindex="0" role="button" onclick={handleEntryClick} onkeydown={handleEntryKeyDown}>
+<tr
+  class="transition ease-out"
+  tabindex="0"
+  role="button"
+  onclick={handleEntryClick}
+  onkeydown={handleEntryKeyDown}
+>
   <td>{entry.name}</td>
   <td>{entry.origin ?? 'Unknown'}</td>
   <td>{entry.process ?? 'Unknown'}</td>

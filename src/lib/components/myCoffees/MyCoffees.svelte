@@ -152,7 +152,7 @@
     />
   {/snippet}
 </PageSearch>
-<PageCard class="page-with-actions-token">
+<PageCard class="mb-24">
   {#if innerWidth > screenMd}
     <CoffeeEntriesTable entries={$myCoffeesStore.entries} isLoading={$myCoffeesStore.isLoading} />
   {:else}

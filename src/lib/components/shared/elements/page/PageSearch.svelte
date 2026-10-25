@@ -1,4 +1,5 @@
 <script lang="ts">
+  import PageTitle from './PageTitle.svelte';
   import {
     faArrowUpAZ,
     faArrowUpWideShort,
@@ -88,9 +89,7 @@
 
 <header class="flex justify-between items-center gap-4 px-2 w-full h-12 {headerSearchActiveClass}">
   <div class="flex items-center gap-4 w-full">
-    <h2 class="page-header-title">
-      <span>{title}</span>
-    </h2>
+    <PageTitle {title} />
     {#if isSearchActive && isLoading}
       <Spinner />
     {/if}
