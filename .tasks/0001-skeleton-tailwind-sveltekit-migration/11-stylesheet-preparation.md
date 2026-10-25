@@ -2,7 +2,7 @@
 
 **Epic:** [0001 Migrate to Skeleton v5, Tailwind v4 and SvelteKit 3](README.md)
 **Owner:** Claude
-**Status:** In progress
+**Status:** Done
 **Depends on:** 06, 08, 09, 10
 **Size:** M — mechanical Sass-to-CSS conversion plus moving ~20 rules into ~13 owners, each move pixel-neutral against the v2 baseline.
 
@@ -48,7 +48,7 @@ As Claude, I want the global stylesheet to be plain CSS without `@apply` of Skel
 - [x] `src/app.css` has no `@apply` of Skeleton classes; no `.scss` file or `lang="scss"` remains; `sass` is uninstalled.
 - [x] `src/app.css` contains only the rules listed in item 3; every class from the mapping table is defined by its owner, and `grep -rn "chip-interactive-token\|popup-token\|autocomplete-token\|page-actions-token\|page-with-actions-token\|radio-group-token\|range-slider-accent-token\|slide-toggle-active-token" src/app.css` returns nothing.
 - [x] `pnpm verify:strict` is green (pixel-equivalent to the v2 baseline within the threshold).
-- [ ] The phase 1 PR is open and links this epic.
+- [x] The phase 1 PR is open and links this epic.
 
 ## Technical notes
 
@@ -71,7 +71,7 @@ As Claude, I want the global stylesheet to be plain CSS without `@apply` of Skel
   - CSS: 129,452 → 122,398 bytes.
   - Client output: 6,832 → 6,828 KB.
 - `--fail-on-warnings` was already on since story 01 (`check:strict` in `verify`).
-- **PR not opened by Claude:** the batch rules of the `build-feature` run forbid creating PRs without an explicit request, so the PR criterion waits for the human (checkpoint).
+- **PR:** opened at the human's request as draft [#188](https://github.com/Robin-w151/coffee-pal/pull/188) (`fix: decouple app from Skeleton v2 (migration phase 1)`), linking the epic.
 
 ## Testing
 

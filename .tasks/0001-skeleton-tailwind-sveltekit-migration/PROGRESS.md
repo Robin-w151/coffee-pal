@@ -213,7 +213,7 @@ New wrappers `Switch`, `SegmentedControl`, `Slider`, `RatingGroup`, `TagsInput` 
 
 **Gates:** `pnpm verify:strict` green: 194 unit, 121 e2e (new: Combobox Escape keeps focus in the input), 72 visual.
 
-## 2026-10-26 — Story 11: Stylesheet preparation (In progress: PR pending)
+## 2026-10-26 — Story 11: Stylesheet preparation (Done)
 
 `src/app.scss` is now plain `src/app.css`. It keeps only the Tailwind directives, `:root`, the tap highlight, the heading/link/button weight, the mesh background, the `html, body` sizing and the view transitions. Every override and token moved into its owner as classes, wrapper props or plain host CSS (details in the story's "As built"). `PageTitle.svelte` is new. `AppDragHandle` uses plain CSS, `sass` is removed, and the `body` background rule was deleted with no pixel change.
 
@@ -223,4 +223,4 @@ New wrappers `Switch`, `SegmentedControl`, `Slider`, `RatingGroup`, `TagsInput` 
 
 **Gates:** `pnpm verify:strict` green (194 unit, 121 e2e, 72 visual).
 
-**Open:** the phase 1 PR (`migration/1-decouple → main`, title `fix: decouple app from Skeleton v2 (migration phase 1)`) waits for the human. The `build-feature` batch rules don't let Claude open PRs on its own.
+**PR:** draft [#188](https://github.com/Robin-w151/coffee-pal/pull/188) `migration/1-decouple → main`, titled `fix: decouple app from Skeleton v2 (migration phase 1)`, opened at the human's request. Next is checkpoint 12 (human): review, merge and the production data check.
