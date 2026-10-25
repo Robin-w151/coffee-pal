@@ -97,7 +97,8 @@ function sanitizeLocalStorage(): void {
     }
 
     persist(settings as Settings);
-  } catch (_error) {
+  } catch {
+    // Not valid JSON: start over with the defaults.
     persist(DEFAULT_SETTINGS);
   }
 }

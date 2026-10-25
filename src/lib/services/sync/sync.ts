@@ -82,7 +82,8 @@ export const {
   resumeScheduledTask: resumeScheduledSync,
 } = setupScheduledTask(SYNC, () => {
   if (scheduledSyncStore) {
-    sync(scheduledSyncStore);
+    // Fire and forget, like every scheduled task; sync() reports its own failures as toasts.
+    void sync(scheduledSyncStore);
   }
 });
 

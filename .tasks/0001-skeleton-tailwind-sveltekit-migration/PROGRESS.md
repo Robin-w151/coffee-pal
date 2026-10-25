@@ -224,3 +224,14 @@ New wrappers `Switch`, `SegmentedControl`, `Slider`, `RatingGroup`, `TagsInput` 
 **Gates:** `pnpm verify:strict` green (194 unit, 121 e2e, 72 visual).
 
 **PR:** draft [#188](https://github.com/Robin-w151/coffee-pal/pull/188) `migration/1-decouple → main`, titled `fix: decouple app from Skeleton v2 (migration phase 1)`, opened at the human's request. Next is checkpoint 12 (human): review, merge and the production data check.
+
+## 2026-10-26 — Checkpoint 12: SonarCloud findings on PR #188
+
+The quality gate failed on reliability (C) because of one bug. Fixed:
+
+- `sync.ts`: the scheduled-sync closure marks `sync(...)` as `void` (S9383). It is fire and forget, like before, and `sync()` reports its own failures as toasts.
+- `settings.svelte.ts`: the sanitising `catch` has no unused binding and a comment saying that invalid JSON resets to the defaults (S2486).
+
+Left on purpose: `type ToastId = number` (S6564) stays, with `NOSONAR` and a reason. Skeleton v4's toaster uses string ids, so phase 2 changes only that line.
+
+Gates: `pnpm verify:strict` green (194 unit, 121 e2e, 72 visual).

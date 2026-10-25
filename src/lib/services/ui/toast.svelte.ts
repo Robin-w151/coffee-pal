@@ -2,7 +2,8 @@
 // (e.g. sync errors in services/sync/sync.ts) and after `await`s in callbacks, where getContext
 // isn't available.
 
-export type ToastId = number;
+// Kept as its own type: Skeleton v4's toaster uses string ids, so phase 2 changes only this line.
+export type ToastId = number; // NOSONAR(typescript:S6564)
 export type ToastKind = 'info' | 'error';
 
 export interface ToastOptions {
