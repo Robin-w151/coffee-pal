@@ -23,7 +23,7 @@
   };
 
   let waterTemperatureMeasurement: Measurement = $state({
-    value: waterTemperature,
+    value: untrack(() => waterTemperature),
     unit: preferredUnit,
   });
   let inputTouched = $state(false);

@@ -1,6 +1,6 @@
 # Epic 0001: Migrate to Skeleton v5, Tailwind v4 and SvelteKit 3
 
-**Status:** Planned
+**Status:** In progress
 **Created:** 2026-10-23
 
 ## Summary
@@ -102,7 +102,7 @@ Decision 2026-10-23: Claude works on the phase branch and stops only at the Huma
 
 | #   | Story                                                                        | Owner  | Size | Depends on     | Status |
 | --- | ---------------------------------------------------------------------------- | ------ | ---- | -------------- | ------ |
-| 01  | [Verify and migration-status scripts](01-verify-and-status-scripts.md)       | Claude | S    | –              | Todo   |
+| 01  | [Verify and migration-status scripts](01-verify-and-status-scripts.md)       | Claude | S    | –              | Done   |
 | 02  | [E2e tests for app shell and overlays](02-app-shell-e2e-tests.md)            | Claude | M    | 01             | Todo   |
 | 03  | [E2e tests for form controls](03-form-control-e2e-tests.md)                  | Claude | M    | 01             | Todo   |
 | 04  | [Visual and accessibility baseline](04-visual-and-a11y-baseline.md)          | Claude | M    | 01             | Todo   |

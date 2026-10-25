@@ -23,7 +23,7 @@
   };
 
   let waterMeasurement: Measurement = $state({
-    value: water,
+    value: untrack(() => water),
     unit: preferredUnit,
   });
   let errorMessage: string | undefined = $state();

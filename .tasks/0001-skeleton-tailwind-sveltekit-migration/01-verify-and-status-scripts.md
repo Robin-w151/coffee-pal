@@ -2,7 +2,7 @@
 
 **Epic:** [0001 Migrate to Skeleton v5, Tailwind v4 and SvelteKit 3](README.md)
 **Owner:** Claude
-**Status:** Todo
+**Status:** Done
 **Depends on:** –
 **Size:** S — two small scripts and a Playwright config tweak, following existing patterns; the only open detail is current svelte-check warnings.
 
@@ -45,16 +45,16 @@ Unblocks every other Claude story. Branch: `migration/0-safety-net` (create from
 
 ## Acceptance criteria
 
-- [ ] Given a clean checkout with no server running, when I run `pnpm verify`, then it builds, starts `vite preview` on port 4173, runs all e2e specs against it, and exits 0.
-- [ ] Given `.env.local` sets `TEST_BASE_URL=http://localhost:5173`, when I run `pnpm test:e2e:local`, then the tests still run against `http://localhost:4173`.
-- [ ] Given `TEST_BASE_URL=https://coffee-pal.vercel.app`, when I run `pnpm test:e2e`, then no local server is started and the tests run against that URL (Test workflow behaviour unchanged).
-- [ ] Given any failing step, when `pnpm verify` runs, then it stops there and exits non-zero.
-- [ ] Given a failing e2e test, when `pnpm verify` runs, then it exits non-zero within the normal test time and doesn't open a browser or report server.
-- [ ] `pnpm migration:status` prints every category in the table above; as of 2026-10-24 it reports `local-storage-store` = 2, `scss` = 3, `conic-gradient` = 1, `skeleton-v2-imports-total` = 31 (small drift is fine if `main` changed).
-- [ ] `pnpm migration:status --phase 1` exits 1 today; `--json` output is valid JSON with `{ category, count, targetPhase, files[] }` entries.
-- [ ] `PROGRESS.md` exists with the first entry.
-- [ ] `pnpm lint` passes with the new script.
-- [ ] `ci.yaml` triggers on pull requests to `main` and `migration/**`; the `release` job condition (`push` only) is unchanged.
+- [x] Given a clean checkout with no server running, when I run `pnpm verify`, then it builds, starts `vite preview` on port 4173, runs all e2e specs against it, and exits 0.
+- [x] Given `.env.local` sets `TEST_BASE_URL=http://localhost:5173`, when I run `pnpm test:e2e:local`, then the tests still run against `http://localhost:4173`.
+- [x] Given `TEST_BASE_URL=https://coffee-pal.vercel.app`, when I run `pnpm test:e2e`, then no local server is started and the tests run against that URL (Test workflow behaviour unchanged).
+- [x] Given any failing step, when `pnpm verify` runs, then it stops there and exits non-zero.
+- [x] Given a failing e2e test, when `pnpm verify` runs, then it exits non-zero within the normal test time and doesn't open a browser or report server.
+- [x] `pnpm migration:status` prints every category in the table above; as of 2026-10-24 it reports `local-storage-store` = 2, `scss` = 3, `conic-gradient` = 1, `skeleton-v2-imports-total` = 31 (small drift is fine if `main` changed).
+- [x] `pnpm migration:status --phase 1` exits 1 today; `--json` output is valid JSON with `{ category, count, targetPhase, files[] }` entries.
+- [x] `PROGRESS.md` exists with the first entry.
+- [x] `pnpm lint` passes with the new script.
+- [x] `ci.yaml` triggers on pull requests to `main` and `migration/**`; the `release` job condition (`push` only) is unchanged.
 
 ## Technical notes
 
@@ -62,6 +62,7 @@ Unblocks every other Claude story. Branch: `migration/0-safety-net` (create from
 - ESLint already allows Node globals ([eslint.config.js](../../eslint.config.js)); no change expected. `playwright-report/` and `test-results/` are gitignored, which Prettier 3 respects, so `pnpm lint` doesn't touch them.
 - `vite preview` serves the output of `vite build`. `verify` already builds before e2e, so `webServer` must not build again.
 - [vite.config.ts](../../vite.config.ts) calls `git rev-parse` in `getCommitHash()`; that's fine locally.
+- **As built (2026-10-25):** `pnpm` isn't on `PATH` on the dev machine (it runs as `corepack pnpm`, like `.husky/pre-commit`), so `verify` and the Playwright `webServer` use `corepack pnpm …`. The 11 existing svelte-check warnings (`state_referenced_locally`) were fixed with `untrack(() => …)`, so `verify` uses `check:strict` from the start. `migration-status.js` counts either matching files (`unit: 'files'`) or occurrences per category; `files[]` always lists the files with a hit.
 
 ## Testing
 
