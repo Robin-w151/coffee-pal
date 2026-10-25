@@ -118,3 +118,17 @@ No `color-contrast` violations: axe reports text over the mesh background as "in
 
 - `maxDiffPixelRatio: 0.01` lets small text-colour changes through on most screens; the human may want a stricter threshold for phase 1.
 - Known gaps from story 02 (focus return after modal cancel, view transition bug) still apply.
+
+## 2026-10-25 — Checkpoint 05 feedback: more screenshot states
+
+**Requested by the human:** calculator with both optional sections on, drip counter within and outside the target rate, active search.
+
+**Added** (phone, light + dark, 8 screenshots; inventory now 46 phone + 18 desktop = 64):
+
+- `calculator-sections`: Iced Coffee and Temperature Converter switched on.
+- `drip-counter-within-target` / `drip-counter-outside-target`: taps exactly 1 s / 0.5 s apart via the paused fake clock (60 vs 120 drops/min against the default target of 60).
+- `journal-list-search`: search "PuckPuck" active with one result.
+
+Calculator and drip counter scroll inside `#page`, so these tests grow the viewport to 576×1400 to capture the whole page.
+
+**Gates:** the new tests green with `--repeat-each 10` (80/80); `pnpm test:visual` green 3 times in a row (64/64); `pnpm lint` green.

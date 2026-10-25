@@ -1,3 +1,4 @@
+import type { Page } from '@playwright/test';
 import {
   clearAllEntries,
   colorSchemes,
@@ -91,6 +92,44 @@ for (const colorScheme of colorSchemes) {
       await expectScreenshot(page, 'my-coffees-new-validation', colorScheme);
     });
 
+    test('calculator with iced coffee and temperature converter', async ({
+      page,
+      calculatorPage,
+    }) => {
+      await showWholePage(page);
+      await calculatorPage.icedCoffeeToggle.check();
+      await calculatorPage.temperatureConverterToggle.check();
+      await expect(calculatorPage.iceRatioRange).toBeVisible();
+      await expect(calculatorPage.temperatureCelsiusInput).toBeVisible();
+
+      await expectScreenshot(page, 'calculator-sections', colorScheme);
+    });
+
+    for (const { state, intervalMs } of [
+      { state: 'within-target', intervalMs: 1000 },
+      { state: 'outside-target', intervalMs: 500 },
+    ]) {
+      test(`drip counter ${state}`, async ({ page, dripCounterPage }) => {
+        await showWholePage(page);
+        // Pause the fake clock, so the taps are exactly intervalMs apart (target: 60 drops/min).
+        await page.clock.pauseAt((await page.evaluate(() => Date.now())) + 1000);
+        for (let tap = 0; tap < 6; tap++) {
+          await dripCounterPage.clickTapButton();
+          await page.clock.runFor(intervalMs);
+        }
+        await expect(dripCounterPage.dropsPerMinute).toHaveText(`${60_000 / intervalMs} drops/min`);
+
+        await expectScreenshot(page, `drip-counter-${state}`, colorScheme);
+      });
+    }
+
+    test('journal search active', async ({ page, journalPage }) => {
+      await journalPage.enterSearch('PuckPuck');
+      await expect(journalPage.journalList).toHaveCount(1);
+
+      await expectScreenshot(page, 'journal-list-search', colorScheme);
+    });
+
     test('dangerous confirm modal open', async ({ page, appPage }) => {
       await gotoReady(page, '/settings');
       await expect(page.getByRole('button', { name: 'Check for Updates' })).toBeVisible();
@@ -106,4 +145,9 @@ for (const colorScheme of colorSchemes) {
       await expectScreenshot(page, 'settings-modal-dangerous', colorScheme);
     });
   });
+}
+
+// These pages scroll inside #page, so a full-page screenshot wouldn't show more: grow the viewport.
+async function showWholePage(page: Page): Promise<void> {
+  await page.setViewportSize({ width: page.viewportSize()!.width, height: 1400 });
 }
