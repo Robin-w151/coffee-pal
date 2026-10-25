@@ -6,7 +6,23 @@ export class AppPage {
   constructor(private readonly page: Page) {}
 
   get warningDialog(): Locator {
-    return this.page.locator('.modal');
+    return this.page.getByRole('dialog');
+  }
+
+  get menuButton(): Locator {
+    return this.page.getByRole('button', { name: 'App menu' });
+  }
+
+  get menu(): Locator {
+    return this.page.getByRole('dialog');
+  }
+
+  get navigationRail(): Locator {
+    return this.page.getByRole('navigation', { name: 'Main navigation' });
+  }
+
+  get toast(): Locator {
+    return this.page.getByRole('alertdialog').or(this.page.getByRole('alert'));
   }
 
   async goto(): Promise<void> {
@@ -19,6 +35,28 @@ export class AppPage {
 
   async clickWarningConfirmButton(): Promise<void> {
     await this.warningDialog.getByRole('button', { name: 'Confirm' }).click();
+  }
+
+  /**
+   * Writes the given items to localStorage before the next page load, only once per test.
+   * Later reloads keep whatever the app wrote.
+   */
+  async seedLocalStorage(items: Record<string, string>): Promise<void> {
+    await this.page.addInitScript((items) => {
+      if (sessionStorage.getItem('seeded')) {
+        return;
+      }
+
+      Object.entries(items).forEach(([key, value]) => localStorage.setItem(key, value));
+      sessionStorage.setItem('seeded', 'true');
+    }, items);
+  }
+
+  getLocalStorageItem(key: string): Promise<unknown> {
+    return this.page.evaluate((key) => {
+      const value = localStorage.getItem(key);
+      return value === null ? null : JSON.parse(value);
+    }, key);
   }
 
   async addJournalEntries(entries: Array<ActiveJournalEntry>): Promise<void> {
@@ -41,6 +79,14 @@ export class AppPage {
     }, entries);
   }
 
+  async getJournalEntry(id: string): Promise<ActiveJournalEntry | undefined> {
+    return this.getStoredEntry('journal', id);
+  }
+
+  async getCoffeeEntry(id: string): Promise<ActiveCoffeeEntry | undefined> {
+    return this.getStoredEntry('my-coffees', id);
+  }
+
   async addCoffeeEntries(entries: Array<ActiveCoffeeEntry>): Promise<void> {
     await this.page.evaluate(async (entries) => {
       return new Promise((resolve, reject) => {
@@ -58,6 +104,24 @@ export class AppPage {
         openRequest.onerror = reject;
       });
     }, entries);
+  }
+
+  private async getStoredEntry<T>(dbName: string, id: string): Promise<T | undefined> {
+    return this.page.evaluate(
+      async ({ dbName, id }) => {
+        return new Promise((resolve, reject) => {
+          const openRequest = globalThis.indexedDB.open(dbName);
+          openRequest.onsuccess = (event: any) => {
+            const db = event.target.result as IDBDatabase;
+            const request = db.transaction(['entries']).objectStore('entries').get(id);
+            request.onsuccess = () => resolve(request.result);
+            request.onerror = reject;
+          };
+          openRequest.onerror = reject;
+        });
+      },
+      { dbName, id },
+    ) as Promise<T | undefined>;
   }
 }
 
@@ -161,3 +225,26 @@ export const testCoffeeEntries: Array<ActiveCoffeeEntry> = [
     updatedAt: '2023-09-14T18:30:27.456+02:00',
   },
 ];
+
+/**
+ * Whether the element is rendered and can be seen and used. Unlike `toBeVisible()`, this treats
+ * transparent and inert elements as not shown (Skeleton v2 popups close via `opacity: 0` + `inert`).
+ */
+export async function isShown(locator: Locator): Promise<boolean> {
+  if ((await locator.count()) === 0) {
+    return false;
+  }
+
+  return locator.first().evaluate((element) => {
+    if (element.closest('[inert]') || !element.checkVisibility({ visibilityProperty: true })) {
+      return false;
+    }
+
+    for (let node: Element | null = element; node; node = node.parentElement) {
+      if (getComputedStyle(node).opacity === '0') {
+        return false;
+      }
+    }
+    return true;
+  });
+}

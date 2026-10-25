@@ -15,7 +15,7 @@
   }
 </script>
 
-<div class="py-2">
+<div class="py-2" data-testid="rating" data-value={rating}>
   <Ratings
     value={rating}
     max={5}

@@ -12,7 +12,7 @@ export class CalculatorPage {
   }
 
   get fixedRatioToggle(): Locator {
-    return this.page.getByLabel('Fixed Ratio').locator('label');
+    return this.page.getByRole('switch', { name: 'Fixed Ratio' });
   }
 
   get waterAmountInput(): Locator {
@@ -28,11 +28,15 @@ export class CalculatorPage {
   }
 
   get icedCoffeeToggle(): Locator {
-    return this.page.getByLabel('Iced Coffee').locator('label');
+    return this.page.getByRole('switch', { name: 'Toggle Iced Coffee' });
   }
 
   get iceRatioRange(): Locator {
     return this.page.getByLabel('Ice Ratio');
+  }
+
+  get iceRatioValue(): Locator {
+    return this.page.getByText(/^\d+ %$/);
   }
 
   get brewWaterAmountInput(): Locator {
@@ -44,7 +48,7 @@ export class CalculatorPage {
   }
 
   get temperatureConverterToggle(): Locator {
-    return this.page.getByLabel('Temperature Converter').locator('label');
+    return this.page.getByRole('switch', { name: 'Toggle Temperature Converter' });
   }
 
   get temperatureCelsiusInput(): Locator {

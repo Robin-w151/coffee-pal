@@ -43,6 +43,27 @@ export class MyCoffeesEntryDetailPage {
     return this.page.getByLabel('Description');
   }
 
+  get aromaChips(): Locator {
+    return this.page.getByTestId('aromas').getByRole('button');
+  }
+
+  get rating(): Locator {
+    return this.page.getByTestId('rating');
+  }
+
+  getAromaChip(aroma: string): Locator {
+    return this.aromaChips.filter({ hasText: aroma });
+  }
+
+  getRatingStar(star: number): Locator {
+    return this.rating.getByRole('button').nth(star - 1);
+  }
+
+  async addAroma(aroma: string): Promise<void> {
+    await this.aromasInput.fill(aroma);
+    await this.aromasInput.press('Enter');
+  }
+
   async clickSaveButton(): Promise<void> {
     await this.page.getByRole('button', { name: 'Save' }).click();
   }

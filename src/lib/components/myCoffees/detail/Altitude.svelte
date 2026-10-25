@@ -20,7 +20,7 @@
   const errorMessage = 'altitude must be greater than or equal to 0';
 
   let altitudeMeasurement: Measurement = $state({
-    value: altitude,
+    value: untrack(() => altitude),
     unit: preferredUnit,
   });
   let inputTouched = $state(false);

@@ -23,7 +23,7 @@
   };
 
   let coffeeMeasurement: Measurement = $state({
-    value: coffee,
+    value: untrack(() => coffee),
     unit: preferredUnit,
   });
   let errorMessage: string | undefined = $state();

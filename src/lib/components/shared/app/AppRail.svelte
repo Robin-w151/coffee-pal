@@ -25,6 +25,7 @@
       href={route.href}
       title={route.label}
       selected={isSelected(route, $page?.url?.pathname)}
+      aria-current={isSelected(route, $page?.url?.pathname) ? 'page' : undefined}
       regionLabel="px-1"
     >
       {#snippet lead()}

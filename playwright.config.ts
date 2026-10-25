@@ -4,12 +4,17 @@ import dotenv from 'dotenv-flow';
 dotenv.config({ silent: true });
 
 const isCI = !!process.env['CI'];
-const baseURL = process.env['TEST_BASE_URL'] ?? 'http://localhost:5173';
+const useLocalPreview = process.env['TEST_LOCAL_PREVIEW'] === '1';
+const localPreviewURL = 'http://localhost:4173';
+const baseURL = useLocalPreview
+  ? localPreviewURL
+  : (process.env['TEST_BASE_URL'] ?? 'http://localhost:5173');
 
 export default defineConfig({
   testDir: './tests',
+  testIgnore: ['visual/**'],
   fullyParallel: true,
-  reporter: 'html',
+  reporter: useLocalPreview ? [['html', { open: 'never' }], ['list']] : 'html',
   use: {
     baseURL,
     trace: 'on-first-retry',
@@ -20,11 +25,25 @@ export default defineConfig({
   projects: [
     {
       name: 'chromium',
+      grepInvert: useLocalPreview ? /@desktop/ : /@desktop|@local-preview/,
       use: { ...devices['Desktop Chrome'], viewport: { width: 576, height: 768 } },
+    },
+    {
+      name: 'chromium-desktop',
+      testMatch: 'specs/appShell.spec.ts',
+      grep: /@desktop/,
+      use: { ...devices['Desktop Chrome'], viewport: { width: 1280, height: 800 } },
     },
   ],
   expect: {
     timeout: 30_000,
   },
   retries: isCI ? 2 : 0,
+  ...(useLocalPreview && {
+    webServer: {
+      command: 'pnpm exec vite preview --port 4173 --strictPort',
+      url: localPreviewURL,
+      reuseExistingServer: false,
+    },
+  }),
 });

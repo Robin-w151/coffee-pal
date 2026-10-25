@@ -25,6 +25,7 @@ export class MyCoffeesPage {
 
   async goto(): Promise<void> {
     await this.page.goto('/my-coffees');
+    await expect(this.page.locator('html')).toHaveAttribute('data-test', 'ready');
     await this.clickSortButton();
     await this.clickSortOption('Recently Updated');
   }
@@ -65,6 +66,6 @@ export class MyCoffeesPage {
   }
 
   async clickCoffeeEntry(entry: Locator | number): Promise<void> {
-    return (typeof entry === 'number' ? this.getCoffeeEntry(entry) : entry).click();
+    await (typeof entry === 'number' ? this.getCoffeeEntry(entry) : entry).click();
   }
 }

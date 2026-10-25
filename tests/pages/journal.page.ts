@@ -11,6 +11,14 @@ export class JournalPage {
     return this.page.getByText('could not find any entries').first();
   }
 
+  getPaginatorButton(button: 'First' | 'Previous' | 'Next' | 'Last'): Locator {
+    return this.page.getByRole('button', { name: `${button} page`, exact: true });
+  }
+
+  getSortOption(option: 'A-Z' | 'Z-A' | 'Best' | 'Recently Added' | 'Recently Updated'): Locator {
+    return this.page.getByRole('option', { name: option });
+  }
+
   getJournalEntry(entry: number): Locator {
     return this.journalList.nth(entry);
   }
@@ -25,6 +33,7 @@ export class JournalPage {
 
   async goto(): Promise<void> {
     await this.page.goto('/');
+    await expect(this.page.locator('html')).toHaveAttribute('data-test', 'ready');
     await this.clickSortButton();
     await this.clickSortOption('Recently Updated');
   }
@@ -58,6 +67,6 @@ export class JournalPage {
   }
 
   async clickJournalEntry(entry: Locator | number): Promise<void> {
-    return (typeof entry === 'number' ? this.getJournalEntry(entry) : entry).click();
+    await (typeof entry === 'number' ? this.getJournalEntry(entry) : entry).click();
   }
 }

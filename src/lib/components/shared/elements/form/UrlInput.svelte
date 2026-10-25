@@ -2,6 +2,7 @@
   import { HOST_REGEXP } from '$lib/config/regexp';
   import type { Scheme, UrlInputChange } from '$lib/models/urlInput';
   import { faArrowUpRightFromSquare, faLock, faLockOpen } from '@fortawesome/free-solid-svg-icons';
+  import { untrack } from 'svelte';
   import { Icon } from 'svelte-awesome';
 
   interface Props {
@@ -15,7 +16,7 @@
 
   const availableSchemes = ['https:', 'http:'] satisfies Array<Scheme>;
 
-  let [scheme, host] = $state(getSchemeAndHost(url));
+  let [scheme, host] = $state(untrack(() => getSchemeAndHost(url)));
   let inputTouched = $state(false);
   let hostValid = $derived(isHostValid(host));
   let schemeIcon = $derived(scheme === 'https:' ? faLock : faLockOpen);

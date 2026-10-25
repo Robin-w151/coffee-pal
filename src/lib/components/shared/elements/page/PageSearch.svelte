@@ -7,7 +7,7 @@
     faSearch,
   } from '@fortawesome/free-solid-svg-icons';
   import { popup, type PopupSettings } from '@skeletonlabs/skeleton';
-  import { tick, type Snippet } from 'svelte';
+  import { tick, untrack, type Snippet } from 'svelte';
   import { Icon } from 'svelte-awesome';
   import { fade } from 'svelte/transition';
   import { scaleX } from '../../transitions/scaleX';
@@ -43,7 +43,7 @@
   };
 
   let searchInputRef: HTMLInputElement | undefined = $state();
-  let isSearchActive = $state(!!search);
+  let isSearchActive = $state(untrack(() => !!search));
   let isChangeSortOrderButtonDisabled = $derived(!!search);
   let headerSearchActiveClass = $derived(
     isSearchActive

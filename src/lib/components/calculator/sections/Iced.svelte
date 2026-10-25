@@ -10,6 +10,7 @@
   import { getPreferredWeightUnit } from '$lib/shared/units';
   import { settingsStore } from '$lib/stores/settings';
   import { RangeSlider } from '@skeletonlabs/skeleton';
+  import { untrack } from 'svelte';
 
   interface Props {
     water: number;
@@ -29,11 +30,11 @@
   const preferredUnit = getPreferredWeightUnit($settingsStore.preferredUnits);
 
   let brewWaterMeasurement: Measurement = $state({
-    value: getBrewWater(water, iceRatio),
+    value: untrack(() => getBrewWater(water, iceRatio)),
     unit: preferredUnit,
   });
   let iceMeasurement: Measurement = $state({
-    value: getIce(water, iceRatio),
+    value: untrack(() => getIce(water, iceRatio)),
     unit: preferredUnit,
   });
 

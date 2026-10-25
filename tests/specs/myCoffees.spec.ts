@@ -1,4 +1,6 @@
+import { getAromaColor } from '$lib/services/myCoffees/colors/colors';
 import { expect } from '@playwright/test';
+import { testCoffeeEntries } from '../features/app.feature';
 import { test } from '../fixtures';
 
 test('list', async ({ myCoffeesPage }) => {
@@ -163,3 +165,73 @@ test('entry delete undo', async ({ myCoffeesPage, myCoffeesEntryDetailPage }) =>
 
   await expect(myCoffeesPage.coffeeList).toHaveCount(3);
 });
+
+test.describe('aromas', () => {
+  test.beforeEach(async ({ myCoffeesPage, myCoffeesEntryDetailPage }) => {
+    await myCoffeesPage.clickCoffeeEntry(1);
+    await expect(myCoffeesEntryDetailPage.nameInput).toHaveValue('Terroir PAN');
+  });
+
+  test('chips use the aroma colours', async ({ myCoffeesEntryDetailPage }) => {
+    const aromas = ['blueberry', 'caramel', 'floral', 'sweet', 'honey'];
+    await expect(myCoffeesEntryDetailPage.aromaChips).toHaveCount(aromas.length);
+
+    for (const aroma of aromas) {
+      await expect(myCoffeesEntryDetailPage.getAromaChip(aroma)).toHaveCSS(
+        'background-color',
+        getAromaColor(aroma).backgroundColor,
+      );
+    }
+  });
+
+  test('add, reject duplicate, remove and save', async ({
+    page,
+    appPage,
+    myCoffeesEntryDetailPage,
+  }) => {
+    await myCoffeesEntryDetailPage.addAroma('nutty');
+    await expect(myCoffeesEntryDetailPage.getAromaChip('nutty')).toBeVisible();
+    await expect(myCoffeesEntryDetailPage.aromaChips).toHaveCount(6);
+
+    await myCoffeesEntryDetailPage.addAroma('caramel');
+    await expect(myCoffeesEntryDetailPage.aromaChips).toHaveCount(6);
+    await expect(myCoffeesEntryDetailPage.getAromaChip('caramel')).toHaveCount(1);
+
+    await myCoffeesEntryDetailPage.getAromaChip('floral').click();
+    await expect(myCoffeesEntryDetailPage.getAromaChip('floral')).toHaveCount(0);
+
+    await myCoffeesEntryDetailPage.clickSaveButton();
+    await expect
+      .poll(async () => (await appPage.getCoffeeEntry(testCoffeeEntries[1].id))?.aromas)
+      .toEqual(['blueberry', 'caramel', 'sweet', 'honey', 'nutty']);
+    await page.reload();
+    await expect(myCoffeesEntryDetailPage.aromaChips).toHaveText([
+      /blueberry/,
+      /caramel/,
+      /sweet/,
+      /honey/,
+      /nutty/,
+    ]);
+  });
+
+  test('escape in the input does not propagate', async ({ page, myCoffeesEntryDetailPage }) => {
+    await page.evaluate(() => {
+      (window as EscapeCounter).__escapes = 0;
+      window.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+          (window as EscapeCounter).__escapes! += 1;
+        }
+      });
+    });
+    const escapes = () => page.evaluate(() => (window as EscapeCounter).__escapes);
+
+    await myCoffeesEntryDetailPage.aromasInput.press('Escape');
+    expect(await escapes()).toBe(0);
+
+    await myCoffeesEntryDetailPage.aromasInput.blur();
+    await page.keyboard.press('Escape');
+    expect(await escapes()).toBe(1);
+  });
+});
+
+type EscapeCounter = Window & { __escapes?: number };

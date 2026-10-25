@@ -134,3 +134,30 @@ test('convert fahrenheit to celsius', async ({ calculatorPage }) => {
 
   await expect(calculatorPage.temperatureCelsiusInput).toHaveValue('80');
 });
+
+test('fixed ratio switch toggles', async ({ calculatorPage }) => {
+  await expect(calculatorPage.fixedRatioToggle).toBeChecked();
+
+  await calculatorPage.fixedRatioToggle.click();
+  await expect(calculatorPage.fixedRatioToggle).not.toBeChecked();
+
+  await calculatorPage.fixedRatioToggle.click();
+  await expect(calculatorPage.fixedRatioToggle).toBeChecked();
+});
+
+test('iced ratio slider responds to the keyboard', async ({ calculatorPage }) => {
+  await calculatorPage.icedCoffeeToggle.check();
+  await expect(calculatorPage.iceRatioValue).toHaveText('30 %');
+
+  await calculatorPage.iceRatioRange.focus();
+  for (let i = 0; i < 10; i++) {
+    await calculatorPage.iceRatioRange.press('ArrowRight');
+  }
+
+  await expect(calculatorPage.iceRatioValue).toHaveText('40 %');
+  await expect(calculatorPage.brewWaterAmountInput).toHaveValue('144');
+  await expect(calculatorPage.iceAmountInput).toHaveValue('96');
+
+  await calculatorPage.iceRatioRange.press('ArrowLeft');
+  await expect(calculatorPage.iceRatioValue).toHaveText('39 %');
+});

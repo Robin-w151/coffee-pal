@@ -32,15 +32,15 @@
   const preferredUnit = getPreferredWeightUnit($settingsStore.preferredUnits);
 
   let coffeeMeasurement: Measurement = $state({
-    value: recipe.coffee,
+    value: untrack(() => recipe.coffee),
     unit: preferredUnit,
   });
   let waterMeasurement: Measurement = $state({
-    value: recipe.water,
+    value: untrack(() => recipe.water),
     unit: preferredUnit,
   });
   let outputMeasurement: Measurement = $state({
-    value: recipe.output,
+    value: untrack(() => recipe.output),
     unit: preferredUnit,
   });
 
