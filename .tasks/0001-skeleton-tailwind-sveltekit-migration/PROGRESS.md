@@ -55,3 +55,30 @@ A running log of the migration, written by Claude after each story (see "How Cla
 
 - **Focus return:** after cancelling the confirm dialog, focus lands on `<body>`, not on the button that opened it. Story 16 adds focus return.
 - **View transition bug (not fixed):** `runViewTransition` skips its callback while another transition runs, so a navigation that starts during a running transition never completes (URL changes, old page stays). Tests wait for transitions to finish. Noted in story 02 → Out of scope; candidate for story 07.
+
+## 2026-10-25 — Story 03: E2e tests for form controls
+
+**Branch:** `migration/0-safety-net`
+
+**`pnpm migration:status`:** unchanged (only test hooks added under `src/`).
+
+**Tests:** 18 new tests; the e2e suite is now 99 tests, ~21 s in `vite preview`; `pnpm verify` ~37 s.
+
+| Component (v2)                         | New tests | Where                                                                     |
+| -------------------------------------- | --------: | ------------------------------------------------------------------------- |
+| Autocomplete                           |         3 | journal (filter, ArrowDown + Enter, click); plus 2 popup tests from 02    |
+| ListBox / ListBoxItem                  |         2 | journal sort (`aria-selected`, keyboard); plus the existing sort tests    |
+| Paginator                              |         1 | journal (45 entries, all four buttons and disabled states)                |
+| InputChip                              |         3 | my coffees (colours, add / duplicate / remove / save, Escape guard)       |
+| FileDropzone                           |         2 | settings (import 300 + 100 entries, malformed file)                       |
+| RangeSlider                            |         1 | calculator (keyboard); plus 3 existing ice-ratio tests                    |
+| Ratings                                |         1 | journal (set 4, save, clear, save)                                        |
+| SlideToggle                            |         1 | calculator (`aria-checked`); existing tests now use `getByRole('switch')` |
+| RadioGroup / RadioItem                 |         1 | settings; the 5 existing tests now use `getByRole('radio', { checked })`  |
+| input-group (Measurement, Url, Estim.) |         3 | journal (unit conversion + stored base value), settings, drip counter     |
+
+**Gates:** `pnpm verify` green 3 times in a row; the full e2e suite green with `--repeat-each 5` (495/495); plain `pnpm test:e2e` against `vite dev` green 3 times in a row. Breaking one behaviour per component (autocomplete selection, list box binding, page change, chip colours, file binding, slider binding, rating change, toggle binding, radio binding, unit binding) made the matching tests fail; all reverted.
+
+**Decisions:** see story 03 → Technical notes → As built (test hooks on Rating and Aromas wrappers, IndexedDB polling after saves, seeded backup generator).
+
+**Open issues:** none new.

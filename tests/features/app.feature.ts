@@ -79,6 +79,14 @@ export class AppPage {
     }, entries);
   }
 
+  async getJournalEntry(id: string): Promise<ActiveJournalEntry | undefined> {
+    return this.getStoredEntry('journal', id);
+  }
+
+  async getCoffeeEntry(id: string): Promise<ActiveCoffeeEntry | undefined> {
+    return this.getStoredEntry('my-coffees', id);
+  }
+
   async addCoffeeEntries(entries: Array<ActiveCoffeeEntry>): Promise<void> {
     await this.page.evaluate(async (entries) => {
       return new Promise((resolve, reject) => {
@@ -96,6 +104,24 @@ export class AppPage {
         openRequest.onerror = reject;
       });
     }, entries);
+  }
+
+  private async getStoredEntry<T>(dbName: string, id: string): Promise<T | undefined> {
+    return this.page.evaluate(
+      async ({ dbName, id }) => {
+        return new Promise((resolve, reject) => {
+          const openRequest = globalThis.indexedDB.open(dbName);
+          openRequest.onsuccess = (event: any) => {
+            const db = event.target.result as IDBDatabase;
+            const request = db.transaction(['entries']).objectStore('entries').get(id);
+            request.onsuccess = () => resolve(request.result);
+            request.onerror = reject;
+          };
+          openRequest.onerror = reject;
+        });
+      },
+      { dbName, id },
+    ) as Promise<T | undefined>;
   }
 }
 

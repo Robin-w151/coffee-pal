@@ -39,6 +39,7 @@
 
 <Label text="Aromas">
   <div
+    data-testid="aromas"
     bind:this={inputChipRef}
     use:installEventHandler={{
       selector: 'input',

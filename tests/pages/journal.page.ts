@@ -11,6 +11,14 @@ export class JournalPage {
     return this.page.getByText('could not find any entries').first();
   }
 
+  getPaginatorButton(button: 'First' | 'Previous' | 'Next' | 'Last'): Locator {
+    return this.page.getByRole('button', { name: `${button} page`, exact: true });
+  }
+
+  getSortOption(option: 'A-Z' | 'Z-A' | 'Best' | 'Recently Added' | 'Recently Updated'): Locator {
+    return this.page.getByRole('option', { name: option });
+  }
+
   getJournalEntry(entry: number): Locator {
     return this.journalList.nth(entry);
   }

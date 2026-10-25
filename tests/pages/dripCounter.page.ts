@@ -27,6 +27,10 @@ export class DripCounterPage {
     return this.page.getByLabel('Target drip rate');
   }
 
+  get waterUnitSelect(): Locator {
+    return this.page.locator('label', { hasText: 'Amount of water' }).getByRole('combobox');
+  }
+
   async goto(): Promise<void> {
     await this.page.goto('/drip-counter');
   }

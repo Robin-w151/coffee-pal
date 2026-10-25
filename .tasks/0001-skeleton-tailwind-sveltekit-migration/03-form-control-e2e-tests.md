@@ -2,7 +2,7 @@
 
 **Epic:** [0001 Migrate to Skeleton v5, Tailwind v4 and SvelteKit 3](README.md)
 **Owner:** Claude
-**Status:** Todo
+**Status:** In progress
 **Depends on:** 01
 **Size:** M — about ten components, existing page objects, mostly straightforward. Autocomplete and file upload need some care.
 
@@ -31,16 +31,26 @@ Extend the relevant page objects ([tests/pages](../../tests/pages)) instead of p
 
 ## Acceptance criteria
 
-- [ ] Every component in the table has at least one behaviour test that would fail if the component stopped working.
-- [ ] The `data-testid="radio-item"` locators are gone from `tests/`.
-- [ ] Tests don't select by Skeleton class names (same grep as story 02).
-- [ ] `pnpm verify` is green; 3 consecutive local runs pass.
+- [x] Every component in the table has at least one behaviour test that would fail if the component stopped working.
+- [x] The `data-testid="radio-item"` locators are gone from `tests/`.
+- [x] Tests don't select by Skeleton class names (same grep as story 02).
+- [x] `pnpm verify` is green; 3 consecutive local runs pass.
 - [ ] The Test workflow passes against the branch's Vercel preview, and a plain `pnpm test:e2e` against the dev server passes (or the test is skipped with a clear reason). Any change under `src/` makes the phase 0 merge a `fix:` (see "Releases and deploys" in the epic).
 
 ## Technical notes
 
 - Specs: extend [journal.spec.ts](../../tests/specs/journal.spec.ts), [myCoffees.spec.ts](../../tests/specs/myCoffees.spec.ts), [settings.spec.ts](../../tests/specs/settings.spec.ts), [calculator.spec.ts](../../tests/specs/calculator.spec.ts), [dripCounter.spec.ts](../../tests/specs/dripCounter.spec.ts).
 - Use accessible roles where v2 already exposes them; where it doesn't, add an app-owned `data-testid` on the _call site's_ wrapper element. Story 09/10 wrappers will keep it.
+
+- **As built (2026-10-25):**
+  - App-owned test hooks: `data-testid="rating"` + `data-value` on the [Rating.svelte](../../src/lib/components/shared/elements/form/Rating.svelte) wrapper (v2 stars have no accessible name or state), `data-testid="aromas"` on the [Aromas.svelte](../../src/lib/components/myCoffees/detail/Aromas.svelte) wrapper.
+  - Paginator: 42 generated entries + the 3 fixture entries = 45, so the pages are 20 / 20 / 5.
+  - Autocomplete keyboard: v2 moves focus from the input to the first option with ArrowDown, then Enter selects. Only the first option is tested, because moving further differs between v2 (Tab) and v4 (arrows).
+  - Autocomplete option locators accept both `button` (v2) and `option` (v4+) roles.
+  - Aromas Escape: nothing on the page listens for Escape today, so the test checks the guard itself: a window `keydown` listener doesn't see Escape pressed in the chip input, but does see it elsewhere.
+  - Saves are fire-and-forget (`journalStore.update` isn't awaited), so tests poll IndexedDB (`appPage.getJournalEntry` / `getCoffeeEntry`) before reloading.
+  - `generate-backup.js` got `--journal`, `--coffees`, `--out`, `--seed`; with a seed, ids and dates come from the seeded generator too. Fixture: `node scripts/generate-backup.js --journal 300 --coffees 100 --seed 42 --out tests/fixtures/backup-import.json`, then `pnpm format` (Prettier formats JSON; ~0.6 MB).
+  - Calculator switches are located by `getByRole('switch')` instead of Skeleton's inner `label`.
 
 ## Testing
 

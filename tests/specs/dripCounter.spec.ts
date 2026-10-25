@@ -47,3 +47,16 @@ test('target time', async ({ dripCounterPage }) => {
 export function round(value: number, precision = 0): number {
   return Number.parseFloat(value.toFixed(precision));
 }
+
+test('estimation keeps the target time when the water unit changes', async ({
+  dripCounterPage,
+}) => {
+  await dripCounterPage.waterAmountInput.fill('500');
+  await dripCounterPage.dripRateInput.fill('60');
+  await expect(dripCounterPage.targetTime).toHaveText('Target time: 2h 47m');
+
+  await dripCounterPage.waterUnitSelect.selectOption('oz');
+
+  await expect(dripCounterPage.waterAmountInput).toHaveValue('17.64');
+  await expect(dripCounterPage.targetTime).toHaveText('Target time: 2h 47m');
+});

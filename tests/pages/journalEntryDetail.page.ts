@@ -35,6 +35,29 @@ export class JournalEntryDetailPage {
     return this.page.getByLabel('Description');
   }
 
+  get rating(): Locator {
+    return this.page.getByTestId('rating');
+  }
+
+  get waterUnitSelect(): Locator {
+    return this.getUnitSelect('Amount of water');
+  }
+
+  getRatingStar(star: number): Locator {
+    return this.rating.getByRole('button').nth(star - 1);
+  }
+
+  getAutocompleteOption(name: string | RegExp): Locator {
+    // Skeleton v2 renders autocomplete options as buttons; later versions use the option role.
+    return this.page
+      .getByRole('button', { name, exact: true })
+      .or(this.page.getByRole('option', { name, exact: true }));
+  }
+
+  private getUnitSelect(label: string): Locator {
+    return this.page.locator('label', { hasText: label }).getByRole('combobox');
+  }
+
   async clickSaveButton(): Promise<void> {
     await this.page.getByRole('button', { name: 'Save' }).click();
   }

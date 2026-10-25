@@ -1,5 +1,7 @@
 import { expect } from '@playwright/test';
+import { isShown, testJournalEntries } from '../features/app.feature';
 import { test } from '../fixtures';
+import type { JournalPage } from '../pages/journal.page';
 
 test('list', async ({ journalPage }) => {
   await expect(journalPage.journalList).toHaveCount(3);
@@ -260,3 +262,164 @@ test('entry add new entry and navigate to calculator', async ({
   await expect(calculatorPage.waterAmountInput).toHaveValue('250');
   await expect(calculatorPage.coffeeAmountInput).toHaveValue('16.67');
 });
+
+test.describe('form controls', () => {
+  test('brew method autocomplete filters while typing', async ({
+    journalPage,
+    journalEntryDetailPage,
+  }) => {
+    await journalPage.clickAddButton();
+    await journalEntryDetailPage.methodInput.fill('Chem');
+
+    await expect
+      .poll(() => isShown(journalEntryDetailPage.getAutocompleteOption('Chemex')))
+      .toBe(true);
+    await expect
+      .poll(() => isShown(journalEntryDetailPage.getAutocompleteOption('Aeropress')))
+      .toBe(false);
+  });
+
+  test('brew method autocomplete selects with arrow down and enter', async ({
+    page,
+    journalPage,
+    journalEntryDetailPage,
+  }) => {
+    await journalPage.clickAddButton();
+    await journalEntryDetailPage.methodInput.fill('Chem');
+    await expect
+      .poll(() => isShown(journalEntryDetailPage.getAutocompleteOption('Chemex')))
+      .toBe(true);
+
+    await page.keyboard.press('ArrowDown');
+    await page.keyboard.press('Enter');
+
+    await expect(journalEntryDetailPage.methodInput).toHaveValue('Chemex');
+  });
+
+  test('coffee type autocomplete selects on click', async ({
+    page,
+    journalPage,
+    journalEntryDetailPage,
+  }) => {
+    await journalPage.clickAddButton();
+    await journalEntryDetailPage.coffeeTypeInput.fill('Wied');
+    const option = journalEntryDetailPage.getAutocompleteOption(/Wiedner Mischung/);
+    await expect.poll(() => isShown(option)).toBe(true);
+
+    await option.click();
+
+    await expect(journalEntryDetailPage.coffeeTypeInput).toHaveValue('Wiedner Mischung (Alt Wien)');
+    await expect(page.getByRole('link', { name: 'Open coffee entry' })).toBeVisible();
+  });
+
+  test('sort list box marks the selected option', async ({ journalPage }) => {
+    await journalPage.clickSortButton();
+    await expect(journalPage.getSortOption('Recently Updated')).toHaveAttribute(
+      'aria-selected',
+      'true',
+    );
+
+    await journalPage.clickSortOption('Z-A');
+    await expect(journalPage.getJournalEntryTitle(0)).toHaveText('V60 Switch - Honeymoon');
+
+    await journalPage.clickSortButton();
+    await expect(journalPage.getSortOption('Z-A')).toHaveAttribute('aria-selected', 'true');
+    await expect(journalPage.getSortOption('Recently Updated')).toHaveAttribute(
+      'aria-selected',
+      'false',
+    );
+  });
+
+  test('sort list box selects with the keyboard', async ({ journalPage }) => {
+    await journalPage.clickSortButton();
+    await journalPage.getSortOption('Best').press('Enter');
+
+    await expect(journalPage.getJournalEntryTitle(0)).toHaveText('V60 Switch - Honeymoon');
+    await journalPage.clickSortButton();
+    await expect(journalPage.getSortOption('Best')).toHaveAttribute('aria-selected', 'true');
+  });
+
+  test('paginator', async ({ appPage, journalPage }) => {
+    // 42 generated + 3 fixture entries = 45; the generated ones are newer, so they come first.
+    const entries = Array.from({ length: 42 }, (_, i) => ({
+      ...testJournalEntries[0],
+      id: `00000000-0000-4000-8000-${String(i).padStart(12, '0')}`,
+      coffeeType: `Entry ${String(i + 1).padStart(2, '0')}`,
+      updatedAt: new Date(Date.UTC(2024, 0, 1) - i * 60_000).toISOString(),
+    }));
+    await appPage.addJournalEntries(entries);
+    await journalPage.goto();
+
+    await expectPage(journalPage, 20, 'Aeropress - Entry 01', 'Aeropress - Entry 20');
+    await expect(journalPage.getPaginatorButton('First')).toBeDisabled();
+    await expect(journalPage.getPaginatorButton('Previous')).toBeDisabled();
+
+    await journalPage.getPaginatorButton('Next').click();
+    await expectPage(journalPage, 20, 'Aeropress - Entry 21', 'Aeropress - Entry 40');
+
+    await journalPage.getPaginatorButton('Last').click();
+    await expectPage(journalPage, 5, 'Aeropress - Entry 41', 'V60 Switch - Honeymoon');
+    await expect(journalPage.getPaginatorButton('Next')).toBeDisabled();
+    await expect(journalPage.getPaginatorButton('Last')).toBeDisabled();
+
+    await journalPage.getPaginatorButton('First').click();
+    await expectPage(journalPage, 20, 'Aeropress - Entry 01', 'Aeropress - Entry 20');
+  });
+
+  test('rating is set, saved and cleared', async ({
+    page,
+    appPage,
+    journalPage,
+    journalEntryDetailPage,
+  }) => {
+    const entryId = testJournalEntries[0].id;
+    await journalPage.clickJournalEntry(0);
+    await expect(journalEntryDetailPage.rating).toHaveAttribute('data-value', '3');
+
+    await journalEntryDetailPage.getRatingStar(4).click();
+    await expect(journalEntryDetailPage.rating).toHaveAttribute('data-value', '4');
+    await journalEntryDetailPage.clickSaveButton();
+    await expect.poll(async () => (await appPage.getJournalEntry(entryId))?.rating ?? 0).toBe(4);
+    await page.reload();
+    await expect(journalEntryDetailPage.rating).toHaveAttribute('data-value', '4');
+
+    await journalEntryDetailPage.getRatingStar(4).click();
+    await expect(journalEntryDetailPage.rating).toHaveAttribute('data-value', '0');
+    await journalEntryDetailPage.clickSaveButton();
+    await expect.poll(async () => (await appPage.getJournalEntry(entryId))?.rating ?? 0).toBe(0);
+    await page.reload();
+    await expect(journalEntryDetailPage.rating).toHaveAttribute('data-value', '0');
+  });
+
+  test('measurement input converts on unit change and stores the base value', async ({
+    appPage,
+    journalPage,
+    journalEntryDetailPage,
+  }) => {
+    await journalPage.clickJournalEntry(0);
+    await expect(journalEntryDetailPage.waterInput).toHaveValue('200');
+
+    await journalEntryDetailPage.waterUnitSelect.selectOption('oz');
+    await expect(journalEntryDetailPage.waterInput).toHaveValue('7.05');
+
+    await journalEntryDetailPage.waterInput.fill('10');
+    await journalEntryDetailPage.clickSaveButton();
+    await expect
+      .poll(async () => (await appPage.getJournalEntry(testJournalEntries[0].id))?.water)
+      .toBe(283.5);
+    await journalEntryDetailPage.clickBackButton();
+
+    await expect(journalPage.getJournalEntryDetail(0)).toContainText('283.5g/13g');
+  });
+});
+
+async function expectPage(
+  journalPage: JournalPage,
+  count: number,
+  firstTitle: string,
+  lastTitle: string,
+): Promise<void> {
+  await expect(journalPage.journalList).toHaveCount(count);
+  await expect(journalPage.getJournalEntryTitle(0)).toHaveText(firstTitle);
+  await expect(journalPage.getJournalEntryTitle(count - 1)).toHaveText(lastTitle);
+}
