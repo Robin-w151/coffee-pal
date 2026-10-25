@@ -2,7 +2,7 @@
 
 **Epic:** [0001 Migrate to Skeleton v5, Tailwind v4 and SvelteKit 3](README.md)
 **Owner:** Claude
-**Status:** Todo
+**Status:** Done
 **Depends on:** 05
 **Size:** M — one central layout component, but scroll restoration, view transitions and the drawer all depend on it, and the result must match the v2 screenshots.
 
@@ -27,17 +27,29 @@ As Claude, I want the app layout to be plain Svelte + Tailwind instead of Skelet
 
 ## Acceptance criteria
 
-- [ ] `pnpm migration:status` shows `app-shell` = 0 and `conic-gradient` = 0.
-- [ ] `grep -rn "rgb(var(--color" src/lib/components` returns nothing.
-- [ ] Scroll restoration e2e test (story 02) is green.
-- [ ] Layout screenshots match the v2 baseline on phone and desktop (`pnpm verify:strict` green).
-- [ ] Keyboard focus order is unchanged: skip-to-content behaviour (if any), header → rail → page.
-- [ ] No new a11y violations (landmarks: `header`, `nav`, `main` exist).
+- [x] `pnpm migration:status` shows `app-shell` = 0 and `conic-gradient` = 0.
+- [x] `grep -rn "rgb(var(--color" src/lib/components` returns nothing.
+- [x] Scroll restoration e2e test (story 02) is green.
+- [x] Layout screenshots match the v2 baseline on phone and desktop (`pnpm verify:strict` green).
+- [x] Keyboard focus order is unchanged: skip-to-content behaviour (if any), header → rail → page.
+- [x] No new a11y violations (landmarks: `header`, `nav`, `main` exist).
 
 ## Technical notes
 
 - Use semantic elements: `<header>`, `<aside>`/`<nav>`, `<main id="page">`.
 - Skeleton v2's AppShell markup for reference: `node_modules/@skeletonlabs/skeleton/dist/components/AppShell/AppShell.svelte`. It's a flex layout (`#page` is a `div` wrapping `<main id="page-content">`); the grid replaces the structure but keeps its geometry and region classes. `<main id="page">` becoming the scroll container doesn't change pixels, and scroll restoration only needs the `#page` id.
+
+### As built (2026-10-25)
+
+- Grid container `grid h-full w-full grid-cols-[auto_minmax(0,1fr)] grid-rows-[auto_minmax(0,1fr)] overflow-hidden`. Inside it:
+  - `<header class="z-10 col-span-full">`
+  - `<aside class="overflow-y-auto overflow-x-hidden">`
+  - `<main id="page" class="overflow-y-auto overflow-x-hidden outline-offset-[-3px]" style:scrollbar-gutter="stable">`
+- The `aside` is always rendered, and the `nav` inside it stays `hidden md:block`, as with v2's sidebar slot. On phone the `auto` column collapses to 0.
+- `main` is a plain block, not a flex column. v2's inner `main#page-content` was `flex-auto`, but nothing visible depended on its extra height.
+- All 72 screenshots matched the v2 baseline on the first run.
+- Spinner: an outer `flex flex-col items-center` wrapper (the old `figure`'s box) carries the `class` (default `text-primary-500`). An inner `aspect-square rounded-full animate-spin` disc uses `background: conic-gradient(transparent 0% 25%, currentColor 75% 100%)`. That's the same full disc as v2; v2 never had an inner cut-out.
+- Focus order was checked with Tab on the desktop settings page: app bar link → 5 rail links → page controls. The landmarks `header`, `aside`, `nav` and `main` are present.
 
 ## Testing
 

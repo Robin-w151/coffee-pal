@@ -22,7 +22,6 @@
     size,
   } from '@floating-ui/dom';
   import {
-    AppShell,
     Drawer,
     Modal,
     Toast,
@@ -32,7 +31,7 @@
   } from '@skeletonlabs/skeleton';
   import type { AfterNavigate } from '@sveltejs/kit';
   import { DateTime } from 'luxon';
-  import { onMount, type ComponentEvents, type Snippet } from 'svelte';
+  import { onMount, type Snippet } from 'svelte';
   import { pwaInfo } from 'virtual:pwa-info';
   import '../../../../app.scss';
   import EnableGlobalMessages from './EnableGlobalMessages.svelte';
@@ -84,8 +83,8 @@
     }
   });
 
-  function handleAppShellScroll(event: ComponentEvents<AppShell>['scroll']): void {
-    rememberScrollPosition($page.url.pathname, (event.currentTarget as HTMLElement)?.scrollTop);
+  function handlePageScroll(event: Event & { currentTarget: HTMLElement }): void {
+    rememberScrollPosition($page.url.pathname, event.currentTarget.scrollTop);
   }
 </script>
 
@@ -107,22 +106,28 @@
   {/if}
 </Drawer>
 
-<AppShell
-  scrollbarGutter="stable"
-  regionPage="outline-offset-[-3px]"
-  on:scroll={handleAppShellScroll}
+<!-- Same geometry and region classes as the Skeleton v2 app shell; #page is the only scroll container. -->
+<div
+  class="grid h-full w-full grid-cols-[auto_minmax(0,1fr)] grid-rows-[auto_minmax(0,1fr)] overflow-hidden"
 >
-  {#snippet header()}
+  <header class="z-10 col-span-full">
     <AppBar />
-  {/snippet}
-  {#snippet sidebarLeft()}
+  </header>
+  <aside class="overflow-y-auto overflow-x-hidden">
     <nav class="hidden md:block h-full" aria-label="Main navigation">
       <AppRail />
     </nav>
-  {/snippet}
-  <div class="flex justify-center p-4">
-    <div class="flex flex-col items-center gap-4 w-full max-w-screen-lg">
-      {@render children?.()}
+  </aside>
+  <main
+    id="page"
+    class="overflow-y-auto overflow-x-hidden outline-offset-[-3px]"
+    style:scrollbar-gutter="stable"
+    onscroll={handlePageScroll}
+  >
+    <div class="flex justify-center p-4">
+      <div class="flex flex-col items-center gap-4 w-full max-w-screen-lg">
+        {@render children?.()}
+      </div>
     </div>
-  </div>
-</AppShell>
+  </main>
+</div>

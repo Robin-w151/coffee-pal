@@ -52,7 +52,7 @@
       onclick={handleSyncClick}
     >
       {#if isSynchronizing}
-        <Spinner color="white" />
+        <Spinner class="text-white" />
       {:else}
         <Icon data={faRotate} scale={1.25} />
         <span class="sr-only"

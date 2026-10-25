@@ -171,3 +171,11 @@ Branch `migration/1-decouple` created from `main` (`6359bf0`). `settings` and `s
 **Status:** `local-storage-store` 0. The other phase 1 categories are unchanged: `skeleton-v2-imports-outside-ui` 29, `app-shell` 1, `conic-gradient` 1, `scss` 3, `skeleton-apply-in-app-css` 9.
 
 **Gates:** `pnpm verify:strict` green: 181 unit, 120 e2e (3 new: settings fallback ×2, dark class before hydration), 72 visual.
+
+## 2026-10-25 — Story 07: Own app layout (Done)
+
+`AppShell` is replaced by a CSS grid in `AppLayout.svelte`: a header across both columns, an `aside` with the rail (`nav hidden md:block`), and `<main id="page">` as the only scroll container (`scrollbar-gutter: stable`, `outline-offset-[-3px]`, `handlePageScroll`). `Spinner` is a plain `div` with a `currentColor` conic gradient. PageActions passes `class="text-white"`.
+
+**Status:** `app-shell` 0, `conic-gradient` 0. Remaining phase 1 categories: `skeleton-v2-imports-outside-ui` 29, `scss` 3, `skeleton-apply-in-app-css` 9.
+
+**Gates:** `pnpm verify:strict` green (181 unit, 120 e2e, 72 visual). The screenshots matched the v2 baseline on the first run. Tab order checked on desktop (header → rail → page).
