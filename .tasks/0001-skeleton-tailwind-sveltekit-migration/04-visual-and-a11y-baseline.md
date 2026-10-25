@@ -47,7 +47,7 @@ As Claude, I want screenshots of every screen and state on v2, plus an accessibi
   - Time: `page.clock.install({ time })` instead of `setFixedTime`. A frozen `Date.now` stalls rxjs `debounceTime`, so lists never load; `install()` starts at a fixed moment and lets time flow.
   - Every screenshot masks the app version, the storage estimate and the "Install App" / "Check for Updates" buttons (they depend on service worker and install prompt timing). Settings shots also wait for "Check for Updates".
   - `expectScreenshot()` waits until `#page` keeps the same scroll position over ~450 ms; the Developer section starts a smooth scroll 150 ms after it opens. The modal shot also scrolls `#page` to the bottom first, so the background is identical every run.
-  - Base screens run on `phone` and `desktop`; the states (empty, menu, popups, toast, validation, modal) on `phone` only. The rail is part of every desktop shot. Inventory: 46 phone + 18 desktop = 64 screenshots (~ 11MB), including the states added at checkpoint 05.
+  - Base screens run on `phone` and `desktop`; the states (empty, menu, popups, toast, validation, modal) on `phone` only. The rail is part of every desktop shot. Inventory: 46 phone + 26 desktop = 72 screenshots (~16 MB), including the states added at checkpoint 05 (calculator sections, drip counter and search run on both projects).
   - The screen list (paths + "rendered" checks) lives in `tests/features/screens.ts` and is shared by the visual suite and `a11y.spec.ts`.
   - Visual config also pins `locale: en-US` and `timezoneId: Europe/Vienna`.
   - `APP_VERSION` comes from `npm_package_version`: start the dev server with `pnpm dev`, not `pnpm exec vite dev`, or the empty version link adds a `link-name` violation on settings.
