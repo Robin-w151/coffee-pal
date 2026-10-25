@@ -33,7 +33,7 @@ export default defineConfig({
     toHaveScreenshot: { animations: 'disabled', caret: 'hide', maxDiffPixelRatio: 0.01 },
   },
   webServer: {
-    command: 'corepack pnpm exec vite preview --port 4173 --strictPort',
+    command: 'pnpm exec vite preview --port 4173 --strictPort',
     url: baseURL,
     reuseExistingServer: false,
   },

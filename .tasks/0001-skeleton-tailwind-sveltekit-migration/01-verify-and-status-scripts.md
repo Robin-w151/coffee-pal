@@ -62,7 +62,7 @@ Unblocks every other Claude story. Branch: `migration/0-safety-net` (create from
 - ESLint already allows Node globals ([eslint.config.js](../../eslint.config.js)); no change expected. `playwright-report/` and `test-results/` are gitignored, which Prettier 3 respects, so `pnpm lint` doesn't touch them.
 - `vite preview` serves the output of `vite build`. `verify` already builds before e2e, so `webServer` must not build again.
 - [vite.config.ts](../../vite.config.ts) calls `git rev-parse` in `getCommitHash()`; that's fine locally.
-- **As built (2026-10-25):** `pnpm` isn't on `PATH` on the dev machine (it runs as `corepack pnpm`, like `.husky/pre-commit`), so `verify` and the Playwright `webServer` use `corepack pnpm …`. The 11 existing svelte-check warnings (`state_referenced_locally`) were fixed with `untrack(() => …)`, so `verify` uses `check:strict` from the start. `migration-status.js` counts either matching files (`unit: 'files'`) or occurrences per category; `files[]` always lists the files with a hit.
+- **As built (2026-10-25):** The 11 existing svelte-check warnings (`state_referenced_locally`) were fixed with `untrack(() => …)`, so `verify` uses `check:strict` from the start. `migration-status.js` counts either matching files (`unit: 'files'`) or occurrences per category; `files[]` always lists the files with a hit.
 
 ## Testing
 

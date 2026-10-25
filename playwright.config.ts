@@ -39,7 +39,7 @@ export default defineConfig({
   retries: isCI ? 2 : 0,
   ...(useLocalPreview && {
     webServer: {
-      command: 'corepack pnpm exec vite preview --port 4173 --strictPort',
+      command: 'pnpm exec vite preview --port 4173 --strictPort',
       url: localPreviewURL,
       reuseExistingServer: false,
     },
