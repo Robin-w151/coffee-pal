@@ -2,7 +2,9 @@
   import { resolve } from '$app/paths';
   import { getCoffeeLabel, type ActiveCoffeeEntry } from '$lib/models/myCoffees';
   import { getDisplayValue, getPreferredLengthUnit } from '$lib/shared/units';
-  import { settingsStore } from '$lib/stores/settings';
+  import { getSettingsStore } from '$lib/stores/settings.svelte';
+
+  const settingsStore = getSettingsStore();
 
   interface Props {
     entry: ActiveCoffeeEntry;
@@ -10,7 +12,7 @@
 
   let { entry }: Props = $props();
 
-  const preferredLengthUnit = getPreferredLengthUnit($settingsStore.preferredUnits);
+  const preferredLengthUnit = getPreferredLengthUnit(settingsStore.preferredUnits);
 
   function title(entry: ActiveCoffeeEntry): string {
     return getCoffeeLabel(entry)!;

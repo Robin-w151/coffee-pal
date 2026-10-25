@@ -107,7 +107,7 @@ Decision 2026-10-23: Claude works on the phase branch and stops only at the Huma
 | 03  | [E2e tests for form controls](03-form-control-e2e-tests.md)                  | Claude | M    | 01             | Done   |
 | 04  | [Visual and accessibility baseline](04-visual-and-a11y-baseline.md)          | Claude | M    | 01             | Done   |
 | 05  | [Checkpoint: approve safety net](05-checkpoint-safety-net.md)                | Human  | S    | 02, 03, 04     | Done   |
-| 06  | [Persisted state with runed](06-persisted-state-runed.md)                    | Claude | M    | 05             | Todo   |
+| 06  | [Persisted state with runed](06-persisted-state-runed.md)                    | Claude | M    | 05             | Done   |
 | 07  | [Own app layout instead of AppShell](07-own-app-layout.md)                   | Claude | M    | 05             | Todo   |
 | 08  | [Overlay services and hosts](08-overlay-services.md)                         | Claude | L    | 05             | Todo   |
 | 09  | [Form control wrappers](09-form-control-wrappers.md)                         | Claude | M    | 05             | Todo   |

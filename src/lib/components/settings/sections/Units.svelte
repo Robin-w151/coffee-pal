@@ -1,11 +1,13 @@
 <script lang="ts">
   import type { MeasurementSystem } from '$lib/models/measurement';
-  import { settingsStore } from '$lib/stores/settings';
+  import { getSettingsStore } from '$lib/stores/settings.svelte';
   import { RadioGroup, RadioItem } from '@skeletonlabs/skeleton';
   import Label from '../../shared/elements/form/Label.svelte';
   import Card from '$lib/components/shared/elements/Card.svelte';
 
-  let preferredUnits: MeasurementSystem = $state($settingsStore.preferredUnits);
+  const settingsStore = getSettingsStore();
+
+  let preferredUnits: MeasurementSystem = $state(settingsStore.preferredUnits);
 
   $effect(() => {
     settingsStore.setPreferredUnits(preferredUnits);

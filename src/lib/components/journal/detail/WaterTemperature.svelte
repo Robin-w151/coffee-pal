@@ -3,9 +3,11 @@
   import MeasurementInput from '$lib/components/shared/elements/form/MeasurementInput.svelte';
   import { TEMPERATURE_UNITS } from '$lib/config/units';
   import type { Measurement } from '$lib/models/measurement';
-  import { settingsStore } from '$lib/stores/settings';
+  import { getSettingsStore } from '$lib/stores/settings.svelte';
   import { getPreferredTemperatureUnit } from '$lib/shared/units';
   import { untrack } from 'svelte';
+
+  const settingsStore = getSettingsStore();
 
   interface Props {
     waterTemperature?: number;
@@ -16,7 +18,7 @@
   let { waterTemperature, valid = $bindable(false), onChange }: Props = $props();
 
   const units = TEMPERATURE_UNITS;
-  const preferredUnit = getPreferredTemperatureUnit($settingsStore.preferredUnits);
+  const preferredUnit = getPreferredTemperatureUnit(settingsStore.preferredUnits);
   const errorMessages: { [key: string]: string } = {
     metric: 'water temperature must be greater than 0',
     imperial: 'water temperature must be greater than 32',

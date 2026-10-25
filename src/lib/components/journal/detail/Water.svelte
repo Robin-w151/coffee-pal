@@ -3,9 +3,11 @@
   import MeasurementInput from '$lib/components/shared/elements/form/MeasurementInput.svelte';
   import { WEIGHT_UNITS } from '$lib/config/units';
   import type { Measurement } from '$lib/models/measurement';
-  import { settingsStore } from '$lib/stores/settings';
+  import { getSettingsStore } from '$lib/stores/settings.svelte';
   import { getPreferredWeightUnit } from '$lib/shared/units';
   import { untrack } from 'svelte';
+
+  const settingsStore = getSettingsStore();
 
   interface Props {
     water?: number;
@@ -16,7 +18,7 @@
   let { water, valid = $bindable(false), onChange }: Props = $props();
 
   const units = WEIGHT_UNITS;
-  const preferredUnit = getPreferredWeightUnit($settingsStore.preferredUnits);
+  const preferredUnit = getPreferredWeightUnit(settingsStore.preferredUnits);
   const errorMessages = {
     required: 'amount of water is required',
     negative: 'amount of water must be greater than 0',

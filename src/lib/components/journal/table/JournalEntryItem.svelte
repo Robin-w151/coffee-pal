@@ -1,7 +1,7 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
   import type { ActiveJournalEntry } from '$lib/models/journal';
-  import { settingsStore } from '$lib/stores/settings';
+  import { getSettingsStore } from '$lib/stores/settings.svelte';
   import {
     getDisplayValue,
     getPreferredTemperatureUnit,
@@ -11,14 +11,16 @@
   import { calculateRatio } from '$lib/shared/math';
   import { resolve } from '$app/paths';
 
+  const settingsStore = getSettingsStore();
+
   interface Props {
     entry: ActiveJournalEntry;
   }
 
   let { entry }: Props = $props();
 
-  const preferredWeightUnit = getPreferredWeightUnit($settingsStore.preferredUnits);
-  const preferredTemperatureUnit = getPreferredTemperatureUnit($settingsStore.preferredUnits);
+  const preferredWeightUnit = getPreferredWeightUnit(settingsStore.preferredUnits);
+  const preferredTemperatureUnit = getPreferredTemperatureUnit(settingsStore.preferredUnits);
 
   let ratio = $derived(calculateRatio(entry.coffee, entry.water));
   let coffeeType = $derived(getCoffeeLabel(entry.coffeeType));

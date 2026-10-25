@@ -6,8 +6,8 @@
   import { sync } from '$lib/services/sync/sync';
   import { ModalHelper } from '$lib/shared/ui/modal';
   import { ToastHelper } from '$lib/shared/ui/toast';
-  import { syncStore } from '$lib/stores/sync';
-  import { syncAvailabilityStore } from '$lib/stores/syncAvailability.svelte';
+  import { getSyncStore } from '$lib/stores/sync.svelte';
+  import { getSyncAvailabilityStore } from '$lib/stores/syncAvailability.svelte';
   import { syncStateStore } from '$lib/stores/syncState.svelte';
   import { getModalStore, getToastStore } from '@skeletonlabs/skeleton';
   import { catchError, finalize, of, tap, type Subscription } from 'rxjs';
@@ -19,17 +19,20 @@
   import NextcloudLoginModal from './NextcloudLoginModal.svelte';
   import { DateTime } from 'luxon';
 
+  const syncStore = getSyncStore();
+  const syncAvailabilityStore = getSyncAvailabilityStore();
+
   const modalHelper = new ModalHelper(getModalStore());
   const toastHelper = new ToastHelper(getToastStore());
 
-  let url = $syncStore.connection?.server.url;
+  let url = syncStore.connection?.server.url;
   let hostValid = $state(!!url);
   let isConnecting = $state(false);
   let pollSubscription: Subscription | undefined;
-  let connected = $derived(!!$syncStore.connection);
+  let connected = $derived(!!syncStore.connection);
   let showSpinner = $derived(isConnecting || syncStateStore.isSynchronizing);
   let lastSyncText = $derived.by(() => {
-    const lastSync = $syncStore.connection?.lastSync;
+    const lastSync = syncStore.connection?.lastSync;
     if (!lastSync) {
       return;
     }
@@ -99,7 +102,7 @@
         password: appPassword,
       },
     });
-    sync();
+    sync(syncStore);
   }
 
   function handleDisconnectClick(): void {
@@ -107,7 +110,7 @@
   }
 
   function handleSyncClick(): void {
-    sync();
+    sync(syncStore);
   }
 </script>
 
@@ -121,7 +124,7 @@
   <Form>
     <Label text="Nextcloud Server URL">
       <UrlInput
-        url={$syncStore.connection?.server.url}
+        url={syncStore.connection?.server.url}
         placeholder="Nextcloud Server URL, e.g. example.nextcloud.com"
         readonly={connected}
         onChange={handleUrlChange}
@@ -140,7 +143,7 @@
         <button
           class="btn variant-filled-primary"
           title="Synchronize data{lastSyncText ? `\n${lastSyncText}` : ''}"
-          disabled={!$syncAvailabilityStore.isAvailable}
+          disabled={!syncAvailabilityStore.isAvailable}
           onclick={handleSyncClick}>Sync</button
         >
       {:else if showSpinner}

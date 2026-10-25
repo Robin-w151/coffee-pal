@@ -17,7 +17,7 @@
   import type { JournalSort, JournalSortDirection, JournalState } from '$lib/models/journal';
   import { sync } from '$lib/services/sync/sync';
   import { journalSearchStore, journalStore } from '$lib/stores/journal';
-  import { syncAvailabilityStore } from '$lib/stores/syncAvailability.svelte';
+  import { getSyncAvailabilityStore } from '$lib/stores/syncAvailability.svelte';
   import { syncStateStore } from '$lib/stores/syncState.svelte';
   import { scrollToTop } from '$lib/shared/ui/scroll';
   import {
@@ -35,8 +35,11 @@
   import PageSearch from '../shared/elements/page/PageSearch.svelte';
   import JournalEntries from './list/JournalEntries.svelte';
   import JournalEntriesTable from './table/JournalEntriesTable.svelte';
-  import { syncStore } from '$lib/stores/sync';
+  import { getSyncStore } from '$lib/stores/sync.svelte';
   import { resolve } from '$app/paths';
+
+  const syncStore = getSyncStore();
+  const syncAvailabilityStore = getSyncAvailabilityStore();
 
   const sortOptions = [
     {
@@ -111,16 +114,16 @@
   }
 
   function handleSyncClick(): void {
-    sync();
+    sync(syncStore);
   }
 </script>
 
 <svelte:window bind:innerWidth />
 
 <PageActions
-  isSyncEnabled={$syncAvailabilityStore.isAvailable}
+  isSyncEnabled={syncAvailabilityStore.isAvailable}
   isSynchronizing={syncStateStore.isSynchronizing}
-  lastSync={$syncStore.connection?.lastSync}
+  lastSync={syncStore.connection?.lastSync}
   onAdd={handleAddClick}
   onSynchronize={handleSyncClick}
 />

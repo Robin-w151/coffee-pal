@@ -1,11 +1,13 @@
 <script lang="ts">
   import type { ColorScheme } from '$lib/models/settings';
-  import { settingsStore } from '$lib/stores/settings';
+  import { getSettingsStore } from '$lib/stores/settings.svelte';
   import { RadioGroup, RadioItem } from '@skeletonlabs/skeleton';
   import Label from '../../shared/elements/form/Label.svelte';
   import Card from '$lib/components/shared/elements/Card.svelte';
 
-  let colorScheme: ColorScheme = $state($settingsStore.colorScheme);
+  const settingsStore = getSettingsStore();
+
+  let colorScheme: ColorScheme = $state(settingsStore.colorScheme);
 
   $effect(() => {
     handleAppThemeChange(colorScheme);

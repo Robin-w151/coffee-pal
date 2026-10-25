@@ -21,7 +21,7 @@
   } from '$lib/models/myCoffees';
   import { sync } from '$lib/services/sync/sync';
   import { myCoffeesSearchStore, myCoffeesStore } from '$lib/stores/myCoffees';
-  import { syncAvailabilityStore } from '$lib/stores/syncAvailability.svelte';
+  import { getSyncAvailabilityStore } from '$lib/stores/syncAvailability.svelte';
   import { syncStateStore } from '$lib/stores/syncState.svelte';
   import { scrollToTop } from '$lib/shared/ui/scroll';
   import {
@@ -41,8 +41,11 @@
   import PageSearch from '../shared/elements/page/PageSearch.svelte';
   import CoffeeEntries from './list/CoffeeEntries.svelte';
   import CoffeeEntriesTable from './table/CoffeeEntriesTable.svelte';
-  import { syncStore } from '$lib/stores/sync';
+  import { getSyncStore } from '$lib/stores/sync.svelte';
   import { resolve } from '$app/paths';
+
+  const syncStore = getSyncStore();
+  const syncAvailabilityStore = getSyncAvailabilityStore();
 
   const sortOptions = [
     {
@@ -130,16 +133,16 @@
   }
 
   function handleSyncClick(): void {
-    sync();
+    sync(syncStore);
   }
 </script>
 
 <svelte:window bind:innerWidth />
 
 <PageActions
-  isSyncEnabled={$syncAvailabilityStore.isAvailable}
+  isSyncEnabled={syncAvailabilityStore.isAvailable}
   isSynchronizing={syncStateStore.isSynchronizing}
-  lastSync={$syncStore.connection?.lastSync}
+  lastSync={syncStore.connection?.lastSync}
   onAdd={handleAddClick}
   onSynchronize={handleSyncClick}
 />

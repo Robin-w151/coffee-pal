@@ -155,3 +155,19 @@ Gates: `pnpm verify:strict` green (168 unit, 117 e2e, 72 visual); e2e against `p
 **Merged:** PR #186 squash-merged into `main` as `06879bc` (`fix: add test hooks for migration safety net (migration phase 0)`); semantic-release cut `0.32.92` (`db5aa3b`), deployed to production. The human confirmed all checks of the runbook: CI on `main`, the release deploy, the Test workflow against production, and `pnpm migration:status` / `pnpm verify:strict` on `main`.
 
 From here on, a green `pnpm verify` / `pnpm verify:strict` means "nothing broke". Next: phase 1 (`migration/1-decouple`, stories 06–11, checkpoint 12).
+
+## 2026-10-25 — Story 06: Persisted state with runed (Done)
+
+Branch `migration/1-decouple` created from `main` (`6359bf0`). `settings` and `sync` now use runed `PersistedState` (`settings.svelte.ts`, `sync.svelte.ts`), created in `AppLayout` and read through `getSettingsStore()` / `getSyncStore()` / `getSyncAvailabilityStore()`. The sync service gets the store passed in (`sync(syncStore)`, `initScheduledSync(syncStore)`).
+
+**Decisions:**
+
+- The stores use getters instead of `$derived` fields. `PersistedState` already reads storage on every access, and a cache could go stale for the timer-driven sync.
+- The setters run fully inside `untrack`. Spreading the `PersistedState` proxy inside an `$effect` (Appearance, Units) otherwise loops with `effect_update_depth_exceeded`. A regression unit test covers this.
+- Vitest uses `resolve.conditions: ['browser']`.
+
+**Behaviour difference:** default values are now written to storage when the key is missing. The format is unchanged.
+
+**Status:** `local-storage-store` 0. The other phase 1 categories are unchanged: `skeleton-v2-imports-outside-ui` 29, `app-shell` 1, `conic-gradient` 1, `scss` 3, `skeleton-apply-in-app-css` 9.
+
+**Gates:** `pnpm verify:strict` green: 181 unit, 120 e2e (3 new: settings fallback ×2, dark class before hydration), 72 visual.

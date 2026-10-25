@@ -14,7 +14,7 @@ import type { Connection, SyncClient, SyncResult } from '$lib/models/sync';
 import { journalStore } from '$lib/stores/journal';
 import { myCoffeesStore } from '$lib/stores/myCoffees';
 import { onlineStore } from '$lib/stores/svelte-legos/online';
-import { syncStore } from '$lib/stores/sync';
+import type { SyncStoreInterface } from '$lib/stores/sync.svelte';
 import { syncStateStore } from '$lib/stores/syncState.svelte';
 import { get } from 'svelte/store';
 import { setupScheduledTask } from '../scheduler/scheduler';
@@ -24,9 +24,11 @@ import { toastHelper } from '$lib/shared/ui/toast';
 const SYNC = Symbol('sync');
 const isOnline = onlineStore();
 
-export async function sync(): Promise<void> {
-  const sync = get(syncStore);
-  if (!sync.connection) {
+let scheduledSyncStore: SyncStoreInterface | undefined;
+
+export async function sync(syncStore: SyncStoreInterface): Promise<void> {
+  const connection = syncStore.connection;
+  if (!connection) {
     return;
   }
 
@@ -42,8 +44,8 @@ export async function sync(): Promise<void> {
   const coffeeEntries = await myCoffeesStore.loadAll();
 
   try {
-    const journalSync = syncJournal(sync.connection, journalEntries);
-    const myCoffeesSync = syncMyCoffees(sync.connection, coffeeEntries);
+    const journalSync = syncJournal(connection, journalEntries);
+    const myCoffeesSync = syncMyCoffees(connection, coffeeEntries);
 
     const [journalSyncResult, myCoffeesSyncResult] = await Promise.allSettled([
       journalSync,
@@ -82,7 +84,16 @@ export const {
   clearScheduledExecution: clearScheduledSync,
   pauseScheduledTask: pauseScheduledSync,
   resumeScheduledTask: resumeScheduledSync,
-} = setupScheduledTask(SYNC, sync);
+} = setupScheduledTask(SYNC, () => {
+  if (scheduledSyncStore) {
+    sync(scheduledSyncStore);
+  }
+});
+
+/** Registers the store the scheduled sync uses; it runs from timers, outside any component. */
+export function initScheduledSync(syncStore: SyncStoreInterface): void {
+  scheduledSyncStore = syncStore;
+}
 
 async function syncJournal(
   connection: Connection,

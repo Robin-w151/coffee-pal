@@ -3,11 +3,13 @@
   import type { Measurement } from '$lib/models/measurement';
   import { round } from '$lib/shared/math';
   import { getPreferredWeightUnit } from '$lib/shared/units';
-  import { settingsStore } from '$lib/stores/settings';
+  import { getSettingsStore } from '$lib/stores/settings.svelte';
   import Card from '../shared/elements/Card.svelte';
   import Form from '../shared/elements/form/Form.svelte';
   import Label from '../shared/elements/form/Label.svelte';
   import MeasurementInput from '../shared/elements/form/MeasurementInput.svelte';
+
+  const settingsStore = getSettingsStore();
 
   interface Props {
     dropsPerMinute: number;
@@ -17,7 +19,7 @@
   let { dropsPerMinute, isWithinRange = $bindable(false) }: Props = $props();
 
   const units = WEIGHT_UNITS;
-  const preferredUnit = getPreferredWeightUnit($settingsStore.preferredUnits);
+  const preferredUnit = getPreferredWeightUnit(settingsStore.preferredUnits);
 
   let waterMeasurement: Measurement = $state({
     value: 500,

@@ -1,11 +1,13 @@
 <script lang="ts">
   import { browser } from '$app/environment';
   import type { ColorScheme } from '$lib/models/settings';
-  import { settingsStore } from '$lib/stores/settings';
+  import { getSettingsStore } from '$lib/stores/settings.svelte';
   import { onDestroy, onMount } from 'svelte';
 
+  const settingsStore = getSettingsStore();
+
   $effect(() => {
-    applyColorScheme($settingsStore.colorScheme ?? 'system');
+    applyColorScheme(settingsStore.colorScheme ?? 'system');
   });
 
   onMount(() => {
@@ -37,7 +39,7 @@
   }
 
   function changeColorScheme({ matches: prefersDarkColorScheme }: { matches: boolean }) {
-    const colorScheme = $settingsStore.colorScheme;
+    const colorScheme = settingsStore.colorScheme;
     if (colorScheme === 'system') {
       applyColorScheme(colorScheme, prefersDarkColorScheme);
     }

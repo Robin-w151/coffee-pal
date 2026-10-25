@@ -7,9 +7,11 @@
   import type { Measurement } from '$lib/models/measurement';
   import type { Recipe } from '$lib/models/recipe';
   import { getPreferredWeightUnit } from '$lib/shared/units';
-  import { settingsStore } from '$lib/stores/settings';
+  import { getSettingsStore } from '$lib/stores/settings.svelte';
   import { SlideToggle } from '@skeletonlabs/skeleton';
   import { untrack } from 'svelte';
+
+  const settingsStore = getSettingsStore();
 
   interface Props {
     fixedRatio?: boolean;
@@ -29,7 +31,7 @@
 
   const units = WEIGHT_UNITS;
   const units_coffee = WEIGHT_UNITS_COFFEE;
-  const preferredUnit = getPreferredWeightUnit($settingsStore.preferredUnits);
+  const preferredUnit = getPreferredWeightUnit(settingsStore.preferredUnits);
 
   let coffeeMeasurement: Measurement = $state({
     value: untrack(() => recipe.coffee),

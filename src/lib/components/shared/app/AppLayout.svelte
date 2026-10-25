@@ -5,10 +5,12 @@
   import AppMenu from '$lib/components/shared/app/AppMenu.svelte';
   import AppRail from '$lib/components/shared/app/AppRail.svelte';
   import EnableColorSchemes from '$lib/components/shared/app/EnableColorSchemes.svelte';
-  import { scheduleSync } from '$lib/services/sync/sync';
+  import { initScheduledSync, scheduleSync } from '$lib/services/sync/sync';
   import { rememberScrollPosition, scrollToLastKnownPosition } from '$lib/shared/ui/scroll';
   import '$lib/stores/app.svelte';
-  import { syncStore } from '$lib/stores/sync';
+  import { setSettingsStore } from '$lib/stores/settings.svelte';
+  import { setSyncStore } from '$lib/stores/sync.svelte';
+  import { setSyncAvailabilityStore } from '$lib/stores/syncAvailability.svelte';
   import {
     arrow,
     autoUpdate,
@@ -31,7 +33,6 @@
   import type { AfterNavigate } from '@sveltejs/kit';
   import { DateTime } from 'luxon';
   import { onMount, type ComponentEvents, type Snippet } from 'svelte';
-  import { get } from 'svelte/store';
   import { pwaInfo } from 'virtual:pwa-info';
   import '../../../../app.scss';
   import EnableGlobalMessages from './EnableGlobalMessages.svelte';
@@ -45,6 +46,11 @@
 
   let { children }: Props = $props();
 
+  setSettingsStore();
+  const syncStore = setSyncStore();
+  setSyncAvailabilityStore(syncStore);
+  initScheduledSync(syncStore);
+
   initializeStores();
   storePopup.set({ computePosition, autoUpdate, offset, shift, flip, arrow, size, inline });
 
@@ -55,7 +61,7 @@
   onMount(() => {
     document.documentElement.setAttribute('data-test', 'ready');
 
-    const lastSync = get(syncStore).connection?.lastSync;
+    const lastSync = syncStore.connection?.lastSync;
     if (!lastSync || DateTime.now().diff(DateTime.fromISO(lastSync), 'minutes').minutes > 15) {
       scheduleSync();
     }

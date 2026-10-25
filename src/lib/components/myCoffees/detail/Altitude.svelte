@@ -3,9 +3,11 @@
   import MeasurementInput from '$lib/components/shared/elements/form/MeasurementInput.svelte';
   import { LENGTH_UNITS } from '$lib/config/units';
   import type { Measurement } from '$lib/models/measurement';
-  import { settingsStore } from '$lib/stores/settings';
+  import { getSettingsStore } from '$lib/stores/settings.svelte';
   import { getPreferredLengthUnit } from '$lib/shared/units';
   import { untrack } from 'svelte';
+
+  const settingsStore = getSettingsStore();
 
   interface Props {
     altitude?: number;
@@ -16,7 +18,7 @@
   let { altitude, valid = $bindable(false), onChange }: Props = $props();
 
   const units = LENGTH_UNITS;
-  const preferredUnit = getPreferredLengthUnit($settingsStore.preferredUnits);
+  const preferredUnit = getPreferredLengthUnit(settingsStore.preferredUnits);
   const errorMessage = 'altitude must be greater than or equal to 0';
 
   let altitudeMeasurement: Measurement = $state({

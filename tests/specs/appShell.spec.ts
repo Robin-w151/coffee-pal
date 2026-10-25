@@ -251,6 +251,56 @@ test.describe('phone', () => {
     await expect(page.getByPlaceholder('Nextcloud Server URL')).toHaveValue('cloud.example.test');
   });
 
+  for (const [name, stored] of [
+    ['an unknown colour scheme', '{"colorScheme":"pink"}'],
+    ['invalid JSON', '{colorScheme'],
+  ]) {
+    test(`settings with ${name} fall back to the defaults`, async ({
+      page,
+      appPage,
+      settingsPage,
+    }) => {
+      await appPage.seedLocalStorage({ settings: stored });
+
+      await gotoReady(page, '/settings');
+
+      await expect(settingsPage.activeAppearenceOption).toHaveText('System');
+      await expect(settingsPage.activeUnitsOption).toHaveText('Metric');
+      expect(await appPage.getLocalStorageItem('settings')).toEqual({
+        colorScheme: 'system',
+        preferredUnits: 'metric',
+      });
+    });
+  }
+
+  test('stored dark colour scheme is applied before hydration', async ({ page, appPage }) => {
+    await appPage.seedLocalStorage({ settings: legacyStorage.settings });
+    // Records <html> as soon as <body> exists: after the inline script in app.html has run, but
+    // before SvelteKit hydrates and sets data-test="ready".
+    await page.addInitScript(() => {
+      const observer = new MutationObserver(() => {
+        if (!document.body) {
+          return;
+        }
+
+        observer.disconnect();
+        const html = document.documentElement;
+        (globalThis as any).preHydration = {
+          className: html.className,
+          ready: html.getAttribute('data-test') === 'ready',
+        };
+      });
+      observer.observe(document, { childList: true, subtree: true });
+    });
+
+    await gotoReady(page, '/');
+
+    expect(await page.evaluate(() => (globalThis as any).preHydration)).toEqual({
+      className: 'dark',
+      ready: false,
+    });
+  });
+
   test(
     'service worker serves the app offline',
     { tag: '@local-preview' },
