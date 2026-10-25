@@ -25,6 +25,7 @@ export class JournalPage {
 
   async goto(): Promise<void> {
     await this.page.goto('/');
+    await expect(this.page.locator('html')).toHaveAttribute('data-test', 'ready');
     await this.clickSortButton();
     await this.clickSortOption('Recently Updated');
   }

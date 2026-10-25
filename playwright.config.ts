@@ -26,6 +26,11 @@ export default defineConfig({
       name: 'chromium',
       use: { ...devices['Desktop Chrome'], viewport: { width: 576, height: 768 } },
     },
+    {
+      name: 'chromium-desktop',
+      testMatch: 'specs/appShell.spec.ts',
+      use: { ...devices['Desktop Chrome'], viewport: { width: 1280, height: 800 } },
+    },
   ],
   expect: {
     timeout: 30_000,

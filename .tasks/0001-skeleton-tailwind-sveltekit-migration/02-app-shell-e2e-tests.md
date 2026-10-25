@@ -2,7 +2,7 @@
 
 **Epic:** [0001 Migrate to Skeleton v5, Tailwind v4 and SvelteKit 3](README.md)
 **Owner:** Claude
-**Status:** Todo
+**Status:** In progress
 **Depends on:** 01
 **Size:** M — many small tests in an existing page-object setup; some uncertainty about service-worker and offline testing in Playwright.
 
@@ -30,9 +30,9 @@ Behaviours to cover:
 
 ## Acceptance criteria
 
-- [ ] All behaviours 1–11 have at least one test; each test fails if the behaviour is removed (check by temporarily breaking one case per area, then revert).
-- [ ] No test uses Skeleton class names as selectors: `grep -rnE "['\"\`][^'\"\`]*\.(modal|toast|drawer|app-rail|popup)\b|variant-|-token" tests` → no matches.
-- [ ] `pnpm verify` is green; the suite passes 3 consecutive local runs (no flakiness).
+- [x] All behaviours 1–11 have at least one test; each test fails if the behaviour is removed (check by temporarily breaking one case per area, then revert).
+- [x] No test uses Skeleton class names as selectors: `grep -rnE "['\"\`][^'\"\`]*\.(modal|toast|drawer|app-rail|popup)\b|variant-|-token" tests` → no matches.
+- [x] `pnpm verify` is green; the suite passes 3 consecutive local runs (no flakiness).
 - [ ] The Test workflow passes against the branch's Vercel preview (it runs automatically on each preview deployment), and a plain `pnpm test:e2e` against the dev server still passes: tests that need the local preview are skipped there, not failing.
 
 ## Technical notes
@@ -44,6 +44,15 @@ Behaviours to cover:
 - Seed localStorage only once per test: in the init script, write only if `sessionStorage.getItem('seeded')` is unset, then set it. `addInitScript` runs before every load, so without the guard a reload restores the seeded values and hides what the app wrote.
 - For the sync tests, answer WebDAV requests to the fake host with `page.route(..., route => route.fulfill({ status: 401 }))`, and assert the expected sync error toast ([sync.ts](../../src/lib/services/sync/sync.ts) shows one) or dismiss it before the next step. Don't leave requests hanging.
 
+- **As built (2026-10-25):**
+  - Behaviour 4 uses the Developer settings action "Clear IndexedDB" (deleting a journal entry has no confirm dialog). After cancel, focus lands on `<body>`, not on the trigger: known gap for story 16, not asserted.
+  - Behaviour 5: a single delete already shows the "Did you click to fast?" toast (with Undo); the test dismisses it via "Dismiss toast".
+  - Behaviour 3 scrolls to 800 px: with 33 entries (20 per page) the page only scrolls ~1010 px on the phone viewport.
+  - App-owned markup added: `aria-current="page"` on rail and menu links, and the rail wrapper became `<nav aria-label="Main navigation">`. So the phase 0 merge is a releasable `fix:`.
+  - Skeleton v2 closes popups with `opacity: 0` + `inert`, which Playwright still counts as visible; `isShown()` in [app.feature.ts](../../tests/features/app.feature.ts) checks "rendered, opaque and not inert" instead.
+  - The app drops navigations that start while a view transition runs (see Out of scope). `appShell.spec.ts` counts running view transitions via an init script and waits for 0 after each navigation.
+  - The `journalPage`/`myCoffeesPage` fixtures now wait for `data-test="ready"` before opening the sort popup; without it, existing specs were flaky against the dev server.
+
 ## Testing
 
 This story _is_ tests. Record new test count and runtime in PROGRESS.md.
@@ -51,3 +60,4 @@ This story _is_ tests. Record new test count and runtime in PROGRESS.md.
 ## Out of scope
 
 - Form controls (03), screenshots and axe (04).
+- **Bug found, not fixed (2026-10-25):** `runViewTransition` ([viewTransition.ts](../../src/lib/shared/viewTransition.ts)) returns without calling its callback when a transition is already running. `onNavigate` in AppLayout then never resolves, so a navigation started during another navigation's transition (e.g. a quick back tap) hangs: the URL changes but the old page stays. Candidate for story 07 (own app layout) or a separate fix.

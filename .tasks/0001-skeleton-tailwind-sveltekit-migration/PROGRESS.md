@@ -33,3 +33,25 @@ A running log of the migration, written by Claude after each story (see "How Cla
 - `tailwind-v3` is 10: three config files (`tailwind.config.ts`, `postcss.config.js`, `theme.ts`), four `@tailwind` directives in `src/app.scss` (including `variants`), and three package.json dependencies.
 
 **Open issues:** none.
+
+## 2026-10-25 — Story 02: E2e tests for app shell and overlays
+
+**Branch:** `migration/0-safety-net`
+
+**`pnpm migration:status`:** unchanged from story 01 (no Skeleton usage changed).
+
+**Tests:** new `tests/specs/appShell.spec.ts` with 18 tests (17 phone, 1 desktop on the new `chromium-desktop` project). The e2e suite is now 81 tests, ~18 s in `vite preview`; `pnpm verify` ~34 s.
+
+**Gates:** `pnpm verify` green 3 times in a row; `appShell.spec.ts` green 10× with `--repeat-each 10` (180/180); plain `pnpm test:e2e` against `vite dev` green 3 times in a row (PWA test skipped). Breaking one behaviour per area (menu close, rail `aria-current`, scroll memory, confirm dialog, delete toast, sort popup, settings persistence, sync disconnect, offline service worker, shortcut mapping) made the matching tests fail; all reverted.
+
+**Decisions:**
+
+- Modal tests use "Clear IndexedDB" in the Developer settings (the only destructive confirm dialog; deleting a journal entry uses an undo toast instead).
+- Added app-owned markup: `aria-current="page"` on rail and menu links, `<nav aria-label="Main navigation">` around the rail. `src/` changed, so the phase 0 PR title is the `fix:` variant.
+- `isShown()` test helper: v2 popups close via `opacity: 0` + `inert`, which Playwright treats as visible.
+- `journalPage` / `myCoffeesPage` fixtures now wait for hydration before opening the sort popup (they were flaky against the dev server).
+
+**Known gaps / open issues:**
+
+- **Focus return:** after cancelling the confirm dialog, focus lands on `<body>`, not on the button that opened it. Story 16 adds focus return.
+- **View transition bug (not fixed):** `runViewTransition` skips its callback while another transition runs, so a navigation that starts during a running transition never completes (URL changes, old page stays). Tests wait for transitions to finish. Noted in story 02 → Out of scope; candidate for story 07.
