@@ -2,7 +2,7 @@
 
 **Epic:** [0001 Migrate to Skeleton v5, Tailwind v4 and SvelteKit 3](README.md)
 **Owner:** Human
-**Status:** In progress
+**Status:** Done
 **Depends on:** 02, 03, 04
 **Size:** S — review a screenshot list and a PR, then merge; no live-system risk beyond a normal release.
 
@@ -19,7 +19,7 @@ Only you can judge whether important states are missing. After this checkpoint, 
 #### Prerequisites
 
 - [x] Stories 01–04 are Done and pushed to `migration/0-safety-net`; the Test workflow is green on the branch's Vercel preview deployment (see [PROGRESS.md](PROGRESS.md)).
-- [ ] A draft PR from `migration/0-safety-net` to `main` exists. Claude's batch run doesn't open PRs, so open it yourself (or ask Claude to):
+- [x] A draft PR from `migration/0-safety-net` to `main` exists. Claude's batch run doesn't open PRs, so open it yourself (or ask Claude to):
   ```sh
   gh pr create --draft --base main --head migration/0-safety-net \
     --title "fix: add test hooks for migration safety net (migration phase 0)"
@@ -70,8 +70,8 @@ Revert the squash commit (`git revert <SQUASH_SHA>` and push, or use GitHub's "R
 
 ## Acceptance criteria
 
-- [ ] Given the merged PR, when `pnpm verify:strict` runs on `main` locally, then it exits 0.
-- [ ] The human has confirmed coverage (or listed gaps that were then fixed).
+- [x] Given the merged PR, when `pnpm verify:strict` runs on `main` locally, then it exits 0.
+- [x] The human has confirmed coverage (or listed gaps that were then fixed).
 
 ## Technical notes
 

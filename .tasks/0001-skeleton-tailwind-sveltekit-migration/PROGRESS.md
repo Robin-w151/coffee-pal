@@ -147,3 +147,11 @@ The quality gate failed on reliability (D) and security (C). Fixed:
 Left as is: two "`await` inside a loop" smells in `states.visual.ts` (the drip counter taps have to be sequential).
 
 Gates: `pnpm verify:strict` green (168 unit, 117 e2e, 72 visual); e2e against `pnpm dev` green (116, PWA test excluded).
+
+## 2026-10-25 — Story 05: Checkpoint safety net (phase 0 done)
+
+**Approved by the human:** "Safety net approved", after the requested screenshot states were added (checkpoint feedback above), the SonarCloud findings were fixed and the CodeRabbit comments were answered.
+
+**Merged:** PR #186 squash-merged into `main` as `06879bc` (`fix: add test hooks for migration safety net (migration phase 0)`); semantic-release cut `0.32.92` (`db5aa3b`), deployed to production. The human confirmed all checks of the runbook: CI on `main`, the release deploy, the Test workflow against production, and `pnpm migration:status` / `pnpm verify:strict` on `main`.
+
+From here on, a green `pnpm verify` / `pnpm verify:strict` means "nothing broke". Next: phase 1 (`migration/1-decouple`, stories 06–11, checkpoint 12).
