@@ -25,7 +25,7 @@ Create in `src/lib/components/ui/`:
 ## Acceptance criteria
 
 - [ ] `pnpm migration:status` shows `skeleton-v2-imports-outside-ui` = 0.
-- [ ] `src/lib/shared/ui/autocomplete.ts` is deleted; `grep -rn "@skeletonlabs/skeleton" src --include=*.ts | grep -v "src/lib/services/ui/"` returns nothing.
+- [ ] `src/lib/shared/ui/autocomplete.ts` is deleted; `grep -rnE "'@skeletonlabs/skeleton[/']" src --include='*.ts' --include='*.svelte' | grep -vE "^src/lib/(components|services)/ui/"` returns nothing (`--include=*.ts` also covers `.svelte.ts`).
 - [ ] Autocomplete, ListBox, Paginator and navigation e2e tests (02, 03) are green, unchanged.
 - [ ] Given the Combobox list is open, when the user presses Escape, then it closes and focus stays in the input.
 - [ ] `pnpm verify:strict` is green.
