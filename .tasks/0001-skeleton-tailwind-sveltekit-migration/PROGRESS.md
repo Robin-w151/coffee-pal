@@ -132,3 +132,5 @@ No `color-contrast` violations: axe reports text over the mesh background as "in
 Calculator and drip counter scroll inside `#page`, so these tests grow the viewport to 576×1400 to capture the whole page.
 
 **Gates:** the new tests green with `--repeat-each 10` (80/80); `pnpm test:visual` green 3 times in a row (64/64); `pnpm lint` green.
+
+**Follow-up (same day):** at the human's request the calculator, drip counter and search states also run on `desktop`, where their layout differs (two-column calculator, counter and estimation side by side, journal table). The search test no longer uses the `journalPage` fixture, which checks the phone list; the phone search screenshots were regenerated accordingly. Inventory now 46 phone + 26 desktop = 72 (~16 MB). Gates: the cross-layout tests green with `--repeat-each 10` (160/160); `pnpm test:visual` green 3 times in a row (72/72).

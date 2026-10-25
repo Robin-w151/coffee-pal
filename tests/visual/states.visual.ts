@@ -1,4 +1,5 @@
 import type { Page } from '@playwright/test';
+import { JournalPage } from '../pages/journal.page';
 import {
   clearAllEntries,
   colorSchemes,
@@ -92,6 +93,28 @@ for (const colorScheme of colorSchemes) {
       await expectScreenshot(page, 'my-coffees-new-validation', colorScheme);
     });
 
+    test('dangerous confirm modal open', async ({ page, appPage }) => {
+      await gotoReady(page, '/settings');
+      await expect(page.getByRole('button', { name: 'Check for Updates' })).toBeVisible();
+      await page.getByRole('switch', { name: 'Toggle Developer Settings' }).click();
+      await waitForScrollToSettle(page);
+      await page
+        .locator('#page')
+        .evaluate((element) => element.scrollTo({ top: element.scrollHeight }));
+      await waitForScrollToSettle(page);
+      await page.getByRole('button', { name: 'Clear IndexedDB' }).click();
+      await expect(appPage.warningDialog).toBeVisible();
+
+      await expectScreenshot(page, 'settings-modal-dangerous', colorScheme);
+    });
+  });
+}
+
+// States whose layout differs between phone and desktop.
+for (const colorScheme of colorSchemes) {
+  test.describe(`${colorScheme} all layouts`, () => {
+    test.use({ colorScheme });
+
     test('calculator with iced coffee and temperature converter', async ({
       page,
       calculatorPage,
@@ -123,26 +146,15 @@ for (const colorScheme of colorSchemes) {
       });
     }
 
-    test('journal search active', async ({ page, journalPage }) => {
-      await journalPage.enterSearch('PuckPuck');
-      await expect(journalPage.journalList).toHaveCount(1);
+    test('journal search active', async ({ page }) => {
+      // Not the journalPage fixture: it checks the phone list, desktop shows a table.
+      await gotoReady(page, '/');
+      await new JournalPage(page).enterSearch('PuckPuck');
+      // Phone shows a list, desktop a table: check the result by its text.
+      await expect(page.getByText(/Äthiopien Chelbesa/).first()).toBeVisible();
+      await expect(page.getByText(/Honeymoon/)).toHaveCount(0);
 
       await expectScreenshot(page, 'journal-list-search', colorScheme);
-    });
-
-    test('dangerous confirm modal open', async ({ page, appPage }) => {
-      await gotoReady(page, '/settings');
-      await expect(page.getByRole('button', { name: 'Check for Updates' })).toBeVisible();
-      await page.getByRole('switch', { name: 'Toggle Developer Settings' }).click();
-      await waitForScrollToSettle(page);
-      await page
-        .locator('#page')
-        .evaluate((element) => element.scrollTo({ top: element.scrollHeight }));
-      await waitForScrollToSettle(page);
-      await page.getByRole('button', { name: 'Clear IndexedDB' }).click();
-      await expect(appPage.warningDialog).toBeVisible();
-
-      await expectScreenshot(page, 'settings-modal-dangerous', colorScheme);
     });
   });
 }

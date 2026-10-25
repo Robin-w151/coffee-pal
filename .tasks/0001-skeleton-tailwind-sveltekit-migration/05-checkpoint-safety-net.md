@@ -39,7 +39,7 @@ Only you can judge whether important states are missing. After this checkpoint, 
    ```sh
    pnpm verify:strict
    ```
-   **Expected:** exits 0 after ~1 min. The output ends with the visual suite passing (64 screenshots).
+   **Expected:** exits 0 after ~1 min. The output ends with the visual suite passing (72 screenshots).
 3. **Review the screenshot inventory.** Open `tests/visual/__screenshots__/phone/` and `.../desktop/` in Finder (Quick Look with Space lets you page through quickly).
    **Expected:** every screen and state you care about is there, in light and dark. Masked areas show as solid magenta boxes; none of them hides something you want checked. Note anything missing (e.g. "brew timer running", "sync error state").
 4. **Skim the new tests** in the PR (`tests/specs/appShell.spec.ts`, `tests/specs/a11y.spec.ts`, extended specs). Check that the flows you rely on most are covered.
