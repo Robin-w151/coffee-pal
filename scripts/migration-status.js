@@ -146,10 +146,8 @@ if (args.phase !== undefined) {
 }
 
 function listFiles() {
-  // Local dev script: resolving git via the developer's PATH is intended. NOSONAR(javascript:S4036)
-  const output = execFileSync('git', ['ls-files', '--cached', '--others', '--exclude-standard'], {
-    encoding: 'utf-8',
-  });
+  const gitArgs = ['ls-files', '--cached', '--others', '--exclude-standard'];
+  const output = execFileSync('git', gitArgs, { encoding: 'utf-8' }); // NOSONAR: dev script, git from PATH
   return [...new Set(output.split('\n').filter(Boolean))].filter((file) => existsSync(file));
 }
 
