@@ -1,22 +1,18 @@
 <script lang="ts">
-  import { getModalStore } from '@skeletonlabs/skeleton';
+  import type { CustomModalProps } from '$lib/services/ui/modal.svelte';
 
-  interface Props {
+  interface Props extends CustomModalProps<boolean> {
     loginUrl: string;
   }
 
-  let { loginUrl }: Props = $props();
-
-  const modalStore = getModalStore();
+  let { loginUrl, close }: Props = $props();
 
   function handleLoginClick(): void {
-    $modalStore[0].response?.(true);
-    modalStore.close();
+    close(true);
   }
 
   function handleCancelClick(): void {
-    $modalStore[0].response?.(false);
-    modalStore.close();
+    close(false);
   }
 </script>
 

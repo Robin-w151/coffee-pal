@@ -179,3 +179,18 @@ Branch `migration/1-decouple` created from `main` (`6359bf0`). `settings` and `s
 **Status:** `app-shell` 0, `conic-gradient` 0. Remaining phase 1 categories: `skeleton-v2-imports-outside-ui` 29, `scss` 3, `skeleton-apply-in-app-css` 9.
 
 **Gates:** `pnpm verify:strict` green (181 unit, 120 e2e, 72 visual). The screenshots matched the v2 baseline on the first run. Tab order checked on desktop (header → rail → page).
+
+## 2026-10-25 — Story 08: Overlay services and hosts (Done)
+
+Modals, toasts and the drawer now go through `modal`, `toast` and `drawer` in `src/lib/services/ui/`. These are runes singletons with no Skeleton or store imports. `ModalHost`, `ToastHost` and `DrawerHost` in `src/lib/components/ui/` translate them to the v2 stores. `Popover` wraps the v2 `popup` action (as a Svelte attachment on the trigger snippet) and replaces `use:popup` in Method, CoffeeType and PageSearch. `ToastHelper`, `ModalHelper`, `autocomplete.ts` and `EnableGlobalMessages` are deleted.
+
+**Decisions:**
+
+- The toast service owns the timeouts.
+- `modal.open` infers its result type from the component's `close` prop.
+- The dangerous modal footer uses v2's `buttonNeutral`/`buttonPositive` props instead of CSS.
+- The hosts read the v2 stores untracked, so a close done by v2 itself (backdrop, Escape) can't reopen the overlay. The first e2e run caught exactly that for the drawer.
+
+**Status:** `skeleton-v2-imports-outside-ui` 15 (from 29). `skeleton-apply-in-app-css` 5 (from 9; the modal footer rules are gone). `scss` 3 is unchanged and belongs to story 11.
+
+**Gates:** `pnpm verify:strict` green: 194 unit (13 new service tests), 120 e2e, 72 visual.

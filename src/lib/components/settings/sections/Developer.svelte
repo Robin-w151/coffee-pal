@@ -5,8 +5,7 @@
   import { JOURNAL_DB_NAME } from '$lib/config/journal';
   import { MY_COFFEES_DB_NAME } from '$lib/config/myCoffees';
   import { humanReadableMemorySize } from '$lib/shared/ui/formatting';
-  import { ModalHelper } from '$lib/shared/ui/modal';
-  import { getModalStore } from '@skeletonlabs/skeleton';
+  import { modal } from '$lib/services/ui/modal.svelte';
   import { onDestroy, onMount } from 'svelte';
 
   interface Props {
@@ -15,7 +14,6 @@
 
   let { cardClass = '' }: Props = $props();
 
-  const modalHelper = new ModalHelper(getModalStore());
   const itemClass = 'grid grid-cols-subgrid col-span-full';
 
   let developerSettingsActive = $state(false);
@@ -39,13 +37,11 @@
   });
 
   async function handleResetLocalStorageButtonClick() {
-    const confirmed = await modalHelper.triggerConfirm(
-      'Data will be deleted',
-      'Are you sure that you want to clear the LocalStorage?',
-      {
-        modalClasses: 'dangerous',
-      },
-    );
+    const confirmed = await modal.confirm({
+      title: 'Data will be deleted',
+      body: 'Are you sure that you want to clear the LocalStorage?',
+      dangerous: true,
+    });
 
     if (confirmed) {
       localStorage.clear();
@@ -54,13 +50,11 @@
   }
 
   async function handleResetIndexedDbButtonClick() {
-    const confirmed = await modalHelper.triggerConfirm(
-      'Data will be deleted',
-      'Are you sure that you want to clear the IndexedDB?',
-      {
-        modalClasses: 'dangerous',
-      },
-    );
+    const confirmed = await modal.confirm({
+      title: 'Data will be deleted',
+      body: 'Are you sure that you want to clear the IndexedDB?',
+      dangerous: true,
+    });
 
     if (confirmed) {
       indexedDB.deleteDatabase(JOURNAL_DB_NAME);

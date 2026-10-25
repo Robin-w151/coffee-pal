@@ -19,7 +19,7 @@ import { syncStateStore } from '$lib/stores/syncState.svelte';
 import { get } from 'svelte/store';
 import { setupScheduledTask } from '../scheduler/scheduler';
 import { NextcloudSyncClient } from './nextcloud';
-import { toastHelper } from '$lib/shared/ui/toast';
+import { toast } from '$lib/services/ui/toast.svelte';
 
 const SYNC = Symbol('sync');
 const isOnline = onlineStore();
@@ -57,18 +57,14 @@ export async function sync(syncStore: SyncStoreInterface): Promise<void> {
       applyResults.push(journalStore.apply(journalSyncResult.value));
     } else {
       console.error(journalSyncResult.reason);
-      toastHelper.triggerError(
-        'Failed to sync journal - remote data is corrupted or in an unexpected format',
-      );
+      toast.error('Failed to sync journal - remote data is corrupted or in an unexpected format');
     }
 
     if (myCoffeesSyncResult.status === 'fulfilled') {
       applyResults.push(myCoffeesStore.apply(myCoffeesSyncResult.value));
     } else {
       console.error(myCoffeesSyncResult.reason);
-      toastHelper.triggerError(
-        'Failed to sync myCoffees - remote data is corrupted or in an unexpected format',
-      );
+      toast.error('Failed to sync myCoffees - remote data is corrupted or in an unexpected format');
     }
 
     await Promise.all(applyResults);

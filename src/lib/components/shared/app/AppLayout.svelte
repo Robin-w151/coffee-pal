@@ -5,36 +5,20 @@
   import AppMenu from '$lib/components/shared/app/AppMenu.svelte';
   import AppRail from '$lib/components/shared/app/AppRail.svelte';
   import EnableColorSchemes from '$lib/components/shared/app/EnableColorSchemes.svelte';
+  import DrawerHost from '$lib/components/ui/DrawerHost.svelte';
+  import ModalHost from '$lib/components/ui/ModalHost.svelte';
+  import ToastHost from '$lib/components/ui/ToastHost.svelte';
   import { initScheduledSync, scheduleSync } from '$lib/services/sync/sync';
   import { rememberScrollPosition, scrollToLastKnownPosition } from '$lib/shared/ui/scroll';
   import '$lib/stores/app.svelte';
   import { setSettingsStore } from '$lib/stores/settings.svelte';
   import { setSyncStore } from '$lib/stores/sync.svelte';
   import { setSyncAvailabilityStore } from '$lib/stores/syncAvailability.svelte';
-  import {
-    arrow,
-    autoUpdate,
-    computePosition,
-    flip,
-    inline,
-    offset,
-    shift,
-    size,
-  } from '@floating-ui/dom';
-  import {
-    Drawer,
-    Modal,
-    Toast,
-    getDrawerStore,
-    initializeStores,
-    storePopup,
-  } from '@skeletonlabs/skeleton';
   import type { AfterNavigate } from '@sveltejs/kit';
   import { DateTime } from 'luxon';
   import { onMount, type Snippet } from 'svelte';
   import { pwaInfo } from 'virtual:pwa-info';
   import '../../../../app.scss';
-  import EnableGlobalMessages from './EnableGlobalMessages.svelte';
   import EnableShortcuts from './EnableShortcuts.svelte';
   import EnableUpdateListener from './EnableUpdateListener.svelte';
   import { runViewTransition } from '$lib/shared/viewTransition';
@@ -49,11 +33,6 @@
   const syncStore = setSyncStore();
   setSyncAvailabilityStore(syncStore);
   initScheduledSync(syncStore);
-
-  initializeStores();
-  storePopup.set({ computePosition, autoUpdate, offset, shift, flip, arrow, size, inline });
-
-  const drawerStore = getDrawerStore();
 
   let webManifestLink = $derived(pwaInfo ? pwaInfo.webManifest.linkTag : '');
 
@@ -94,17 +73,18 @@
 </svelte:head>
 
 <EnableColorSchemes />
-<EnableGlobalMessages />
 <EnableShortcuts />
 <EnableUpdateListener />
 
-<Modal />
-<Toast />
-<Drawer>
-  {#if $drawerStore.id === 'app-menu'}
-    <AppMenu />
-  {/if}
-</Drawer>
+<ModalHost />
+<ToastHost />
+<DrawerHost>
+  {#snippet content(id)}
+    {#if id === 'app-menu'}
+      <AppMenu />
+    {/if}
+  {/snippet}
+</DrawerHost>
 
 <!-- Same geometry and region classes as the Skeleton v2 app shell; #page is the only scroll container. -->
 <div

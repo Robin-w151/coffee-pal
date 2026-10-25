@@ -6,13 +6,13 @@
     faClose,
     faSearch,
   } from '@fortawesome/free-solid-svg-icons';
-  import { popup, type PopupSettings } from '@skeletonlabs/skeleton';
   import { tick, untrack, type Snippet } from 'svelte';
   import { Icon } from 'svelte-awesome';
   import { fade } from 'svelte/transition';
   import { scaleX } from '../../transitions/scaleX';
   import Spinner from '../Spinner.svelte';
   import InputWithButton from '../form/InputWithButton.svelte';
+  import Popover from '$lib/components/ui/Popover.svelte';
 
   type PageSearchSort = 'asc' | 'desc';
 
@@ -35,12 +35,6 @@
     onSearchChange,
     onSortToggle,
   }: Props = $props();
-
-  const sortPopup: PopupSettings = {
-    event: 'click',
-    target: 'sort-popup',
-    placement: 'bottom',
-  };
 
   let searchInputRef: HTMLInputElement | undefined = $state();
   let isSearchActive = $state(untrack(() => !!search));
@@ -127,17 +121,20 @@
       </button>
     {/if}
     {#if popupContent}
-      <button
-        class="btn btn-icon {isSearchActive ? 'variant-filled-primary' : 'variant-ghost-secondary'}"
-        title={changeSortOrderButtonTitle}
-        disabled={isChangeSortOrderButtonDisabled}
-        use:popup={sortPopup}
-      >
-        <Icon data={faArrowUpWideShort} />
-      </button>
-      <div class="popup-token" data-popup="sort-popup">
-        {@render popupContent()}
-      </div>
+      <Popover content={popupContent}>
+        {#snippet trigger(triggerProps)}
+          <button
+            class="btn btn-icon {isSearchActive
+              ? 'variant-filled-primary'
+              : 'variant-ghost-secondary'}"
+            title={changeSortOrderButtonTitle}
+            disabled={isChangeSortOrderButtonDisabled}
+            {...triggerProps}
+          >
+            <Icon data={faArrowUpWideShort} />
+          </button>
+        {/snippet}
+      </Popover>
     {:else}
       <button
         class="btn btn-icon {isSearchActive ? 'variant-filled-primary' : 'variant-ghost-secondary'}"

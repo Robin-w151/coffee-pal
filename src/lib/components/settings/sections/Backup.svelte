@@ -7,16 +7,14 @@
   import { journalStore } from '$lib/stores/journal';
   import { myCoffeesStore } from '$lib/stores/myCoffees';
   import { readJsonFile, writeJsonFile } from '$lib/shared/file';
-  import { ToastHelper } from '$lib/shared/ui/toast';
+  import { toast } from '$lib/services/ui/toast.svelte';
   import { faFileArrowUp } from '@fortawesome/free-solid-svg-icons';
-  import { FileDropzone, getToastStore } from '@skeletonlabs/skeleton';
+  import { FileDropzone } from '@skeletonlabs/skeleton';
   import { DateTime } from 'luxon';
   import { Icon } from 'svelte-awesome';
   import Spinner from '../../shared/elements/Spinner.svelte';
   import Form from '../../shared/elements/form/Form.svelte';
   import Card from '$lib/components/shared/elements/Card.svelte';
-
-  const toastHelper = new ToastHelper(getToastStore());
 
   let files: FileList | undefined = $state();
   let isImporting = $state(false);
@@ -59,9 +57,9 @@
       }
 
       files = undefined;
-      toastHelper.triggerInfo('Importing backup data was successful');
+      toast.info('Importing backup data was successful');
     } catch (error: unknown) {
-      toastHelper.triggerError(`Importing backup data failed. ${(error as Error).message}`);
+      toast.error(`Importing backup data failed. ${(error as Error).message}`);
     } finally {
       isImporting = false;
     }

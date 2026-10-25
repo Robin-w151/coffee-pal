@@ -4,12 +4,11 @@
   import type { UrlInputChange } from '$lib/models/urlInput';
   import { NextcloudLoginClient } from '$lib/services/sync/nextcloud';
   import { sync } from '$lib/services/sync/sync';
-  import { ModalHelper } from '$lib/shared/ui/modal';
-  import { ToastHelper } from '$lib/shared/ui/toast';
+  import { modal } from '$lib/services/ui/modal.svelte';
+  import { toast } from '$lib/services/ui/toast.svelte';
   import { getSyncStore } from '$lib/stores/sync.svelte';
   import { getSyncAvailabilityStore } from '$lib/stores/syncAvailability.svelte';
   import { syncStateStore } from '$lib/stores/syncState.svelte';
-  import { getModalStore, getToastStore } from '@skeletonlabs/skeleton';
   import { catchError, finalize, of, tap, type Subscription } from 'rxjs';
   import { onDestroy } from 'svelte';
   import Spinner from '../../shared/elements/Spinner.svelte';
@@ -21,9 +20,6 @@
 
   const syncStore = getSyncStore();
   const syncAvailabilityStore = getSyncAvailabilityStore();
-
-  const modalHelper = new ModalHelper(getModalStore());
-  const toastHelper = new ToastHelper(getToastStore());
 
   let url = syncStore.connection?.server.url;
   let hostValid = $state(!!url);
@@ -65,7 +61,7 @@
       .pipe(
         tap(handleCredentials),
         catchError((error: unknown) => {
-          toastHelper.triggerError(`Login failed! ${(error as Error).message}`);
+          toast.error(`Login failed! ${(error as Error).message}`);
           return of();
         }),
         finalize(() => (isConnecting = false)),
@@ -77,15 +73,9 @@
     pollSubscription?.unsubscribe();
   }
 
-  function handleLoginStart(loginUrl: string): void {
-    modalHelper.triggerModal(NextcloudLoginModal, {
-      props: { loginUrl },
-      response: handleLoginCancel,
-    });
-  }
-
-  function handleLoginCancel(response?: boolean): void {
-    if (!response) {
+  async function handleLoginStart(loginUrl: string): Promise<void> {
+    const confirmed = await modal.open(NextcloudLoginModal, { loginUrl });
+    if (!confirmed) {
       pollSubscription?.unsubscribe();
     }
   }

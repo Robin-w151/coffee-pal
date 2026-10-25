@@ -3,18 +3,16 @@
   import { page } from '$app/stores';
   import { routes } from '$lib/config/routes';
   import type { Route } from '$lib/models/route';
+  import { drawer } from '$lib/services/ui/drawer.svelte';
   import { faClose } from '@fortawesome/free-solid-svg-icons';
-  import { getDrawerStore } from '@skeletonlabs/skeleton';
   import { Icon } from 'svelte-awesome';
-
-  const drawerStore = getDrawerStore();
 
   let routeActiveClass = $derived((route: Route) =>
     isSelected(route, $page.url.pathname) ? 'bg-primary-active-token' : '',
   );
 
   function handleClick(): void {
-    drawerStore.close();
+    drawer.close();
   }
 
   function isSelected(route: Route, pathname: string): boolean {

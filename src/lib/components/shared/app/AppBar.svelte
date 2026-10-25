@@ -2,17 +2,12 @@
   import { resolve } from '$app/paths';
   import { mainRoute } from '$lib/config/routes';
   import { faBars, faMugHot } from '@fortawesome/free-solid-svg-icons';
-  import { AppBar, getDrawerStore, type DrawerSettings } from '@skeletonlabs/skeleton';
+  import { drawer } from '$lib/services/ui/drawer.svelte';
+  import { AppBar } from '@skeletonlabs/skeleton';
   import { Icon } from 'svelte-awesome';
 
-  const drawerStore = getDrawerStore();
-
   function handleMenuClick(): void {
-    const drawerSettings: DrawerSettings = {
-      id: 'app-menu',
-    };
-
-    drawerStore.open(drawerSettings);
+    drawer.open('app-menu');
   }
 </script>
 

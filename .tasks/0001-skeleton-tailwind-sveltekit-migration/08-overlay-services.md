@@ -2,7 +2,7 @@
 
 **Epic:** [0001 Migrate to Skeleton v5, Tailwind v4 and SvelteKit 3](README.md)
 **Owner:** Claude
-**Status:** Todo
+**Status:** Done
 **Depends on:** 05
 **Size:** L — 11 store consumers plus 3 popup sites, custom modal components, and a new API design. v4 replaces the store-based model with components, so this is the riskiest part of phase 1.
 
@@ -26,14 +26,14 @@ Build an app-owned API with **no Skeleton types in its signatures**. In phase 1 
 
 ## Acceptance criteria
 
-- [ ] Outside `src/lib/components/ui/` and `src/lib/services/ui/`, `grep -rnE "getModalStore|getToastStore|getDrawerStore|initializeStores|storePopup|use:popup|ModalSettings|ToastSettings|DrawerSettings|PopupSettings|ModalComponent" src` returns nothing.
-- [ ] Modal, toast, drawer and popup e2e tests from story 02 are green, unchanged except for test ids that moved into hosts.
-- [ ] Given a `modal.confirm()` is open, when the user presses Escape or clicks the backdrop, then the promise resolves `false`.
-- [ ] Given two `modal.confirm()` calls in a row, then they are shown one after another and each promise resolves with its own answer.
-- [ ] Given the "Did you click to fast?" toast, when it closes (timeout, dismiss or Undo), then `onClose` runs once and a sync is scheduled, as today.
-- [ ] Given a persistent toast, when its page is destroyed, then `toast.dismiss(id)` removes it.
-- [ ] `src/lib/shared/ui/toast.ts` and `src/lib/shared/ui/modal.ts` are deleted.
-- [ ] `pnpm verify:strict` is green.
+- [x] Outside `src/lib/components/ui/` and `src/lib/services/ui/`, `grep -rnE "getModalStore|getToastStore|getDrawerStore|initializeStores|storePopup|use:popup|ModalSettings|ToastSettings|DrawerSettings|PopupSettings|ModalComponent" src` returns nothing.
+- [x] Modal, toast, drawer and popup e2e tests from story 02 are green, unchanged except for test ids that moved into hosts.
+- [x] Given a `modal.confirm()` is open, when the user presses Escape or clicks the backdrop, then the promise resolves `false`.
+- [x] Given two `modal.confirm()` calls in a row, then they are shown one after another and each promise resolves with its own answer.
+- [x] Given the "Did you click to fast?" toast, when it closes (timeout, dismiss or Undo), then `onClose` runs once and a sync is scheduled, as today.
+- [x] Given a persistent toast, when its page is destroyed, then `toast.dismiss(id)` removes it.
+- [x] `src/lib/shared/ui/toast.ts` and `src/lib/shared/ui/modal.ts` are deleted.
+- [x] `pnpm verify:strict` is green.
 
 ## Technical notes
 
@@ -41,6 +41,26 @@ Build an app-owned API with **no Skeleton types in its signatures**. In phase 1 
 - Keep services free of `svelte/store` and Skeleton imports; only hosts import Skeleton.
 - Unit-test the services (queueing, promise resolution) with Vitest without rendering Skeleton.
 - Unit tests need the Vitest setup from story 06, step 0 (`sveltekit()` plugin, `jsdom` per file). If 08 is done before 06, do that step here.
+
+### As built (2026-10-25)
+
+- **Services** ([src/lib/services/ui/](../../src/lib/services/ui/)): state is a private `$state` field exposed through getters, as in story 06.
+  - `modal` holds a queue of requests. `current` is the head of the queue, and `close(result)` resolves the head and moves on to the next request. `confirm` resolves `result === true`, so Cancel (`false`) and backdrop/Escape (`undefined`) both resolve `false`.
+  - `modal.open(component, props)` infers the result type from the component's `close` prop (`CustomModalProps<TResult>`). Callers write `await modal.open(NextcloudLoginModal, { loginUrl })` without a type argument. The props type is named `CustomModalProps`, because `ModalComponent…` would match the acceptance grep.
+  - **`toast` owns the timeouts** (default 5000 ms, as in v2). `ToastHost` triggers every v2 toast with `autohide: false`. The behaviour is then the same in every phase and can be tested with fake timers.
+  - `toast.dismiss` removes the toast and calls `onClose`; repeated closes are no-ops, so `onClose` runs once. `runAction(id)` runs the action, then dismisses the toast. Toasts triggered before `ToastHost` mounts (e.g. a sync error at startup) are shown once it mounts. Before, `toastHelper` threw if it wasn't initialised yet.
+- **Hosts** ([src/lib/components/ui/](../../src/lib/components/ui/)): each host calls `initializeStores()` for its own subtree.
+  - Each host's effect depends only on the service: it reads the v2 store untracked (`get(store)`). Otherwise v2's own close (backdrop, Escape) races the effect, and the drawer reopened in the e2e tests.
+  - `DrawerHost` reports v2-side closes through a store subscription. It keeps rendering the last opened id while v2 animates the drawer out. It also checks `open`, not only the id, because v2's `close()` keeps the id.
+  - `DrawerHost` takes a `content(id)` snippet; AppLayout renders `AppMenu` for `'app-menu'`.
+  - `ModalHost` sets v2's `buttonNeutral`/`buttonPositive` per request (`dangerous` → `variant-ghost-surface` / `variant-filled-error`, otherwise `variant-ghost-primary` / `variant-filled-primary`). The `.modal-footer` and `.modal.dangerous` rules are removed from `app.scss`.
+  - The other modal, toast and snackbar overrides in `app.scss` stay for story 11. Keeping them out of component `<style>` blocks avoids changing the cascade.
+- **Popover** ([Popover.svelte](../../src/lib/components/ui/Popover.svelte)):
+  - Props: `trigger(triggerProps)` and `content` snippets, `openOn` (`click` | `focus-click`), `placement`, `matchWidth`, `portal`, `trapFocus`, `contentClass` (default `popup-token`), `open` (bindable, read-only in phase 1, since v2's `popup` has no programmatic open) and `onOpenChange`.
+  - The v2 `popup` action reaches the trigger as a Svelte attachment (`fromAction`), which the snippet spreads onto its element. The `data-popup` target comes from `$props.id()`.
+  - `storePopup.set(...)` moved from AppLayout into the Popover's module script.
+  - `src/lib/shared/ui/autocomplete.ts` is deleted; its width middleware is `matchWidth`.
+- `EnableGlobalMessages.svelte` is deleted (it only held `toastHelper.init`).
 
 ## Testing
 
