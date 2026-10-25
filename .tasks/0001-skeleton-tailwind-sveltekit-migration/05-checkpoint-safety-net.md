@@ -2,7 +2,7 @@
 
 **Epic:** [0001 Migrate to Skeleton v5, Tailwind v4 and SvelteKit 3](README.md)
 **Owner:** Human
-**Status:** Todo
+**Status:** In progress
 **Depends on:** 02, 03, 04
 **Size:** S — review a screenshot list and a PR, then merge; no live-system risk beyond a normal release.
 
@@ -18,7 +18,13 @@ Only you can judge whether important states are missing. After this checkpoint, 
 
 #### Prerequisites
 
-- [ ] Stories 01–04 are Done; the draft PR for `migration/0-safety-net` exists (Claude links it in [PROGRESS.md](PROGRESS.md)), CI is green, and the Test workflow is green on the PR's Vercel preview deployment.
+- [ ] Stories 01–04 are Done and pushed to `migration/0-safety-net`; the Test workflow is green on the branch's Vercel preview deployment (see [PROGRESS.md](PROGRESS.md)).
+- [ ] A draft PR from `migration/0-safety-net` to `main` exists. Claude's batch run doesn't open PRs, so open it yourself (or ask Claude to):
+  ```sh
+  gh pr create --draft --base main --head migration/0-safety-net \
+    --title "fix: add test hooks for migration safety net (migration phase 0)"
+  ```
+  The title is the `fix:` variant because `src/` changed (`aria-current`, the rail `<nav>` landmark, `data-testid`s on Rating and Aromas). CI must be green on the PR.
 - [ ] Local checkout with `pnpm install` done, on macOS (screenshots are macOS-specific).
 - [ ] Playwright browsers installed: `pnpm exec playwright install chromium`.
 
@@ -33,7 +39,7 @@ Only you can judge whether important states are missing. After this checkpoint, 
    ```sh
    pnpm verify:strict
    ```
-   **Expected:** exits 0. The output ends with the visual suite passing.
+   **Expected:** exits 0 after ~1 min. The output ends with the visual suite passing (56 screenshots).
 3. **Review the screenshot inventory.** Open `tests/visual/__screenshots__/phone/` and `.../desktop/` in Finder (Quick Look with Space lets you page through quickly).
    **Expected:** every screen and state you care about is there, in light and dark. Masked areas show as solid magenta boxes; none of them hides something you want checked. Note anything missing (e.g. "brew timer running", "sync error state").
 4. **Skim the new tests** in the PR (`tests/specs/appShell.spec.ts`, `tests/specs/a11y.spec.ts`, extended specs). Check that the flows you rely on most are covered.
