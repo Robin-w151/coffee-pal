@@ -2,7 +2,7 @@
 
 **Epic:** [0001 Migrate to Skeleton v5, Tailwind v4 and SvelteKit 3](README.md)
 **Owner:** Claude
-**Status:** Todo
+**Status:** Done
 **Depends on:** 05
 **Size:** M — six small wrappers following one pattern, plus updating their call sites; FileUpload has some event-handling detail.
 
@@ -37,18 +37,27 @@ Rules:
 
 ## Acceptance criteria
 
-- [ ] No file outside `src/lib/components/ui/` imports `SlideToggle`, `RadioGroup`, `RadioItem`, `RangeSlider`, `Ratings`, `InputChip` or `FileDropzone`.
-- [ ] No call site passes Skeleton class names to these wrappers.
-- [ ] Form control e2e tests from story 03 are green, unchanged.
-- [ ] `Aromas.svelte` contains no `querySelector`, `installEventHandler` or chip class names.
-- [ ] Given aromas "caramel" and "lemon", when the coffee detail renders, then each tag has the colours from `getAromaColor` (e2e assertion on the tag's computed `background-color`, part of the story 03 InputChip test).
-- [ ] Given focus in the tags input, when Escape is pressed, then the event doesn't reach `window` (whatever listened before, e.g. the page's back handling, isn't triggered).
-- [ ] `pnpm verify:strict` is green (no visual change).
+- [x] No file outside `src/lib/components/ui/` imports `SlideToggle`, `RadioGroup`, `RadioItem`, `RangeSlider`, `Ratings`, `InputChip` or `FileDropzone`.
+- [x] No call site passes Skeleton class names to these wrappers.
+- [x] Form control e2e tests from story 03 are green, unchanged.
+- [x] `Aromas.svelte` contains no `querySelector`, `installEventHandler` or chip class names.
+- [x] Given aromas "caramel" and "lemon", when the coffee detail renders, then each tag has the colours from `getAromaColor` (e2e assertion on the tag's computed `background-color`, part of the story 03 InputChip test).
+- [x] Given focus in the tags input, when Escape is pressed, then the event doesn't reach `window` (whatever listened before, e.g. the page's back handling, isn't triggered).
+- [x] `pnpm verify:strict` is green (no visual change).
 
 ## Technical notes
 
 - Existing shared form components for style: [src/lib/components/shared/elements/form/](../../src/lib/components/shared/elements/form).
 - Each wrapper has a short header comment naming the v4/v5 component it will map to.
+
+### As built (2026-10-25)
+
+- **`label` only on `Switch`.** It is the only wrapper whose call sites pass an accessible name (v2 `SlideToggle`'s `label`). The segmented controls get theirs from the surrounding `Label`, and the slider, rating and tags input have none today. Adding names would change the a11y tree, so it's left to phase 2 together with the v4 API, following the rule "only the props the call sites need".
+- `SegmentedControl` is generic over the value type (`generics="TValue extends string"`). Its options are `as const` arrays at the call sites.
+- `RatingGroup` reports the clicked star through `onValueChange`. The toggle-off logic stays in `Rating.svelte`.
+- `TagsInput` applies `tagColors` itself: an effect over `value` colours the v2 chips inside its own root, matching each chip by its exact text instead of the old `includes`. A keydown listener on its root stops Escape. `src/lib/shared/ui/events.ts` (`installEventHandler`) had no other users and is deleted.
+- `FileUpload` binds v2's `files` through a function binding and exposes `file` (the first file). Setting `file` to `undefined` clears it, as `Backup.svelte` did before with `files = undefined`. An extra `hint` prop carries the "Allowed type: JSON" line, so the markup stays the same.
+- The story 03 e2e tests already cover the tag colours (computed `background-color`) and Escape not reaching `window`. Both stayed unchanged.
 
 ## Testing
 

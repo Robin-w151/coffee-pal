@@ -4,12 +4,12 @@
   import Form from '$lib/components/shared/elements/form/Form.svelte';
   import Label from '$lib/components/shared/elements/form/Label.svelte';
   import MeasurementInput from '$lib/components/shared/elements/form/MeasurementInput.svelte';
+  import Slider from '$lib/components/ui/Slider.svelte';
   import { WEIGHT_UNITS } from '$lib/config/units';
   import type { Measurement } from '$lib/models/measurement';
   import { sanitize } from '$lib/shared/math';
   import { getPreferredWeightUnit } from '$lib/shared/units';
   import { getSettingsStore } from '$lib/stores/settings.svelte';
-  import { RangeSlider } from '@skeletonlabs/skeleton';
   import { untrack } from 'svelte';
 
   const settingsStore = getSettingsStore();
@@ -62,18 +62,12 @@
     bind:active={iced}
   >
     <Form>
-      <RangeSlider
-        name="ice-ratio"
-        min={0}
-        max={100}
-        accent="range-slider-accent-token"
-        bind:value={iceRatio}
-      >
+      <Slider name="ice-ratio" min={0} max={100} bind:value={iceRatio}>
         <div class="flex justify-between items-center">
           <span>Ice Ratio</span>
           <span>{iceRatio} %</span>
         </div>
-      </RangeSlider>
+      </Slider>
       <div class="grid sm:grid-cols-[1fr_auto_1fr] gap-4 w-full">
         <Label text="Amount of brewing water">
           <MeasurementInput readonly {units} bind:measurement={brewWaterMeasurement} />

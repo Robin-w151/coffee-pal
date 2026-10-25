@@ -1,6 +1,6 @@
 <script lang="ts">
   import { waitAndTick } from '$lib/shared/promise';
-  import { SlideToggle } from '@skeletonlabs/skeleton';
+  import Switch from '$lib/components/ui/Switch.svelte';
   import scrollIntoView from 'scroll-into-view-if-needed';
   import { rollDown } from '../transitions/rollDown';
   import type { Snippet } from 'svelte';
@@ -29,14 +29,7 @@
 </script>
 
 <div class="flex items-center gap-2" bind:this={ref}>
-  <SlideToggle
-    {name}
-    {label}
-    size="sm"
-    active="slide-toggle-active-token"
-    bind:checked={active}
-    on:change={handleToggleChange}
-  />
+  <Switch {name} {label} bind:checked={active} onCheckedChange={handleToggleChange} />
   <h3 class="h3">{title || label}</h3>
 </div>
 {#if active}

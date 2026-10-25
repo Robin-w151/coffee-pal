@@ -194,3 +194,13 @@ Modals, toasts and the drawer now go through `modal`, `toast` and `drawer` in `s
 **Status:** `skeleton-v2-imports-outside-ui` 15 (from 29). `skeleton-apply-in-app-css` 5 (from 9; the modal footer rules are gone). `scss` 3 is unchanged and belongs to story 11.
 
 **Gates:** `pnpm verify:strict` green: 194 unit (13 new service tests), 120 e2e, 72 visual.
+
+## 2026-10-25 — Story 09: Form control wrappers (Done)
+
+New wrappers `Switch`, `SegmentedControl`, `Slider`, `RatingGroup`, `TagsInput` and `FileUpload` in `src/lib/components/ui/` replace the v2 form controls at all nine call sites. `TagsInput` owns the tag colours and the Escape handling. `Aromas.svelte` no longer touches Skeleton's DOM, and `installEventHandler` is deleted.
+
+**Decision:** `label` exists only where a call site passes one (`Switch`), so the a11y tree stays the same.
+
+**Status:** `skeleton-v2-imports-outside-ui` 7, `skeleton-apply-in-app-css` 5.
+
+**Gates:** `pnpm verify:strict` green (194 unit, 120 e2e, 72 visual).
