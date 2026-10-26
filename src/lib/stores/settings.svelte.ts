@@ -7,8 +7,8 @@ import {
   isMeasurementSystem,
 } from '$lib/models/settings';
 import { PersistedState } from 'runed';
-import { getContext, setContext, untrack } from 'svelte';
-import { JSON_SERIALIZER } from './persisted';
+import { getContext, setContext } from 'svelte';
+import { JSON_SERIALIZER, updatePersistedState } from './persisted';
 
 export interface SettingsStoreInterface {
   readonly colorScheme: ColorScheme;
@@ -44,20 +44,12 @@ export class SettingsStore implements SettingsStoreInterface {
   }
 
   setColorScheme = (colorScheme: ColorScheme): void => {
-    this.update((settings) => ({ ...settings, colorScheme }));
+    updatePersistedState(this.state, (settings) => ({ ...settings, colorScheme }));
   };
 
   setPreferredUnits = (preferredUnits: MeasurementSystem): void => {
-    this.update((settings) => ({ ...settings, preferredUnits }));
+    updatePersistedState(this.state, (settings) => ({ ...settings, preferredUnits }));
   };
-
-  // Untracked as a whole: setters are called from effects, and reading the PersistedState proxy
-  // (also when spreading it) would make the effect depend on the value it writes.
-  private update(updater: (settings: Settings) => Settings): void {
-    untrack(() => {
-      this.state.current = updater(this.state.current);
-    });
-  }
 }
 
 const DEFAULT_KEY = Symbol('root_settings_store');

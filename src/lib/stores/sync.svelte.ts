@@ -1,8 +1,8 @@
 import type { Connection, Sync } from '$lib/models/sync';
 import { DateTime } from 'luxon';
 import { PersistedState } from 'runed';
-import { getContext, setContext, untrack } from 'svelte';
-import { JSON_SERIALIZER } from './persisted';
+import { getContext, setContext } from 'svelte';
+import { JSON_SERIALIZER, updatePersistedState } from './persisted';
 
 export interface SyncStoreInterface {
   readonly connection: Connection | undefined;
@@ -25,29 +25,21 @@ export class SyncStore implements SyncStoreInterface {
   }
 
   setConnection = (connection: Connection): void => {
-    this.update((sync) => ({ ...sync, connection }));
+    updatePersistedState(this.state, (sync) => ({ ...sync, connection }));
   };
 
   removeConnection = (): void => {
-    this.update((sync) => ({ ...sync, connection: undefined }));
+    updatePersistedState(this.state, (sync) => ({ ...sync, connection: undefined }));
   };
 
   updateLastSync = (): void => {
-    this.update((sync) => ({
+    updatePersistedState(this.state, (sync) => ({
       ...sync,
       connection: sync.connection
         ? { ...sync.connection, lastSync: DateTime.now().toISO() }
         : undefined,
     }));
   };
-
-  // Untracked as a whole: setters are called from effects, and reading the PersistedState proxy
-  // (also when spreading it) would make the effect depend on the value it writes.
-  private update(updater: (sync: Sync) => Sync): void {
-    untrack(() => {
-      this.state.current = updater(this.state.current);
-    });
-  }
 }
 
 const DEFAULT_KEY = Symbol('root_sync_store');
