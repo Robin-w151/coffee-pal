@@ -33,8 +33,6 @@ export class SettingsStore implements SettingsStoreInterface {
     });
   }
 
-  // Plain getters: PersistedState re-reads storage on every access and tracks it in effects, so a
-  // $derived would only add a cache that callers outside effects could see stale.
   get colorScheme(): ColorScheme {
     return this.state.current.colorScheme;
   }

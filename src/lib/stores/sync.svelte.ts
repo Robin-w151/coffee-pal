@@ -19,7 +19,6 @@ export class SyncStore implements SyncStoreInterface {
     serializer: JSON_SERIALIZER,
   });
 
-  // A plain getter, as in SettingsStore: the scheduled sync reads it from a timer, outside effects.
   get connection(): Connection | undefined {
     return this.state.current.connection;
   }
