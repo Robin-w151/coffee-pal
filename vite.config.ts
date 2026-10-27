@@ -1,4 +1,5 @@
 import { sveltekit } from '@sveltejs/kit/vite';
+import tailwindcss from '@tailwindcss/vite';
 import { SvelteKitPWA } from '@vite-pwa/sveltekit';
 import dotenv from 'dotenv-flow';
 import { execSync } from 'node:child_process';
@@ -14,6 +15,7 @@ export default defineConfig({
     'process.env.NODE_ENV': '"production"',
   },
   plugins: [
+    tailwindcss(),
     sveltekit(),
     SvelteKitPWA({
       strategies: 'injectManifest',
