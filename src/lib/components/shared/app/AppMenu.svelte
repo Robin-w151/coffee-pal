@@ -37,7 +37,7 @@
       {#each routes as route (route.href)}
         <li>
           <a
-            class="!grid grid-cols-[1.25rem_1fr] {routeActiveClass(route)}"
+            class="grid! grid-cols-[1.25rem_1fr] {routeActiveClass(route)}"
             href={resolve(route.href, {})}
             aria-current={isSelected(route, $page.url.pathname) ? 'page' : undefined}
             onclick={handleClick}

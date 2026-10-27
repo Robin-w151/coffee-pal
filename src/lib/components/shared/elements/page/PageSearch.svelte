@@ -42,7 +42,7 @@
   const isChangeSortOrderButtonDisabled = $derived(!!search);
   const headerSearchActiveClass = $derived(
     isSearchActive
-      ? 'card flex-col !items-start px-4 py-4 h-auto transition ease-out duration-250'
+      ? 'card flex-col items-start! px-4 py-4 h-auto transition ease-out duration-250'
       : '',
   );
   const changeSortOrderButtonTitle = $derived(

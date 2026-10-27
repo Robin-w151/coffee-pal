@@ -11,7 +11,7 @@
   let { lead: leadContent, title }: Props = $props();
 </script>
 
-<AppBar padding="px-4 md:px-2 py-1 md:py-2" shadow="shadow-xl" regionRowMain="max-md:!gap-2">
+<AppBar padding="px-4 md:px-2 py-1 md:py-2" shadow="shadow-xl" regionRowMain="max-md:gap-2!">
   {#snippet lead()}
     {@render leadContent?.()}
   {/snippet}

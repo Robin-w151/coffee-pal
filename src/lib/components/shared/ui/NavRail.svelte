@@ -34,7 +34,7 @@
       {#snippet lead()}
         <Icon data={route.icon} scale={1.5} />
       {/snippet}
-      <span class="break-words">{route.label}</span>
+      <span class="wrap-break-word">{route.label}</span>
     </AppRailAnchor>
   {/each}
 </AppRail>

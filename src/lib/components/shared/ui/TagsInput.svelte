@@ -60,7 +60,7 @@
     {name}
     {placeholder}
     padding="px-3 py-2"
-    regionInput="focus:!outline-none"
+    regionInput="focus:outline-hidden!"
     bind:value={
       () => value ?? [],
       // v2 mutates the array in place and assigns it back; a copy makes the change visible

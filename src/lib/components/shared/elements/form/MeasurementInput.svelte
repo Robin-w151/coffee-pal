@@ -76,7 +76,7 @@
 </script>
 
 <div
-  class="input-group input-group-divider grid-cols-[1fr_auto] [&_input]:!min-w-[10rem] [&_select]:!min-w-[6rem] [&_.input-group-shim]:!min-w-[6rem] {clazz ??
+  class="input-group input-group-divider grid-cols-[1fr_auto] [&_input]:min-w-40! [&_select]:min-w-24! [&_.input-group-shim]:min-w-24! {clazz ??
     ''}"
 >
   <input
