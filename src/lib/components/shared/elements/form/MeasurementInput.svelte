@@ -75,9 +75,11 @@
   }
 </script>
 
-<div class="input-group input-group-divider grid-cols-[1fr_auto] {clazz ?? ''}">
+<div
+  class="input-group input-group-divider grid-cols-[1fr_auto] [&_input]:!min-w-[10rem] [&_select]:!min-w-[6rem] [&_.input-group-shim]:!min-w-[6rem] {clazz ??
+    ''}"
+>
   <input
-    class="!min-w-[10rem]"
     type="number"
     step="0.1"
     {placeholder}
@@ -90,10 +92,7 @@
     {onkeydown}
     {onkeyup}
   />
-  <select
-    class="!min-w-[6rem] focus:bg-surface-300 dark:focus:bg-surface-500"
-    bind:value={measurement.unit}
-  >
+  <select class="focus:bg-surface-300 dark:focus:bg-surface-500" bind:value={measurement.unit}>
     {#each units as unit (unit.label)}
       <option value={unit}>{unit.label}</option>
     {/each}

@@ -77,14 +77,15 @@
       <MeasurementInput {units} bind:measurement={waterMeasurement} />
     </Label>
     <Label text="Target drip rate">
-      <div class="input-group input-group-divider grid-cols-[1fr_auto]">
+      <div
+        class="input-group input-group-divider grid-cols-[1fr_auto] [&_input]:!min-w-[10rem] [&_select]:!min-w-[6rem] [&_.input-group-shim]:!min-w-[6rem]"
+      >
         <input
-          class="!min-w-[10rem]"
           type="number"
           placeholder="Target drip rate, e.g. 60dpm"
           bind:value={targetDropsPerMinute}
         />
-        <div class="input-group-shim !min-w-[6rem]">dpm</div>
+        <div class="input-group-shim">dpm</div>
       </div>
     </Label>
   </Form>

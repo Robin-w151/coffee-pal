@@ -161,3 +161,14 @@ test('iced ratio slider responds to the keyboard', async ({ calculatorPage }) =>
   await calculatorPage.iceRatioRange.press('ArrowLeft');
   await expect(calculatorPage.iceRatioValue).toHaveText('39 %');
 });
+
+// Too small for the visual threshold: the unit selects keep a minimum width, so they line up.
+test('unit selects have the same minimum width', async ({ page, calculatorPage }) => {
+  await expect(calculatorPage.waterAmountInput).toBeVisible();
+  const widths = await page
+    .locator('#page select')
+    .evaluateAll((selects) => selects.map((select) => select.getBoundingClientRect().width));
+
+  expect(widths.length).toBeGreaterThanOrEqual(3);
+  expect(new Set(widths)).toEqual(new Set([96]));
+});
