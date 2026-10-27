@@ -1,6 +1,6 @@
 <script lang="ts">
   import { page } from '$app/stores';
-  import NavRail from '$lib/components/ui/NavRail.svelte';
+  import NavRail from '$lib/components/shared/ui/NavRail.svelte';
   import { routes } from '$lib/config/routes';
 </script>
 

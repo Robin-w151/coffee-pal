@@ -2,7 +2,7 @@
   import { resolve } from '$app/paths';
   import { mainRoute } from '$lib/config/routes';
   import { faBars, faMugHot } from '@fortawesome/free-solid-svg-icons';
-  import UiAppBar from '$lib/components/ui/AppBar.svelte';
+  import UiAppBar from '$lib/components/shared/ui/AppBar.svelte';
   import { drawer } from '$lib/services/ui/drawer.svelte';
   import { Icon } from 'svelte-awesome';
 

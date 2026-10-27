@@ -4,7 +4,7 @@
   import Form from '$lib/components/shared/elements/form/Form.svelte';
   import Label from '$lib/components/shared/elements/form/Label.svelte';
   import MeasurementInput from '$lib/components/shared/elements/form/MeasurementInput.svelte';
-  import Slider from '$lib/components/ui/Slider.svelte';
+  import Slider from '$lib/components/shared/ui/Slider.svelte';
   import { WEIGHT_UNITS } from '$lib/config/units';
   import type { Measurement } from '$lib/models/measurement';
   import { sanitize } from '$lib/shared/math';

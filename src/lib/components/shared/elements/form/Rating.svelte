@@ -1,5 +1,5 @@
 <script lang="ts">
-  import RatingGroup from '$lib/components/ui/RatingGroup.svelte';
+  import RatingGroup from '$lib/components/shared/ui/RatingGroup.svelte';
 
   interface Props {
     rating?: number;

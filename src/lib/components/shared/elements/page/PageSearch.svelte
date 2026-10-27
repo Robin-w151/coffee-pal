@@ -13,7 +13,7 @@
   import { scaleX } from '../../transitions/scaleX';
   import Spinner from '../Spinner.svelte';
   import InputWithButton from '../form/InputWithButton.svelte';
-  import Popover from '$lib/components/ui/Popover.svelte';
+  import Popover from '$lib/components/shared/ui/Popover.svelte';
 
   type PageSearchSort = 'asc' | 'desc';
 

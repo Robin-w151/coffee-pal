@@ -3,7 +3,7 @@
   import { getSettingsStore } from '$lib/stores/settings.svelte';
   import Label from '../../shared/elements/form/Label.svelte';
   import Card from '$lib/components/shared/elements/Card.svelte';
-  import SegmentedControl from '$lib/components/ui/SegmentedControl.svelte';
+  import SegmentedControl from '$lib/components/shared/ui/SegmentedControl.svelte';
 
   const settingsStore = getSettingsStore();
   const unitOptions = [

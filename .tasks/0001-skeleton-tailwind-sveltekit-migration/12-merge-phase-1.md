@@ -24,7 +24,7 @@ Merging to `main` releases and deploys, so only you do it. The real-data check (
 
 #### Steps
 
-1. **Review the PR.** Focus on `src/lib/services/ui/*`, `src/lib/components/ui/*`, `src/lib/stores/settings.svelte.ts`, `src/lib/stores/sync.svelte.ts`.
+1. **Review the PR.** Focus on `src/lib/services/ui/*`, `src/lib/components/shared/ui/*`, `src/lib/stores/settings.svelte.ts`, `src/lib/stores/sync.svelte.ts`.
    **Expected:** no call site outside `ui/` imports `@skeletonlabs/skeleton`.
 2. **Open the PR's Vercel preview** (link in the PR's checks / deployments) and click through journal, my coffees, calculator, drip counter, settings. Open the menu, delete-confirm dialog (cancel it) and a popup.
    **Expected:** looks and behaves exactly like production.

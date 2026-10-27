@@ -48,7 +48,7 @@ Coffee Pal runs on Skeleton v2 (`@skeletonlabs/skeleton` 2.11 + `@skeletonlabs/t
 
 Key design decisions:
 
-- **An anti-corruption layer.** After phase 1, only `src/lib/components/ui/` (wrapper components named after the v4/v5 components: `Switch`, `SegmentedControl`, `Slider`, `RatingGroup`, `TagsInput`, `FileUpload`, `Combobox`, `Listbox`, `Pagination`, `Popover`, `NavRail`, `AppBar`, plus `ModalHost`/`ToastHost`/`DrawerHost`) and `src/lib/services/ui/` (`modal`, `toast`, `drawer` services with a promise/function API) know about Skeleton. Phases 2 and 3 then rewrite the _inside_ of those files, not 31 call sites.
+- **An anti-corruption layer.** After phase 1, only `src/lib/components/shared/ui/` (wrapper components named after the v4/v5 components: `Switch`, `SegmentedControl`, `Slider`, `RatingGroup`, `TagsInput`, `FileUpload`, `Combobox`, `Listbox`, `Pagination`, `Popover`, `NavRail`, `AppBar`, plus `ModalHost`/`ToastHost`/`DrawerHost`) and `src/lib/services/ui/` (`modal`, `toast`, `drawer` services with a promise/function API) know about Skeleton. Phases 2 and 3 then rewrite the _inside_ of those files, not 31 call sites.
 - **Wrappers are thin and app-shaped.** Props describe what the app needs (`bind:value`, `label`, `options`, …), not the v2 API. This avoids carrying the v2 API forward.
 - **Persisted state via [runed `PersistedState`](https://runed.dev/docs/utilities/persisted-state)** replaces `localStorageStore` (decision 2026-10-23), with the same localStorage keys and format so existing users keep their data.
 - **The coffee theme is converted by hand** (no Theme Generator), decision 2026-10-23.

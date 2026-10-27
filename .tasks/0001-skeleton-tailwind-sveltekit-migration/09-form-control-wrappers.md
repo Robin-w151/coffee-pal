@@ -12,7 +12,7 @@ As Claude, I want the simple form controls behind app-owned wrapper components n
 
 ## Description
 
-Create in `src/lib/components/ui/`:
+Create in `src/lib/components/shared/ui/`:
 
 | Wrapper                   | Wraps (v2)               | v4/v5 target       | App-shaped props                                                                                                                                                                                                                                                                     |
 | ------------------------- | ------------------------ | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -37,7 +37,7 @@ Rules:
 
 ## Acceptance criteria
 
-- [x] No file outside `src/lib/components/ui/` imports `SlideToggle`, `RadioGroup`, `RadioItem`, `RangeSlider`, `Ratings`, `InputChip` or `FileDropzone`.
+- [x] No file outside `src/lib/components/shared/ui/` imports `SlideToggle`, `RadioGroup`, `RadioItem`, `RangeSlider`, `Ratings`, `InputChip` or `FileDropzone`.
 - [x] No call site passes Skeleton class names to these wrappers.
 - [x] Form control e2e tests from story 03 are green, unchanged.
 - [x] `Aromas.svelte` contains no `querySelector`, `installEventHandler` or chip class names.

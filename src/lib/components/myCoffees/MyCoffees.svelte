@@ -29,8 +29,8 @@
     faStar,
     type IconDefinition,
   } from '@fortawesome/free-solid-svg-icons';
-  import Listbox from '$lib/components/ui/Listbox.svelte';
-  import Pagination from '$lib/components/ui/Pagination.svelte';
+  import Listbox from '$lib/components/shared/ui/Listbox.svelte';
+  import Pagination from '$lib/components/shared/ui/Pagination.svelte';
   import PageActions from '../shared/elements/page/PageActions.svelte';
   import PageCard from '../shared/elements/page/PageCard.svelte';
   import PageSearch from '../shared/elements/page/PageSearch.svelte';

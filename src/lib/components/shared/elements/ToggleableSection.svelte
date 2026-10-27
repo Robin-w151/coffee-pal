@@ -1,6 +1,6 @@
 <script lang="ts">
   import { waitAndTick } from '$lib/shared/promise';
-  import Switch from '$lib/components/ui/Switch.svelte';
+  import Switch from '$lib/components/shared/ui/Switch.svelte';
   import scrollIntoView from 'scroll-into-view-if-needed';
   import { rollDown } from '../transitions/rollDown';
   import type { Snippet } from 'svelte';

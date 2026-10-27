@@ -3,7 +3,7 @@
   import Form from '$lib/components/shared/elements/form/Form.svelte';
   import Label from '$lib/components/shared/elements/form/Label.svelte';
   import MeasurementInput from '$lib/components/shared/elements/form/MeasurementInput.svelte';
-  import Switch from '$lib/components/ui/Switch.svelte';
+  import Switch from '$lib/components/shared/ui/Switch.svelte';
   import { WEIGHT_UNITS, WEIGHT_UNITS_COFFEE } from '$lib/config/units';
   import type { Measurement } from '$lib/models/measurement';
   import type { Recipe } from '$lib/models/recipe';

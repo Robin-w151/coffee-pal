@@ -5,9 +5,9 @@
   import AppMenu from '$lib/components/shared/app/AppMenu.svelte';
   import AppRail from '$lib/components/shared/app/AppRail.svelte';
   import EnableColorSchemes from '$lib/components/shared/app/EnableColorSchemes.svelte';
-  import DrawerHost from '$lib/components/ui/DrawerHost.svelte';
-  import ModalHost from '$lib/components/ui/ModalHost.svelte';
-  import ToastHost from '$lib/components/ui/ToastHost.svelte';
+  import DrawerHost from '$lib/components/shared/ui/DrawerHost.svelte';
+  import ModalHost from '$lib/components/shared/ui/ModalHost.svelte';
+  import ToastHost from '$lib/components/shared/ui/ToastHost.svelte';
   import { initScheduledSync, scheduleSync } from '$lib/services/sync/sync';
   import { rememberScrollPosition, scrollToLastKnownPosition } from '$lib/shared/ui/scroll';
   import '$lib/stores/app.svelte';

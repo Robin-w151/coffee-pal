@@ -12,7 +12,7 @@
   import Spinner from '../../shared/elements/Spinner.svelte';
   import Form from '../../shared/elements/form/Form.svelte';
   import Card from '$lib/components/shared/elements/Card.svelte';
-  import FileUpload from '$lib/components/ui/FileUpload.svelte';
+  import FileUpload from '$lib/components/shared/ui/FileUpload.svelte';
 
   let file: File | undefined = $state();
   let isImporting = $state(false);
