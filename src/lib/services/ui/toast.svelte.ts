@@ -2,8 +2,8 @@
 // (e.g. sync errors in services/sync/sync.ts) and after `await`s in callbacks, where getContext
 // isn't available.
 
-// Kept as its own type: Skeleton v4's toaster uses string ids, so phase 2 changes only this line.
-export type ToastId = number; // NOSONAR(typescript:S6564)
+import { v4 as uuid } from 'uuid';
+
 export type ToastKind = 'info' | 'error';
 
 export interface ToastOptions {
@@ -16,7 +16,7 @@ export interface ToastOptions {
 }
 
 export interface ToastMessage {
-  id: ToastId;
+  id: string;
   kind: ToastKind;
   message: string;
   action?: ToastOptions['action'];
@@ -25,11 +25,11 @@ export interface ToastMessage {
 export interface ToastServiceInterface {
   /** Open toasts, oldest first. */
   readonly toasts: ReadonlyArray<ToastMessage>;
-  info: (message: string, options?: ToastOptions) => ToastId;
-  error: (message: string, options?: ToastOptions) => ToastId;
-  dismiss: (id: ToastId) => void;
+  info: (message: string, options?: ToastOptions) => string;
+  error: (message: string, options?: ToastOptions) => string;
+  dismiss: (id: string) => void;
   /** Runs the toast's action, then closes it. */
-  runAction: (id: ToastId) => Promise<void>;
+  runAction: (id: string) => Promise<void>;
 }
 
 const DEFAULT_TIMEOUT = 5_000;
@@ -42,21 +42,20 @@ interface OpenToast {
 
 export class ToastService implements ToastServiceInterface {
   private open = $state<Array<OpenToast>>([]);
-  private nextId = 1;
 
   get toasts(): ReadonlyArray<ToastMessage> {
     return this.open.map(({ message }) => message);
   }
 
-  info = (message: string, options?: ToastOptions): ToastId => {
+  info = (message: string, options?: ToastOptions): string => {
     return this.add('info', message, options);
   };
 
-  error = (message: string, options?: ToastOptions): ToastId => {
+  error = (message: string, options?: ToastOptions): string => {
     return this.add('error', message, options);
   };
 
-  dismiss = (id: ToastId): void => {
+  dismiss = (id: string): void => {
     const toast = this.open.find(({ message }) => message.id === id);
     if (!toast) {
       return;
@@ -67,7 +66,7 @@ export class ToastService implements ToastServiceInterface {
     toast.onClose?.();
   };
 
-  runAction = async (id: ToastId): Promise<void> => {
+  runAction = async (id: string): Promise<void> => {
     const toast = this.open.find(({ message }) => message.id === id);
     if (!toast) {
       return;
@@ -80,9 +79,9 @@ export class ToastService implements ToastServiceInterface {
     }
   };
 
-  private add(kind: ToastKind, message: string, options: ToastOptions = {}): ToastId {
+  private add(kind: ToastKind, message: string, options: ToastOptions = {}): string {
     const { timeout = DEFAULT_TIMEOUT, persistent = false, action, onClose } = options;
-    const id = this.nextId++;
+    const id = uuid();
     const timeoutId = persistent ? undefined : setTimeout(() => this.dismiss(id), timeout);
 
     this.open = [...this.open, { message: { id, kind, message, action }, onClose, timeoutId }];

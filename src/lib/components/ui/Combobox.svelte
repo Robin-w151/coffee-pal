@@ -24,7 +24,7 @@
   import Popover from './Popover.svelte';
 
   interface Props {
-    inputValue?: string;
+    value?: string;
     options: Array<ComboboxOption<T>>;
     /** `none` shows the options as given, for callers that filter themselves. */
     filter?: 'contains' | 'none';
@@ -39,7 +39,7 @@
   }
 
   let {
-    inputValue = $bindable(),
+    value = $bindable(),
     options,
     filter = 'contains',
     placeholder,
@@ -79,7 +79,7 @@
     {#if filter === 'contains'}
       <Autocomplete
         {options}
-        input={inputValue}
+        input={value}
         transitions={false}
         regionButton="w-full text-start"
         on:selection={handleSelection}
@@ -102,9 +102,9 @@
         type="text"
         {placeholder}
         bind:this={inputElement}
-        bind:value={inputValue}
+        bind:value
         {...triggerProps}
-        oninput={() => onInputChange?.(inputValue ?? '')}
+        oninput={() => onInputChange?.(value ?? '')}
         onblur={onBlur}
         onkeydown={handleKeydown}
       />

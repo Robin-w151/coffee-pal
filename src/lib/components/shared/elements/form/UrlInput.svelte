@@ -18,8 +18,8 @@
 
   let [scheme, host] = $state(untrack(() => getSchemeAndHost(url)));
   let inputTouched = $state(false);
-  let hostValid = $derived(isHostValid(host));
-  let schemeIcon = $derived(scheme === 'https:' ? faLock : faLockOpen);
+  const hostValid = $derived(isHostValid(host));
+  const schemeIcon = $derived(scheme === 'https:' ? faLock : faLockOpen);
 
   $effect(() => {
     handleChange(scheme, host);

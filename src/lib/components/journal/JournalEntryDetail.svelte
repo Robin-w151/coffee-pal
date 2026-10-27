@@ -5,7 +5,7 @@
   import { pauseScheduledSync, resumeScheduledSync, scheduleSync } from '$lib/services/sync/sync';
   import { isEqualJournalEntry } from '$lib/shared/compare';
   import { modal } from '$lib/services/ui/modal.svelte';
-  import { toast, type ToastId } from '$lib/services/ui/toast.svelte';
+  import { toast } from '$lib/services/ui/toast.svelte';
   import { journalStore } from '$lib/stores/journal';
   import { syncStateEvents } from '$lib/stores/syncState.svelte';
   import { faCalculator, faFaceSadCry } from '@fortawesome/free-solid-svg-icons';
@@ -56,16 +56,16 @@
   let isLoading = $state(true);
   let hasChanged = $derived(!isEqualJournalEntry(entry, originalEntry));
   let shouldGoBack = false;
-  let updateInfoToast: ToastId | undefined;
+  let updateInfoToast: string | undefined;
 
   let methodInputValid = $state(true);
   let waterInputValid = $state(true);
   let coffeeInputValid = $state(true);
   let waterTemperatureValid = $state(true);
-  let formValid = $derived(methodInputValid && waterInputValid && coffeeInputValid);
+  const formValid = $derived(methodInputValid && waterInputValid && coffeeInputValid);
 
   let pageHeader = $state<PageHeader | undefined>(undefined);
-  let entryTitle = $derived(getTitle(unknown, entry));
+  const entryTitle = $derived(getTitle(unknown, entry));
 
   onMount(async () => {
     pauseScheduledSync();

@@ -11,7 +11,7 @@
   const errorMessage = 'name is required';
 
   let inputTouched = $state(false);
-  let showError = $derived(inputTouched && !valid);
+  const showError = $derived(inputTouched && !valid);
 
   $effect(() => {
     checkValidity(name);

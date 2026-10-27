@@ -22,8 +22,8 @@
   const preferredWeightUnit = getPreferredWeightUnit(settingsStore.preferredUnits);
   const preferredTemperatureUnit = getPreferredTemperatureUnit(settingsStore.preferredUnits);
 
-  let ratio = $derived(calculateRatio(entry.coffee, entry.water));
-  let coffeeType = $derived(getCoffeeLabel(entry.coffeeType));
+  const ratio = $derived(calculateRatio(entry.coffee, entry.water));
+  const coffeeType = $derived(getCoffeeLabel(entry.coffeeType));
 
   function handleEntryClick(): void {
     gotoDetail();

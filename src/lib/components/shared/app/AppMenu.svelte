@@ -7,7 +7,7 @@
   import { faClose } from '@fortawesome/free-solid-svg-icons';
   import { Icon } from 'svelte-awesome';
 
-  let routeActiveClass = $derived((route: Route) =>
+  const routeActiveClass = $derived((route: Route) =>
     isSelected(route, $page.url.pathname) ? 'bg-primary-active-token' : '',
   );
 

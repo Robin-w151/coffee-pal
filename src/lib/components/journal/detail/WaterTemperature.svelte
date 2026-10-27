@@ -29,8 +29,8 @@
     unit: preferredUnit,
   });
   let inputTouched = $state(false);
-  let showError = $derived(inputTouched && !valid);
-  let errorMessage = $derived(errorMessages[waterTemperatureMeasurement.unit.system]);
+  const showError = $derived(inputTouched && !valid);
+  const errorMessage = $derived(errorMessages[waterTemperatureMeasurement.unit.system]);
 
   $effect(() => {
     handleWaterTemperatureChange(waterTemperature);

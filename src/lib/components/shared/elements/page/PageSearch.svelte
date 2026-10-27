@@ -39,13 +39,13 @@
 
   let searchInputRef: HTMLInputElement | undefined = $state();
   let isSearchActive = $state(untrack(() => !!search));
-  let isChangeSortOrderButtonDisabled = $derived(!!search);
-  let headerSearchActiveClass = $derived(
+  const isChangeSortOrderButtonDisabled = $derived(!!search);
+  const headerSearchActiveClass = $derived(
     isSearchActive
       ? 'card flex-col !items-start px-4 py-4 h-auto transition ease-out duration-250'
       : '',
   );
-  let changeSortOrderButtonTitle = $derived(
+  const changeSortOrderButtonTitle = $derived(
     isChangeSortOrderButtonDisabled
       ? 'Sort order is determined by search input'
       : 'Change sort order',

@@ -12,7 +12,7 @@
 
   let { page, pageSize, total, onPageChange }: Props = $props();
 
-  let settings = $derived({ page, limit: pageSize, size: total, amounts: [] });
+  const settings = $derived({ page, limit: pageSize, size: total, amounts: [] });
 </script>
 
 <Paginator

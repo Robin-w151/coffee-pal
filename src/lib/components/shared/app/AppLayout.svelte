@@ -34,7 +34,7 @@
   setSyncAvailabilityStore(syncStore);
   initScheduledSync(syncStore);
 
-  let webManifestLink = $derived(pwaInfo ? pwaInfo.webManifest.linkTag : '');
+  const webManifestLink = $derived(pwaInfo ? pwaInfo.webManifest.linkTag : '');
 
   onMount(() => {
     document.documentElement.setAttribute('data-test', 'ready');

@@ -56,11 +56,12 @@ Build an app-owned API with **no Skeleton types in its signatures**. In phase 1 
   - `ModalHost` sets v2's `buttonNeutral`/`buttonPositive` per request (`dangerous` → `variant-ghost-surface` / `variant-filled-error`, otherwise `variant-ghost-primary` / `variant-filled-primary`). The `.modal-footer` and `.modal.dangerous` rules are removed from `app.scss`.
   - The other modal, toast and snackbar overrides in `app.scss` stay for story 11. Keeping them out of component `<style>` blocks avoids changing the cascade.
 - **Popover** ([Popover.svelte](../../src/lib/components/ui/Popover.svelte)):
-  - Props: `trigger(triggerProps)` and `content` snippets, `openOn` (`click` | `focus-click`), `placement`, `matchWidth`, `portal`, `trapFocus`, `contentClass` (default `popup-token`), `open` (bindable, read-only in phase 1, since v2's `popup` has no programmatic open) and `onOpenChange`.
+  - Props: `trigger(triggerProps)` and `content` snippets, `openOn` (`click` | `focus-click`), `placement`, `matchWidth`, `portal`, `trapFocus`, `contentClass` and `onOpenChange`. The planned bindable `open` was dropped in review of PR #188: no caller binds it, and v2's `popup` can't be opened programmatically anyway.
   - The v2 `popup` action reaches the trigger as a Svelte attachment (`fromAction`), which the snippet spreads onto its element. The `data-popup` target comes from `$props.id()`.
   - `storePopup.set(...)` moved from AppLayout into the Popover's module script.
   - `src/lib/shared/ui/autocomplete.ts` is deleted; its width middleware is `matchWidth`.
 - `EnableGlobalMessages.svelte` is deleted (it only held `toastHelper.init`).
+- Modal and toast ids are UUIDs (`uuid` v4, as for entries), changed in review of PR #188. The toast id is a plain `string`, with no `ToastId` alias.
 
 ## Testing
 

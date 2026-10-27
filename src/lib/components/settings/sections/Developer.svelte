@@ -18,7 +18,7 @@
 
   let developerSettingsActive = $state(false);
   let estimatedStorageUsage: number | undefined = $state(0);
-  let estimatedStorageUsageString = $derived(
+  const estimatedStorageUsageString = $derived(
     estimatedStorageUsage ? humanReadableMemorySize(estimatedStorageUsage) : 'Unknown',
   );
   let estimatedStorageUsageInterval: unknown;

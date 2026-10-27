@@ -1,6 +1,7 @@
 // A module-level singleton instead of context accessors: modals are opened after `await`s in
 // callbacks and from services, where getContext isn't available.
 import type { Component } from 'svelte';
+import { v4 as uuid } from 'uuid';
 
 export interface ConfirmOptions {
   title: string;
@@ -19,9 +20,9 @@ export interface CustomModalProps<TResult> {
 export type ModalResult<TProps> = TProps extends CustomModalProps<infer TResult> ? TResult : never;
 
 export type ModalRequest =
-  | { id: number; kind: 'confirm'; options: ConfirmOptions }
+  | { id: string; kind: 'confirm'; options: ConfirmOptions }
   | {
-      id: number;
+      id: string;
       kind: 'component';
       component: Component<any>;
       props: Record<string, unknown>;
@@ -47,7 +48,6 @@ interface QueuedModal {
 
 export class ModalService implements ModalServiceInterface {
   private queue = $state<Array<QueuedModal>>([]);
-  private nextId = 1;
 
   get current(): ModalRequest | undefined {
     return this.queue[0]?.request;
@@ -55,9 +55,7 @@ export class ModalService implements ModalServiceInterface {
 
   confirm = (options: ConfirmOptions): Promise<boolean> => {
     return new Promise((resolve) => {
-      this.enqueue({ id: this.nextId++, kind: 'confirm', options }, (result) =>
-        resolve(result === true),
-      );
+      this.enqueue({ id: uuid(), kind: 'confirm', options }, (result) => resolve(result === true));
     });
   };
 
@@ -67,7 +65,7 @@ export class ModalService implements ModalServiceInterface {
   ): Promise<ModalResult<TProps> | undefined> => {
     return new Promise((resolve) => {
       this.enqueue(
-        { id: this.nextId++, kind: 'component', component: component as Component<any>, props },
+        { id: uuid(), kind: 'component', component: component as Component<any>, props },
         (result) => resolve(result as ModalResult<TProps> | undefined),
       );
     });

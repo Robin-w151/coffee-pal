@@ -13,9 +13,9 @@
   // Each host sets up the v2 stores for its own subtree.
   initializeStores();
   const modalStore = getModalStore();
-  let shownId: number | undefined;
+  let shownId: string | undefined;
 
-  let dangerous = $derived(
+  const dangerous = $derived(
     modal.current?.kind === 'confirm' && modal.current.options.dangerous === true,
   );
 

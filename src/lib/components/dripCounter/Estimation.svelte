@@ -26,8 +26,8 @@
     unit: preferredUnit,
   });
   let targetDropsPerMinute = $state(60);
-  let targetTime = $derived(calculateTime(waterMeasurement.value, targetDropsPerMinute));
-  let estimatedTime = $derived(calculateTime(waterMeasurement.value, dropsPerMinute));
+  const targetTime = $derived(calculateTime(waterMeasurement.value, targetDropsPerMinute));
+  const estimatedTime = $derived(calculateTime(waterMeasurement.value, dropsPerMinute));
 
   $effect(() => {
     isWithinRange = Math.abs(dropsPerMinute - targetDropsPerMinute) < targetDropsPerMinute * 0.1;

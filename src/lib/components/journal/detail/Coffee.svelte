@@ -30,7 +30,7 @@
   });
   let errorMessage: string | undefined = $state();
   let inputTouched = $state(false);
-  let showError = $derived(inputTouched && !valid);
+  const showError = $derived(inputTouched && !valid);
 
   $effect(() => {
     handleCoffeeChange(coffee);

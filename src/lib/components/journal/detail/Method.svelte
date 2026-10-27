@@ -14,7 +14,7 @@
 
   let inputTouched = $state(false);
   let autocompleteTouched = $state(false);
-  let showError = $derived(inputTouched && autocompleteTouched && !valid);
+  const showError = $derived(inputTouched && autocompleteTouched && !valid);
 
   $effect(() => {
     checkValidity(method);
@@ -44,7 +44,7 @@
     options={methodOptions}
     placeholder="Brew method, e.g. V60"
     invalid={showError}
-    bind:inputValue={method}
+    bind:value={method}
     onSelect={handleMethodSelect}
     onBlur={handleInputBlur}
     onOpenChange={handleAutocompleteOpenChange}

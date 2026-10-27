@@ -24,7 +24,7 @@ import { toast } from '$lib/services/ui/toast.svelte';
 const SYNC = Symbol('sync');
 const isOnline = onlineStore();
 
-let scheduledSyncStore: SyncStoreInterface | undefined;
+let registeredSyncStore: SyncStoreInterface | undefined;
 
 export async function sync(syncStore: SyncStoreInterface): Promise<void> {
   const connection = syncStore.connection;
@@ -81,15 +81,15 @@ export const {
   pauseScheduledTask: pauseScheduledSync,
   resumeScheduledTask: resumeScheduledSync,
 } = setupScheduledTask(SYNC, () => {
-  if (scheduledSyncStore) {
+  if (registeredSyncStore) {
     // Fire and forget, like every scheduled task; sync() reports its own failures as toasts.
-    void sync(scheduledSyncStore);
+    void sync(registeredSyncStore);
   }
 });
 
 /** Registers the store the scheduled sync uses; it runs from timers, outside any component. */
 export function initScheduledSync(syncStore: SyncStoreInterface): void {
-  scheduledSyncStore = syncStore;
+  registeredSyncStore = syncStore;
 }
 
 async function syncJournal(

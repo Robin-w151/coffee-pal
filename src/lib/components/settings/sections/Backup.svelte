@@ -16,7 +16,7 @@
 
   let file: File | undefined = $state();
   let isImporting = $state(false);
-  let fileSelected = $derived(!!file);
+  const fileSelected = $derived(!!file);
 
   async function handleExportClick(): Promise<void> {
     const journalEntries = await journalStore.loadAll();

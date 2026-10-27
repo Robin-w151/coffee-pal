@@ -40,8 +40,6 @@
     portal?: boolean;
     trapFocus?: boolean;
     contentClass?: string;
-    /** Whether the content is shown; closes on outside click and Escape. Read-only in phase 1. */
-    open?: boolean;
     onOpenChange?: (open: boolean) => void;
   }
 
@@ -54,15 +52,13 @@
     portal = false,
     trapFocus = false,
     contentClass = 'card p-4 bg-surface-200-700-token shadow-xl z-10',
-    // eslint-disable-next-line no-useless-assignment -- bindable prop, read by the parent
-    open = $bindable(false),
     onOpenChange,
   }: Props = $props();
 
   const id = $props.id();
   const target = `popover-${id}`;
 
-  let settings: PopupSettings = $derived({
+  const settings: PopupSettings = $derived({
     event: openOn,
     target,
     placement,
@@ -76,7 +72,6 @@
         }
       : undefined,
     state: ({ state }) => {
-      open = state;
       onOpenChange?.(state);
     },
   });

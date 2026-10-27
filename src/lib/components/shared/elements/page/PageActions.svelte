@@ -20,7 +20,7 @@
     onSynchronize,
   }: Props = $props();
 
-  let lastSyncText = $derived.by(() => {
+  const lastSyncText = $derived.by(() => {
     if (!lastSync) {
       return;
     }

@@ -38,7 +38,7 @@ Create in `src/lib/components/ui/`:
 
 - `src/lib/shared/ui/autocomplete.ts` was already deleted in story 08; its settings became `Popover`'s `openOn="focus-click"` + `matchWidth`, which `Combobox` uses.
 - **Combobox** props:
-  - `inputValue` (bindable), `options`, `filter` (`contains` | `none`), `placeholder`, `onSelect`, `onInputChange`.
+  - `value` (bindable input text; named `inputValue` in the plan, renamed in review of PR #188), `options`, `filter` (`contains` | `none`), `placeholder`, `onSelect`, `onInputChange`.
   - Extra props that the call sites need:
     - `invalid` (Method's `input-error`)
     - `onBlur` and `onOpenChange` (Method's "touched" logic)

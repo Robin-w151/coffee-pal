@@ -4,7 +4,7 @@
   import { pauseScheduledSync, resumeScheduledSync, scheduleSync } from '$lib/services/sync/sync';
   import { isEqualCoffeeEntry } from '$lib/shared/compare';
   import { modal } from '$lib/services/ui/modal.svelte';
-  import { toast, type ToastId } from '$lib/services/ui/toast.svelte';
+  import { toast } from '$lib/services/ui/toast.svelte';
   import { myCoffeesStore } from '$lib/stores/myCoffees';
   import { syncStateEvents } from '$lib/stores/syncState.svelte';
   import { faFaceSadCry } from '@fortawesome/free-solid-svg-icons';
@@ -56,14 +56,14 @@
   let isLoading = $state(true);
   let hasChanged = $derived(!isEqualCoffeeEntry(entry, originalEntry));
   let shouldGoBack = false;
-  let updateInfoToast: ToastId | undefined;
+  let updateInfoToast: string | undefined;
 
   let nameInputValid = $state(true);
   let altitudeInputValid = $state(true);
-  let formValid = $derived(nameInputValid && altitudeInputValid);
+  const formValid = $derived(nameInputValid && altitudeInputValid);
 
   let pageHeader = $state<PageHeader | undefined>(undefined);
-  let entryTitle = $derived(getTitle(unknown, entry));
+  const entryTitle = $derived(getTitle(unknown, entry));
 
   onMount(async () => {
     pauseScheduledSync();

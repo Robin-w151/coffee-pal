@@ -26,7 +26,7 @@
     unit: preferredUnit,
   });
   let inputTouched = $state(false);
-  let showError = $derived(inputTouched && !valid);
+  const showError = $derived(inputTouched && !valid);
 
   $effect(() => {
     handleAltitudeChange(altitude);

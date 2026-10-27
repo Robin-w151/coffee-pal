@@ -17,7 +17,7 @@
 
   let coffeeTypeOptions: Array<ComboboxOption<ActiveCoffeeEntry>> = $state([]);
   let coffeeTypeInput = $state(getCoffeeLabel(coffeeType));
-  let coffeeTypeId = $derived(typeof coffeeType === 'object' ? coffeeType.id : undefined);
+  const coffeeTypeId = $derived(typeof coffeeType === 'object' ? coffeeType.id : undefined);
 
   onMount(() => {
     filter
@@ -87,7 +87,7 @@
       visible: !!coffeeTypeId,
       icon: faArrowUpRightFromSquare,
     }}
-    bind:inputValue={coffeeTypeInput}
+    bind:value={coffeeTypeInput}
     onSelect={handleCoffeeTypeSelect}
     onInputChange={handleInputChange}
   />

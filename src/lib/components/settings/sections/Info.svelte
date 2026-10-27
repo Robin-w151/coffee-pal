@@ -14,7 +14,7 @@
   const appCommitHash = import.meta.env.APP_COMMIT_HASH;
   const itemClass = 'grid grid-cols-subgrid col-span-full';
 
-  let showSpinner = $derived(appStore.checkForUpdateInProgress);
+  const showSpinner = $derived(appStore.checkForUpdateInProgress);
 
   function handleInstallClick(): void {
     appStore.requestAppInstall();

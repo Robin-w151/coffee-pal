@@ -1,6 +1,6 @@
 <script lang="ts">
   // Phase 1: renders the service's toasts with Skeleton v2's toast store.
-  import { toast, type ToastId, type ToastKind } from '$lib/services/ui/toast.svelte';
+  import { toast, type ToastKind } from '$lib/services/ui/toast.svelte';
   import { Toast, getToastStore, initializeStores } from '@skeletonlabs/skeleton';
 
   const BACKGROUNDS: Record<ToastKind, string> = {
@@ -13,7 +13,7 @@
   const toastStore = getToastStore();
   // Plain Map on purpose: bookkeeping for the effect, which must not depend on it.
   // eslint-disable-next-line svelte/prefer-svelte-reactivity
-  const shown = new Map<ToastId, string>();
+  const shown = new Map<string, string>();
 
   $effect(() => {
     const open = toast.toasts;

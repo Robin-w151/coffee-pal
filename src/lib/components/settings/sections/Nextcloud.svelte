@@ -25,9 +25,9 @@
   let hostValid = $state(!!url);
   let isConnecting = $state(false);
   let pollSubscription: Subscription | undefined;
-  let connected = $derived(!!syncStore.connection);
-  let showSpinner = $derived(isConnecting || syncStateStore.isSynchronizing);
-  let lastSyncText = $derived.by(() => {
+  const connected = $derived(!!syncStore.connection);
+  const showSpinner = $derived(isConnecting || syncStateStore.isSynchronizing);
+  const lastSyncText = $derived.by(() => {
     const lastSync = syncStore.connection?.lastSync;
     if (!lastSync) {
       return;
