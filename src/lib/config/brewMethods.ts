@@ -1,4 +1,4 @@
-import type { ComboboxOption } from '$lib/components/ui/Combobox.svelte';
+import type { ComboboxOption } from '$lib/components/shared/ui/Combobox.svelte';
 
 export const methodOptions: Array<ComboboxOption<string>> = [
   {
