@@ -166,6 +166,26 @@ test('entry delete undo', async ({ myCoffeesPage, myCoffeesEntryDetailPage }) =>
   await expect(myCoffeesPage.coffeeList).toHaveCount(3);
 });
 
+test('aromas of a new, unsaved entry use the aroma colours', async ({
+  myCoffeesPage,
+  myCoffeesEntryDetailPage,
+}) => {
+  await myCoffeesPage.clickAddButton();
+  await expect(myCoffeesEntryDetailPage.nameInput).toBeVisible();
+
+  for (const aroma of ['apple', 'cherry']) {
+    await myCoffeesEntryDetailPage.addAroma(aroma);
+  }
+
+  await expect(myCoffeesEntryDetailPage.aromaChips).toHaveCount(2);
+  for (const aroma of ['apple', 'cherry']) {
+    await expect(myCoffeesEntryDetailPage.getAromaChip(aroma)).toHaveCSS(
+      'background-color',
+      getAromaColor(aroma).backgroundColor,
+    );
+  }
+});
+
 test.describe('aromas', () => {
   test.beforeEach(async ({ myCoffeesPage, myCoffeesEntryDetailPage }) => {
     await myCoffeesPage.clickCoffeeEntry(1);

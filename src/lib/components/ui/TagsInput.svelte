@@ -46,6 +46,11 @@
     {placeholder}
     padding="px-3 py-2"
     regionInput="focus:!outline-none"
-    bind:value
+    bind:value={
+      () => value ?? [],
+      // v2 mutates the array in place and assigns it back; a copy makes the change visible
+      // (e.g. to the colour effect) even when the array isn't reactive state.
+      (tags) => (value = [...tags])
+    }
   />
 </div>

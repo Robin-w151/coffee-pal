@@ -56,6 +56,7 @@ Rules:
 - `SegmentedControl` is generic over the value type (`generics="TValue extends string"`). Its options are `as const` arrays at the call sites.
 - `RatingGroup` reports the clicked star through `onValueChange`. The toggle-off logic stays in `Rating.svelte`.
 - `TagsInput` applies `tagColors` itself: an effect over `value` colours the v2 chips inside its own root, matching each chip by its exact text instead of the old `includes`. A keydown listener on its root stops Escape. `src/lib/shared/ui/events.ts` (`installEventHandler`) had no other users and is deleted.
+- **Fix from review of PR #188:** for a new, unsaved entry, `aromas` starts as `undefined`. v2 then appends tags to its own plain array and assigns the same reference back, so the colour effect never re-ran and the chips stayed in the theme's default colours. `TagsInput` now binds through a function binding that stores a copy (`value = [...tags]`). A new e2e test covers this (`aromas of a new, unsaved entry use the aroma colours`).
 - `FileUpload` binds v2's `files` through a function binding and exposes `file` (the first file). Setting `file` to `undefined` clears it, as `Backup.svelte` did before with `files = undefined`. An extra `hint` prop carries the "Allowed type: JSON" line, so the markup stays the same.
 - The story 03 e2e tests already cover the tag colours (computed `background-color`) and Escape not reaching `window`. Both stayed unchanged.
 
