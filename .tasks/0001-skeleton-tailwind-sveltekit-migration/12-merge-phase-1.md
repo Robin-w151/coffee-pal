@@ -2,7 +2,7 @@
 
 **Epic:** [0001 Migrate to Skeleton v5, Tailwind v4 and SvelteKit 3](README.md)
 **Owner:** Human
-**Status:** In Progress
+**Status:** Done
 **Depends on:** 11
 **Size:** S — PR review plus one check on your phone that real settings survived; this ships a refactor to production.
 
@@ -61,8 +61,12 @@ On the phone: Settings shows your previous values and the sync connection; journ
 
 ## Acceptance criteria
 
-- [ ] Given the phase 1 release is deployed, when the installed app is opened on the human's phone, then settings and sync connection are unchanged.
-- [ ] CI is green on the merge commit, and the Test workflow is green on the deployment of the `chore(release)` commit.
+- [x] Given the phase 1 release is deployed, when the installed app is opened on the human's phone, then settings and sync connection are unchanged.
+- [x] CI is green on the merge commit, and the Test workflow is green on the deployment of the `chore(release)` commit.
+
+### Result (2026-10-27)
+
+PR #188 was squash-merged as `ed2b27a` (`fix: decouple app from Skeleton v2 (migration phase 1)`), and semantic-release cut `0.32.93` (`67f9a69`), which was deployed to production. The human confirmed every check: the preview walkthrough, CI and the Test workflow, the update on the phone, settings and sync connection unchanged, and a successful sync.
 
 ## Technical notes
 

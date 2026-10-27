@@ -253,3 +253,9 @@ Applied:
 - **Regression from story 11, fixed:** the unit selects in measurement inputs had lost their 6rem minimum width (71/86 px instead of 96 px). Skeleton's own `!important` rule on `.input-group select` is more specific than a single utility class. The minimum widths are now arbitrary variants on the input group (`[&_select]:!min-w-[6rem]` etc.), which restores the old specificity. The visual gate missed this because the change stays under its 1% pixel threshold, so a new e2e test pins the select widths.
 
 Gates: `pnpm verify:strict` green (see the commit).
+
+## 2026-10-27 — Story 12: Merge phase 1 (Done, phase 1 complete)
+
+PR #188 was squash-merged into `main` as `ed2b27a`, and semantic-release cut `0.32.93` (`67f9a69`), deployed to production. The human confirmed all runbook checks: the preview, CI and the Test workflow, the app update on the phone, settings and sync connection unchanged, and a successful sync.
+
+The app now runs on Skeleton v2 only behind `src/lib/components/shared/ui/` and `src/lib/services/ui/`. Next is phase 2: `migration/2-skeleton-v4` is branched from `main` (phase 1 is merged, so no stacking or rebase is needed). It covers stories 13–17, up to checkpoint 18.
