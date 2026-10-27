@@ -24,12 +24,27 @@
     for (const tagElement of root.querySelectorAll<HTMLButtonElement>('button.chip')) {
       const tag = tagElement.querySelector('span')?.textContent ?? '';
       if (tags.includes(tag)) {
-        const { color, backgroundColor } = tagColors(tag);
-        tagElement.style.color = color;
-        tagElement.style.backgroundColor = backgroundColor;
+        applyColors(tagElement, tagColors(tag));
       }
     }
   });
+
+  // v2 tags transition all properties, so a new tag would fade from the theme colour to its own.
+  // The colours are applied with transitions off and committed by a layout read.
+  function applyColors(
+    tagElement: HTMLElement,
+    { color, backgroundColor }: { color: string; backgroundColor: string },
+  ): void {
+    if (tagElement.style.backgroundColor === backgroundColor && tagElement.style.color === color) {
+      return;
+    }
+
+    tagElement.style.transition = 'none';
+    tagElement.style.color = color;
+    tagElement.style.backgroundColor = backgroundColor;
+    tagElement.getBoundingClientRect(); // commits the colours before transitions come back
+    tagElement.style.transition = '';
+  }
 
   // Escape belongs to the input while it's focused (e.g. not to the page's back handling).
   function handleKeydown(event: KeyboardEvent): void {
