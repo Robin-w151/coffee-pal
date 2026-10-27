@@ -1,9 +1,8 @@
 @import 'tailwindcss';
 @import '@skeletonlabs/skeleton';
-
-/*
-  Add your theme import for your theme: "coffee" here
-*/
+@import '@skeletonlabs/skeleton-svelte';
+/* Preset theme until story 14 brings the coffee theme. */
+@import '@skeletonlabs/skeleton/themes/cerberus';
 
 @plugin '@tailwindcss/forms';
 

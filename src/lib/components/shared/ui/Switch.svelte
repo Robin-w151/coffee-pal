@@ -1,7 +1,5 @@
 <script lang="ts">
-  // Maps to Skeleton v4/v5 `Switch`. Phase 1: wraps v2 `SlideToggle`.
-  import { Switch } from '@skeletonlabs/skeleton-svelte';
-
+  // Maps to Skeleton v4/v5 `Switch`. Phase 2: a native checkbox until story 15.
   interface Props {
     checked?: boolean;
     name: string;
@@ -13,11 +11,12 @@
   let { checked = $bindable(false), name, label, onCheckedChange }: Props = $props();
 </script>
 
-<Switch
+<!-- MIGRATION_PLACEHOLDER: Switch -->
+<input
+  type="checkbox"
+  role="switch"
   {name}
-  {label}
-  size="sm"
-  active="bg-primary-500 dark:bg-primary-600"
+  aria-label={label}
   bind:checked
-  on:change={() => onCheckedChange?.(checked)}
+  onchange={() => onCheckedChange?.(checked)}
 />

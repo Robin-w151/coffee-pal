@@ -1,7 +1,6 @@
 <script lang="ts">
-  // Maps to Skeleton v4/v5 `Navigation` with `layout="rail"`. Phase 1: wraps v2 `AppRail`.
+  // Maps to Skeleton v4/v5 `Navigation` with `layout="rail"`. Phase 2: plain links until story 16.
   import type { Route } from '$lib/models/route';
-  import { Navigation } from '@skeletonlabs/skeleton-svelte';
   import { Icon } from 'svelte-awesome';
 
   interface Props {
@@ -16,25 +15,21 @@
   }
 </script>
 
-<Navigation
-  background="bg-surface-50-950"
-  regionDefault="p-1 space-y-1"
-  hover="preset-tonal-primary"
-  active="preset-filled-primary-500"
->
+<!-- MIGRATION_PLACEHOLDER: NavRail -->
+<div class="flex flex-col h-full w-20 p-1 space-y-1 bg-surface-50-950">
   {#each items as route (route.href)}
-    <AppRailAnchor
-      class="block overflow-hidden rounded-md"
+    <a
+      class="flex flex-col items-center gap-1 overflow-hidden rounded-md px-1 py-2 text-xs {isSelected(
+        route,
+      )
+        ? 'preset-filled-primary-500'
+        : 'hover:preset-tonal-primary'}"
       href={route.href}
       title={route.label}
-      selected={isSelected(route)}
       aria-current={isSelected(route) ? 'page' : undefined}
-      regionLabel="px-1"
     >
-      {#snippet lead()}
-        <Icon data={route.icon} scale={1.5} />
-      {/snippet}
+      <Icon data={route.icon} scale={1.5} />
       <span class="wrap-break-word">{route.label}</span>
-    </AppRailAnchor>
+    </a>
   {/each}
-</Navigation>
+</div>

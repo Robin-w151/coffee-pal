@@ -1,6 +1,6 @@
-import type { CustomThemeConfig } from '@skeletonlabs/tw-plugin';
-
-export const coffeeTheme: CustomThemeConfig = {
+// The Skeleton v2 coffee theme, unused since the v4 upgrade. It's the source for the hand
+// conversion in story 14, which deletes this file.
+export const coffeeTheme = {
   name: 'coffee',
   properties: {
     '--theme-font-family-base': 'system-ui',

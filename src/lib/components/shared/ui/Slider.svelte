@@ -1,6 +1,5 @@
 <script lang="ts">
-  // Maps to Skeleton v4/v5 `Slider`. Phase 1: wraps v2 `RangeSlider`.
-  import { Slider } from '@skeletonlabs/skeleton-svelte';
+  // Maps to Skeleton v4/v5 `Slider`. Phase 2: a native range input until story 15.
   import type { Snippet } from 'svelte';
 
   interface Props {
@@ -15,6 +14,8 @@
   let { value = $bindable(), min, max, name, children }: Props = $props();
 </script>
 
-<Slider {name} {min} {max} accent="accent-primary-500 dark:accent-primary-600" bind:value>
+<!-- MIGRATION_PLACEHOLDER: Slider -->
+<label class="flex flex-col gap-2">
   {@render children?.()}
-</Slider>
+  <input type="range" class="w-full" {name} {min} {max} bind:value />
+</label>

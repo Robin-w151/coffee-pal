@@ -1,63 +1,33 @@
 <script lang="ts">
-  // Phase 1: renders the service's toasts with Skeleton v2's toast store.
+  // Phase 2: a plain toast list until story 16.
   import { toast, type ToastKind } from '$lib/services/ui/toast.svelte';
-  import { ToastProvider } from '@skeletonlabs/skeleton-svelte';
 
   const BACKGROUNDS: Record<ToastKind, string> = {
     info: 'preset-filled-primary-500',
     error: 'preset-filled-error-500',
   };
-
-  // Each host sets up the v2 stores for its own subtree.
-  initializeStores();
-  const toastStore = getToastStore();
-  // Plain Map on purpose: bookkeeping for the effect, which must not depend on it.
-  // eslint-disable-next-line svelte/prefer-svelte-reactivity
-  const shown = new Map<string, string>();
-
-  $effect(() => {
-    const open = toast.toasts;
-
-    for (const { id, kind, message, action } of open) {
-      if (shown.has(id)) {
-        continue;
-      }
-
-      const storeId = toastStore.trigger({
-        message,
-        background: BACKGROUNDS[kind],
-        classes: 'flex-col sm:flex-row gap-4',
-        // The service owns the timeout, so all toasts close the same way.
-        autohide: false,
-        action: action && { label: action.label, response: () => toast.runAction(id) },
-        callback: ({ status }) => {
-          if (status === 'closed') {
-            toast.dismiss(id);
-          }
-        },
-      });
-      shown.set(id, storeId);
-    }
-
-    for (const [id, storeId] of shown) {
-      if (!open.some((message) => message.id === id)) {
-        shown.delete(id);
-        toastStore.close(storeId);
-      }
-    }
-  });
 </script>
 
-<ToastProvider />
-
-<style>
-  /* v2 renders these elements; the extra class outranks its utilities regardless of CSS order. */
-  :global(.snackbar-wrapper .snackbar) {
-    padding-left: 2rem;
-    padding-right: 2rem;
-  }
-
-  :global(.toast .toast-actions) {
-    margin-left: 0 !important;
-  }
-</style>
+<!-- MIGRATION_PLACEHOLDER: ToastHost -->
+<div class="fixed bottom-4 inset-x-4 z-50 flex flex-col items-center gap-2 pointer-events-none">
+  {#each toast.toasts as { id, kind, message, action } (id)}
+    <div
+      class="card flex flex-col sm:flex-row items-center gap-4 px-8 py-4 pointer-events-auto {BACKGROUNDS[
+        kind
+      ]}"
+      role="alert"
+    >
+      <span>{message}</span>
+      <div class="flex gap-2">
+        {#if action}
+          <button type="button" class="btn" onclick={() => toast.runAction(id)}
+            >{action.label}</button
+          >
+        {/if}
+        <button type="button" class="btn" aria-label="Dismiss" onclick={() => toast.dismiss(id)}
+          >✕</button
+        >
+      </div>
+    </div>
+  {/each}
+</div>

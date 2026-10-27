@@ -1,8 +1,7 @@
 <script lang="ts">
-  // Phase 1: shows the service's drawer with Skeleton v2's drawer store.
+  // Phase 2: a fixed panel with a backdrop until story 16.
   import { drawer, type DrawerId } from '$lib/services/ui/drawer.svelte';
-  import { untrack, type Snippet } from 'svelte';
-  import { get } from 'svelte/store';
+  import type { Snippet } from 'svelte';
 
   interface Props {
     content: Snippet<[DrawerId]>;
@@ -10,39 +9,26 @@
 
   let { content }: Props = $props();
 
-  // Each host sets up the v2 stores for its own subtree.
-  initializeStores();
-  const drawerStore = getDrawerStore();
-
-  // The last opened drawer stays rendered while v2 animates it out, as with v2's own id.
-  let shownId = $state<DrawerId | undefined>();
-
-  // Service → v2 store. The store is read untracked, so a close by v2 can't reopen the drawer.
-  $effect(() => {
-    const id = drawer.current;
-    untrack(() => {
-      const state = get(drawerStore);
-      if (id && !(state.open && state.id === id)) {
-        shownId = id;
-        drawerStore.open({ id });
-      } else if (!id && state.open) {
-        drawerStore.close();
-      }
-    });
-  });
-
-  // v2 store → service: backdrop click and Escape close the v2 drawer directly.
-  $effect(() =>
-    drawerStore.subscribe(({ open }) => {
-      if (!open && untrack(() => drawer.current)) {
-        drawer.close();
-      }
-    }),
-  );
+  function handleKeydown(event: KeyboardEvent): void {
+    if (drawer.current && event.key === 'Escape') {
+      drawer.close();
+    }
+  }
 </script>
 
-<Drawer>
-  {#if shownId}
-    {@render content(shownId)}
-  {/if}
-</Drawer>
+<svelte:window onkeydown={handleKeydown} />
+
+<!-- MIGRATION_PLACEHOLDER: DrawerHost -->
+{#if drawer.current}
+  <div class="fixed inset-0 z-50 flex">
+    <button
+      type="button"
+      class="absolute inset-0 bg-surface-950/50"
+      aria-label="Close"
+      onclick={drawer.close}
+    ></button>
+    <div class="relative h-full w-80 max-w-full overflow-y-auto bg-surface-100-900" role="dialog">
+      {@render content(drawer.current)}
+    </div>
+  </div>
+{/if}

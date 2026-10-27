@@ -17,9 +17,8 @@
 </script>
 
 <script lang="ts" generics="T">
-  // Maps to Skeleton v4/v5 `Combobox`. Phase 1: an input with v2 `Autocomplete` in a Popover.
+  // Maps to Skeleton v4/v5 `Combobox`. Phase 2: an input with plain option buttons until story 16.
   import InputWithButton from '$lib/components/shared/elements/form/InputWithButton.svelte';
-  import { type AutocompleteOption } from '@skeletonlabs/skeleton-svelte';
   import { Icon } from 'svelte-awesome';
   import Popover from './Popover.svelte';
 
@@ -53,8 +52,16 @@
 
   let inputElement = $state<HTMLInputElement>();
 
-  function handleSelection({ detail }: CustomEvent<AutocompleteOption<T>>): void {
-    onSelect(detail as ComboboxOption<T>);
+  const shownOptions = $derived(
+    filter === 'contains'
+      ? options.filter(({ label, keywords }) =>
+          `${label} ${keywords ?? ''}`.toLowerCase().includes((value ?? '').toLowerCase()),
+        )
+      : options,
+  );
+
+  function handleSelection(option: ComboboxOption<T>): void {
+    onSelect(option);
     inputElement?.focus();
   }
 
@@ -76,23 +83,18 @@
   {onOpenChange}
 >
   {#snippet content()}
-    {#if filter === 'contains'}
-      <Autocomplete
-        {options}
-        input={value}
-        transitions={false}
-        regionButton="w-full text-start"
-        on:selection={handleSelection}
-      />
-    {:else}
-      <Autocomplete
-        {options}
-        filter={() => [...options]}
-        transitions={false}
-        regionButton="w-full text-start"
-        on:selection={handleSelection}
-      />
-    {/if}
+    <!-- MIGRATION_PLACEHOLDER: Combobox -->
+    <div class="flex flex-col">
+      {#each shownOptions as option (option.value)}
+        <button
+          type="button"
+          class="w-full text-start px-4 py-2"
+          onclick={() => handleSelection(option)}
+        >
+          {option.label}
+        </button>
+      {/each}
+    </div>
   {/snippet}
   {#snippet trigger(triggerProps)}
     {#snippet input()}

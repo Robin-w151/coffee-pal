@@ -1,9 +1,5 @@
 <script lang="ts">
-  // Maps to Skeleton v4/v5 `FileUpload`. Phase 1: wraps v2 `FileDropzone`.
-  import { faFileArrowUp } from '@fortawesome/free-solid-svg-icons';
-  import { FileUpload } from '@skeletonlabs/skeleton-svelte';
-  import { Icon } from 'svelte-awesome';
-
+  // Maps to Skeleton v4/v5 `FileUpload`. Phase 2: a native file input until story 15.
   interface Props {
     file?: File;
     name: string;
@@ -13,28 +9,18 @@
   }
 
   let { file = $bindable(), name, accept, hint }: Props = $props();
-
-  let files = $state<FileList>();
 </script>
 
-<FileUpload
-  {name}
-  {accept}
-  bind:files={
-    () => (file ? files : undefined),
-    (newFiles) => {
-      files = newFiles;
-      file = newFiles?.[0];
-    }
-  }
->
-  {#snippet lead()}
-    <Icon data={faFileArrowUp} scale={1.5} />
-  {/snippet}
-  {#snippet message()}
-    <span>{file ? file.name : 'Click to select file or drag and drop'}</span>
-  {/snippet}
-  {#snippet meta()}
-    {hint}
-  {/snippet}
-</FileUpload>
+<!-- MIGRATION_PLACEHOLDER: FileUpload -->
+<label class="flex flex-col gap-2">
+  <span>{file ? file.name : 'Click to select file or drag and drop'}</span>
+  <input
+    type="file"
+    {name}
+    {accept}
+    onchange={(event) => (file = event.currentTarget.files?.[0])}
+  />
+  {#if hint}
+    <span class="text-sm">{hint}</span>
+  {/if}
+</label>

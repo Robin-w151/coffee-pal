@@ -45,10 +45,10 @@ importers:
         specifier: 10.0.1
         version: 10.0.1(semantic-release@25.0.8(supports-color@7.2.0)(typescript@5.9.3))(supports-color@7.2.0)
       '@skeletonlabs/skeleton':
-        specifier: ^4.0.0
+        specifier: 4.15.2
         version: 4.15.2(tailwindcss@4.3.3)
       '@skeletonlabs/skeleton-svelte':
-        specifier: ^4.0.0
+        specifier: 4.15.2
         version: 4.15.2(svelte@5.56.8(@typescript-eslint/types@8.65.0))
       '@sveltejs/adapter-auto':
         specifier: 7.0.1
