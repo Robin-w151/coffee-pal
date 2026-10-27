@@ -2,7 +2,7 @@
 
 **Epic:** [0001 Migrate to Skeleton v5, Tailwind v4 and SvelteKit 3](README.md)
 **Owner:** Claude
-**Status:** Todo
+**Status:** In progress
 **Depends on:** 11
 **Size:** L — three tools (Tailwind upgrade, `skeleton-3` and `skeleton-4` codemods) run in sequence, the app breaks on purpose, and their output on the wrapped code is uncertain.
 
