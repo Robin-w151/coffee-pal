@@ -259,3 +259,23 @@ Gates: `pnpm verify:strict` green (see the commit).
 PR #188 was squash-merged into `main` as `ed2b27a`, and semantic-release cut `0.32.93` (`67f9a69`), deployed to production. The human confirmed all runbook checks: the preview, CI and the Test workflow, the app update on the phone, settings and sync connection unchanged, and a successful sync.
 
 The app now runs on Skeleton v2 only behind `src/lib/components/shared/ui/` and `src/lib/services/ui/`. Next is phase 2: `migration/2-skeleton-v4` is branched from `main` (phase 1 is merged, so no stacking or rebase is needed). It covers stories 13–17, up to checkpoint 18.
+
+## 2026-10-27 — Story 13: Tailwind v4 and Skeleton codemods (Done)
+
+Phase 2 starts on `migration/2-skeleton-v4`, branched from `main` (phase 1 is merged, so nothing is stacked). Tailwind 4.3.3 runs through `@tailwindcss/vite`. `@skeletonlabs/skeleton` and `@skeletonlabs/skeleton-svelte` are pinned to 4.15.2, with the cerberus preset until story 14. Following the archived v2 → v4 guide, Tailwind came first, then the codemods. Both used Skeleton CLI 5.0.1 on `src/` only, each in its own commit. The two codemod commits skip the hooks (approved by the human), because the dropped v2 imports fail ESLint until the placeholders land. Details are in the story's "As built".
+
+**Status:** `tailwind-v3` 1 (`theme.ts`, story 14), `skeleton-v2-imports-total` 0, `v2-classes` 11 (input groups in 3 files, story 17), `migration-placeholders` 15.
+
+**Gates:** `check`, `lint`, `build` and `test:unit` (194) green. E2e: 110 passed, 14 failed. Visual: not run, since it's a judgment check in phase 2.
+
+**Failing e2e tests (the to-do list for 14–17):**
+
+- `SegmentedControl` (story 15), 8 tests: `settings.spec` appearence system/light/dark, units metric/imperial, and "appearence radio group marks one option". `appShell.spec` phone: settings with an unknown colour scheme / invalid JSON fall back to the defaults. All of them read the checked option through the v2 markup.
+- `FileUpload` (story 15), 1 test: `settings.spec` backup import "imports journal and coffee entries". The native file input's accessible name contains "import", so `getByRole('button', { name: 'Import' })` matches two elements.
+- `Combobox` (story 16), 1 test: `journal.spec` "brew method autocomplete selects with arrow down and enter". There's no keyboard navigation yet.
+- `Listbox` (story 16), 1 test: `journal.spec` "sort list box selects with the keyboard".
+- `Pagination` (story 16), 1 test: `journal.spec` "paginator". The buttons are named "First"/"Last", not "First page"/….
+- `ModalHost` (story 16), 1 test: `appShell.spec` phone "modal traps focus".
+- `ToastHost` (story 16), 1 test: `appShell.spec` phone "toast after deleting an entry can be dismissed". The dismiss button is named "Dismiss", not "Dismiss toast".
+
+Everything else passes, including persistence, legacy data, scroll restoration, view transitions, drawer navigation and the other overlay tests.
