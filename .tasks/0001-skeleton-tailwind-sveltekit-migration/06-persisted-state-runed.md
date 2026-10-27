@@ -2,7 +2,7 @@
 
 **Epic:** [0001 Migrate to Skeleton v5, Tailwind v4 and SvelteKit 3](README.md)
 **Owner:** Claude
-**Status:** Todo
+**Status:** Done
 **Depends on:** 05
 **Size:** M — two stores, but ~22 consumer files move from store syntax to runes, and the stored data format must stay compatible.
 
@@ -78,12 +78,12 @@ Replace `localStorageStore` from `@skeletonlabs/skeleton` in [src/lib/stores/set
 
 ## Acceptance criteria
 
-- [ ] `pnpm migration:status` shows `local-storage-store` = 0.
-- [ ] Given localStorage contains `settings` / `sync` values in the legacy v2 format (fixture from story 02), when the app loads, then the colour scheme, units and sync connection are applied (e2e "legacy data format" test is green, unchanged).
-- [ ] Given an invalid `settings` value (e.g. `{"colorScheme":"pink"}` or invalid JSON), when the app loads, then it falls back to `system`/`metric` like today.
-- [ ] Given a user changes a setting, when the page reloads, then the change persists, and `localStorage.settings` contains plain JSON with the same shape as before.
-- [ ] Given `localStorage.settings` has `colorScheme: 'dark'`, when the page loads, then `<html>` has the `dark` class before hydration (the inline script in `app.html` still reads the format). Covered by an e2e check that reads `document.documentElement.className` in an `addInitScript`-seeded page before `data-test="ready"` is set.
-- [ ] `pnpm verify:strict` is green (no visual change).
+- [x] `pnpm migration:status` shows `local-storage-store` = 0.
+- [x] Given localStorage contains `settings` / `sync` values in the legacy v2 format (fixture from story 02), when the app loads, then the colour scheme, units and sync connection are applied (e2e "legacy data format" test is green, unchanged).
+- [x] Given an invalid `settings` value (e.g. `{"colorScheme":"pink"}` or invalid JSON), when the app loads, then it falls back to `system`/`metric` like today.
+- [x] Given a user changes a setting, when the page reloads, then the change persists, and `localStorage.settings` contains plain JSON with the same shape as before.
+- [x] Given `localStorage.settings` has `colorScheme: 'dark'`, when the page loads, then `<html>` has the `dark` class before hydration (the inline script in `app.html` still reads the format). Covered by an e2e check that reads `document.documentElement.className` in an `addInitScript`-seeded page before `data-test="ready"` is set.
+- [x] `pnpm verify:strict` is green (no visual change).
 
 ## Technical notes
 
@@ -91,6 +91,17 @@ Replace `localStorageStore` from `@skeletonlabs/skeleton` in [src/lib/stores/set
 - Store pattern reference: [orfarchiv-ui `src/lib/stores/runes/`](https://github.com/Robin-w151/orfarchiv-ui/tree/develop/src/lib/stores/runes) (`skeleton.svelte.ts`, `effectiveColorScheme.svelte.ts`). The existing `app.svelte.ts` and `syncState.svelte.ts` in this repo use an older closure style; they stay as they are (out of scope).
 - Also touched: [syncAvailability.svelte.ts](../../src/lib/stores/syncAvailability.svelte.ts), [AppLayout.svelte](../../src/lib/components/shared/app/AppLayout.svelte) (creates the stores).
 - `syncTabs` stays at its default `true` (see epic assumptions).
+
+### As built (2026-10-25)
+
+- `runed` 0.38.0 and `jsdom` 30.1.3 as dev dependencies. `JSON_SERIALIZER` lives in [src/lib/stores/persisted.ts](../../src/lib/stores/persisted.ts) and is shared by both stores.
+- **Getters instead of `$derived` fields** (`colorScheme`, `preferredUnits`, `connection`, `isAvailable`). `PersistedState.current` already re-reads storage on every access and tracks it inside effects, so a `$derived` would only add a cache that callers outside effects (the timer-driven scheduled sync) could see stale. A `$derived` field reading a constructor-assigned field also fails `svelte-check` (TS2729).
+- **Setters run fully inside `untrack`** (the shared `updatePersistedState(state, updater)` in `persisted.ts`, extracted during review of PR #188). Appearance and Units call the setters from an `$effect`. The value `PersistedState` returns is a proxy whose get traps subscribe the running effect, even when it's only spread (`{ ...settings }`). Untracking just the read still loops (`effect_update_depth_exceeded`), so the whole read-update-write is untracked. A unit test covers this.
+- **Vitest** also needs `resolve.conditions: ['browser']`. Without it `esm-env` reports "not a browser", so runed runs without a window and `$app/environment`'s `browser` is `false`.
+- The settings unit spec is `settings.svelte.spec.ts`, so it can use `$effect.root`. The sync spec stays `sync.spec.ts`.
+- **Small behaviour difference:** `PersistedState` writes the default value when the key is missing (`settings` → `{"colorScheme":"system","preferredUnits":"metric"}`, `sync` → `{}`). Skeleton's store only wrote on change. The format is the same, and `app.html` treats `system` like a missing value.
+- SSR: runed's `defaultWindow` is `undefined` on the server, so no storage is touched there. `pnpm build` (prerender) logs no storage errors.
+- New e2e tests in [appShell.spec.ts](../../tests/specs/appShell.spec.ts): an invalid `settings` value (unknown colour scheme, invalid JSON) falls back to the defaults, and the stored `dark` scheme is applied before hydration. A `MutationObserver` init script records `<html>` as soon as `<body>` exists.
 
 ## Testing
 

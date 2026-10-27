@@ -155,3 +155,101 @@ Gates: `pnpm verify:strict` green (168 unit, 117 e2e, 72 visual); e2e against `p
 **Merged:** PR #186 squash-merged into `main` as `06879bc` (`fix: add test hooks for migration safety net (migration phase 0)`); semantic-release cut `0.32.92` (`db5aa3b`), deployed to production. The human confirmed all checks of the runbook: CI on `main`, the release deploy, the Test workflow against production, and `pnpm migration:status` / `pnpm verify:strict` on `main`.
 
 From here on, a green `pnpm verify` / `pnpm verify:strict` means "nothing broke". Next: phase 1 (`migration/1-decouple`, stories 06–11, checkpoint 12).
+
+## 2026-10-25 — Story 06: Persisted state with runed (Done)
+
+Branch `migration/1-decouple` created from `main` (`6359bf0`). `settings` and `sync` now use runed `PersistedState` (`settings.svelte.ts`, `sync.svelte.ts`), created in `AppLayout` and read through `getSettingsStore()` / `getSyncStore()` / `getSyncAvailabilityStore()`. The sync service gets the store passed in (`sync(syncStore)`, `initScheduledSync(syncStore)`).
+
+**Decisions:**
+
+- The stores use getters instead of `$derived` fields. `PersistedState` already reads storage on every access, and a cache could go stale for the timer-driven sync.
+- The setters run fully inside `untrack`. Spreading the `PersistedState` proxy inside an `$effect` (Appearance, Units) otherwise loops with `effect_update_depth_exceeded`. A regression unit test covers this.
+- Vitest uses `resolve.conditions: ['browser']`.
+
+**Behaviour difference:** default values are now written to storage when the key is missing. The format is unchanged.
+
+**Status:** `local-storage-store` 0. The other phase 1 categories are unchanged: `skeleton-v2-imports-outside-ui` 29, `app-shell` 1, `conic-gradient` 1, `scss` 3, `skeleton-apply-in-app-css` 9.
+
+**Gates:** `pnpm verify:strict` green: 181 unit, 120 e2e (3 new: settings fallback ×2, dark class before hydration), 72 visual.
+
+## 2026-10-25 — Story 07: Own app layout (Done)
+
+`AppShell` is replaced by a CSS grid in `AppLayout.svelte`: a header across both columns, an `aside` with the rail (`nav hidden md:block`), and `<main id="page">` as the only scroll container (`scrollbar-gutter: stable`, `outline-offset-[-3px]`, `handlePageScroll`). `Spinner` is a plain `div` with a `currentColor` conic gradient. PageActions passes `class="text-white"`.
+
+**Status:** `app-shell` 0, `conic-gradient` 0. Remaining phase 1 categories: `skeleton-v2-imports-outside-ui` 29, `scss` 3, `skeleton-apply-in-app-css` 9.
+
+**Gates:** `pnpm verify:strict` green (181 unit, 120 e2e, 72 visual). The screenshots matched the v2 baseline on the first run. Tab order checked on desktop (header → rail → page).
+
+## 2026-10-25 — Story 08: Overlay services and hosts (Done)
+
+Modals, toasts and the drawer now go through `modal`, `toast` and `drawer` in `src/lib/services/ui/`. These are runes singletons with no Skeleton or store imports. `ModalHost`, `ToastHost` and `DrawerHost` in `src/lib/components/shared/ui/` translate them to the v2 stores. `Popover` wraps the v2 `popup` action (as a Svelte attachment on the trigger snippet) and replaces `use:popup` in Method, CoffeeType and PageSearch. `ToastHelper`, `ModalHelper`, `autocomplete.ts` and `EnableGlobalMessages` are deleted.
+
+**Decisions:**
+
+- The toast service owns the timeouts.
+- `modal.open` infers its result type from the component's `close` prop.
+- The dangerous modal footer uses v2's `buttonNeutral`/`buttonPositive` props instead of CSS.
+- The hosts read the v2 stores untracked, so a close done by v2 itself (backdrop, Escape) can't reopen the overlay. The first e2e run caught exactly that for the drawer.
+
+**Status:** `skeleton-v2-imports-outside-ui` 15 (from 29). `skeleton-apply-in-app-css` 5 (from 9; the modal footer rules are gone). `scss` 3 is unchanged and belongs to story 11.
+
+**Gates:** `pnpm verify:strict` green: 194 unit (13 new service tests), 120 e2e, 72 visual.
+
+## 2026-10-25 — Story 09: Form control wrappers (Done)
+
+New wrappers `Switch`, `SegmentedControl`, `Slider`, `RatingGroup`, `TagsInput` and `FileUpload` in `src/lib/components/shared/ui/` replace the v2 form controls at all nine call sites. `TagsInput` owns the tag colours and the Escape handling. `Aromas.svelte` no longer touches Skeleton's DOM, and `installEventHandler` is deleted.
+
+**Decision:** `label` exists only where a call site passes one (`Switch`), so the a11y tree stays the same.
+
+**Status:** `skeleton-v2-imports-outside-ui` 7, `skeleton-apply-in-app-css` 5.
+
+**Gates:** `pnpm verify:strict` green (194 unit, 120 e2e, 72 visual).
+
+## 2026-10-25 — Story 10: List and navigation wrappers (Done)
+
+`Combobox`, `Listbox`, `Pagination`, `NavRail` and `AppBar` in `src/lib/components/shared/ui/` replace the last v2 components outside `ui/`. These were Method/CoffeeType autocompletes, the sort popups and paginators of Journal and MyCoffees, the rail and the app bar. `brewMethods.ts` uses `ComboboxOption<string>`. The `.autocomplete-button` and `.app-rail-anchor` overrides became utility classes inside the wrappers.
+
+**Status:** `skeleton-v2-imports-outside-ui` 0; no `@skeletonlabs/skeleton` import outside `src/lib/{components,services}/ui/`. Remaining phase 1 categories: `scss` 3, `skeleton-apply-in-app-css` 5 (story 11).
+
+**Gates:** `pnpm verify:strict` green: 194 unit, 121 e2e (new: Combobox Escape keeps focus in the input), 72 visual.
+
+## 2026-10-26 — Story 11: Stylesheet preparation (Done)
+
+`src/app.scss` is now plain `src/app.css`. It keeps only the Tailwind directives, `:root`, the tap highlight, the heading/link/button weight, the mesh background, the `html, body` sizing and the view transitions. Every override and token moved into its owner as classes, wrapper props or plain host CSS (details in the story's "As built"). `PageTitle.svelte` is new. `AppDragHandle` uses plain CSS, `sass` is removed, and the `body` background rule was deleted with no pixel change.
+
+**Status:** `pnpm migration:status --phase 1` exits 0, so every phase 1 category is 0. Phase 4 (`sveltekit-2`) is the only category with large counts left.
+
+**Build size:** CSS 129,452 → 122,398 bytes; client output 6,832 → 6,828 KB.
+
+**Gates:** `pnpm verify:strict` green (194 unit, 121 e2e, 72 visual).
+
+**PR:** draft [#188](https://github.com/Robin-w151/coffee-pal/pull/188) `migration/1-decouple → main`, titled `fix: decouple app from Skeleton v2 (migration phase 1)`, opened at the human's request. Next is checkpoint 12 (human): review, merge and the production data check.
+
+## 2026-10-26 — Checkpoint 12: SonarCloud findings on PR #188
+
+The quality gate failed on reliability (C) because of one bug. Fixed:
+
+- `sync.ts`: the scheduled-sync closure marks `sync(...)` as `void` (S9383). It is fire and forget, like before, and `sync()` reports its own failures as toasts.
+- `settings.svelte.ts`: the sanitising `catch` has no unused binding and a comment saying that invalid JSON resets to the defaults (S2486).
+
+Left on purpose: `type ToastId = number` (S6564) stays, with `NOSONAR` and a reason. Skeleton v4's toaster uses string ids, so phase 2 changes only that line.
+
+Gates: `pnpm verify:strict` green (194 unit, 121 e2e, 72 visual).
+
+## 2026-10-27 — Checkpoint 12: review feedback on PR #188
+
+Applied:
+
+- Exact versions for `jsdom` and `runed`.
+- UUID ids for modals and toasts.
+- `const` for `$derived`.
+- Combobox `value` prop.
+- The unused Popover `open` prop is removed.
+- `registeredSyncStore` replaces `scheduledSyncStore` as the name of the store the scheduled sync uses.
+- Two `TagsInput` fixes:
+  - A new, unsaved entry had uncoloured tags.
+  - New tags faded in from the theme colour.
+- **The wrapper folder moved:** `src/lib/components/ui/` → `src/lib/components/shared/ui/`. The `migration-status` UI-layer glob and the paths in all stories moved with it. `src/lib/services/ui/` stays where it is. Later stories therefore refer to `shared/ui/`.
+- **Regression from story 11, fixed:** the unit selects in measurement inputs had lost their 6rem minimum width (71/86 px instead of 96 px). Skeleton's own `!important` rule on `.input-group select` is more specific than a single utility class. The minimum widths are now arbitrary variants on the input group (`[&_select]:!min-w-[6rem]` etc.), which restores the old specificity. The visual gate missed this because the change stays under its 1% pixel threshold, so a new e2e test pins the select widths.
+
+Gates: `pnpm verify:strict` green (see the commit).

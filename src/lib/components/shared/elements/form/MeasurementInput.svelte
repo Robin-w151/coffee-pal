@@ -75,7 +75,10 @@
   }
 </script>
 
-<div class="input-group input-group-divider measurement-input grid-cols-[1fr_auto] {clazz ?? ''}">
+<div
+  class="input-group input-group-divider grid-cols-[1fr_auto] [&_input]:!min-w-[10rem] [&_select]:!min-w-[6rem] [&_.input-group-shim]:!min-w-[6rem] {clazz ??
+    ''}"
+>
   <input
     type="number"
     step="0.1"

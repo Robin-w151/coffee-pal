@@ -1,8 +1,5 @@
 <script lang="ts">
-  import { faStar as faStarRegular } from '@fortawesome/free-regular-svg-icons';
-  import { faStar } from '@fortawesome/free-solid-svg-icons';
-  import { Ratings } from '@skeletonlabs/skeleton';
-  import { Icon } from 'svelte-awesome';
+  import RatingGroup from '$lib/components/shared/ui/RatingGroup.svelte';
 
   interface Props {
     rating?: number;
@@ -10,25 +7,12 @@
 
   let { rating = $bindable(0) }: Props = $props();
 
-  function handleRatingChange({ detail }: CustomEvent<{ index: number }>): void {
-    rating = rating === detail.index ? 0 : detail.index;
+  // Clicking the current rating again clears it.
+  function handleValueChange(value: number): void {
+    rating = rating === value ? 0 : value;
   }
 </script>
 
 <div class="py-2" data-testid="rating" data-value={rating}>
-  <Ratings
-    value={rating}
-    max={5}
-    interactive
-    justify="justify-start"
-    text="text-tertiary-600-300-token"
-    on:icon={handleRatingChange}
-  >
-    {#snippet empty()}
-      <Icon data={faStarRegular} scale={2} />
-    {/snippet}
-    {#snippet full()}
-      <Icon data={faStar} scale={2} />
-    {/snippet}
-  </Ratings>
+  <RatingGroup value={rating} max={5} onValueChange={handleValueChange} />
 </div>

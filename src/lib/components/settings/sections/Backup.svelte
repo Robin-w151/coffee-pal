@@ -7,20 +7,16 @@
   import { journalStore } from '$lib/stores/journal';
   import { myCoffeesStore } from '$lib/stores/myCoffees';
   import { readJsonFile, writeJsonFile } from '$lib/shared/file';
-  import { ToastHelper } from '$lib/shared/ui/toast';
-  import { faFileArrowUp } from '@fortawesome/free-solid-svg-icons';
-  import { FileDropzone, getToastStore } from '@skeletonlabs/skeleton';
+  import { toast } from '$lib/services/ui/toast.svelte';
   import { DateTime } from 'luxon';
-  import { Icon } from 'svelte-awesome';
   import Spinner from '../../shared/elements/Spinner.svelte';
   import Form from '../../shared/elements/form/Form.svelte';
   import Card from '$lib/components/shared/elements/Card.svelte';
+  import FileUpload from '$lib/components/shared/ui/FileUpload.svelte';
 
-  const toastHelper = new ToastHelper(getToastStore());
-
-  let files: FileList | undefined = $state();
+  let file: File | undefined = $state();
   let isImporting = $state(false);
-  let fileSelected = $derived(files?.length && files.length > 0);
+  const fileSelected = $derived(!!file);
 
   async function handleExportClick(): Promise<void> {
     const journalEntries = await journalStore.loadAll();
@@ -34,14 +30,14 @@
   }
 
   async function handleImportClick(): Promise<void> {
-    if (!files?.length) {
+    if (!file) {
       return;
     }
 
     isImporting = true;
 
     try {
-      const backup = (await readJsonFile(files[0])) as Backup;
+      const backup = (await readJsonFile(file)) as Backup;
       await validateBackup(backup);
 
       const { journal, myCoffees } = backup;
@@ -58,10 +54,10 @@
         myCoffeesStore.apply(result.localChanges);
       }
 
-      files = undefined;
-      toastHelper.triggerInfo('Importing backup data was successful');
+      file = undefined;
+      toast.info('Importing backup data was successful');
     } catch (error: unknown) {
-      toastHelper.triggerError(`Importing backup data failed. ${(error as Error).message}`);
+      toast.error(`Importing backup data failed. ${(error as Error).message}`);
     } finally {
       isImporting = false;
     }
@@ -84,21 +80,12 @@
     {/if}
   </div>
   <Form>
-    <FileDropzone name="import-file-input" accept="application/json" bind:files>
-      {#snippet lead()}
-        <Icon data={faFileArrowUp} scale={1.5} />
-      {/snippet}
-      {#snippet message()}
-        {#if fileSelected}
-          <span>{files?.[0].name}</span>
-        {:else}
-          <span>Click to select file or drag and drop</span>
-        {/if}
-      {/snippet}
-      {#snippet meta()}
-        Allowed type: JSON
-      {/snippet}
-    </FileDropzone>
+    <FileUpload
+      name="import-file-input"
+      accept="application/json"
+      hint="Allowed type: JSON"
+      bind:file
+    />
     <div class="flex justify-end gap-2">
       <button
         class="btn variant-ghost-primary"

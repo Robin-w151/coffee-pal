@@ -20,7 +20,7 @@
     onSynchronize,
   }: Props = $props();
 
-  let lastSyncText = $derived.by(() => {
+  const lastSyncText = $derived.by(() => {
     if (!lastSync) {
       return;
     }
@@ -44,7 +44,7 @@
   }
 </script>
 
-<div class="page-actions-token">
+<div class="flex items-end gap-4 fixed z-10 bottom-8 right-8">
   {#if isSyncEnabled}
     <button
       class="btn btn-icon btn-icon-lg variant-filled-primary shadow-xl"
@@ -52,7 +52,7 @@
       onclick={handleSyncClick}
     >
       {#if isSynchronizing}
-        <Spinner color="white" />
+        <Spinner class="text-white" />
       {:else}
         <Icon data={faRotate} scale={1.25} />
         <span class="sr-only"

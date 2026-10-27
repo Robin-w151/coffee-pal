@@ -3,11 +3,13 @@
   import type { Measurement } from '$lib/models/measurement';
   import { round } from '$lib/shared/math';
   import { getPreferredWeightUnit } from '$lib/shared/units';
-  import { settingsStore } from '$lib/stores/settings';
+  import { getSettingsStore } from '$lib/stores/settings.svelte';
   import Card from '../shared/elements/Card.svelte';
   import Form from '../shared/elements/form/Form.svelte';
   import Label from '../shared/elements/form/Label.svelte';
   import MeasurementInput from '../shared/elements/form/MeasurementInput.svelte';
+
+  const settingsStore = getSettingsStore();
 
   interface Props {
     dropsPerMinute: number;
@@ -17,15 +19,15 @@
   let { dropsPerMinute, isWithinRange = $bindable(false) }: Props = $props();
 
   const units = WEIGHT_UNITS;
-  const preferredUnit = getPreferredWeightUnit($settingsStore.preferredUnits);
+  const preferredUnit = getPreferredWeightUnit(settingsStore.preferredUnits);
 
   let waterMeasurement: Measurement = $state({
     value: 500,
     unit: preferredUnit,
   });
   let targetDropsPerMinute = $state(60);
-  let targetTime = $derived(calculateTime(waterMeasurement.value, targetDropsPerMinute));
-  let estimatedTime = $derived(calculateTime(waterMeasurement.value, dropsPerMinute));
+  const targetTime = $derived(calculateTime(waterMeasurement.value, targetDropsPerMinute));
+  const estimatedTime = $derived(calculateTime(waterMeasurement.value, dropsPerMinute));
 
   $effect(() => {
     isWithinRange = Math.abs(dropsPerMinute - targetDropsPerMinute) < targetDropsPerMinute * 0.1;
@@ -75,7 +77,9 @@
       <MeasurementInput {units} bind:measurement={waterMeasurement} />
     </Label>
     <Label text="Target drip rate">
-      <div class="input-group input-group-divider measurement-input grid-cols-[1fr_auto]">
+      <div
+        class="input-group input-group-divider grid-cols-[1fr_auto] [&_input]:!min-w-[10rem] [&_select]:!min-w-[6rem] [&_.input-group-shim]:!min-w-[6rem]"
+      >
         <input
           type="number"
           placeholder="Target drip rate, e.g. 60dpm"

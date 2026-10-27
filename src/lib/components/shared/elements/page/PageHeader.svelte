@@ -1,4 +1,5 @@
 <script lang="ts">
+  import PageTitle from './PageTitle.svelte';
   import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
   import { tick } from 'svelte';
   import { Icon } from 'svelte-awesome';
@@ -45,8 +46,6 @@
         <Icon data={faArrowLeft} />
       </button>
     {/if}
-    <h2 class="page-header-title">
-      <span>{title}</span>
-    </h2>
+    <PageTitle {title} />
   {/if}
 </header>

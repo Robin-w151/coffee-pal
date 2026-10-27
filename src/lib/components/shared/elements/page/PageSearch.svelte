@@ -1,4 +1,5 @@
 <script lang="ts">
+  import PageTitle from './PageTitle.svelte';
   import {
     faArrowUpAZ,
     faArrowUpWideShort,
@@ -6,13 +7,13 @@
     faClose,
     faSearch,
   } from '@fortawesome/free-solid-svg-icons';
-  import { popup, type PopupSettings } from '@skeletonlabs/skeleton';
   import { tick, untrack, type Snippet } from 'svelte';
   import { Icon } from 'svelte-awesome';
   import { fade } from 'svelte/transition';
   import { scaleX } from '../../transitions/scaleX';
   import Spinner from '../Spinner.svelte';
   import InputWithButton from '../form/InputWithButton.svelte';
+  import Popover from '$lib/components/shared/ui/Popover.svelte';
 
   type PageSearchSort = 'asc' | 'desc';
 
@@ -36,21 +37,15 @@
     onSortToggle,
   }: Props = $props();
 
-  const sortPopup: PopupSettings = {
-    event: 'click',
-    target: 'sort-popup',
-    placement: 'bottom',
-  };
-
   let searchInputRef: HTMLInputElement | undefined = $state();
   let isSearchActive = $state(untrack(() => !!search));
-  let isChangeSortOrderButtonDisabled = $derived(!!search);
-  let headerSearchActiveClass = $derived(
+  const isChangeSortOrderButtonDisabled = $derived(!!search);
+  const headerSearchActiveClass = $derived(
     isSearchActive
       ? 'card flex-col !items-start px-4 py-4 h-auto transition ease-out duration-250'
       : '',
   );
-  let changeSortOrderButtonTitle = $derived(
+  const changeSortOrderButtonTitle = $derived(
     isChangeSortOrderButtonDisabled
       ? 'Sort order is determined by search input'
       : 'Change sort order',
@@ -94,9 +89,7 @@
 
 <header class="flex justify-between items-center gap-4 px-2 w-full h-12 {headerSearchActiveClass}">
   <div class="flex items-center gap-4 w-full">
-    <h2 class="page-header-title">
-      <span>{title}</span>
-    </h2>
+    <PageTitle {title} />
     {#if isSearchActive && isLoading}
       <Spinner />
     {/if}
@@ -127,17 +120,20 @@
       </button>
     {/if}
     {#if popupContent}
-      <button
-        class="btn btn-icon {isSearchActive ? 'variant-filled-primary' : 'variant-ghost-secondary'}"
-        title={changeSortOrderButtonTitle}
-        disabled={isChangeSortOrderButtonDisabled}
-        use:popup={sortPopup}
-      >
-        <Icon data={faArrowUpWideShort} />
-      </button>
-      <div class="popup-token" data-popup="sort-popup">
-        {@render popupContent()}
-      </div>
+      <Popover content={popupContent}>
+        {#snippet trigger(triggerProps)}
+          <button
+            class="btn btn-icon {isSearchActive
+              ? 'variant-filled-primary'
+              : 'variant-ghost-secondary'}"
+            title={changeSortOrderButtonTitle}
+            disabled={isChangeSortOrderButtonDisabled}
+            {...triggerProps}
+          >
+            <Icon data={faArrowUpWideShort} />
+          </button>
+        {/snippet}
+      </Popover>
     {:else}
       <button
         class="btn btn-icon {isSearchActive ? 'variant-filled-primary' : 'variant-ghost-secondary'}"

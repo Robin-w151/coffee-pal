@@ -2,7 +2,7 @@
 
 **Epic:** [0001 Migrate to Skeleton v5, Tailwind v4 and SvelteKit 3](README.md)
 **Owner:** Claude
-**Status:** Todo
+**Status:** Done
 **Depends on:** 07, 08
 **Size:** M — five wrappers; Combobox is the tricky one, because v2 splits it into input + popup + `Autocomplete` list and the wrapper must own all three.
 
@@ -12,7 +12,7 @@ As Claude, I want the remaining Skeleton components behind app-owned wrappers, s
 
 ## Description
 
-Create in `src/lib/components/ui/`:
+Create in `src/lib/components/shared/ui/`:
 
 | Wrapper             | Wraps (v2)                       | v4/v5 target                   | Notes                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
 | ------------------- | -------------------------------- | ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -24,15 +24,33 @@ Create in `src/lib/components/ui/`:
 
 ## Acceptance criteria
 
-- [ ] `pnpm migration:status` shows `skeleton-v2-imports-outside-ui` = 0.
-- [ ] `src/lib/shared/ui/autocomplete.ts` is deleted; `grep -rnE "'@skeletonlabs/skeleton[/']" src --include='*.ts' --include='*.svelte' | grep -vE "^src/lib/(components|services)/ui/"` returns nothing (`--include=*.ts` also covers `.svelte.ts`).
-- [ ] Autocomplete, ListBox, Paginator and navigation e2e tests (02, 03) are green, unchanged.
-- [ ] Given the Combobox list is open, when the user presses Escape, then it closes and focus stays in the input.
-- [ ] `pnpm verify:strict` is green.
+- [x] `pnpm migration:status` shows `skeleton-v2-imports-outside-ui` = 0.
+- [x] `src/lib/shared/ui/autocomplete.ts` is deleted; `grep -rnE "'@skeletonlabs/skeleton[/']" src --include='*.ts' --include='*.svelte' | grep -vE "^src/lib/(components/shared|services)/ui/"` returns nothing (`--include=*.ts` also covers `.svelte.ts`).
+- [x] Autocomplete, ListBox, Paginator and navigation e2e tests (02, 03) are green, unchanged.
+- [x] Given the Combobox list is open, when the user presses Escape, then it closes and focus stays in the input.
+- [x] `pnpm verify:strict` is green.
 
 ## Technical notes
 
 - Same wrapper rules as story 09 (runes, minimal app-shaped props, no Skeleton classes from callers, header comment naming the target component).
+
+### As built (2026-10-25)
+
+- `src/lib/shared/ui/autocomplete.ts` was already deleted in story 08; its settings became `Popover`'s `openOn="focus-click"` + `matchWidth`, which `Combobox` uses.
+- **Combobox** props:
+  - `value` (bindable input text; named `inputValue` in the plan, renamed in review of PR #188), `options`, `filter` (`contains` | `none`), `placeholder`, `onSelect`, `onInputChange`.
+  - Extra props that the call sites need:
+    - `invalid` (Method's `input-error`)
+    - `onBlur` and `onOpenChange` (Method's "touched" logic)
+    - `trailLink: { title, href, visible, icon }` instead of a `trail` snippet. CoffeeType's link button is rendered by the wrapper through the app's `InputWithButton`, so phase 2 only has to restyle it.
+  - The visible `Label` (with Method's error message) stays at the call site.
+  - The Combobox focuses its input after a selection and stops Escape itself. v2's popup closes on Escape in the capture phase, and focus stays in the input. A new e2e test covers this (`brew method popup closes on Escape and keeps focus in the input`).
+  - `ComboboxOption<T>` has an optional `keywords`, which the `contains` filter matches, as v2's `Autocomplete` did for `methodOptions`.
+  - `.autocomplete-button { text-align: start }` became `regionButton="w-full text-start"`.
+- **Listbox** renders the icon, the label and the check mark of the selected option itself. `onSelect` fires on every click, also on the selected option, as before. Journal and MyCoffees map their sort options to `{ value: label, label, icon }`.
+- **Pagination** takes `page`, `pageSize`, `total` and `onPageChange`. The `PaginationSettings` objects are gone from both pages.
+- **NavRail**: `.app-rail-anchor { @apply block overflow-hidden rounded-md }` became `class="block overflow-hidden rounded-md"` on each anchor.
+- **AppBar** (`UiAppBar`) takes `lead` and `title` snippets. No `trail` snippet, because no caller has one.
 
 ## Testing
 

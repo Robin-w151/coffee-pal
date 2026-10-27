@@ -25,7 +25,7 @@ Unblocks every other Claude story. Branch: `migration/0-safety-net` (create from
 
    | Category                         | What is counted                                                                                                                                                             | Must be 0 after phase |
    | -------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
-   | `skeleton-v2-imports-outside-ui` | files importing `@skeletonlabs/skeleton` outside `src/lib/components/ui/` and `src/lib/services/ui/`                                                                        | 1                     |
+   | `skeleton-v2-imports-outside-ui` | files importing `@skeletonlabs/skeleton` outside `src/lib/components/shared/ui/` and `src/lib/services/ui/`                                                                 | 1                     |
    | `local-storage-store`            | uses of `localStorageStore`                                                                                                                                                 | 1                     |
    | `app-shell`                      | uses of `AppShell`                                                                                                                                                          | 1                     |
    | `conic-gradient`                 | uses of `ConicGradient`                                                                                                                                                     | 1                     |

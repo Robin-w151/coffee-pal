@@ -1,30 +1,24 @@
 <script lang="ts">
   import { pauseScheduledSync } from '$lib/services/sync/sync';
   import { listenForUpdates } from '$lib/services/updates/updateListener';
-  import { ToastHelper } from '$lib/shared/ui/toast';
-  import { getToastStore } from '@skeletonlabs/skeleton';
+  import { toast } from '$lib/services/ui/toast.svelte';
   import { onMount } from 'svelte';
-
-  const toastHelper = new ToastHelper(getToastStore());
 
   let isRestarting = $state(false);
 
   onMount(async () => {
     listenForUpdates(({ restart }) => {
-      toastHelper.triggerInfo(
-        'A new app version is available. Do you want to update and restart the app now?',
-        {
-          action: {
-            label: 'Restart now',
-            response: async () => {
-              isRestarting = true;
-              pauseScheduledSync();
-              restart();
-            },
+      toast.info('A new app version is available. Do you want to update and restart the app now?', {
+        action: {
+          label: 'Restart now',
+          onClick: async () => {
+            isRestarting = true;
+            pauseScheduledSync();
+            restart();
           },
-          autohide: false,
         },
-      );
+        persistent: true,
+      });
     });
   });
 </script>

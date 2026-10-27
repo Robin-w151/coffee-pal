@@ -4,7 +4,9 @@
   import type { ActiveCoffeeEntry } from '$lib/models/myCoffees';
   import { getAromaColor } from '$lib/services/myCoffees/colors/colors';
   import { getDisplayValue, getPreferredLengthUnit } from '$lib/shared/units';
-  import { settingsStore } from '$lib/stores/settings';
+  import { getSettingsStore } from '$lib/stores/settings.svelte';
+
+  const settingsStore = getSettingsStore();
 
   interface Props {
     entry: ActiveCoffeeEntry;
@@ -12,7 +14,7 @@
 
   let { entry }: Props = $props();
 
-  const preferredLengthUnit = getPreferredLengthUnit($settingsStore.preferredUnits);
+  const preferredLengthUnit = getPreferredLengthUnit(settingsStore.preferredUnits);
 
   function handleEntryClick(): void {
     gotoDetail();
@@ -35,7 +37,13 @@
   }
 </script>
 
-<tr tabindex="0" role="button" onclick={handleEntryClick} onkeydown={handleEntryKeyDown}>
+<tr
+  class="transition ease-out"
+  tabindex="0"
+  role="button"
+  onclick={handleEntryClick}
+  onkeydown={handleEntryKeyDown}
+>
   <td>{entry.name}</td>
   <td>{entry.origin ?? 'Unknown'}</td>
   <td>{entry.process ?? 'Unknown'}</td>

@@ -2,7 +2,7 @@
 
 **Epic:** [0001 Migrate to Skeleton v5, Tailwind v4 and SvelteKit 3](README.md)
 **Owner:** Human
-**Status:** Todo
+**Status:** In Progress
 **Depends on:** 11
 **Size:** S — PR review plus one check on your phone that real settings survived; this ships a refactor to production.
 
@@ -18,13 +18,13 @@ Merging to `main` releases and deploys, so only you do it. The real-data check (
 
 #### Prerequisites
 
-- [ ] PR `migration/1-decouple → main` is open; CI is green.
-- [ ] A phone or browser where Coffee Pal is installed **with real data**: a non-default colour scheme or unit, and ideally a WebDAV sync connection.
-- [ ] Write down your current settings on the phone before updating: colour scheme, units, and the Nextcloud server URL and username shown in Settings (you'll need the app password again if the connection is lost).
+- [x] PR `migration/1-decouple → main` is open; CI is green.
+- [x] A phone or browser where Coffee Pal is installed **with real data**: a non-default colour scheme or unit, and ideally a WebDAV sync connection.
+- [x] Write down your current settings on the phone before updating: colour scheme, units, and the Nextcloud server URL and username shown in Settings (you'll need the app password again if the connection is lost).
 
 #### Steps
 
-1. **Review the PR.** Focus on `src/lib/services/ui/*`, `src/lib/components/ui/*`, `src/lib/stores/settings.svelte.ts`, `src/lib/stores/sync.svelte.ts`.
+1. **Review the PR.** Focus on `src/lib/services/ui/*`, `src/lib/components/shared/ui/*`, `src/lib/stores/settings.svelte.ts`, `src/lib/stores/sync.svelte.ts`.
    **Expected:** no call site outside `ui/` imports `@skeletonlabs/skeleton`.
 2. **Open the PR's Vercel preview** (link in the PR's checks / deployments) and click through journal, my coffees, calculator, drip counter, settings. Open the menu, delete-confirm dialog (cancel it) and a popup.
    **Expected:** looks and behaves exactly like production.

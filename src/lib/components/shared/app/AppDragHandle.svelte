@@ -27,7 +27,7 @@
 
 <div class="drag-handle flex-1 bg-surface-100-800-token" class:visible></div>
 
-<style lang="scss">
+<style>
   .drag-handle.visible {
     -webkit-app-region: drag;
   }

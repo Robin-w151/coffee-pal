@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { ActiveJournalEntry } from '$lib/models/journal';
-  import { settingsStore } from '$lib/stores/settings';
+  import { getSettingsStore } from '$lib/stores/settings.svelte';
   import { calculateRatio } from '$lib/shared/math';
   import {
     getDisplayValue,
@@ -10,17 +10,19 @@
   import { getCoffeeLabel } from '$lib/models/myCoffees';
   import { resolve } from '$app/paths';
 
+  const settingsStore = getSettingsStore();
+
   interface Props {
     entry: ActiveJournalEntry;
   }
 
   let { entry }: Props = $props();
 
-  const preferredWeightUnit = getPreferredWeightUnit($settingsStore.preferredUnits);
-  const preferredTemperatureUnit = getPreferredTemperatureUnit($settingsStore.preferredUnits);
+  const preferredWeightUnit = getPreferredWeightUnit(settingsStore.preferredUnits);
+  const preferredTemperatureUnit = getPreferredTemperatureUnit(settingsStore.preferredUnits);
 
-  let ratio = $derived(calculateRatio(entry.coffee, entry.water));
-  let coffeeType = $derived(getCoffeeLabel(entry.coffeeType));
+  const ratio = $derived(calculateRatio(entry.coffee, entry.water));
+  const coffeeType = $derived(getCoffeeLabel(entry.coffeeType));
 
   function details(entry: ActiveJournalEntry): string {
     const { water, coffee, waterTemperature, grindSettings, description } = entry;

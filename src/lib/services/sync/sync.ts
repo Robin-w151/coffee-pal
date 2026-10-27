@@ -14,19 +14,21 @@ import type { Connection, SyncClient, SyncResult } from '$lib/models/sync';
 import { journalStore } from '$lib/stores/journal';
 import { myCoffeesStore } from '$lib/stores/myCoffees';
 import { onlineStore } from '$lib/stores/svelte-legos/online';
-import { syncStore } from '$lib/stores/sync';
+import type { SyncStoreInterface } from '$lib/stores/sync.svelte';
 import { syncStateStore } from '$lib/stores/syncState.svelte';
 import { get } from 'svelte/store';
 import { setupScheduledTask } from '../scheduler/scheduler';
 import { NextcloudSyncClient } from './nextcloud';
-import { toastHelper } from '$lib/shared/ui/toast';
+import { toast } from '$lib/services/ui/toast.svelte';
 
 const SYNC = Symbol('sync');
 const isOnline = onlineStore();
 
-export async function sync(): Promise<void> {
-  const sync = get(syncStore);
-  if (!sync.connection) {
+let registeredSyncStore: SyncStoreInterface | undefined;
+
+export async function sync(syncStore: SyncStoreInterface): Promise<void> {
+  const connection = syncStore.connection;
+  if (!connection) {
     return;
   }
 
@@ -42,8 +44,8 @@ export async function sync(): Promise<void> {
   const coffeeEntries = await myCoffeesStore.loadAll();
 
   try {
-    const journalSync = syncJournal(sync.connection, journalEntries);
-    const myCoffeesSync = syncMyCoffees(sync.connection, coffeeEntries);
+    const journalSync = syncJournal(connection, journalEntries);
+    const myCoffeesSync = syncMyCoffees(connection, coffeeEntries);
 
     const [journalSyncResult, myCoffeesSyncResult] = await Promise.allSettled([
       journalSync,
@@ -55,18 +57,14 @@ export async function sync(): Promise<void> {
       applyResults.push(journalStore.apply(journalSyncResult.value));
     } else {
       console.error(journalSyncResult.reason);
-      toastHelper.triggerError(
-        'Failed to sync journal - remote data is corrupted or in an unexpected format',
-      );
+      toast.error('Failed to sync journal - remote data is corrupted or in an unexpected format');
     }
 
     if (myCoffeesSyncResult.status === 'fulfilled') {
       applyResults.push(myCoffeesStore.apply(myCoffeesSyncResult.value));
     } else {
       console.error(myCoffeesSyncResult.reason);
-      toastHelper.triggerError(
-        'Failed to sync myCoffees - remote data is corrupted or in an unexpected format',
-      );
+      toast.error('Failed to sync myCoffees - remote data is corrupted or in an unexpected format');
     }
 
     await Promise.all(applyResults);
@@ -82,7 +80,17 @@ export const {
   clearScheduledExecution: clearScheduledSync,
   pauseScheduledTask: pauseScheduledSync,
   resumeScheduledTask: resumeScheduledSync,
-} = setupScheduledTask(SYNC, sync);
+} = setupScheduledTask(SYNC, () => {
+  if (registeredSyncStore) {
+    // Fire and forget, like every scheduled task; sync() reports its own failures as toasts.
+    void sync(registeredSyncStore);
+  }
+});
+
+/** Registers the store the scheduled sync uses; it runs from timers, outside any component. */
+export function initScheduledSync(syncStore: SyncStoreInterface): void {
+  registeredSyncStore = syncStore;
+}
 
 async function syncJournal(
   connection: Connection,

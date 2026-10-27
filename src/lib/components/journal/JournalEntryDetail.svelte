@@ -4,12 +4,11 @@
   import { getCoffeeLabel } from '$lib/models/myCoffees';
   import { pauseScheduledSync, resumeScheduledSync, scheduleSync } from '$lib/services/sync/sync';
   import { isEqualJournalEntry } from '$lib/shared/compare';
-  import { ModalHelper } from '$lib/shared/ui/modal';
-  import { ToastHelper } from '$lib/shared/ui/toast';
+  import { modal } from '$lib/services/ui/modal.svelte';
+  import { toast } from '$lib/services/ui/toast.svelte';
   import { journalStore } from '$lib/stores/journal';
   import { syncStateEvents } from '$lib/stores/syncState.svelte';
   import { faCalculator, faFaceSadCry } from '@fortawesome/free-solid-svg-icons';
-  import { getModalStore, getToastStore } from '@skeletonlabs/skeleton';
   import { Subject, takeUntil, tap } from 'rxjs';
   import { onDestroy, onMount, untrack } from 'svelte';
   import { Icon } from 'svelte-awesome';
@@ -36,9 +35,6 @@
 
   let { id = undefined }: Props = $props();
 
-  const modalHelper = new ModalHelper(getModalStore());
-  const toastStore = getToastStore();
-  const toastHelper = new ToastHelper(toastStore);
   const destroy = new Subject<void>();
 
   let entry: Partial<ActiveJournalEntry> = $state({
@@ -66,10 +62,10 @@
   let waterInputValid = $state(true);
   let coffeeInputValid = $state(true);
   let waterTemperatureValid = $state(true);
-  let formValid = $derived(methodInputValid && waterInputValid && coffeeInputValid);
+  const formValid = $derived(methodInputValid && waterInputValid && coffeeInputValid);
 
   let pageHeader = $state<PageHeader | undefined>(undefined);
-  let entryTitle = $derived(getTitle(unknown, entry));
+  const entryTitle = $derived(getTitle(unknown, entry));
 
   onMount(async () => {
     pauseScheduledSync();
@@ -80,17 +76,17 @@
           if (!isSynchronizing && id && entry) {
             const loadedEntry = await journalStore.loadOne(id);
             if (loadedEntry && !isEqualJournalEntry(entry, loadedEntry)) {
-              updateInfoToast = toastHelper.triggerInfo(
+              updateInfoToast = toast.info(
                 'This entry was updated in the background. Do you want to reload now?',
                 {
                   action: {
                     label: 'Reload now',
-                    response: async () => {
+                    onClick: async () => {
                       entry = loadedEntry;
                       originalEntry = structuredClone(loadedEntry);
                     },
                   },
-                  autohide: false,
+                  persistent: true,
                 },
               );
             }
@@ -120,7 +116,7 @@
     destroy.complete();
 
     if (updateInfoToast) {
-      toastStore.close(updateInfoToast);
+      toast.dismiss(updateInfoToast);
     }
   });
 
@@ -169,18 +165,16 @@
   function handleRemove(): void {
     if (id) {
       const entryId = id;
-      toastHelper.triggerInfo('Did you click to fast?', {
+      toast.info('Did you click to fast?', {
         timeout: 15000,
         action: {
           label: 'Undo',
-          response: () => {
+          onClick: () => {
             journalStore.undo(entryId);
           },
         },
-        callback: (response) => {
-          if (response.status === 'closed') {
-            scheduleSync();
-          }
+        onClose: () => {
+          scheduleSync();
         },
       });
 
@@ -265,10 +259,10 @@
   }
 
   function askUnsavedChanges(): Promise<boolean> {
-    return modalHelper.triggerConfirm(
-      'You have unsaved changes',
-      'Are you sure you want to leave?',
-    );
+    return modal.confirm({
+      title: 'You have unsaved changes',
+      body: 'Are you sure you want to leave?',
+    });
   }
 </script>
 

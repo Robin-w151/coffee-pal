@@ -166,6 +166,57 @@ test('entry delete undo', async ({ myCoffeesPage, myCoffeesEntryDetailPage }) =>
   await expect(myCoffeesPage.coffeeList).toHaveCount(3);
 });
 
+test('aromas of a new, unsaved entry use the aroma colours', async ({
+  myCoffeesPage,
+  myCoffeesEntryDetailPage,
+}) => {
+  await myCoffeesPage.clickAddButton();
+  await expect(myCoffeesEntryDetailPage.nameInput).toBeVisible();
+
+  for (const aroma of ['apple', 'cherry']) {
+    await myCoffeesEntryDetailPage.addAroma(aroma);
+  }
+
+  await expect(myCoffeesEntryDetailPage.aromaChips).toHaveCount(2);
+  for (const aroma of ['apple', 'cherry']) {
+    await expect(myCoffeesEntryDetailPage.getAromaChip(aroma)).toHaveCSS(
+      'background-color',
+      getAromaColor(aroma).backgroundColor,
+    );
+  }
+});
+
+test('a new aroma tag shows its colour without fading in', async ({
+  page,
+  myCoffeesPage,
+  myCoffeesEntryDetailPage,
+}) => {
+  await myCoffeesPage.clickAddButton();
+  await expect(myCoffeesEntryDetailPage.nameInput).toBeVisible();
+  // Records the computed background of every newly rendered tag on each animation frame.
+  await page.evaluate(() => {
+    const recorded: Array<string> = [];
+    (window as TagColorRecorder).__tagColors = recorded;
+    const record = () => {
+      document
+        .querySelectorAll('[data-testid=aromas] button.chip')
+        .forEach((tag) => recorded.push(getComputedStyle(tag).backgroundColor));
+      if (recorded.length < 20) {
+        requestAnimationFrame(record);
+      }
+    };
+    requestAnimationFrame(record);
+  });
+
+  await myCoffeesEntryDetailPage.addAroma('cherry');
+
+  await expect
+    .poll(() => page.evaluate(() => (window as TagColorRecorder).__tagColors!.length))
+    .toBeGreaterThanOrEqual(5);
+  const colors = await page.evaluate(() => (window as TagColorRecorder).__tagColors!);
+  expect(new Set(colors)).toEqual(new Set([getAromaColor('cherry').backgroundColor]));
+});
+
 test.describe('aromas', () => {
   test.beforeEach(async ({ myCoffeesPage, myCoffeesEntryDetailPage }) => {
     await myCoffeesPage.clickCoffeeEntry(1);
@@ -235,3 +286,7 @@ test.describe('aromas', () => {
 });
 
 type EscapeCounter = Window & { __escapes?: number };
+
+interface TagColorRecorder extends Window {
+  __tagColors?: Array<string>;
+}

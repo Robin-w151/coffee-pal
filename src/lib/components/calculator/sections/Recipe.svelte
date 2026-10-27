@@ -3,13 +3,15 @@
   import Form from '$lib/components/shared/elements/form/Form.svelte';
   import Label from '$lib/components/shared/elements/form/Label.svelte';
   import MeasurementInput from '$lib/components/shared/elements/form/MeasurementInput.svelte';
+  import Switch from '$lib/components/shared/ui/Switch.svelte';
   import { WEIGHT_UNITS, WEIGHT_UNITS_COFFEE } from '$lib/config/units';
   import type { Measurement } from '$lib/models/measurement';
   import type { Recipe } from '$lib/models/recipe';
   import { getPreferredWeightUnit } from '$lib/shared/units';
-  import { settingsStore } from '$lib/stores/settings';
-  import { SlideToggle } from '@skeletonlabs/skeleton';
+  import { getSettingsStore } from '$lib/stores/settings.svelte';
   import { untrack } from 'svelte';
+
+  const settingsStore = getSettingsStore();
 
   interface Props {
     fixedRatio?: boolean;
@@ -29,7 +31,7 @@
 
   const units = WEIGHT_UNITS;
   const units_coffee = WEIGHT_UNITS_COFFEE;
-  const preferredUnit = getPreferredWeightUnit($settingsStore.preferredUnits);
+  const preferredUnit = getPreferredWeightUnit(settingsStore.preferredUnits);
 
   let coffeeMeasurement: Measurement = $state({
     value: untrack(() => recipe.coffee),
@@ -79,13 +81,7 @@
   <h3 class="h3">Recipe</h3>
   <Form>
     <div class="flex items-center gap-2">
-      <SlideToggle
-        name="fixed-ratio"
-        label="Fixed Ratio"
-        size="sm"
-        active="slide-toggle-active-token"
-        bind:checked={fixedRatio}
-      />
+      <Switch name="fixed-ratio" label="Fixed Ratio" bind:checked={fixedRatio} />
       <span>Fixed Ratio</span>
     </div>
     <Label text="Amount of water">

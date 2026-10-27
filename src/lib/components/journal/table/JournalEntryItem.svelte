@@ -1,7 +1,7 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
   import type { ActiveJournalEntry } from '$lib/models/journal';
-  import { settingsStore } from '$lib/stores/settings';
+  import { getSettingsStore } from '$lib/stores/settings.svelte';
   import {
     getDisplayValue,
     getPreferredTemperatureUnit,
@@ -11,17 +11,19 @@
   import { calculateRatio } from '$lib/shared/math';
   import { resolve } from '$app/paths';
 
+  const settingsStore = getSettingsStore();
+
   interface Props {
     entry: ActiveJournalEntry;
   }
 
   let { entry }: Props = $props();
 
-  const preferredWeightUnit = getPreferredWeightUnit($settingsStore.preferredUnits);
-  const preferredTemperatureUnit = getPreferredTemperatureUnit($settingsStore.preferredUnits);
+  const preferredWeightUnit = getPreferredWeightUnit(settingsStore.preferredUnits);
+  const preferredTemperatureUnit = getPreferredTemperatureUnit(settingsStore.preferredUnits);
 
-  let ratio = $derived(calculateRatio(entry.coffee, entry.water));
-  let coffeeType = $derived(getCoffeeLabel(entry.coffeeType));
+  const ratio = $derived(calculateRatio(entry.coffee, entry.water));
+  const coffeeType = $derived(getCoffeeLabel(entry.coffeeType));
 
   function handleEntryClick(): void {
     gotoDetail();
@@ -52,7 +54,13 @@
   }
 </script>
 
-<tr tabindex="0" role="button" onclick={handleEntryClick} onkeydown={handleEntryKeyDown}>
+<tr
+  class="transition ease-out"
+  tabindex="0"
+  role="button"
+  onclick={handleEntryClick}
+  onkeydown={handleEntryKeyDown}
+>
   <td><span class="badge variant-soft-tertiary w-16">{ratio}</span></td>
   <td>{entry.method}</td>
   <td>{coffeeType ?? 'Unknown'}</td>

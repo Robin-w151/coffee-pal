@@ -5,7 +5,7 @@ import { parseArgs } from 'node:util';
 
 const SRC_CODE = 'src/**/*.{ts,js,svelte}';
 const SRC_ALL = 'src/**/*.{ts,js,svelte,html,css,scss}';
-const UI_LAYER = ['src/lib/components/ui/**', 'src/lib/services/ui/**'];
+const UI_LAYER = ['src/lib/components/shared/ui/**', 'src/lib/services/ui/**'];
 // The quoted package name only appears in JS imports: v4+ imports its CSS from .css files, which
 // the globs using this don't match.
 const SKELETON_V2_JS_IMPORT = /['"]@skeletonlabs\/skeleton(?:\/[^'"\n]*)?['"]/g;
