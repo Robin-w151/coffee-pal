@@ -1,7 +1,6 @@
 <script lang="ts">
   // Phase 1: shows the service's drawer with Skeleton v2's drawer store.
   import { drawer, type DrawerId } from '$lib/services/ui/drawer.svelte';
-  import { Drawer, getDrawerStore, initializeStores } from '@skeletonlabs/skeleton';
   import { untrack, type Snippet } from 'svelte';
   import { get } from 'svelte/store';
 

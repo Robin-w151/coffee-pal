@@ -19,7 +19,7 @@
 
 <div class="overflow-auto">
   <table
-    class="table rounded-md [&_tbody_tr:nth-child(2n)]:bg-surface-200-700-token {hasEntries(entries)
+    class="table rounded-md [&_tbody_tr:nth-child(2n)]:bg-surface-200-800 {hasEntries(entries)
       ? 'table-interactive'
       : ''}"
   >

@@ -19,7 +19,7 @@
 <script lang="ts" generics="T">
   // Maps to Skeleton v4/v5 `Combobox`. Phase 1: an input with v2 `Autocomplete` in a Popover.
   import InputWithButton from '$lib/components/shared/elements/form/InputWithButton.svelte';
-  import { Autocomplete, type AutocompleteOption } from '@skeletonlabs/skeleton';
+  import { type AutocompleteOption } from '@skeletonlabs/skeleton-svelte';
   import { Icon } from 'svelte-awesome';
   import Popover from './Popover.svelte';
 
@@ -72,7 +72,7 @@
   matchWidth
   portal
   trapFocus
-  contentClass="card z-10 p-4 max-h-48 bg-surface-200-700-token overflow-y-auto shadow-xl"
+  contentClass="card z-10 p-4 max-h-48 bg-surface-200-800 overflow-y-auto shadow-xl"
   {onOpenChange}
 >
   {#snippet content()}

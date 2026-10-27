@@ -1,6 +1,6 @@
 <script lang="ts">
   // Maps to Skeleton v4/v5 `Pagination`. Phase 1: wraps v2 `Paginator`.
-  import { Paginator } from '@skeletonlabs/skeleton';
+  import { Pagination } from '@skeletonlabs/skeleton-svelte';
 
   interface Props {
     /** Zero-based, as the stores count pages. */
@@ -15,7 +15,7 @@
   const settings = $derived({ page, limit: pageSize, size: total, amounts: [] });
 </script>
 
-<Paginator
+<Pagination
   {settings}
   showFirstLastButtons
   showPreviousNextButtons

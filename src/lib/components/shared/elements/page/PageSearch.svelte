@@ -111,7 +111,7 @@
       </InputWithButton>
     {:else}
       <button
-        class="btn btn-icon variant-ghost-secondary"
+        class="btn btn-icon preset-tonal-secondary border border-secondary-500"
         title="Search"
         onclick={handleSearchClick}
         in:fade={{ duration: 250 }}
@@ -124,8 +124,8 @@
         {#snippet trigger(triggerProps)}
           <button
             class="btn btn-icon {isSearchActive
-              ? 'variant-filled-primary'
-              : 'variant-ghost-secondary'}"
+              ? 'preset-filled-primary-500'
+              : 'preset-tonal-secondary border border-secondary-500'}"
             title={changeSortOrderButtonTitle}
             disabled={isChangeSortOrderButtonDisabled}
             {...triggerProps}
@@ -136,7 +136,9 @@
       </Popover>
     {:else}
       <button
-        class="btn btn-icon {isSearchActive ? 'variant-filled-primary' : 'variant-ghost-secondary'}"
+        class="btn btn-icon {isSearchActive
+          ? 'preset-filled-primary-500'
+          : 'preset-tonal-secondary border border-secondary-500'}"
         title={changeSortOrderButtonTitle}
         disabled={isChangeSortOrderButtonDisabled}
         onclick={handleSortClick}

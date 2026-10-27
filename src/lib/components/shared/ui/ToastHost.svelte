@@ -1,11 +1,11 @@
 <script lang="ts">
   // Phase 1: renders the service's toasts with Skeleton v2's toast store.
   import { toast, type ToastKind } from '$lib/services/ui/toast.svelte';
-  import { Toast, getToastStore, initializeStores } from '@skeletonlabs/skeleton';
+  import { ToastProvider } from '@skeletonlabs/skeleton-svelte';
 
   const BACKGROUNDS: Record<ToastKind, string> = {
-    info: 'variant-filled-primary',
-    error: 'variant-filled-error',
+    info: 'preset-filled-primary-500',
+    error: 'preset-filled-error-500',
   };
 
   // Each host sets up the v2 stores for its own subtree.
@@ -48,7 +48,7 @@
   });
 </script>
 
-<Toast />
+<ToastProvider />
 
 <style>
   /* v2 renders these elements; the extra class outranks its utilities regardless of CSS order. */

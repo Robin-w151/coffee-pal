@@ -1,7 +1,6 @@
 <script lang="ts" generics="TValue extends string">
   // Maps to Skeleton v4/v5 `Listbox`. Phase 1: wraps v2 `ListBox`/`ListBoxItem` (single selection).
   import { faCheck, type IconDefinition } from '@fortawesome/free-solid-svg-icons';
-  import { ListBox, ListBoxItem } from '@skeletonlabs/skeleton';
   import { Icon } from 'svelte-awesome';
 
   interface Props {

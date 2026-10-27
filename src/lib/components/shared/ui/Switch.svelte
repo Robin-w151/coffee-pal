@@ -1,6 +1,6 @@
 <script lang="ts">
   // Maps to Skeleton v4/v5 `Switch`. Phase 1: wraps v2 `SlideToggle`.
-  import { SlideToggle } from '@skeletonlabs/skeleton';
+  import { Switch } from '@skeletonlabs/skeleton-svelte';
 
   interface Props {
     checked?: boolean;
@@ -13,7 +13,7 @@
   let { checked = $bindable(false), name, label, onCheckedChange }: Props = $props();
 </script>
 
-<SlideToggle
+<Switch
   {name}
   {label}
   size="sm"

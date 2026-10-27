@@ -1,6 +1,6 @@
 <script lang="ts">
   // Maps to Skeleton v4/v5 `Slider`. Phase 1: wraps v2 `RangeSlider`.
-  import { RangeSlider } from '@skeletonlabs/skeleton';
+  import { Slider } from '@skeletonlabs/skeleton-svelte';
   import type { Snippet } from 'svelte';
 
   interface Props {
@@ -15,6 +15,6 @@
   let { value = $bindable(), min, max, name, children }: Props = $props();
 </script>
 
-<RangeSlider {name} {min} {max} accent="accent-primary-500 dark:accent-primary-600" bind:value>
+<Slider {name} {min} {max} accent="accent-primary-500 dark:accent-primary-600" bind:value>
   {@render children?.()}
-</RangeSlider>
+</Slider>

@@ -1,7 +1,7 @@
 <script lang="ts">
   // Maps to Skeleton v4/v5 `Navigation` with `layout="rail"`. Phase 1: wraps v2 `AppRail`.
   import type { Route } from '$lib/models/route';
-  import { AppRail, AppRailAnchor } from '@skeletonlabs/skeleton';
+  import { Navigation } from '@skeletonlabs/skeleton-svelte';
   import { Icon } from 'svelte-awesome';
 
   interface Props {
@@ -16,11 +16,11 @@
   }
 </script>
 
-<AppRail
-  background="bg-surface-50-900-token"
+<Navigation
+  background="bg-surface-50-950"
   regionDefault="p-1 space-y-1"
-  hover="bg-primary-hover-token"
-  active="bg-primary-active-token"
+  hover="preset-tonal-primary"
+  active="preset-filled-primary-500"
 >
   {#each items as route (route.href)}
     <AppRailAnchor
@@ -37,4 +37,4 @@
       <span class="wrap-break-word">{route.label}</span>
     </AppRailAnchor>
   {/each}
-</AppRail>
+</Navigation>

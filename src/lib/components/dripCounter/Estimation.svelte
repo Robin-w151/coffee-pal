@@ -63,12 +63,12 @@
       class={[
         'badge',
         'px-4 py-2 text-base',
-        !dropsPerMinute && 'variant-soft-tertiary',
-        dropsPerMinute && isWithinRange && 'variant-filled-primary',
-        dropsPerMinute && !isWithinRange && 'variant-filled-warning',
+        !dropsPerMinute && 'preset-tonal-tertiary',
+        dropsPerMinute && isWithinRange && 'preset-filled-primary-500',
+        dropsPerMinute && !isWithinRange && 'preset-filled-warning-500',
       ]}>Estimated time: {formatTime(estimatedTime)}</span
     >
-    <span class="badge variant-soft-primary px-4 py-2 text-base"
+    <span class="badge preset-tonal-primary px-4 py-2 text-base"
       >Target time: {formatTime(targetTime)}</span
     >
   </div>

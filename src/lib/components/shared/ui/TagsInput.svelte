@@ -1,6 +1,6 @@
 <script lang="ts">
   // Maps to Skeleton v4/v5 `TagsInput`. Phase 1: wraps v2 `InputChip`, which rejects duplicates.
-  import { InputChip } from '@skeletonlabs/skeleton';
+  import { TagsInput } from '@skeletonlabs/skeleton-svelte';
 
   interface Props {
     value?: Array<string>;
@@ -56,7 +56,7 @@
 
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <div bind:this={root} onkeydown={handleKeydown}>
-  <InputChip
+  <TagsInput
     {name}
     {placeholder}
     padding="px-3 py-2"

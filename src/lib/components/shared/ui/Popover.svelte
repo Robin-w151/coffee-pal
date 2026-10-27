@@ -9,7 +9,6 @@
     shift,
     size,
   } from '@floating-ui/dom';
-  import { storePopup } from '@skeletonlabs/skeleton';
   import type { Attachment } from 'svelte/attachments';
 
   storePopup.set({ computePosition, autoUpdate, offset, shift, flip, arrow, size, inline });
@@ -24,7 +23,7 @@
 <script lang="ts">
   // Phase 1: Skeleton v2's popup action, attached to the trigger the snippet renders.
   import Portal from '$lib/components/shared/elements/Portal.svelte';
-  import { focusTrap, popup, type PopupSettings } from '@skeletonlabs/skeleton';
+  import { type PopupSettings } from '@skeletonlabs/skeleton-svelte';
   import type { Snippet } from 'svelte';
   import { createAttachmentKey, fromAction } from 'svelte/attachments';
 
@@ -51,7 +50,7 @@
     matchWidth = false,
     portal = false,
     trapFocus = false,
-    contentClass = 'card p-4 bg-surface-200-700-token shadow-xl z-10',
+    contentClass = 'card p-4 bg-surface-200-800 shadow-xl z-10',
     onOpenChange,
   }: Props = $props();
 

@@ -25,7 +25,7 @@
   });
 </script>
 
-<div class="drag-handle flex-1 bg-surface-100-800-token" class:visible></div>
+<div class="drag-handle flex-1 bg-surface-100-900" class:visible></div>
 
 <style>
   .drag-handle.visible {

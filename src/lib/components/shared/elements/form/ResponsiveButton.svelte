@@ -18,7 +18,7 @@
     label,
     title,
     type,
-    variant = 'variant-filled',
+    variant = 'preset-filled',
     disabled = false,
     class: clazz,
     iconContent,

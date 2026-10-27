@@ -1,4 +1,10 @@
 @import 'tailwindcss';
+@import '@skeletonlabs/skeleton';
+@import '@skeletonlabs/skeleton/optional/presets';
+
+/*
+  Add your theme import for your theme: "coffee" here
+*/
 
 @plugin '@tailwindcss/forms';
 

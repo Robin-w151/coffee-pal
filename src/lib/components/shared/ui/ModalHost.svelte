@@ -1,12 +1,7 @@
 <script lang="ts">
   // Phase 1: shows the service's current modal with Skeleton v2's modal store.
   import { modal, type ModalRequest } from '$lib/services/ui/modal.svelte';
-  import {
-    Modal,
-    getModalStore,
-    initializeStores,
-    type ModalSettings,
-  } from '@skeletonlabs/skeleton';
+  import { type ModalSettings } from '@skeletonlabs/skeleton-svelte';
   import { untrack } from 'svelte';
   import { get } from 'svelte/store';
 
@@ -72,8 +67,10 @@
 
 <Modal
   regionBackdrop="overflow-hidden"
-  buttonNeutral={dangerous ? 'variant-ghost-surface' : 'variant-ghost-primary'}
-  buttonPositive={dangerous ? 'variant-filled-error' : 'variant-filled-primary'}
+  buttonNeutral={dangerous
+    ? 'preset-tonal-surface border border-surface-500'
+    : 'preset-tonal-primary border border-primary-500'}
+  buttonPositive={dangerous ? 'preset-filled-error-500' : 'preset-filled-primary-500'}
 />
 
 <style>

@@ -1,7 +1,7 @@
 <script lang="ts">
   // Maps to Skeleton v4/v5 `FileUpload`. Phase 1: wraps v2 `FileDropzone`.
   import { faFileArrowUp } from '@fortawesome/free-solid-svg-icons';
-  import { FileDropzone } from '@skeletonlabs/skeleton';
+  import { FileUpload } from '@skeletonlabs/skeleton-svelte';
   import { Icon } from 'svelte-awesome';
 
   interface Props {
@@ -17,7 +17,7 @@
   let files = $state<FileList>();
 </script>
 
-<FileDropzone
+<FileUpload
   {name}
   {accept}
   bind:files={
@@ -37,4 +37,4 @@
   {#snippet meta()}
     {hint}
   {/snippet}
-</FileDropzone>
+</FileUpload>

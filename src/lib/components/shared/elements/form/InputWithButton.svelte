@@ -13,7 +13,7 @@
 
   let { title, visible = true, href, children, buttonContent, onclick }: Props = $props();
 
-  const buttonClass = 'btn btn-icon btn-icon-sm variant-soft-secondary absolute right-2';
+  const buttonClass = 'btn btn-icon btn-icon-sm preset-tonal-secondary absolute right-2';
 
   let wrapper: HTMLDivElement | undefined = $state();
 

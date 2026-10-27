@@ -2,7 +2,7 @@
   // Maps to Skeleton v4/v5 `RatingGroup`. Phase 1: wraps v2 `Ratings`.
   import { faStar as faStarRegular } from '@fortawesome/free-regular-svg-icons';
   import { faStar } from '@fortawesome/free-solid-svg-icons';
-  import { Ratings } from '@skeletonlabs/skeleton';
+  import { Rating } from '@skeletonlabs/skeleton-svelte';
   import { Icon } from 'svelte-awesome';
 
   interface Props {
@@ -15,12 +15,12 @@
   let { value, max, onValueChange }: Props = $props();
 </script>
 
-<Ratings
+<Rating
   {value}
   {max}
   interactive
   justify="justify-start"
-  text="text-tertiary-600-300-token"
+  text="text-tertiary-700-300"
   on:icon={({ detail }: CustomEvent<{ index: number }>) => onValueChange(detail.index)}
 >
   {#snippet empty()}
@@ -29,4 +29,4 @@
   {#snippet full()}
     <Icon data={faStar} scale={2} />
   {/snippet}
-</Ratings>
+</Rating>

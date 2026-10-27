@@ -1,6 +1,6 @@
 <script lang="ts">
   // Maps to Skeleton v4/v5 `AppBar`. Phase 1: wraps v2 `AppBar`.
-  import { AppBar } from '@skeletonlabs/skeleton';
+  import { AppBar } from '@skeletonlabs/skeleton-svelte';
   import type { Snippet } from 'svelte';
 
   interface Props {

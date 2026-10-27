@@ -8,7 +8,7 @@
   import { Icon } from 'svelte-awesome';
 
   const routeActiveClass = $derived((route: Route) =>
-    isSelected(route, $page.url.pathname) ? 'bg-primary-active-token' : '',
+    isSelected(route, $page.url.pathname) ? 'preset-filled-primary-500' : '',
   );
 
   function handleClick(): void {
@@ -27,7 +27,7 @@
 <section class="flex flex-col gap-4 p-4">
   <div class="flex justify-between items-center">
     <h2 class="h2">Coffee Pal</h2>
-    <button class="btn btn-icon hover:variant-soft-secondary" onclick={handleClick}>
+    <button class="btn btn-icon hover:preset-tonal-secondary" onclick={handleClick}>
       <Icon data={faClose} />
     </button>
   </div>
