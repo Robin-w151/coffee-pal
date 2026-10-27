@@ -1,8 +1,7 @@
 @import 'tailwindcss';
 @import '@skeletonlabs/skeleton';
 @import '@skeletonlabs/skeleton-svelte';
-/* Preset theme until story 14 brings the coffee theme. */
-@import '@skeletonlabs/skeleton/themes/cerberus';
+@import './themes/coffee.css';
 
 @plugin '@tailwindcss/forms';
 
@@ -49,7 +48,9 @@
 }
 
 /* Mesh generator: https://csshero.org/mesher/ */
-[data-theme='coffee'] {
+/* On body, since Skeleton's base styles give body the theme background, which would hide a mesh
+   on <html>. */
+[data-theme='coffee'] body {
   background-color: hsla(224, 20%, 88%, 1);
   background-image:
     radial-gradient(at 27% 15%, hsla(182, 96%, 18%, 0.3) 0px, transparent 50%),
@@ -63,7 +64,7 @@
   background-size: cover;
 }
 
-.dark [data-theme='coffee'] {
+.dark[data-theme='coffee'] body {
   background-color: hsla(223, 73%, 16%, 1);
   background-image:
     radial-gradient(at 27% 15%, hsla(182, 96%, 18%, 0.3) 0px, transparent 50%),

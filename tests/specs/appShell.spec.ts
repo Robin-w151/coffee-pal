@@ -318,6 +318,52 @@ test.describe('phone', () => {
     });
   });
 
+  test('coffee theme keeps the v2 palette', async ({ page }) => {
+    await gotoReady(page, '/');
+
+    // The build minifies colours (e.g. to hex), so each variable is resolved as a computed colour.
+    const palette = await page.evaluate(() => {
+      const probe = document.body.appendChild(document.createElement('span'));
+      const colors = [
+        'primary',
+        'secondary',
+        'tertiary',
+        'success',
+        'warning',
+        'error',
+        'surface',
+      ].map((name) => {
+        probe.style.color = `var(--color-${name}-500)`;
+        return [name, getComputedStyle(probe).color];
+      });
+      probe.remove();
+      return colors;
+    });
+
+    // The 500 shades of the v2 theme.ts.
+    expect(Object.fromEntries(palette)).toEqual({
+      primary: 'rgb(1, 99, 103)',
+      secondary: 'rgb(142, 52, 18)',
+      tertiary: 'rgb(175, 80, 14)',
+      success: 'rgb(29, 184, 52)',
+      warning: 'rgb(234, 179, 8)',
+      error: 'rgb(165, 25, 25)',
+      surface: 'rgb(14, 37, 94)',
+    });
+  });
+
+  for (const colorScheme of ['light', 'dark'] as const) {
+    test(`mesh background is shown in ${colorScheme} mode`, async ({ page }) => {
+      await page.emulateMedia({ colorScheme });
+      await gotoReady(page, '/');
+
+      await expect(page.locator('html')).toHaveClass(colorScheme === 'dark' ? 'dark' : '');
+      expect(await page.evaluate(() => getComputedStyle(document.body).backgroundImage)).toContain(
+        'radial-gradient',
+      );
+    });
+  }
+
   test(
     'service worker serves the app offline',
     { tag: '@local-preview' },

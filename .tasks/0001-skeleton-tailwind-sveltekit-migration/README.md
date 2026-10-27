@@ -115,7 +115,7 @@ Decision 2026-10-23: Claude works on the phase branch and stops only at the Huma
 | 11  | [Stylesheet preparation](11-stylesheet-preparation.md)                       | Claude | M    | 06, 08, 09, 10 | Done   |
 | 12  | [Merge phase 1 and check production data](12-merge-phase-1.md)               | Human  | S    | 11             | Done   |
 | 13  | [Tailwind v4 and Skeleton codemods](13-tailwind-v4-and-codemods.md)          | Claude | L    | 11             | Done   |
-| 14  | [Coffee theme for Skeleton v4](14-coffee-theme-v4.md)                        | Claude | M    | 13             | Todo   |
+| 14  | [Coffee theme for Skeleton v4](14-coffee-theme-v4.md)                        | Claude | M    | 13             | Done   |
 | 15  | [Form control wrappers on v4](15-form-controls-v4.md)                        | Claude | M    | 13             | Todo   |
 | 16  | [Overlays, lists and navigation on v4](16-overlays-navigation-v4.md)         | Claude | L    | 13             | Todo   |
 | 17  | [Skeleton v4 cleanup and PR](17-v4-cleanup.md)                               | Claude | M    | 14, 15, 16     | Todo   |

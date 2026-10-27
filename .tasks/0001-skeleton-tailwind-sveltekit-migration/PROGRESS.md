@@ -279,3 +279,20 @@ Phase 2 starts on `migration/2-skeleton-v4`, branched from `main` (phase 1 is me
 - `ToastHost` (story 16), 1 test: `appShell.spec` phone "toast after deleting an entry can be dismissed". The dismiss button is named "Dismiss", not "Dismiss toast".
 
 Everything else passes, including persistence, legacy data, scroll restoration, view transitions, drawer navigation and the other overlay tests.
+
+## 2026-10-27 — Story 14: Coffee theme for Skeleton v4 (Done)
+
+`src/themes/coffee.css` replaces `theme.ts` and the cerberus preset. `<html data-theme="coffee">` is set, and the mesh background is now on `body`. Two new e2e tests pin the v2 palette (all seven 500 shades) and the mesh in light and dark.
+
+**Status:** `tailwind-v3` 0. Remaining phase 2 categories: `v2-classes` 11 and `migration-placeholders` 15.
+
+**Gates:** `check`, `lint`, `build` and `test:unit` (194) green. E2e: 113 passed and the same 14 failures as story 13; the list didn't grow. A11y: no new violations.
+
+**Visual review (72 diffs against the v2 baseline, all expected):** the hues match on every screen in both schemes. That covers the teal primary (active rail and menu item, FAB, focus ring), the brown secondary/tertiary (icon buttons, ratio badges, suggestion chips, rating stars), the red error, the mesh and the navy dark surfaces. Per screen:
+
+- **All screens:** page titles are larger (v4 heading scale), and headings and labels are lighter. Wrapped controls show their placeholders (radios, checkbox, range, plain pagination buttons, unstyled rail, app bar without its own background).
+- **Lists (journal, my coffees):** `card` has no surface background in v4, so the list floats on the mesh (story 16/17). The empty-list hint has the same issue.
+- **Forms (journal/coffee new and entry):** plain inputs take v4's `.input` look. Input groups (`MeasurementInput`, `UrlInput`, Estimation) are white native fields, which stand out in dark mode (story 17, input groups → `ig-*`). Error inputs lose v2's red tint (`input-error` has no v4 equivalent; story 17).
+- **Calculator, drip counter:** chips and the tap/reset buttons keep their colours. The input groups behave as in the forms.
+- **Settings:** the segmented controls are native radios, and the file upload is a native input (story 15).
+- **Overlays:** the confirm modal and the suggestion lists keep their position and colours. The app menu drawer is a plain list (story 16), and the toast uses the placeholder markup.
