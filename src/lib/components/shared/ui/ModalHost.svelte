@@ -1,44 +1,29 @@
 <script lang="ts">
-  // Phase 2: a fixed dialog with a backdrop until story 16.
+  // Shows the head of the modal service's queue in a Skeleton v4 `Dialog`.
   import { modal } from '$lib/services/ui/modal.svelte';
+  import { Dialog, Portal } from '@skeletonlabs/skeleton-svelte';
 
   const request = $derived(modal.current);
 
   // Backdrop and Escape respond with undefined, Cancel with false.
-  function handleKeydown(event: KeyboardEvent): void {
-    if (request && event.key === 'Escape') {
+  function handleOpenChange(details: { open: boolean }): void {
+    if (!details.open && modal.current) {
       modal.close();
     }
   }
 </script>
 
-<svelte:window onkeydown={handleKeydown} />
-
-<!-- MIGRATION_PLACEHOLDER: ModalHost -->
-{#if request}
-  <div class="fixed inset-0 z-50 flex items-center justify-center p-4">
-    <button
-      type="button"
-      class="absolute inset-0 bg-surface-950/50"
-      aria-label="Close"
-      onclick={() => modal.close()}
-    ></button>
-    {#key request.id}
-      {#if request.kind === 'confirm'}
+<Dialog open={!!request} onOpenChange={handleOpenChange}>
+  <Portal>
+    <Dialog.Backdrop class="fixed inset-0 z-50 bg-surface-950/50" />
+    <Dialog.Positioner class="fixed inset-0 z-50 flex items-center justify-center p-4">
+      {#if request?.kind === 'confirm'}
         {@const { title, body, confirmLabel, cancelLabel, dangerous } = request.options}
-        <div
-          class="card relative flex flex-col gap-4 w-full max-w-lg p-4 bg-surface-100-900"
-          role="dialog"
-          aria-modal="true"
-        >
-          <header class="text-2xl font-bold">{title}</header>
-          <article>{body}</article>
+        <Dialog.Content class="card flex flex-col gap-4 w-full max-w-lg p-4 bg-surface-100-900">
+          <Dialog.Title class="text-2xl font-bold">{title}</Dialog.Title>
+          <Dialog.Description>{body}</Dialog.Description>
           <footer class="flex justify-end gap-2">
-            <button
-              type="button"
-              class="btn preset-tonal-surface"
-              onclick={() => modal.close(false)}
-            >
+            <button type="button" class="btn preset-tonal" onclick={() => modal.close(false)}>
               {cancelLabel ?? 'Cancel'}
             </button>
             <button
@@ -49,13 +34,14 @@
               {confirmLabel ?? 'Confirm'}
             </button>
           </footer>
-        </div>
-      {:else}
+        </Dialog.Content>
+      {:else if request}
         {@const Component = request.component}
-        <div class="relative w-full flex justify-center" role="dialog" aria-modal="true">
+        <!-- Custom modals bring their own card. -->
+        <Dialog.Content class="flex justify-center w-full">
           <Component {...request.props} close={(result?: unknown) => modal.close(result)} />
-        </div>
+        </Dialog.Content>
       {/if}
-    {/key}
-  </div>
-{/if}
+    </Dialog.Positioner>
+  </Portal>
+</Dialog>
