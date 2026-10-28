@@ -1,33 +1,59 @@
 <script lang="ts">
-  // Phase 2: a plain toast list until story 16.
-  import { toast, type ToastKind } from '$lib/services/ui/toast.svelte';
+  // Renders the toast service's toasts with Skeleton v4's toaster.
+  import { toast } from '$lib/services/ui/toast.svelte';
+  import { Toast, createToaster } from '@skeletonlabs/skeleton-svelte';
 
-  const BACKGROUNDS: Record<ToastKind, string> = {
-    info: 'preset-filled-primary-500',
-    error: 'preset-filled-error-500',
-  };
+  const toaster = createToaster({ placement: 'bottom', overlap: false });
+
+  // Plain Set on purpose: bookkeeping for the effect, which must not depend on it.
+  // eslint-disable-next-line svelte/prefer-svelte-reactivity
+  const shown = new Set<string>();
+
+  $effect(() => {
+    const open = toast.toasts;
+
+    for (const { id, kind, message, action } of open) {
+      if (shown.has(id)) {
+        continue;
+      }
+
+      shown.add(id);
+      toaster.create({
+        id,
+        description: message,
+        type: kind,
+        // The service owns the timeout, so all toasts close the same way.
+        duration: Infinity,
+        action: action && { label: action.label, onClick: () => void toast.runAction(id) },
+        // Closed in the toaster (close button, action): the service closes it too.
+        onStatusChange: ({ status }) => {
+          if (status === 'dismissing') {
+            toast.dismiss(id);
+          }
+        },
+      });
+    }
+
+    for (const id of shown) {
+      if (!open.some((message) => message.id === id)) {
+        shown.delete(id);
+        toaster.dismiss(id);
+      }
+    }
+  });
 </script>
 
-<!-- MIGRATION_PLACEHOLDER: ToastHost -->
-<div class="fixed bottom-4 inset-x-4 z-50 flex flex-col items-center gap-2 pointer-events-none">
-  {#each toast.toasts as { id, kind, message, action } (id)}
-    <div
-      class="card flex flex-col sm:flex-row items-center gap-4 px-8 py-4 pointer-events-auto {BACKGROUNDS[
-        kind
-      ]}"
-      role="alert"
-    >
-      <span>{message}</span>
-      <div class="flex gap-2">
-        {#if action}
-          <button type="button" class="btn" onclick={() => toast.runAction(id)}
-            >{action.label}</button
-          >
-        {/if}
-        <button type="button" class="btn" aria-label="Dismiss" onclick={() => toast.dismiss(id)}
-          >✕</button
-        >
-      </div>
-    </div>
-  {/each}
-</div>
+<Toast.Group {toaster}>
+  {#snippet children(options)}
+    <!-- role="alert" as with v2; v4 announces toasts as role="status". -->
+    <Toast toast={options} role="alert" class="flex-col sm:flex-row">
+      <Toast.Message>
+        <Toast.Description>{options.description}</Toast.Description>
+      </Toast.Message>
+      {#if options.action}
+        <Toast.ActionTrigger>{options.action.label}</Toast.ActionTrigger>
+      {/if}
+      <Toast.CloseTrigger aria-label="Dismiss toast" />
+    </Toast>
+  {/snippet}
+</Toast.Group>
