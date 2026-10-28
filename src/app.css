@@ -111,14 +111,22 @@
   }
 }
 
-/* Invalid form fields, on .input and .input-group (v2's input-error; v4 has no input states). */
+/* Invalid form fields, on .input and .input-group (v2's input-error, in its colours for both modes;
+   v4 has no input states). The input group's cells inherit the text colour. */
 @utility input-error {
   --tw-ring-color: var(--color-error-500) !important;
-  background-color: color-mix(
-    in oklab,
-    var(--color-error-500) 15%,
-    var(--coffee-field-background)
-  ) !important;
+  background-color: var(--color-error-200) !important;
+  color: var(--color-error-500);
+
+  /* The input group's dividers. */
+  & > * + * {
+    border-color: var(--color-error-500);
+  }
+
+  &::placeholder,
+  & ::placeholder {
+    color: var(--color-error-500);
+  }
 }
 
 /* Icon buttons fade on hover like .btn (Skeleton's btn-icon has no transition). Tailwind merges this
