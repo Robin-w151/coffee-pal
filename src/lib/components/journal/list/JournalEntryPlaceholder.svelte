@@ -1,4 +1,4 @@
-<div class="justify-between h-16 animate-pulse">
+<div class="flex items-center justify-between gap-4 p-2 h-16 animate-pulse">
   <span class="hidden sm:flex items-center">
     <span class="placeholder w-16"></span>
   </span>

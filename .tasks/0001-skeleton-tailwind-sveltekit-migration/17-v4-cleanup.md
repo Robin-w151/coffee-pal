@@ -42,7 +42,7 @@ As Claude, I want no v2 classes or placeholders left and a reviewable PR with a 
 - **Leftover v2 classes outside the status rule:**
   - `divider-vertical` → `vr` plus `border-t-0` on the `<hr>`.
   - Plain `<hr>`s fell back to the v3 compatibility border colour (`gray-200`, near-white in both modes), as v4 no longer styles bare `<hr>`s. `app.css` gives `hr` the `surface-200-800` colour of Skeleton's `hr`/`vr` in the base layer (human's finding, 2026-10-28).
-  - `list-dl` was dropped (it did nothing visible).
+  - `list-dl` was dropped. The list items set their own layout, but the list placeholders relied on its flex rows (badge and circle collapsed, human's finding, 2026-10-28); they now carry `flex items-center gap-4 p-2` themselves.
   - `list-nav` (AppMenu) → explicit link layout, with hover only on inactive links.
   - `migration-status` now counts `list-nav`, `list-dl` and `divider-vertical` as v2 classes, and no longer counts `input-group` itself, which is valid in v4.
 - **Cards:** v4's `card` has no background (v2's had the surface colour), so sections floated on the mesh, and the input outlines disappeared in light mode. PageCard, the active search header, the Nextcloud login modal and the confirm dialog use v2's card colours, `bg-surface-100 dark:bg-surface-800` (first `bg-surface-50-950`; changed after the human's review, see below).
