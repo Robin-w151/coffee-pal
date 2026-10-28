@@ -25,11 +25,12 @@
   }
 }
 
-/* Form field outlines: thicker than v4's 1px, and in the stronger surface-300-700 pairing, as the
-   theme's surface-800 outline is barely visible on surface-950 cards in dark mode. Only the variables
-   the outlines use are redefined on the fields, so focus rings and other surface-200-800 uses stay as
-   they are. Fields get a background one step off the surface-50-950 cards (v4's are transparent),
-   like v2's fields were against its cards, and v2's 0.5rem vertical padding (v4 has 0.25rem). */
+/* Form field outlines: thicker than v4's 1px, and in the stronger surface-400-600 pairing, as the
+   theme's surface-200-800 outline is barely visible against the cards and field backgrounds. Only the
+   variables the outlines use are redefined on the fields, so focus rings and other surface-200-800
+   uses stay as they are. Fields get a surface-200-800 background, off the surface-50-950 cards (v4's
+   fields are transparent), like v2's fields stood off its cards, and v2's 0.5rem vertical padding
+   (v4 has 0.25rem). */
 @layer components {
   .input,
   .textarea,
@@ -40,8 +41,8 @@
   [data-scope='file-upload'][data-part='dropzone'],
   [data-scope='radio-group'][data-part='control'] {
     --default-ring-width: 3px;
-    --color-surface-200-800: var(--color-surface-300-700);
-    background-color: var(--color-surface-100-900);
+    --color-surface-200-800: var(--color-surface-400-600);
+    background-color: var(--coffee-field-background);
   }
 
   [data-scope='file-upload'][data-part='dropzone'],
@@ -57,15 +58,15 @@
 /* Skeleton's field utilities set their own background and padding, which beat the components layer
    above. Tailwind merges these into them. */
 @utility input {
-  background-color: var(--color-surface-100-900);
+  background-color: var(--coffee-field-background);
   padding-block: --spacing(2);
 }
 @utility select {
-  background-color: var(--color-surface-100-900);
+  background-color: var(--coffee-field-background);
   padding-block: --spacing(2);
 }
 @utility textarea {
-  background-color: var(--color-surface-100-900);
+  background-color: var(--coffee-field-background);
   padding-block: --spacing(2);
 }
 
@@ -111,7 +112,7 @@
   background-color: color-mix(
     in oklab,
     var(--color-error-500) 15%,
-    var(--color-surface-100-900)
+    var(--coffee-field-background)
   ) !important;
 }
 
@@ -149,6 +150,9 @@
 /* Global variables */
 :root {
   --coffee-view-transition-duration: 100ms;
+  /* The surface-200-800 pairing, spelled out, as the fields redefine --color-surface-200-800 for their
+     outlines. */
+  --coffee-field-background: light-dark(var(--color-surface-200), var(--color-surface-800));
 }
 
 /* Theme overrides */
