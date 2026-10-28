@@ -48,7 +48,7 @@ test('iced toggle', async ({ calculatorPage }) => {
 
 test('iced ratio 25%', async ({ calculatorPage }) => {
   await calculatorPage.icedCoffeeToggle.check();
-  await calculatorPage.iceRatioRange.fill('25');
+  await calculatorPage.setIceRatio(25);
 
   await expect(calculatorPage.brewWaterAmountInput).toHaveValue('180');
   await expect(calculatorPage.iceAmountInput).toHaveValue('60');
@@ -56,7 +56,7 @@ test('iced ratio 25%', async ({ calculatorPage }) => {
 
 test('iced ratio 50%', async ({ calculatorPage }) => {
   await calculatorPage.icedCoffeeToggle.check();
-  await calculatorPage.iceRatioRange.fill('50');
+  await calculatorPage.setIceRatio(50);
 
   await expect(calculatorPage.brewWaterAmountInput).toHaveValue('120');
   await expect(calculatorPage.iceAmountInput).toHaveValue('120');
@@ -149,16 +149,16 @@ test('iced ratio slider responds to the keyboard', async ({ calculatorPage }) =>
   await calculatorPage.icedCoffeeToggle.check();
   await expect(calculatorPage.iceRatioValue).toHaveText('30 %');
 
-  await calculatorPage.iceRatioRange.focus();
+  await calculatorPage.iceRatioThumb.focus();
   for (let i = 0; i < 10; i++) {
-    await calculatorPage.iceRatioRange.press('ArrowRight');
+    await calculatorPage.iceRatioThumb.press('ArrowRight');
   }
 
   await expect(calculatorPage.iceRatioValue).toHaveText('40 %');
   await expect(calculatorPage.brewWaterAmountInput).toHaveValue('144');
   await expect(calculatorPage.iceAmountInput).toHaveValue('96');
 
-  await calculatorPage.iceRatioRange.press('ArrowLeft');
+  await calculatorPage.iceRatioThumb.press('ArrowLeft');
   await expect(calculatorPage.iceRatioValue).toHaveText('39 %');
 });
 
