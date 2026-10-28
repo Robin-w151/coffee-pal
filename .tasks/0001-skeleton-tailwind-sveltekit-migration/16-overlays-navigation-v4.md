@@ -2,7 +2,7 @@
 
 **Epic:** [0001 Migrate to Skeleton v5, Tailwind v4 and SvelteKit 3](README.md)
 **Owner:** Claude
-**Status:** Todo
+**Status:** In progress
 **Depends on:** 13
 **Size:** L — the most interactive parts of the app (dialogs, drawer, toasts, popovers, combobox, navigation), and a shift from stores to components.
 

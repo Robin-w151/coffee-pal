@@ -1,5 +1,6 @@
 <script lang="ts">
-  // Maps to Skeleton v4/v5 `AppBar`. Phase 2: plain markup until story 16.
+  // Maps to Skeleton v4/v5 `AppBar`.
+  import { AppBar } from '@skeletonlabs/skeleton-svelte';
   import type { Snippet } from 'svelte';
 
   interface Props {
@@ -10,10 +11,18 @@
   let { lead, title }: Props = $props();
 </script>
 
-<!-- MIGRATION_PLACEHOLDER: AppBar -->
-<div
-  class="flex items-center gap-2 md:gap-4 px-4 md:px-2 py-1 md:py-2 shadow-xl bg-surface-100-900"
->
-  {@render lead?.()}
-  {@render title()}
-</div>
+<!-- A div: the app layout's <header> is the banner landmark already. -->
+<AppBar class="px-4 md:px-2 py-1 md:py-2">
+  {#snippet element(attributes)}
+    <div {...attributes}>
+      <AppBar.Toolbar class="grid-cols-[auto_1fr] gap-2 md:gap-4">
+        <AppBar.Lead>
+          {@render lead?.()}
+        </AppBar.Lead>
+        <AppBar.Headline>
+          {@render title()}
+        </AppBar.Headline>
+      </AppBar.Toolbar>
+    </div>
+  {/snippet}
+</AppBar>
