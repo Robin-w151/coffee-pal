@@ -1,5 +1,9 @@
 <script lang="ts">
-  // Maps to Skeleton v4/v5 `TagsInput`. Phase 2: a plain input with tag buttons until story 15.
+  // Maps to Skeleton v4/v5 `TagsInput`. Duplicates are rejected, as with v2.
+  import { faXmark } from '@fortawesome/free-solid-svg-icons';
+  import { TagsInput } from '@skeletonlabs/skeleton-svelte';
+  import { Icon } from 'svelte-awesome';
+
   interface Props {
     value?: Array<string>;
     name: string;
@@ -10,49 +14,48 @@
 
   let { value = $bindable(), name, placeholder, tagColors }: Props = $props();
 
-  let input = $state('');
-
-  function handleKeydown(event: KeyboardEvent): void {
-    // Escape belongs to the input while it's focused (e.g. not to the page's back handling).
-    if (event.key === 'Escape') {
-      event.stopPropagation();
-    } else if (event.key === 'Enter') {
-      event.preventDefault();
-      const tag = input.trim();
-      if (tag && !(value ?? []).includes(tag)) {
-        value = [...(value ?? []), tag];
-      }
-      input = '';
-    }
+  function isNew({ inputValue, value }: { inputValue: string; value: Array<string> }): boolean {
+    return !value.includes(inputValue);
   }
 
-  function removeTag(tag: string): void {
-    value = (value ?? []).filter((other) => other !== tag);
+  // Escape belongs to the input while it's focused (e.g. not to the page's back handling).
+  function handleKeydown(event: KeyboardEvent): void {
+    if (event.key === 'Escape') {
+      event.stopPropagation();
+    }
   }
 </script>
 
-<!-- MIGRATION_PLACEHOLDER: TagsInput -->
-<div class="input flex flex-col gap-2 px-3 py-2">
-  <input
-    class="w-full"
-    type="text"
+<!-- svelte-ignore a11y_no_static_element_interactions -->
+<div onkeydown={handleKeydown}>
+  <TagsInput
     {name}
-    {placeholder}
-    bind:value={input}
-    onkeydown={handleKeydown}
-  />
-  <div class="flex flex-wrap gap-2">
-    {#each value ?? [] as tag (tag)}
-      {@const colors = tagColors?.(tag)}
-      <button
-        type="button"
-        class="chip"
-        style:color={colors?.color}
-        style:background-color={colors?.backgroundColor}
-        onclick={() => removeTag(tag)}
-      >
-        <span>{tag}</span>
-      </button>
-    {/each}
-  </div>
+    value={value ?? []}
+    editable={false}
+    validate={isNew}
+    onValueChange={(details) => (value = [...details.value])}
+  >
+    <TagsInput.Control>
+      {#each value ?? [] as tag, index (tag)}
+        {@const colors = tagColors?.(tag)}
+        <TagsInput.Item value={tag} {index}>
+          <TagsInput.ItemPreview>
+            <!-- The whole tag deletes it on click, as v2's chips did. -->
+            <!-- "Remove", since v4's "Delete tag …" would also match the page's Delete button. -->
+            <TagsInput.ItemDeleteTrigger
+              aria-label="Remove {tag}"
+              class="flex items-center gap-2 rounded-base"
+              style={colors &&
+                `color: ${colors.color}; background-color: ${colors.backgroundColor}`}
+            >
+              <span>{tag}</span>
+              <Icon data={faXmark} />
+            </TagsInput.ItemDeleteTrigger>
+          </TagsInput.ItemPreview>
+        </TagsInput.Item>
+      {/each}
+      <TagsInput.Input class="flex-1" {placeholder} />
+    </TagsInput.Control>
+    <TagsInput.HiddenInput />
+  </TagsInput>
 </div>
