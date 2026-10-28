@@ -25,6 +25,28 @@
   }
 }
 
+/* Form field outlines: thicker than v4's 1px, and lighter in dark mode, where the theme's
+   surface-800 outline is barely visible on surface-950 cards. Only the variables the outlines use are
+   redefined on the fields, so focus rings and other surface-200-800 uses stay as they are. */
+@layer components {
+  .input,
+  .textarea,
+  .select,
+  .input-group,
+  [data-scope='combobox'][data-part='input'],
+  [data-scope='tags-input'][data-part='control'],
+  [data-scope='file-upload'][data-part='dropzone'],
+  [data-scope='radio-group'][data-part='control'] {
+    --default-ring-width: 2px;
+    --color-surface-200-800: light-dark(var(--color-surface-200), var(--color-surface-400));
+  }
+
+  [data-scope='file-upload'][data-part='dropzone'],
+  [data-scope='radio-group'][data-part='control'] {
+    border-width: 2px;
+  }
+}
+
 /* Invalid form fields, on .input and .input-group (v2's input-error; v4 has no input states). */
 @utility input-error {
   --tw-ring-color: var(--color-error-500) !important;
