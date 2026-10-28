@@ -17,10 +17,11 @@
 </script>
 
 <script lang="ts" generics="T">
-  // Maps to Skeleton v4/v5 `Combobox`. Phase 2: an input with plain option buttons until story 16.
+  // Maps to Skeleton v4/v5 `Combobox`. Free text is allowed: the input text is the value, and
+  // choosing an option is reported through onSelect.
   import InputWithButton from '$lib/components/shared/elements/form/InputWithButton.svelte';
+  import { Combobox, Portal, useListCollection } from '@skeletonlabs/skeleton-svelte';
   import { Icon } from 'svelte-awesome';
-  import Popover from './Popover.svelte';
 
   interface Props {
     value?: string;
@@ -50,8 +51,6 @@
     onOpenChange,
   }: Props = $props();
 
-  let inputElement = $state<HTMLInputElement>();
-
   const shownOptions = $derived(
     filter === 'contains'
       ? options.filter(({ label, keywords }) =>
@@ -60,13 +59,39 @@
       : options,
   );
 
-  function handleSelection(option: ComboboxOption<T>): void {
-    onSelect(option);
-    inputElement?.focus();
+  const collection = $derived(
+    useListCollection<ComboboxOption<T>>({
+      items: shownOptions,
+      itemToValue: (option) => option.label,
+      itemToString: (option) => option.label,
+    }),
+  );
+
+  let open = $state(false);
+
+  function setOpen(next: boolean): void {
+    if (open !== next) {
+      open = next;
+      onOpenChange?.(next);
+    }
   }
 
-  // Escape closes the list (the popup listens in the capture phase) and must go no further,
-  // e.g. not to the page's back handling.
+  // Selecting an option also replaces the input text; only typing is reported as an input change.
+  function handleInputValueChange(details: { inputValue: string; reason?: string }): void {
+    value = details.inputValue;
+    if (details.reason === 'input-change') {
+      onInputChange?.(details.inputValue);
+    }
+  }
+
+  function handleValueChange(details: { items: Array<ComboboxOption<T>> }): void {
+    const [option] = details.items;
+    if (option) {
+      onSelect(option);
+    }
+  }
+
+  // Escape closes the list and must go no further, e.g. not to the page's back handling.
   function handleKeydown(event: KeyboardEvent): void {
     if (event.key === 'Escape') {
       event.stopPropagation();
@@ -74,43 +99,29 @@
   }
 </script>
 
-<Popover
-  openOn="focus-click"
-  matchWidth
-  portal
-  trapFocus
-  contentClass="card z-10 p-4 max-h-48 bg-surface-200-800 overflow-y-auto shadow-xl"
-  {onOpenChange}
+<!-- Rendered inside Combobox.Control below; declared here so it isn't a prop of the control. -->
+{#snippet input()}
+  <Combobox.Input
+    {placeholder}
+    onfocus={() => setOpen(true)}
+    onblur={onBlur}
+    onkeydown={handleKeydown}
+  />
+{/snippet}
+
+<Combobox
+  {collection}
+  {open}
+  {invalid}
+  inputValue={value ?? ''}
+  allowCustomValue
+  openOnClick
+  positioning={{ sameWidth: true }}
+  onOpenChange={(details) => setOpen(details.open)}
+  onInputValueChange={handleInputValueChange}
+  onValueChange={handleValueChange}
 >
-  {#snippet content()}
-    <!-- MIGRATION_PLACEHOLDER: Combobox -->
-    <div class="flex flex-col">
-      {#each shownOptions as option (option.value)}
-        <button
-          type="button"
-          class="w-full text-start px-4 py-2"
-          onclick={() => handleSelection(option)}
-        >
-          {option.label}
-        </button>
-      {/each}
-    </div>
-  {/snippet}
-  {#snippet trigger(triggerProps)}
-    {#snippet input()}
-      <input
-        class="input autocomplete"
-        class:input-error={invalid}
-        type="text"
-        {placeholder}
-        bind:this={inputElement}
-        bind:value
-        {...triggerProps}
-        oninput={() => onInputChange?.(value ?? '')}
-        onblur={onBlur}
-        onkeydown={handleKeydown}
-      />
-    {/snippet}
+  <Combobox.Control>
     {#if trailLink}
       <InputWithButton title={trailLink.title} visible={trailLink.visible} href={trailLink.href}>
         {@render input()}
@@ -121,5 +132,16 @@
     {:else}
       {@render input()}
     {/if}
-  {/snippet}
-</Popover>
+  </Combobox.Control>
+  <Portal>
+    <Combobox.Positioner>
+      <Combobox.Content class="max-h-48 overflow-y-auto">
+        {#each collection.items as option (option.label)}
+          <Combobox.Item item={option}>
+            <Combobox.ItemText>{option.label}</Combobox.ItemText>
+          </Combobox.Item>
+        {/each}
+      </Combobox.Content>
+    </Combobox.Positioner>
+  </Portal>
+</Combobox>
