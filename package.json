@@ -28,6 +28,8 @@
     "verify": "pnpm check:strict && pnpm lint && pnpm build && pnpm test:unit && pnpm test:e2e:local",
     "verify:strict": "pnpm verify && pnpm test:visual:run",
     "migration:status": "node scripts/migration-status.js",
+    "visual:review": "pnpm test:visual; node scripts/visual-review.js && open test-results/visual-review.html",
+    "visual:review:base": "node scripts/visual-review.js --base origin/main && open test-results/visual-review.html",
     "sme": "source-map-explorer .svelte-kit/output/client/**/*.js",
     "prepare": "husky && svelte-kit sync",
     "prepack": "pinst --disable",
