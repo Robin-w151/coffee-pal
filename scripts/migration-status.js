@@ -10,8 +10,10 @@ const UI_LAYER = ['src/lib/components/shared/ui/**', 'src/lib/services/ui/**'];
 // the globs using this don't match.
 const SKELETON_V2_JS_IMPORT = /['"]@skeletonlabs\/skeleton(?:\/[^'"\n]*)?['"]/g;
 const SKELETON_APPLY_CLASS = /\b(?:variant-|btn\b|card\b|chip\b|badge\b|input)|-token\b/;
-// `input-group` itself stays in v4; only its v2 children and divider are gone.
-const V2_CLASS = /^(?:variant-[a-z]|input-group-(?:shim|divider))|-token$/;
+// `input-group` itself stays in v4; only its v2 children and divider are gone. The list and divider
+// classes have no v4 equivalent under the same name.
+const V2_CLASS =
+  /^(?:variant-[a-z]|input-group-(?:shim|divider)|list-(?:nav|dl)|divider-vertical)|-token$/;
 
 /**
  * Each category consists of rules. A rule matches tracked files via `glob` (minus `exclude`).

@@ -31,7 +31,7 @@
     >
       {#if request?.kind === 'confirm'}
         {@const { title, body, confirmLabel, cancelLabel, dangerous } = request.options}
-        <Dialog.Content class="card flex flex-col gap-4 w-full max-w-lg p-4 bg-surface-100-900">
+        <Dialog.Content class="card flex flex-col gap-4 w-full max-w-lg p-4 bg-surface-50-950">
           <Dialog.Title class="text-2xl font-bold">{title}</Dialog.Title>
           <Dialog.Description>{body}</Dialog.Description>
           <footer class="flex justify-end gap-2">

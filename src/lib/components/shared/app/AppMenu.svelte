@@ -8,7 +8,9 @@
   import { Icon } from 'svelte-awesome';
 
   const routeActiveClass = $derived((route: Route) =>
-    isSelected(route, $page.url.pathname) ? 'preset-filled-primary-500' : '',
+    isSelected(route, $page.url.pathname)
+      ? 'preset-filled-primary-500'
+      : 'hover:preset-tonal-primary',
   );
 
   function handleClick(): void {
@@ -32,12 +34,14 @@
     </button>
   </div>
   <hr />
-  <nav class="list-nav">
-    <ul>
+  <nav>
+    <ul class="flex flex-col gap-1">
       {#each routes as route (route.href)}
         <li>
           <a
-            class="grid! grid-cols-[1.25rem_1fr] {routeActiveClass(route)}"
+            class="grid grid-cols-[1.25rem_1fr] items-center gap-4 px-4 py-2 rounded-base {routeActiveClass(
+              route,
+            )}"
             href={resolve(route.href, {})}
             aria-current={isSelected(route, $page.url.pathname) ? 'page' : undefined}
             onclick={handleClick}

@@ -17,6 +17,7 @@
   }: Props = $props();
 </script>
 
-<div class="card {display} {padding} w-full {clazz ?? ''}">
+<!-- v4's card has no background (v2's had one); 50-950 keeps v4's form outlines visible on it. -->
+<div class="card bg-surface-50-950 {display} {padding} w-full {clazz ?? ''}">
   {@render children?.()}
 </div>

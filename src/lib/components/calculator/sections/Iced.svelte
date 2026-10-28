@@ -74,7 +74,7 @@
         </Label>
         <div class="hidden sm:flex flex-col gap-1">
           <div class="h-[24px]"></div>
-          <hr class="flex-1 divider-vertical" />
+          <hr class="flex-1 vr border-t-0 mx-auto" />
         </div>
         <Label text="Amount of ice">
           <MeasurementInput readonly {units} bind:measurement={iceMeasurement} />
