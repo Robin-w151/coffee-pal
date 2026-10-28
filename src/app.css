@@ -25,6 +25,12 @@
   }
 }
 
+/* Invalid form fields, on .input and .input-group (v2's input-error; v4 has no input states). */
+@utility input-error {
+  --tw-ring-color: var(--color-error-500) !important;
+  background-color: color-mix(in oklab, var(--color-error-500) 15%, transparent);
+}
+
 /* Global variables */
 :root {
   --coffee-view-transition-duration: 100ms;

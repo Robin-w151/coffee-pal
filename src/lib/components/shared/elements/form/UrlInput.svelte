@@ -52,23 +52,20 @@
   }
 </script>
 
-<div
-  class="input-group input-group-divider grid-cols-[auto_1fr_auto]"
-  class:input-error={inputTouched && !hostValid}
->
+<div class="input-group grid-cols-[auto_1fr_auto]" class:input-error={inputTouched && !hostValid}>
   {#if readonly}
-    <div class="input-group-shim">
+    <div class="ig-cell">
       <Icon data={schemeIcon} class="overflow-visible" />
     </div>
   {:else}
-    <select bind:value={scheme}>
+    <select class="ig-select px-3" bind:value={scheme}>
       {#each availableSchemes as availableScheme (availableScheme)}
         <option value={availableScheme}>{availableScheme}//</option>
       {/each}
     </select>
   {/if}
   <input
-    style="min-width: 6rem !important"
+    class="ig-input min-w-24"
     type="text"
     autocapitalize="off"
     {placeholder}
@@ -78,7 +75,7 @@
   />
   {#if host}
     <!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
-    <a class="input-group-shim" href="{scheme}//{host}" target="_blank" title="Open URL">
+    <a class="ig-cell" href="{scheme}//{host}" target="_blank" title="Open URL">
       <Icon data={faArrowUpRightFromSquare} class="overflow-visible" />
     </a>
   {/if}

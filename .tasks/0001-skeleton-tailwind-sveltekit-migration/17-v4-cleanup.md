@@ -2,7 +2,7 @@
 
 **Epic:** [0001 Migrate to Skeleton v5, Tailwind v4 and SvelteKit 3](README.md)
 **Owner:** Claude
-**Status:** Todo
+**Status:** In progress
 **Depends on:** 14, 15, 16
 **Size:** M — search-and-fix work across ~37 files plus 4 input groups; small individually, but many visual spots to check.
 
