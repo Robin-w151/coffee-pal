@@ -91,10 +91,12 @@
     }
   }
 
-  // Escape closes the list and must go no further, e.g. not to the page's back handling.
+  // Escape closes the list and must go no further, e.g. not to the page's back handling. Closed here
+  // too, since v4 ignores Escape while its own state lags behind `open` (e.g. right after focusing).
   function handleKeydown(event: KeyboardEvent): void {
     if (event.key === 'Escape') {
       event.stopPropagation();
+      setOpen(false);
     }
   }
 </script>

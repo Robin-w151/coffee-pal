@@ -5,18 +5,30 @@
 
   const request = $derived(modal.current);
 
-  // Backdrop and Escape respond with undefined, Cancel with false.
-  function handleOpenChange(details: { open: boolean }): void {
-    if (!details.open && modal.current) {
+  // Closing is handled here, not by the Dialog: it reacts to Escape and outside clicks only once
+  // it has set itself up after opening, so early input would be lost. Backdrop and Escape respond
+  // with undefined, Cancel with false.
+  function handleKeydown(event: KeyboardEvent): void {
+    if (request && event.key === 'Escape') {
       modal.close();
     }
   }
 </script>
 
-<Dialog open={!!request} onOpenChange={handleOpenChange}>
+<svelte:window onkeydown={handleKeydown} />
+
+<Dialog open={!!request} closeOnEscape={false} closeOnInteractOutside={false}>
   <Portal>
-    <Dialog.Backdrop class="fixed inset-0 z-50 bg-surface-950/50" />
-    <Dialog.Positioner class="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <Dialog.Backdrop
+      class="pointer-events-auto fixed inset-0 z-50 bg-surface-950/50"
+      onclick={() => modal.close()}
+    />
+    <!-- Covers the backdrop, so a click beside the card lands here. The Dialog disables pointer
+         events on <body> while open; backdrop and positioner take them back. -->
+    <Dialog.Positioner
+      class="pointer-events-auto fixed inset-0 z-50 flex items-center justify-center p-4"
+      onclick={(event) => event.target === event.currentTarget && modal.close()}
+    >
       {#if request?.kind === 'confirm'}
         {@const { title, body, confirmLabel, cancelLabel, dangerous } = request.options}
         <Dialog.Content class="card flex flex-col gap-4 w-full max-w-lg p-4 bg-surface-100-900">

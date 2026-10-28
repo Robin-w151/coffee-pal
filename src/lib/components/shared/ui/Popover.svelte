@@ -38,12 +38,30 @@
     onOpenChange,
   }: Props = $props();
 
+  const id = $props.id();
+  const ids = { trigger: `popover-${id}-trigger`, content: `popover-${id}-content` };
+
   let open = $state(false);
 
   function setOpen(value: boolean): void {
     if (open !== value) {
       open = value;
       onOpenChange?.(value);
+    }
+  }
+
+  // Closing on Escape and outside clicks is handled here, not by the Popover: it reacts to them only
+  // once it has set itself up after opening, so early input would be lost.
+  function handleWindowKeydown(event: KeyboardEvent): void {
+    if (open && event.key === 'Escape') {
+      setOpen(false);
+    }
+  }
+
+  function handleWindowPointerdown(event: PointerEvent): void {
+    const target = event.target instanceof Element ? event.target : null;
+    if (open && !target?.closest(`#${ids.trigger}, #${ids.content}`)) {
+      setOpen(false);
     }
   }
 
@@ -61,8 +79,13 @@
   }
 </script>
 
+<svelte:window onkeydown={handleWindowKeydown} onpointerdown={handleWindowPointerdown} />
+
 <Popover
+  {ids}
   {open}
+  closeOnEscape={false}
+  closeOnInteractOutside={false}
   onOpenChange={(details) => setOpen(details.open)}
   modal={trapFocus}
   positioning={{ placement, sameWidth: matchWidth }}
