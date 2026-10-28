@@ -172,6 +172,28 @@
   background-color: light-dark(var(--color-surface-300), var(--color-surface-500));
 }
 
+/* Buttons in v2's sizes (v4's are smaller: 32px tall buttons, 24/32/44px icon buttons). Icon buttons
+   are fixed squares, as in v2. */
+@utility btn {
+  padding: 9px --spacing(5);
+}
+@utility btn-icon {
+  box-sizing: border-box;
+  width: 43px;
+  height: 43px;
+  padding: 0;
+}
+@utility btn-icon-sm {
+  width: 33px;
+  height: 33px;
+  padding: 0;
+}
+@utility btn-icon-lg {
+  width: 53px;
+  height: 53px;
+  padding: 0;
+}
+
 /* Icon buttons fade on hover like .btn (Skeleton's btn-icon has no transition). Tailwind merges this
    into Skeleton's btn-icon. */
 @utility btn-icon {
