@@ -62,6 +62,24 @@
   background-color: var(--color-surface-100-900);
 }
 
+/* Input groups show focus on the group's outline, around all its cells, instead of a 1px ring (from
+   the forms plugin) on the focused child. */
+@utility input-group {
+  &:focus-within {
+    --tw-ring-color: var(--color-primary-500);
+  }
+}
+@utility ig-input {
+  &:focus {
+    box-shadow: none;
+  }
+}
+@utility ig-select {
+  &:focus {
+    box-shadow: none;
+  }
+}
+
 /* Invalid form fields, on .input and .input-group (v2's input-error; v4 has no input states). */
 @utility input-error {
   --tw-ring-color: var(--color-error-500) !important;
