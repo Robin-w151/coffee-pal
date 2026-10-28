@@ -1,18 +1,15 @@
 <script lang="ts" module>
-  import type { Attachment } from 'svelte/attachments';
-
   type Side = 'top' | 'bottom' | 'left' | 'right';
   export type PopoverPlacement = Side | `${Side}-start` | `${Side}-end`;
 
   /** Props to spread onto the trigger element. */
-  export type PopoverTriggerProps = Record<symbol, Attachment<HTMLElement>>;
+  export type PopoverTriggerProps = Record<string, unknown>;
 </script>
 
 <script lang="ts">
-  // Phase 2: toggles the content next to the trigger (positioned once on open) until story 16.
-  import Portal from '$lib/components/shared/elements/Portal.svelte';
+  // Maps to Skeleton v4/v5 `Popover`.
+  import { Popover, Portal } from '@skeletonlabs/skeleton-svelte';
   import type { Snippet } from 'svelte';
-  import { createAttachmentKey } from 'svelte/attachments';
 
   interface Props {
     trigger: Snippet<[PopoverTriggerProps]>;
@@ -42,116 +39,50 @@
   }: Props = $props();
 
   let open = $state(false);
-  let triggerElement: HTMLElement | undefined;
-  let position = $state<Record<string, string>>({});
-
-  function computePosition(): Record<string, string> {
-    const rect = triggerElement?.getBoundingClientRect();
-    if (!rect) {
-      return {};
-    }
-
-    const [side, align] = placement.split('-');
-    const style: Record<string, string> = { position: 'fixed' };
-    if (side === 'top') {
-      style.bottom = `${window.innerHeight - rect.top}px`;
-    } else {
-      style.top = `${rect.bottom}px`;
-    }
-    if (align === 'end') {
-      style.right = `${window.innerWidth - rect.right}px`;
-    } else {
-      style.left = `${rect.left}px`;
-    }
-    if (matchWidth) {
-      style.width = `${rect.width}px`;
-    }
-    return style;
-  }
-
-  // Keeps Tab inside the content once focus is in it.
-  function handleContentKeydown(event: KeyboardEvent & { currentTarget: HTMLElement }): void {
-    if (!trapFocus || event.key !== 'Tab') {
-      return;
-    }
-
-    const focusables = [
-      ...event.currentTarget.querySelectorAll<HTMLElement>('button, input, a[href], [tabindex]'),
-    ];
-    const first = focusables[0];
-    const last = focusables.at(-1);
-    if (event.shiftKey && document.activeElement === first) {
-      event.preventDefault();
-      last?.focus();
-    } else if (!event.shiftKey && document.activeElement === last) {
-      event.preventDefault();
-      first?.focus();
-    }
-  }
 
   function setOpen(value: boolean): void {
     if (open !== value) {
-      position = value ? computePosition() : {};
       open = value;
       onOpenChange?.(value);
     }
   }
 
-  const triggerProps: PopoverTriggerProps = {
-    [createAttachmentKey()]: (element) => {
-      triggerElement = element;
-      const toggle = () => setOpen(openOn === 'focus-click' ? true : !open);
-      const show = () => setOpen(true);
-      const hide = (event: KeyboardEvent) => event.key === 'Escape' && setOpen(false);
-      element.addEventListener('click', toggle);
-      element.addEventListener('keydown', hide);
-      if (openOn === 'focus-click') {
-        element.addEventListener('focus', show);
-      }
-      return () => {
-        element.removeEventListener('click', toggle);
-        element.removeEventListener('keydown', hide);
-        element.removeEventListener('focus', show);
-      };
-    },
-  };
+  // Choosing something in the content (click or Enter) closes the popover, as v2's popups did.
+  function handleContentClick(event: MouseEvent): void {
+    if (event.target !== event.currentTarget) {
+      setOpen(false);
+    }
+  }
 
-  // Content clicks close it too, like v2 did for the app's popovers (selection lists).
-  function closeOnOutsideClick(event: MouseEvent): void {
-    if (
-      open &&
-      !(event.target instanceof Element && event.target.closest('[data-popover-trigger]'))
-    ) {
+  function handleContentKeydown(event: KeyboardEvent): void {
+    if (event.key === 'Enter') {
       setOpen(false);
     }
   }
 </script>
 
-<svelte:window onclickcapture={closeOnOutsideClick} />
-
-<!-- MIGRATION_PLACEHOLDER: Popover -->
-{#snippet popoverContent()}
-  {#if open}
-    <div
-      class={contentClass}
-      style={Object.entries(position)
-        .map(([key, value]) => `${key}: ${value}`)
-        .join('; ')}
-      role="presentation"
-      onkeydown={handleContentKeydown}
-    >
-      {@render content()}
-    </div>
-  {/if}
-{/snippet}
-
-<span class="contents" data-popover-trigger>
-  {@render trigger(triggerProps)}
-</span>
-{#if portal}
-  <Portal target="body">
-    {@render popoverContent()}
+<Popover
+  {open}
+  onOpenChange={(details) => setOpen(details.open)}
+  modal={trapFocus}
+  positioning={{ placement, sameWidth: matchWidth }}
+>
+  <Popover.Trigger>
+    {#snippet element(attributes)}
+      {@render trigger(
+        openOn === 'focus-click' ? { ...attributes, onfocus: () => setOpen(true) } : attributes,
+      )}
+    {/snippet}
+  </Popover.Trigger>
+  <Portal disabled={!portal}>
+    <Popover.Positioner>
+      <Popover.Content
+        class={contentClass}
+        onclick={handleContentClick}
+        onkeydown={handleContentKeydown}
+      >
+        {@render content()}
+      </Popover.Content>
+    </Popover.Positioner>
   </Portal>
-{:else}
-  {@render popoverContent()}
-{/if}
+</Popover>
