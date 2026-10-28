@@ -24,11 +24,14 @@
     border-color: var(--color-gray-200, currentcolor);
   }
 
-  /* The combobox and tags input placeholders in the colour Skeleton gives .input's (they'd get the
-     forms plugin's grey otherwise). */
+  /* Field placeholders in v2's colour, the forms plugin's gray-500 in both modes, instead of
+     Skeleton's surface-700-300. */
+  .input::placeholder,
+  .textarea::placeholder,
+  .ig-input::placeholder,
   [data-scope='combobox'][data-part='input']::placeholder,
   [data-scope='tags-input'][data-part='input']::placeholder {
-    color: var(--color-surface-700-300);
+    color: var(--color-gray-500);
   }
 
   /* Plain <hr>s in the colour of Skeleton's hr and vr (v2 styled bare <hr>s, v4 doesn't). */
