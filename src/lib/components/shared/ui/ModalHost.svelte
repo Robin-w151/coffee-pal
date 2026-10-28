@@ -32,7 +32,7 @@
       {#if request?.kind === 'confirm'}
         {@const { title, body, confirmLabel, cancelLabel, dangerous } = request.options}
         <Dialog.Content
-          class="card flex flex-col gap-4 w-full max-w-lg p-4 bg-surface-50 dark:bg-surface-800"
+          class="card flex flex-col gap-4 w-full max-w-lg p-4 bg-surface-100 dark:bg-surface-800"
         >
           <Dialog.Title class="text-2xl font-bold">{title}</Dialog.Title>
           <Dialog.Description>{body}</Dialog.Description>

@@ -33,7 +33,7 @@
 /* Form field outlines: thicker than v4's 1px, and in the stronger surface-400-600 pairing, as the
    theme's surface-200-800 outline is barely visible against the cards and field backgrounds. Only the
    variables the outlines use are redefined on the fields, so focus rings and other surface-200-800
-   uses stay as they are. Fields get a surface 100 / 700 background, off the surface 50 / 800 cards (v4's
+   uses stay as they are. Fields get a surface 200 / 700 background, off the surface 100 / 800 cards (v4's
    fields are transparent), like v2's fields stood off its cards, and v2's 0.5rem vertical padding
    (v4 has 0.25rem). */
 @layer components {
@@ -155,8 +155,8 @@
 /* Global variables */
 :root {
   --coffee-view-transition-duration: 100ms;
-  /* Surface 100 in light mode and 700 in dark mode, which isn't one of the theme's pairings. */
-  --coffee-field-background: light-dark(var(--color-surface-100), var(--color-surface-700));
+  /* Surface 200 in light mode and 700 in dark mode (as in v2), which isn't one of the theme's pairings. */
+  --coffee-field-background: light-dark(var(--color-surface-200), var(--color-surface-700));
 }
 
 /* Theme overrides */

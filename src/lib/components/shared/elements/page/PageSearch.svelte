@@ -42,7 +42,7 @@
   const isChangeSortOrderButtonDisabled = $derived(!!search);
   const headerSearchActiveClass = $derived(
     isSearchActive
-      ? 'card bg-surface-50 dark:bg-surface-800 flex-col items-start! px-4 py-4 h-auto transition ease-out duration-250'
+      ? 'card bg-surface-100 dark:bg-surface-800 flex-col items-start! px-4 py-4 h-auto transition ease-out duration-250'
       : '',
   );
   const changeSortOrderButtonTitle = $derived(
