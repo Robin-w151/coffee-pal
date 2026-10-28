@@ -54,6 +54,37 @@
   background-color: color-mix(in oklab, var(--color-error-500) 15%, transparent);
 }
 
+/* Icon buttons fade on hover like .btn (Skeleton's btn-icon has no transition). Tailwind merges this
+   into Skeleton's btn-icon. */
+@utility btn-icon {
+  transition-property:
+    color,
+    background-color,
+    border-color,
+    outline-color,
+    text-decoration-color,
+    fill,
+    stroke,
+    --tw-gradient-from,
+    --tw-gradient-via,
+    --tw-gradient-to,
+    opacity,
+    box-shadow,
+    transform,
+    translate,
+    scale,
+    rotate,
+    filter,
+    -webkit-backdrop-filter,
+    backdrop-filter,
+    display,
+    content-visibility,
+    overlay,
+    pointer-events;
+  transition-timing-function: var(--default-transition-timing-function);
+  transition-duration: var(--default-transition-duration);
+}
+
 /* Global variables */
 :root {
   --coffee-view-transition-duration: 100ms;

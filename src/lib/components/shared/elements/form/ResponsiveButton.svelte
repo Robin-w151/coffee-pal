@@ -27,7 +27,7 @@
 </script>
 
 <button
-  class="btn max-lg:btn-icon {variant} {clazz ?? ''}"
+  class="lg:btn max-lg:btn-icon {variant} {clazz ?? ''}"
   {type}
   {disabled}
   title={title || label}
