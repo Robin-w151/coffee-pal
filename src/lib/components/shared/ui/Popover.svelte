@@ -7,6 +7,7 @@
   // Maps to Skeleton v4/v5 `Popover`.
   import { Popover } from '@skeletonlabs/skeleton-svelte';
   import type { Snippet } from 'svelte';
+  import { fade } from 'svelte/transition';
 
   interface Props {
     trigger: Snippet<[PopoverTriggerProps]>;
@@ -64,12 +65,20 @@
     {/snippet}
   </Popover.Trigger>
   <Popover.Positioner>
+    <!-- Rendered only while open, to fade in and out as v2's popups did (150ms). v4 hides closed
+         content at once, so `hidden` is kept off while it fades out. -->
     <Popover.Content
       class="card p-4 bg-surface-200-800 shadow-xl z-10"
       onclick={handleContentClick}
       onkeydown={handleContentKeydown}
     >
-      {@render content()}
+      {#snippet element(attributes)}
+        {#if open}
+          <div {...attributes} hidden={false} transition:fade={{ duration: 150 }}>
+            {@render content()}
+          </div>
+        {/if}
+      {/snippet}
     </Popover.Content>
   </Popover.Positioner>
 </Popover>

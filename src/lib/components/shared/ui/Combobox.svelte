@@ -23,6 +23,7 @@
   import InputWithButton from '$lib/components/shared/elements/form/InputWithButton.svelte';
   import { Combobox, Portal, useCombobox, useListCollection } from '@skeletonlabs/skeleton-svelte';
   import { Icon } from 'svelte-awesome';
+  import { fade } from 'svelte/transition';
 
   interface Props {
     value?: string;
@@ -135,12 +136,20 @@
   </Combobox.Control>
   <Portal>
     <Combobox.Positioner>
+      <!-- Rendered only while open, to fade in and out as v2's popups did (150ms). v4 hides closed
+           content at once, so `hidden` is kept off while it fades out. -->
       <Combobox.Content class="max-h-48 overflow-y-auto">
-        {#each collection.items as option (option.label)}
-          <Combobox.Item item={option}>
-            <Combobox.ItemText>{option.label}</Combobox.ItemText>
-          </Combobox.Item>
-        {/each}
+        {#snippet element(attributes)}
+          {#if combobox().open}
+            <ul {...attributes} hidden={false} transition:fade={{ duration: 150 }}>
+              {#each collection.items as option (option.label)}
+                <Combobox.Item item={option}>
+                  <Combobox.ItemText>{option.label}</Combobox.ItemText>
+                </Combobox.Item>
+              {/each}
+            </ul>
+          {/if}
+        {/snippet}
       </Combobox.Content>
     </Combobox.Positioner>
   </Portal>
