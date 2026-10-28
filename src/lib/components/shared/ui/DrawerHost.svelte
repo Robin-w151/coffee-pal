@@ -1,6 +1,7 @@
 <script lang="ts">
-  // Phase 2: a fixed panel with a backdrop until story 16.
+  // Shows the drawer service's drawer as a Skeleton v4 `Dialog` on the left side.
   import { drawer, type DrawerId } from '$lib/services/ui/drawer.svelte';
+  import { Dialog, Portal } from '@skeletonlabs/skeleton-svelte';
   import type { Snippet } from 'svelte';
 
   interface Props {
@@ -9,6 +10,9 @@
 
   let { content }: Props = $props();
 
+  // Closing is handled here, not by the Dialog: it reacts to Escape and outside clicks only once
+  // it has set itself up after opening, so early input would be lost. The Dialog disables pointer
+  // events on <body> while open, so the backdrop takes them back.
   function handleKeydown(event: KeyboardEvent): void {
     if (drawer.current && event.key === 'Escape') {
       drawer.close();
@@ -18,17 +22,22 @@
 
 <svelte:window onkeydown={handleKeydown} />
 
-<!-- MIGRATION_PLACEHOLDER: DrawerHost -->
-{#if drawer.current}
-  <div class="fixed inset-0 z-50 flex">
-    <button
-      type="button"
-      class="absolute inset-0 bg-surface-950/50"
-      aria-label="Close"
+<Dialog open={!!drawer.current} closeOnEscape={false} closeOnInteractOutside={false}>
+  <Portal>
+    <Dialog.Backdrop
+      class="pointer-events-auto fixed inset-0 z-50 bg-surface-950/50"
       onclick={drawer.close}
-    ></button>
-    <div class="relative h-full w-80 max-w-full overflow-y-auto bg-surface-100-900" role="dialog">
-      {@render content(drawer.current)}
-    </div>
-  </div>
-{/if}
+    />
+    <Dialog.Positioner class="fixed inset-y-0 left-0 z-50 flex">
+      <!-- Mounted only while open: a mounted, closed Dialog.Content breaks Escape and outside
+           clicks for other overlays. -->
+      {#if drawer.current}
+        <Dialog.Content
+          class="h-full w-80 max-w-[100vw] overflow-y-auto bg-surface-100-900 shadow-xl"
+        >
+          {@render content(drawer.current)}
+        </Dialog.Content>
+      {/if}
+    </Dialog.Positioner>
+  </Portal>
+</Dialog>
