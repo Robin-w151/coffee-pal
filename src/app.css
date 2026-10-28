@@ -63,8 +63,22 @@
 }
 
 /* Input groups show focus on the group's outline, around all its cells, instead of a 1px ring (from
-   the forms plugin) on the focused child. */
+   the forms plugin) on the focused child. The outline is drawn on ::after, above the cells, as the
+   cells' divider borders would otherwise cut through it. */
 @utility input-group {
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    /* Tailwind registers --tw-ring-color as non-inheriting. */
+    --tw-ring-color: inherit;
+    box-shadow: inset 0 0 0 var(--default-ring-width) var(--tw-ring-color);
+  }
+
   &:focus-within {
     --tw-ring-color: var(--color-primary-500);
   }
