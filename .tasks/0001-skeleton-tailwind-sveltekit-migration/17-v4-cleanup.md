@@ -26,14 +26,29 @@ As Claude, I want no v2 classes or placeholders left and a reviewable PR with a 
 
 ## Acceptance criteria
 
-- [ ] `pnpm migration:status --phase 2` exits 0 (`v2-classes`, `migration-placeholders`, `skeleton-v2-imports-total`, `tailwind-v3` all 0).
-- [ ] `pnpm verify` green; a11y no new violations.
-- [ ] Every visual diff has been reviewed; PROGRESS.md lists per screen "OK – intended" or the fix made.
+- [x] `pnpm migration:status --phase 2` exits 0 (`v2-classes`, `migration-placeholders`, `skeleton-v2-imports-total`, `tailwind-v3` all 0).
+- [x] `pnpm verify` green; a11y no new violations.
+- [x] Every visual diff has been reviewed; PROGRESS.md lists per screen "OK – intended" or the fix made.
 - [ ] The PR is ready for review, with the description above.
 
 ## Technical notes
 
 - Don't update the visual snapshots in this story; the v2 baseline stays as the reference until the human approves v4 at checkpoint 18, after which Claude commits the v4 baseline.
+
+### As built (2026-10-28)
+
+- **Input groups:** `MeasurementInput`, `UrlInput` and Estimation use `ig-input`, `ig-select` and `ig-cell`. `input-group-divider` is gone (v4 always draws dividers). The minimum widths select the new classes (`[&_.ig-input]:min-w-40`, `[&_.ig-select]:min-w-24`) and no longer need `!important`, because no v2 rule competes. This fixed the white, unreadable unit fields in dark mode. The select-width e2e test still passes.
+- **`input-error`:** v4 has no state classes for inputs, and six call sites use v2's `input-error`. `app.css` now defines it as an `@utility` (error ring plus a light error tint) that works on `.input` and `.input-group`, so the call sites stay unchanged.
+- **Leftover v2 classes outside the status rule:**
+  - `divider-vertical` → `vr` plus `border-t-0` on the `<hr>`.
+  - `list-dl` was dropped (it did nothing visible).
+  - `list-nav` (AppMenu) → explicit link layout, with hover only on inactive links.
+  - `migration-status` now counts `list-nav`, `list-dl` and `divider-vertical` as v2 classes, and no longer counts `input-group` itself, which is valid in v4.
+- **Cards:** v4's `card` has no background (v2's had the surface colour), so sections floated on the mesh, and the input outlines disappeared in light mode. PageCard, the active search header, the Nextcloud login modal and the confirm dialog use `bg-surface-50-950`, the pairing v4's form outlines are drawn against.
+- **A11y:** v4's segmented controls and file upload fixed Settings' `label` and `nested-interactive` violations. The baseline was shrunk in its own commit (Settings now has none).
+- **Review page:** `scripts/visual-review.js` plus `pnpm visual:review` and `pnpm visual:review:base` (`--base <ref>` compares committed baselines and embeds the images from git as data URIs). The output stays in `test-results/` (ignored).
+- **Open for checkpoint 18 (design decision):** in dark mode, v4 draws field outlines in `surface-800`, and the coffee theme's 800/900/950 are very close, so outlines are only faintly visible on cards. The options are lightening the theme's dark surface shades (a brand change) or giving form fields a lighter ring colour in dark mode in `app.css`. Left as is for the human to decide.
+- **PR (step 4):** stopped before it. In batch mode PRs need the human's explicit go-ahead.
 
 ## Testing
 

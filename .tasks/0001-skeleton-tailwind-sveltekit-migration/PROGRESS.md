@@ -339,3 +339,32 @@ Everything else passes, including persistence, legacy data, scroll restoration, 
 - Error inputs have no red tint (`input-error`), and the Temperature Converter fields look like plain text in light mode.
 
 Next is story 17 (cleanup, input groups, PR).
+
+## 2026-10-28 — Story 17: Skeleton v4 cleanup (implementation done, PR pending)
+
+Input groups are on `ig-*`, and the leftover v2 classes are replaced (`divider-vertical`, `list-nav`, `list-dl`, plus an app-level `input-error`). Cards have a surface again. The a11y baseline for Settings is shrunk, and `pnpm visual:review` builds the review page. Details are in the story's "As built".
+
+**Status:** `pnpm migration:status --phase 2` exits 0. `skeleton-v4-only` 12 is the `ig-*` classes, which story 19 renames.
+
+**Gates:** `pnpm verify` green: 194 unit, 127 e2e. A11y: no new violations, and Settings is down from 6 violations to 0 per scheme. Visual: 71 of 72 screens differ from the v2 baseline (`journal-list-empty-dark` stays within the threshold). The baseline isn't updated before checkpoint 18.
+
+**Visual review (every diff, light and dark, phone and desktop):**
+
+| Screen                                                                        | Verdict                                                                                                                                     |
+| ----------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| calculator, calculator-sections                                               | OK – intended: v4 inputs and input groups, Skeleton switch and slider (smaller "Ice Ratio" label), vertical dividers kept, larger headings. |
+| drip-counter (outside/within target)                                          | OK – intended: same tap/reset colours, badges in the theme colours, "dpm" cell aligned in the input group.                                  |
+| journal-list, my-coffees-list (phone list, desktop table), journal-list-empty | OK – intended: card surface again, v4 pagination (page numbers instead of "1-3 of 3"), tonal ratio badges.                                  |
+| journal-search-active                                                         | OK – intended: the search header card keeps its surface, and the clear button is in the error colour.                                       |
+| journal-entry, journal-new, my-coffees-entry, my-coffees-new                  | OK – intended: v4 inputs (thin outline instead of v2's filled fields), Skeleton stars, aroma tags as coloured delete buttons.               |
+| coffee-validation-errors, journal-entry-validation-errors                     | OK – fixed in this story: the error ring and tint come back through the app-level `input-error`.                                            |
+| brew-method-suggestions (open/filtered), coffee-type-suggestions-open         | OK – intended: v4 combobox list in the surface colour, positioned under the input.                                                          |
+| sort-popup-open                                                               | OK – intended: v4 listbox in the popover, check icon on the selected option.                                                                |
+| dangerous-confirm-modal-open                                                  | OK – intended: v4 dialog, Cancel tonal and Confirm in the error colour, dimmed backdrop.                                                    |
+| app-menu-open                                                                 | OK – fixed in this story: menu links have padding, rounding and hover again (replacing `list-nav`).                                         |
+| toast-visible                                                                 | OK – intended: v4 toast at the bottom centre in the surface colour (v2: primary), clear of the menu button.                                 |
+| settings                                                                      | OK – intended: v4 segmented controls, file upload dropzone, switch.                                                                         |
+
+**Known difference for checkpoint 18:** in dark mode, field outlines (`surface-800`) are faint on cards (`surface-950`), because the coffee theme's darkest shades are close together. It needs a design decision (theme shades or a dark ring colour for fields).
+
+**Next:** step 4 of story 17, updating the PR and marking it ready. Waiting for the human's go-ahead; no PR exists for phase 2 yet.
