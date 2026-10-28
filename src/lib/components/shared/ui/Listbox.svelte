@@ -1,47 +1,77 @@
 <script lang="ts" generics="TValue extends string">
-  // Maps to Skeleton v4/v5 `Listbox`. Phase 2: plain options until story 16.
+  // Maps to Skeleton v4/v5 `Listbox` (single selection).
   import { faCheck, type IconDefinition } from '@fortawesome/free-solid-svg-icons';
+  import { Listbox, useListCollection } from '@skeletonlabs/skeleton-svelte';
   import { Icon } from 'svelte-awesome';
+
+  interface Option {
+    value: TValue;
+    label: string;
+    icon?: IconDefinition;
+  }
 
   interface Props {
     value: TValue;
-    options: ReadonlyArray<{
-      value: TValue;
-      label: string;
-      icon?: IconDefinition;
-    }>;
+    options: ReadonlyArray<Option>;
     /** Called on every click, also on the selected option. */
     onSelect?: (value: TValue) => void;
   }
 
   let { value = $bindable(), options, onSelect }: Props = $props();
 
-  function select(option: TValue): void {
-    value = option;
-    onSelect?.(option);
+  const collection = $derived(
+    useListCollection<Option>({
+      items: [...options],
+      itemToValue: (option) => option.value,
+      itemToString: (option) => option.label,
+    }),
+  );
+
+  let highlightedValue = $state<string | null>(null);
+
+  // v4 reports changes only, and only after its own event handling (the popover around it may close
+  // first). Clicks and Enter select directly, so `value` and onSelect also see the current option.
+  function handleValueChange(details: { value: Array<string> }): void {
+    const option = options.find((candidate) => candidate.value === details.value[0]);
+    if (option) {
+      value = option.value;
+    }
+  }
+
+  function select(option: Option): void {
+    value = option.value;
+    onSelect?.(option.value);
+  }
+
+  function handleContentKeydown(event: KeyboardEvent): void {
+    const option = options.find((candidate) => candidate.value === highlightedValue);
+    if (event.key === 'Enter' && option) {
+      select(option);
+    }
   }
 </script>
 
-<!-- MIGRATION_PLACEHOLDER: Listbox -->
-<div class="flex flex-col gap-1" role="listbox">
-  {#each options as option (option.value)}
-    <div
-      class="flex justify-between items-center gap-4 w-full min-w-48 px-4 py-2 cursor-pointer"
-      role="option"
-      tabindex="0"
-      aria-selected={value === option.value}
-      onclick={() => select(option.value)}
-      onkeydown={(event) => (event.key === 'Enter' || event.key === ' ') && select(option.value)}
-    >
-      <div class="flex items-center gap-2">
-        {#if option.icon}
-          <Icon data={option.icon} />
-        {/if}
-        <span>{option.label}</span>
-      </div>
-      {#if value === option.value}
-        <Icon data={faCheck} />
-      {/if}
-    </div>
-  {/each}
-</div>
+<Listbox
+  {collection}
+  value={[value]}
+  onValueChange={handleValueChange}
+  onHighlightChange={(details) => (highlightedValue = details.highlightedValue)}
+>
+  <Listbox.Content onkeydown={handleContentKeydown}>
+    {#each options as option (option.value)}
+      <Listbox.Item item={option} onclick={() => select(option)}>
+        <div class="flex justify-between items-center gap-4 w-full min-w-48">
+          <div class="flex items-center gap-2">
+            {#if option.icon}
+              <Icon data={option.icon} />
+            {/if}
+            <Listbox.ItemText>{option.label}</Listbox.ItemText>
+          </div>
+          {#if value === option.value}
+            <Icon data={faCheck} />
+          {/if}
+        </div>
+      </Listbox.Item>
+    {/each}
+  </Listbox.Content>
+</Listbox>

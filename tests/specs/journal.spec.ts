@@ -332,7 +332,7 @@ test.describe('form controls', () => {
 
   test('sort list box selects with the keyboard', async ({ journalPage }) => {
     await journalPage.clickSortButton();
-    await journalPage.getSortOption('Best').press('Enter');
+    await journalPage.selectSortOptionWithKeyboard('Best');
 
     await expect(journalPage.getJournalEntryTitle(0)).toHaveText('V60 Switch - Honeymoon');
     await journalPage.clickSortButton();

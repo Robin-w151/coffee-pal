@@ -56,6 +56,17 @@ export class JournalPage {
     await expect(this.page.getByRole('option', { name: 'Recently Added' })).toBeVisible();
   }
 
+  // The listbox keeps focus itself and highlights options (type-ahead); Enter selects.
+  async selectSortOptionWithKeyboard(
+    option: 'A-Z' | 'Z-A' | 'Best' | 'Recently Added' | 'Recently Updated',
+  ): Promise<void> {
+    const listbox = this.page.getByRole('listbox');
+    await listbox.focus();
+    await listbox.pressSequentially(option);
+    await expect(this.getSortOption(option)).toHaveAttribute('data-highlighted');
+    await listbox.press('Enter');
+  }
+
   async clickSortOption(
     option: 'A-Z' | 'Z-A' | 'Best' | 'Recently Added' | 'Recently Updated',
   ): Promise<void> {
