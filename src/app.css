@@ -23,6 +23,11 @@
   ::file-selector-button {
     border-color: var(--color-gray-200, currentcolor);
   }
+
+  /* Plain <hr>s in the colour of Skeleton's hr and vr (v2 styled bare <hr>s, v4 doesn't). */
+  hr {
+    border-color: var(--color-surface-200-800);
+  }
 }
 
 /* Form field outlines: thicker than v4's 1px, and in the stronger surface-400-600 pairing, as the

@@ -41,6 +41,7 @@ As Claude, I want no v2 classes or placeholders left and a reviewable PR with a 
 - **`input-error`:** v4 has no state classes for inputs, and six call sites use v2's `input-error`. `app.css` now defines it as an `@utility` (error ring plus a light error tint) that works on `.input` and `.input-group`, so the call sites stay unchanged.
 - **Leftover v2 classes outside the status rule:**
   - `divider-vertical` → `vr` plus `border-t-0` on the `<hr>`.
+  - Plain `<hr>`s fell back to the v3 compatibility border colour (`gray-200`, near-white in both modes), as v4 no longer styles bare `<hr>`s. `app.css` gives `hr` the `surface-200-800` colour of Skeleton's `hr`/`vr` in the base layer (human's finding, 2026-10-28).
   - `list-dl` was dropped (it did nothing visible).
   - `list-nav` (AppMenu) → explicit link layout, with hover only on inactive links.
   - `migration-status` now counts `list-nav`, `list-dl` and `divider-vertical` as v2 classes, and no longer counts `input-group` itself, which is valid in v4.
