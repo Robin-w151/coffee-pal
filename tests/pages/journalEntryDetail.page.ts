@@ -44,7 +44,7 @@ export class JournalEntryDetailPage {
   }
 
   getRatingStar(star: number): Locator {
-    return this.rating.getByRole('button').nth(star - 1);
+    return this.rating.getByRole('radio').nth(star - 1);
   }
 
   getAutocompleteOption(name: string | RegExp): Locator {

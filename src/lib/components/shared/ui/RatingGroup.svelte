@@ -1,24 +1,30 @@
 <script lang="ts">
-  // Maps to Skeleton v4/v5 `RatingGroup`. Phase 2: plain buttons until story 15.
-  import { faStar as faStarRegular } from '@fortawesome/free-regular-svg-icons';
-  import { faStar } from '@fortawesome/free-solid-svg-icons';
-  import { Icon } from 'svelte-awesome';
+  // Maps to Skeleton v4/v5 `RatingGroup`.
+  import { RatingGroup } from '@skeletonlabs/skeleton-svelte';
 
   interface Props {
     value: number;
     max: number;
-    /** Called with the clicked star (1-based). */
+    /** Called with the clicked star (1-based), also when it is the current value. */
     onValueChange: (value: number) => void;
   }
 
   let { value, max, onValueChange }: Props = $props();
+
+  // v4 reports changes only, so a click on the current star is reported here.
+  function handleItemClick(index: number): void {
+    if (index === value) {
+      onValueChange(index);
+    }
+  }
 </script>
 
-<!-- MIGRATION_PLACEHOLDER: RatingGroup -->
-<div class="flex justify-start text-tertiary-700-300">
-  {#each { length: max }, index (index)}
-    <button type="button" onclick={() => onValueChange(index + 1)}>
-      <Icon data={index < value ? faStar : faStarRegular} scale={2} />
-    </button>
-  {/each}
-</div>
+<RatingGroup count={max} {value} onValueChange={(details) => onValueChange(details.value)}>
+  <!-- v2's 2x star icons: a touch target of 2rem. -->
+  <RatingGroup.Control class="[&_svg]:size-8">
+    {#each { length: max }, i (i)}
+      <RatingGroup.Item index={i + 1} onclick={() => handleItemClick(i + 1)} />
+    {/each}
+  </RatingGroup.Control>
+  <RatingGroup.HiddenInput />
+</RatingGroup>
