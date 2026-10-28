@@ -162,6 +162,16 @@
   }
 }
 
+/* Loading placeholders in surface 300 / 500. v4's surface-200-800 is the colour of the light table
+   stripes and the dark cards, so the bars vanished there; v2's dark 600 barely shows on the 700
+   stripes. */
+@utility placeholder {
+  background-color: light-dark(var(--color-surface-300), var(--color-surface-500));
+}
+@utility placeholder-circle {
+  background-color: light-dark(var(--color-surface-300), var(--color-surface-500));
+}
+
 /* Icon buttons fade on hover like .btn (Skeleton's btn-icon has no transition). Tailwind merges this
    into Skeleton's btn-icon. */
 @utility btn-icon {
