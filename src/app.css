@@ -139,6 +139,24 @@
   }
 }
 
+/* Tables as in v2: bold headers on surface 200 / 700, the colour of the alternating rows too, and
+   roomier cells (v4: normal weight, no header background, 0.5rem padding). */
+@utility table {
+  & thead,
+  & tbody tr:nth-child(2n) {
+    background-color: light-dark(var(--color-surface-200), var(--color-surface-700));
+  }
+
+  & th {
+    font-weight: bold;
+  }
+
+  & th,
+  & td {
+    padding: --spacing(4) --spacing(3);
+  }
+}
+
 /* Icon buttons fade on hover like .btn (Skeleton's btn-icon has no transition). Tailwind merges this
    into Skeleton's btn-icon. */
 @utility btn-icon {
