@@ -18,9 +18,10 @@
 
 <script lang="ts" generics="T">
   // Maps to Skeleton v4/v5 `Combobox`. Free text is allowed: the input text is the value, and
-  // choosing an option is reported through onSelect.
+  // choosing an option is reported through onSelect. `open` stays uncontrolled: when controlled, v4
+  // refocuses the input a frame after every close, even after the user has moved to another field.
   import InputWithButton from '$lib/components/shared/elements/form/InputWithButton.svelte';
-  import { Combobox, Portal, useListCollection } from '@skeletonlabs/skeleton-svelte';
+  import { Combobox, Portal, useCombobox, useListCollection } from '@skeletonlabs/skeleton-svelte';
   import { Icon } from 'svelte-awesome';
 
   interface Props {
@@ -67,14 +68,19 @@
     }),
   );
 
-  let open = $state(false);
-
-  function setOpen(next: boolean): void {
-    if (open !== next) {
-      open = next;
-      onOpenChange?.(next);
-    }
-  }
+  const id = $props.id();
+  const combobox = useCombobox(() => ({
+    id,
+    collection,
+    invalid,
+    inputValue: value ?? '',
+    allowCustomValue: true,
+    openOnClick: true,
+    positioning: { sameWidth: true },
+    onOpenChange: (details) => onOpenChange?.(details.open),
+    onInputValueChange: handleInputValueChange,
+    onValueChange: handleValueChange,
+  }));
 
   // Selecting an option also replaces the input text; only typing is reported as an input change.
   function handleInputValueChange(details: { inputValue: string; reason?: string }): void {
@@ -92,37 +98,24 @@
   }
 
   // Escape closes the list and must go no further, e.g. not to the page's back handling. Closed here
-  // too, since v4 ignores Escape while its own state lags behind `open` (e.g. right after focusing).
+  // too: v4 closes on Escape through a layer it sets up only after opening, so an early Escape
+  // would be lost.
   function handleKeydown(event: KeyboardEvent): void {
     if (event.key === 'Escape') {
       event.stopPropagation();
-      setOpen(false);
+      if (combobox().open) {
+        combobox().setOpen(false);
+      }
     }
   }
 </script>
 
 <!-- Rendered inside Combobox.Control below; declared here so it isn't a prop of the control. -->
 {#snippet input()}
-  <Combobox.Input
-    {placeholder}
-    onfocus={() => setOpen(true)}
-    onblur={onBlur}
-    onkeydown={handleKeydown}
-  />
+  <Combobox.Input {placeholder} onblur={onBlur} onkeydown={handleKeydown} />
 {/snippet}
 
-<Combobox
-  {collection}
-  {open}
-  {invalid}
-  inputValue={value ?? ''}
-  allowCustomValue
-  openOnClick
-  positioning={{ sameWidth: true }}
-  onOpenChange={(details) => setOpen(details.open)}
-  onInputValueChange={handleInputValueChange}
-  onValueChange={handleValueChange}
->
+<Combobox.Provider value={combobox}>
   <Combobox.Control>
     {#if trailLink}
       <InputWithButton title={trailLink.title} visible={trailLink.visible} href={trailLink.href}>
@@ -146,4 +139,4 @@
       </Combobox.Content>
     </Combobox.Positioner>
   </Portal>
-</Combobox>
+</Combobox.Provider>

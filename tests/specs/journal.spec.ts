@@ -95,9 +95,9 @@ test('entry add', async ({ journalPage, journalEntryDetailPage }) => {
   await expect(journalEntryDetailPage.header).toBeVisible();
 
   await journalEntryDetailPage.methodInput.fill('Chemex');
-  await journalEntryDetailPage.methodInput.press('Escape');
+  await journalEntryDetailPage.closeSuggestions(journalEntryDetailPage.methodInput);
   await journalEntryDetailPage.coffeeTypeInput.fill('Tovolea Classic');
-  await journalEntryDetailPage.coffeeTypeInput.press('Escape');
+  await journalEntryDetailPage.closeSuggestions(journalEntryDetailPage.coffeeTypeInput);
   await journalEntryDetailPage.waterInput.fill('510');
   await journalEntryDetailPage.coffeeInput.fill('30');
   await journalEntryDetailPage.waterTemperatureInput.fill('98');
@@ -251,7 +251,7 @@ test('entry add new entry and navigate to calculator', async ({
   await page.waitForTimeout(500);
 
   await journalPage.clickAddButton();
-  await journalEntryDetailPage.methodInput.fill('V60');
+  await journalEntryDetailPage.fillCombobox(journalEntryDetailPage.methodInput, 'V60');
   await journalEntryDetailPage.waterInput.fill('250');
   await journalEntryDetailPage.coffeeInput.fill('16.67');
   await journalEntryDetailPage.clickSaveButton();

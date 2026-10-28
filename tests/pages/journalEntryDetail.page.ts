@@ -47,6 +47,20 @@ export class JournalEntryDetailPage {
     return this.rating.getByRole('radio').nth(star - 1);
   }
 
+  // Typing opens the suggestions, and the combobox focuses its input a frame later; moving on to
+  // another field before that would send its text to this input.
+  async fillCombobox(input: Locator, text: string): Promise<void> {
+    await input.fill(text);
+    await this.page.evaluate(() => new Promise(requestAnimationFrame));
+  }
+
+  // Escape closes the suggestions, and the combobox refocuses its input a frame later; moving on
+  // to another field before that would send its text to this input.
+  async closeSuggestions(input: Locator): Promise<void> {
+    await input.press('Escape');
+    await this.page.evaluate(() => new Promise(requestAnimationFrame));
+  }
+
   getAutocompleteOption(name: string | RegExp): Locator {
     // Skeleton v2 renders autocomplete options as buttons; later versions use the option role.
     return this.page
