@@ -147,6 +147,11 @@
     background-color: light-dark(var(--color-surface-200), var(--color-surface-700));
   }
 
+  /* Skeleton's surface-700-300 header text, but white in dark mode. */
+  & thead {
+    color: light-dark(var(--color-surface-700), white);
+  }
+
   & th {
     font-weight: bold;
   }
