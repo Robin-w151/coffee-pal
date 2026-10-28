@@ -100,31 +100,31 @@ Decision 2026-10-23: Claude works on the phase branch and stops only at the Huma
 
 ## Stories
 
-| #   | Story                                                                        | Owner  | Size | Depends on     | Status      |
-| --- | ---------------------------------------------------------------------------- | ------ | ---- | -------------- | ----------- |
-| 01  | [Verify and migration-status scripts](01-verify-and-status-scripts.md)       | Claude | S    | –              | Done        |
-| 02  | [E2e tests for app shell and overlays](02-app-shell-e2e-tests.md)            | Claude | M    | 01             | Done        |
-| 03  | [E2e tests for form controls](03-form-control-e2e-tests.md)                  | Claude | M    | 01             | Done        |
-| 04  | [Visual and accessibility baseline](04-visual-and-a11y-baseline.md)          | Claude | M    | 01             | Done        |
-| 05  | [Checkpoint: approve safety net](05-checkpoint-safety-net.md)                | Human  | S    | 02, 03, 04     | Done        |
-| 06  | [Persisted state with runed](06-persisted-state-runed.md)                    | Claude | M    | 05             | Done        |
-| 07  | [Own app layout instead of AppShell](07-own-app-layout.md)                   | Claude | M    | 05             | Done        |
-| 08  | [Overlay services and hosts](08-overlay-services.md)                         | Claude | L    | 05             | Done        |
-| 09  | [Form control wrappers](09-form-control-wrappers.md)                         | Claude | M    | 05             | Done        |
-| 10  | [List and navigation wrappers](10-list-navigation-wrappers.md)               | Claude | M    | 07, 08         | Done        |
-| 11  | [Stylesheet preparation](11-stylesheet-preparation.md)                       | Claude | M    | 06, 08, 09, 10 | Done        |
-| 12  | [Merge phase 1 and check production data](12-merge-phase-1.md)               | Human  | S    | 11             | Done        |
-| 13  | [Tailwind v4 and Skeleton codemods](13-tailwind-v4-and-codemods.md)          | Claude | L    | 11             | Done        |
-| 14  | [Coffee theme for Skeleton v4](14-coffee-theme-v4.md)                        | Claude | M    | 13             | Done        |
-| 15  | [Form control wrappers on v4](15-form-controls-v4.md)                        | Claude | M    | 13             | In progress |
-| 16  | [Overlays, lists and navigation on v4](16-overlays-navigation-v4.md)         | Claude | L    | 13             | Todo        |
-| 17  | [Skeleton v4 cleanup and PR](17-v4-cleanup.md)                               | Claude | M    | 14, 15, 16     | Todo        |
-| 18  | [Checkpoint: approve v4 and ship](18-checkpoint-v4.md)                       | Human  | S    | 12, 17         | Todo        |
-| 19  | [Skeleton v5 upgrade](19-skeleton-v5.md)                                     | Claude | M    | 18             | Todo        |
-| 20  | [Checkpoint: approve v5 and test PWA on device](20-checkpoint-v5-and-pwa.md) | Human  | M    | 19             | Todo        |
-| 21  | [SvelteKit 3 readiness check](21-sveltekit-3-readiness.md)                   | Claude | S    | 20             | Todo        |
-| 22  | [SvelteKit 3 migration](22-sveltekit-3-migration.md)                         | Claude | L    | 21             | Todo        |
-| 23  | [Checkpoint: approve SvelteKit 3 and ship](23-checkpoint-sveltekit-3.md)     | Human  | S    | 22             | Todo        |
+| #   | Story                                                                        | Owner  | Size | Depends on     | Status |
+| --- | ---------------------------------------------------------------------------- | ------ | ---- | -------------- | ------ |
+| 01  | [Verify and migration-status scripts](01-verify-and-status-scripts.md)       | Claude | S    | –              | Done   |
+| 02  | [E2e tests for app shell and overlays](02-app-shell-e2e-tests.md)            | Claude | M    | 01             | Done   |
+| 03  | [E2e tests for form controls](03-form-control-e2e-tests.md)                  | Claude | M    | 01             | Done   |
+| 04  | [Visual and accessibility baseline](04-visual-and-a11y-baseline.md)          | Claude | M    | 01             | Done   |
+| 05  | [Checkpoint: approve safety net](05-checkpoint-safety-net.md)                | Human  | S    | 02, 03, 04     | Done   |
+| 06  | [Persisted state with runed](06-persisted-state-runed.md)                    | Claude | M    | 05             | Done   |
+| 07  | [Own app layout instead of AppShell](07-own-app-layout.md)                   | Claude | M    | 05             | Done   |
+| 08  | [Overlay services and hosts](08-overlay-services.md)                         | Claude | L    | 05             | Done   |
+| 09  | [Form control wrappers](09-form-control-wrappers.md)                         | Claude | M    | 05             | Done   |
+| 10  | [List and navigation wrappers](10-list-navigation-wrappers.md)               | Claude | M    | 07, 08         | Done   |
+| 11  | [Stylesheet preparation](11-stylesheet-preparation.md)                       | Claude | M    | 06, 08, 09, 10 | Done   |
+| 12  | [Merge phase 1 and check production data](12-merge-phase-1.md)               | Human  | S    | 11             | Done   |
+| 13  | [Tailwind v4 and Skeleton codemods](13-tailwind-v4-and-codemods.md)          | Claude | L    | 11             | Done   |
+| 14  | [Coffee theme for Skeleton v4](14-coffee-theme-v4.md)                        | Claude | M    | 13             | Done   |
+| 15  | [Form control wrappers on v4](15-form-controls-v4.md)                        | Claude | M    | 13             | Done   |
+| 16  | [Overlays, lists and navigation on v4](16-overlays-navigation-v4.md)         | Claude | L    | 13             | Todo   |
+| 17  | [Skeleton v4 cleanup and PR](17-v4-cleanup.md)                               | Claude | M    | 14, 15, 16     | Todo   |
+| 18  | [Checkpoint: approve v4 and ship](18-checkpoint-v4.md)                       | Human  | S    | 12, 17         | Todo   |
+| 19  | [Skeleton v5 upgrade](19-skeleton-v5.md)                                     | Claude | M    | 18             | Todo   |
+| 20  | [Checkpoint: approve v5 and test PWA on device](20-checkpoint-v5-and-pwa.md) | Human  | M    | 19             | Todo   |
+| 21  | [SvelteKit 3 readiness check](21-sveltekit-3-readiness.md)                   | Claude | S    | 20             | Todo   |
+| 22  | [SvelteKit 3 migration](22-sveltekit-3-migration.md)                         | Claude | L    | 21             | Todo   |
+| 23  | [Checkpoint: approve SvelteKit 3 and ship](23-checkpoint-sveltekit-3.md)     | Human  | S    | 22             | Todo   |
 
 **Size overview:** 6×S, 13×M, 4×L. Claude: 2×S, 12×M, 4×L. Human: 4×S, 1×M. Largest risks: 08 (overlay services, since v4 drops the store-based modal/toast/drawer model), 13 (Tailwind v4 + two codemods at once, the moment the app breaks), 16 (rewriting the most interactive components on Zag.js-based v4 components), 22 (SvelteKit 3 plus the PWA tooling).
 
@@ -214,6 +214,7 @@ flowchart TD
   - Once 12 is merged, Claude transplants phase 2 onto `main`: `git rebase --onto origin/main <PHASE1_TIP> migration/2-skeleton-v4`, where `<PHASE1_TIP>` is the merged PR's head SHA (`gh pr view <PR> --json headRefOid`), not the branch name (it may be deleted). Then Claude re-runs the phase 2 gate, pushes with `--force-with-lease` and changes the PR base to `main` (`gh pr edit <PR> --base main`). Expected conflicts are small (`package.json` version from the release commit, `pnpm-lock.yaml` → regenerate with `pnpm install`).
 - `PersistedState`'s `syncTabs` stays at its default (`true`). Syncing settings across open tabs is an acceptable small behaviour change.
 - Target versions are the latest stable releases at the time each phase starts: Skeleton 4.15.2 for phase 2, latest 5.x for phase 3, latest Tailwind 4.x, latest SvelteKit 3.x, latest TypeScript 6.x (not 7.x, which doesn't work with the toolchain yet; decision 2026-10-25).
+- **Tests coupled to v2 markup (decision 2026-10-28, phase 2):** page objects and the interaction lines of test bodies may be adapted to the v4 markup (e.g. a keyboard helper instead of `fill` on a `div[role=slider]`). Assertions stay unchanged. Every such change is listed in its commit, the story's "As built" and PROGRESS.md.
 - The visual baseline covers the phone viewport used by the existing e2e tests (576×768) plus one desktop viewport (1280×800). Tablet sizes aren't captured.
 
 ## Definition of done

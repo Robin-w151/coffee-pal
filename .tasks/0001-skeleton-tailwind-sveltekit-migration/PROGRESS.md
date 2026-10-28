@@ -296,3 +296,26 @@ Everything else passes, including persistence, legacy data, scroll restoration, 
 - **Calculator, drip counter:** chips and the tap/reset buttons keep their colours. The input groups behave as in the forms.
 - **Settings:** the segmented controls are native radios, and the file upload is a native input (story 15).
 - **Overlays:** the confirm modal and the suggestion lists keep their position and colours. The app menu drawer is a plain list (story 16), and the toast uses the placeholder markup.
+
+## 2026-10-28 — Story 15: Form control wrappers on v4 (Done)
+
+`Switch`, `SegmentedControl`, `Slider`, `RatingGroup`, `TagsInput` and `FileUpload` are built on `@skeletonlabs/skeleton-svelte` 4.15.2, one commit each. Their props are unchanged and no call site changed. Details are in the story's "As built".
+
+**Decision (human, 2026-10-28):** tests coupled to v2 markup may have their page objects and interaction lines adapted; assertions stay unchanged (see the epic's Assumptions). Changes in this story:
+
+- `settings.page.ts`: `getCheckedRadio` returns the label around the checked radio.
+- `calculator.page.ts`: `iceRatioRange` is the hidden form input; there's a new `iceRatioThumb` and a new `setIceRatio()`. `calculator.spec.ts` uses them for the slider interactions, and `states.visual.ts` waits for the thumb.
+- `journalEntryDetail.page.ts` and `myCoffeesEntryDetail.page.ts`: `getRatingStar` uses role `radio`.
+- `myCoffeesEntryDetail.page.ts`: `addAroma` waits for the cleared input. `myCoffees.spec.ts`: the fade-in recorder selects `button`, and the Escape test waits a frame before blurring.
+
+**Status:** `migration-placeholders` 9, `v2-classes` 11.
+
+**Gates:** `check`, `lint`, `build` and `test:unit` (194) green. E2e: 121 passed, 6 failed (was 14). A11y: no new violations.
+
+**Failing e2e tests (to-do list for 16):**
+
+- `Combobox`, 1 test: `journal.spec` "brew method autocomplete selects with arrow down and enter".
+- `Listbox`, 1 test: `journal.spec` "sort list box selects with the keyboard".
+- `Pagination`, 2 tests: `journal.spec` "paginator", and `settings.spec` backup import "imports journal and coffee entries" (it now gets past the upload and needs "Last page").
+- `ModalHost`, 1 test: `appShell.spec` phone "modal traps focus".
+- `ToastHost`, 1 test: `appShell.spec` phone "toast after deleting an entry can be dismissed".
