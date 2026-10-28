@@ -319,3 +319,23 @@ Everything else passes, including persistence, legacy data, scroll restoration, 
 - `Pagination`, 2 tests: `journal.spec` "paginator", and `settings.spec` backup import "imports journal and coffee entries" (it now gets past the upload and needs "Last page").
 - `ModalHost`, 1 test: `appShell.spec` phone "modal traps focus".
 - `ToastHost`, 1 test: `appShell.spec` phone "toast after deleting an entry can be dismissed".
+
+## 2026-10-28 — Story 16: Overlays, lists and navigation on v4 (Done)
+
+`AppBar`, `NavRail`, `Pagination`, `Listbox`, `Popover`, `Combobox`, `ModalHost`, `DrawerHost` and `ToastHost` are built on `@skeletonlabs/skeleton-svelte` 4.15.2. Service APIs and wrapper props are unchanged, and `@floating-ui/dom` is removed. Details are in the story's "As built".
+
+**Notable:** Zag sets up Escape and outside-click handling for an overlay only after it has opened, and input that arrives earlier is lost. The modal, drawer and popover therefore close on Escape, backdrop and outside clicks themselves. After that, the overlay specs were stable over 3 repetitions under load. Also, 4.15.2's pagination first/last triggers lack their data attributes and disabled state; the wrapper sets both.
+
+**Test change (phase 2 rule):** `journal.page.ts` has a new `selectSortOptionWithKeyboard` (type-ahead + Enter), used by "sort list box selects with the keyboard".
+
+**Status:** `migration-placeholders` 0. `v2-classes` 11 (input groups, story 17).
+
+**Gates:** `pnpm verify` green: 194 unit, 127 e2e, 0 failing (the failing-test list is empty). A11y: no new violations.
+
+**Visual review (72 diffs against the v2 baseline):** the hues match everywhere. The rail, app bar, pagination, sort popup, combobox list, confirm dialog, drawer and toast show the v4 look and work in both schemes. Remaining differences belong to story 17:
+
+- **Input groups (priority):** in dark mode the v2 `input-group` fields (`MeasurementInput`, `UrlInput`, Estimation's drip rate) are white with white text, so their values are unreadable. The drip rate's "dpm" addon is also misaligned.
+- `card` has no surface background in v4: the lists and the calculator/drip-counter sections float on the mesh.
+- Error inputs have no red tint (`input-error`), and the Temperature Converter fields look like plain text in light mode.
+
+Next is story 17 (cleanup, input groups, PR).
