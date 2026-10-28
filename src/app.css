@@ -29,7 +29,7 @@
    theme's surface-800 outline is barely visible on surface-950 cards in dark mode. Only the variables
    the outlines use are redefined on the fields, so focus rings and other surface-200-800 uses stay as
    they are. Fields get a background one step off the surface-50-950 cards (v4's are transparent),
-   like v2's fields were against its cards. */
+   like v2's fields were against its cards, and v2's 0.5rem vertical padding (v4 has 0.25rem). */
 @layer components {
   .input,
   .textarea,
@@ -48,18 +48,25 @@
   [data-scope='radio-group'][data-part='control'] {
     border-width: 3px;
   }
+
+  [data-scope='combobox'][data-part='input'] {
+    padding-block: --spacing(2);
+  }
 }
 
-/* Skeleton's input, select and textarea utilities set a transparent background, which beats the
-   components layer above. Tailwind merges these into them. */
+/* Skeleton's field utilities set their own background and padding, which beat the components layer
+   above. Tailwind merges these into them. */
 @utility input {
   background-color: var(--color-surface-100-900);
+  padding-block: --spacing(2);
 }
 @utility select {
   background-color: var(--color-surface-100-900);
+  padding-block: --spacing(2);
 }
 @utility textarea {
   background-color: var(--color-surface-100-900);
+  padding-block: --spacing(2);
 }
 
 /* Input groups show focus on the group's outline, around all its cells, instead of a 1px ring (from
@@ -84,11 +91,15 @@
   }
 }
 @utility ig-input {
+  padding-block: --spacing(2);
+
   &:focus {
     box-shadow: none;
   }
 }
 @utility ig-select {
+  padding-block: --spacing(2);
+
   &:focus {
     box-shadow: none;
   }
