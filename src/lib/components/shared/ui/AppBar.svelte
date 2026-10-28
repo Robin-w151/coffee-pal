@@ -12,7 +12,7 @@
 </script>
 
 <!-- A div: the app layout's <header> is the banner landmark already. -->
-<AppBar class="px-4 md:px-2 py-1 md:py-2">
+<AppBar class="px-4 md:px-2 py-1 md:py-2 dark:bg-surface-800 shadow-xl">
   {#snippet element(attributes)}
     <div {...attributes}>
       <AppBar.Toolbar class="grid-cols-[auto_1fr] gap-2 md:gap-4">

@@ -18,6 +18,6 @@
 </script>
 
 <!-- v4's card has no background (v2's had one); 50-950 keeps v4's form outlines visible on it. -->
-<div class="card bg-surface-50-950 {display} {padding} w-full {clazz ?? ''}">
+<div class="card bg-surface-50 dark:bg-surface-800 {display} {padding} w-full {clazz ?? ''}">
   {@render children?.()}
 </div>
