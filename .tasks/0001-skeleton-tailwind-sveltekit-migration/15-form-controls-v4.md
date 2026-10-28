@@ -2,7 +2,7 @@
 
 **Epic:** [0001 Migrate to Skeleton v5, Tailwind v4 and SvelteKit 3](README.md)
 **Owner:** Claude
-**Status:** Todo
+**Status:** In progress
 **Depends on:** 13
 **Size:** M — six wrappers with existing v4 equivalents and existing tests; the Zag.js-based API (`onValueChange` with details objects) needs adapting to `$bindable`.
 

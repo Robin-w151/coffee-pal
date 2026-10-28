@@ -44,9 +44,12 @@ export class SettingsPage {
     await this.page.getByRole('button', { name: 'Import' }).click();
   }
 
+  // The label around the checked radio, whose text is the option: the radio itself may be an input
+  // without text content.
   private getCheckedRadio(options: Array<string>): Locator {
     return this.page
-      .getByRole('radio', { checked: true })
+      .locator('label')
+      .filter({ has: this.page.getByRole('radio', { checked: true }) })
       .filter({ hasText: new RegExp(String.raw`^\s*(${options.join('|')})\s*$`) });
   }
 }
