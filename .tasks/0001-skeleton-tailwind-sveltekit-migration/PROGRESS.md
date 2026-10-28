@@ -365,6 +365,16 @@ Input groups are on `ig-*`, and the leftover v2 classes are replaced (`divider-v
 | toast-visible                                                                 | OK – intended: v4 toast at the bottom centre in the surface colour (v2: primary), clear of the menu button.                                 |
 | settings                                                                      | OK – intended: v4 segmented controls, file upload dropzone, switch.                                                                         |
 
-**Known difference for checkpoint 18:** in dark mode, field outlines (`surface-800`) are faint on cards (`surface-950`), because the coffee theme's darkest shades are close together. It needs a design decision (theme shades or a dark ring colour for fields).
+**Known difference for checkpoint 18 (resolved below):** in dark mode, field outlines (`surface-800`) were faint on cards (`surface-950`).
 
 **Next:** step 4 of story 17, updating the PR and marking it ready. Waiting for the human's go-ahead; no PR exists for phase 2 yet.
+
+## 2026-10-28 — Story 17: follow-ups from the human's review
+
+- **Field outlines:** 2px, and `surface-400` in dark mode, set only on form fields in `app.css`.
+- **Popover:** seven unused props removed.
+- **Combobox focus bug fixed:** a controlled `open` made Zag refocus the input after it closed, so text for later fields ended up in the brew method or coffee type. The combobox is now uncontrolled, and Escape closes it through the API. Suggestions no longer open on focus alone. Two journal page-object helpers wait one frame for Zag's own refocus (phase 2 rule).
+
+**Gates:** `pnpm verify` green (194 unit, 127 e2e). Journal and app shell specs passed 5× in a row (270 runs).
+
+**Next:** the PR for phase 2 (step 4 of story 17), once the human gives the go-ahead.
