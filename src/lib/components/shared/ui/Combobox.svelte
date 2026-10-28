@@ -112,7 +112,12 @@
 
 <!-- Rendered inside Combobox.Control below; declared here so it isn't a prop of the control. -->
 {#snippet input()}
-  <Combobox.Input {placeholder} onblur={onBlur} onkeydown={handleKeydown} />
+  <Combobox.Input
+    class={invalid ? 'input-error' : ''}
+    {placeholder}
+    onblur={onBlur}
+    onkeydown={handleKeydown}
+  />
 {/snippet}
 
 <Combobox.Provider value={combobox}>
