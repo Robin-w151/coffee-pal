@@ -71,6 +71,17 @@
     background-color: light-dark(var(--color-surface-400), var(--color-surface-500));
   }
 
+  /* Segmented controls in v2's RadioGroup spacing. Their items are buttons and would otherwise get the
+     buttons' v2 padding inside v4's 8px control padding (64px tall). */
+  [data-scope='radio-group'][data-part='control'] {
+    gap: --spacing(1);
+    padding: --spacing(1);
+  }
+
+  [data-scope='radio-group'][data-part='item'] {
+    padding: --spacing(1) --spacing(4);
+  }
+
   [data-scope='combobox'][data-part='input'] {
     padding-block: 9px;
   }
