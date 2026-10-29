@@ -177,9 +177,15 @@
 /* Invalid form fields, on .input and .input-group (v2's input-error, in its colours for both modes;
    v4 has no input states). The input group's cells inherit the text colour. */
 @utility input-error {
-  --tw-ring-color: var(--color-error-500) !important;
-  background-color: var(--color-error-200) !important;
+  --coffee-field-background: var(--color-error-200);
+  --tw-ring-color: var(--color-error-500);
   color: var(--color-error-500);
+
+  /* The ring stays red on focus, where the fields turn it primary. */
+  &:focus,
+  &:focus-within {
+    --tw-ring-color: var(--color-error-500);
+  }
 
   /* The input group's dividers. */
   & > * + * {
