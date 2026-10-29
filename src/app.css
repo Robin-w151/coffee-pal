@@ -98,6 +98,26 @@
     padding: --spacing(1);
   }
 
+  /* Sliders in the primary colour (v4: surface-950-50), on the off switches' track colour, which
+     shows on the cards in dark mode too. */
+  [data-scope='slider'][data-part='track'] {
+    background: light-dark(var(--color-surface-400), var(--color-surface-500));
+  }
+
+  [data-scope='slider'][data-part='range'] {
+    background: var(--color-primary-500);
+  }
+
+  /* The thumb light in both modes, like the switches' (v4: surface-50-950). */
+  [data-scope='slider'][data-part='thumb'] {
+    background: var(--color-surface-50);
+    box-shadow: inset 0 0 0 2px var(--color-primary-500);
+
+    &:focus-visible {
+      outline-color: var(--color-primary-500);
+    }
+  }
+
   [data-scope='combobox'][data-part='input'] {
     padding-block: 9px;
   }
