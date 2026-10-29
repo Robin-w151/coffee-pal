@@ -82,6 +82,22 @@
     padding: --spacing(1) --spacing(4);
   }
 
+  /* The navigation rail in v2's geometry: 80px wide, 4px padding and gaps, 72px tiles. v4's is
+     100px with 8px spacing, and its tiles are buttons that got the buttons' v2 padding. */
+  [data-scope='navigation'][data-part='root'][data-layout='rail'] {
+    width: --spacing(20);
+    padding: --spacing(1);
+  }
+
+  [data-scope='navigation'][data-part='menu'][data-layout='rail'] {
+    gap: --spacing(1);
+  }
+
+  [data-scope='navigation'][data-part='trigger-anchor'][data-layout='rail'] {
+    max-width: none;
+    padding: --spacing(1);
+  }
+
   [data-scope='combobox'][data-part='input'] {
     padding-block: 9px;
   }
