@@ -1,19 +1,13 @@
 <script lang="ts">
-  // Phase 1: renders the service's toasts with Skeleton v2's toast store.
-  import { toast, type ToastKind } from '$lib/services/ui/toast.svelte';
-  import { Toast, getToastStore, initializeStores } from '@skeletonlabs/skeleton';
+  // Renders the toast service's toasts with Skeleton v4's toaster.
+  import { toast } from '$lib/services/ui/toast.svelte';
+  import { Toast, createToaster } from '@skeletonlabs/skeleton-svelte';
 
-  const BACKGROUNDS: Record<ToastKind, string> = {
-    info: 'variant-filled-primary',
-    error: 'variant-filled-error',
-  };
+  const toaster = createToaster({ placement: 'bottom', overlap: false });
 
-  // Each host sets up the v2 stores for its own subtree.
-  initializeStores();
-  const toastStore = getToastStore();
-  // Plain Map on purpose: bookkeeping for the effect, which must not depend on it.
+  // Plain Set on purpose: bookkeeping for the effect, which must not depend on it.
   // eslint-disable-next-line svelte/prefer-svelte-reactivity
-  const shown = new Map<string, string>();
+  const shown = new Set<string>();
 
   $effect(() => {
     const open = toast.toasts;
@@ -23,41 +17,44 @@
         continue;
       }
 
-      const storeId = toastStore.trigger({
-        message,
-        background: BACKGROUNDS[kind],
-        classes: 'flex-col sm:flex-row gap-4',
+      shown.add(id);
+      toaster.create({
+        id,
+        description: message,
+        type: kind,
         // The service owns the timeout, so all toasts close the same way.
-        autohide: false,
-        action: action && { label: action.label, response: () => toast.runAction(id) },
-        callback: ({ status }) => {
-          if (status === 'closed') {
+        duration: Infinity,
+        action: action && { label: action.label, onClick: () => void toast.runAction(id) },
+        // Closed in the toaster (close button, action): the service closes it too.
+        onStatusChange: ({ status }) => {
+          if (status === 'dismissing') {
             toast.dismiss(id);
           }
         },
       });
-      shown.set(id, storeId);
     }
 
-    for (const [id, storeId] of shown) {
+    for (const id of shown) {
       if (!open.some((message) => message.id === id)) {
         shown.delete(id);
-        toastStore.close(storeId);
+        toaster.dismiss(id);
       }
     }
   });
 </script>
 
-<Toast />
-
-<style>
-  /* v2 renders these elements; the extra class outranks its utilities regardless of CSS order. */
-  :global(.snackbar-wrapper .snackbar) {
-    padding-left: 2rem;
-    padding-right: 2rem;
-  }
-
-  :global(.toast .toast-actions) {
-    margin-left: 0 !important;
-  }
-</style>
+<Toast.Group {toaster}>
+  {#snippet children(options)}
+    <!-- role="alert" as with v2; v4 announces toasts as role="status". -->
+    <!-- A row on all widths, as in v2: the message takes the room left and wraps. -->
+    <Toast toast={options} role="alert">
+      <Toast.Message class="flex-1 min-w-0">
+        <Toast.Description>{options.description}</Toast.Description>
+      </Toast.Message>
+      {#if options.action}
+        <Toast.ActionTrigger>{options.action.label}</Toast.ActionTrigger>
+      {/if}
+      <Toast.CloseTrigger aria-label="Dismiss toast" />
+    </Toast>
+  {/snippet}
+</Toast.Group>

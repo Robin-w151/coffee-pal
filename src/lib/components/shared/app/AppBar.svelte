@@ -14,7 +14,7 @@
 <UiAppBar>
   {#snippet lead()}
     <button
-      class="btn btn-icon hover:variant-soft-secondary md:hidden"
+      class="btn-icon hover:preset-tonal-secondary md:hidden"
       title="App menu"
       onclick={handleMenuClick}
     >

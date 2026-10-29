@@ -1,7 +1,7 @@
 <script lang="ts">
-  // Maps to Skeleton v4/v5 `Navigation` with `layout="rail"`. Phase 1: wraps v2 `AppRail`.
+  // Maps to Skeleton v4/v5 `Navigation` with `layout="rail"`.
   import type { Route } from '$lib/models/route';
-  import { AppRail, AppRailAnchor } from '@skeletonlabs/skeleton';
+  import { Navigation } from '@skeletonlabs/skeleton-svelte';
   import { Icon } from 'svelte-awesome';
 
   interface Props {
@@ -16,25 +16,19 @@
   }
 </script>
 
-<AppRail
-  background="bg-surface-50-900-token"
-  regionDefault="p-1 space-y-1"
-  hover="bg-primary-hover-token"
-  active="bg-primary-active-token"
->
-  {#each items as route (route.href)}
-    <AppRailAnchor
-      class="block overflow-hidden rounded-md"
-      href={route.href}
-      title={route.label}
-      selected={isSelected(route)}
-      aria-current={isSelected(route) ? 'page' : undefined}
-      regionLabel="px-1"
-    >
-      {#snippet lead()}
+<Navigation layout="rail">
+  <!-- Top-aligned like v2's rail; v4 centres the menu vertically. -->
+  <Navigation.Menu class="justify-start">
+    {#each items as route (route.href)}
+      <Navigation.TriggerAnchor
+        class={isSelected(route) ? 'preset-filled-primary-500' : ''}
+        href={route.href}
+        title={route.label}
+        aria-current={isSelected(route) ? 'page' : undefined}
+      >
         <Icon data={route.icon} scale={1.5} />
-      {/snippet}
-      <span class="break-words">{route.label}</span>
-    </AppRailAnchor>
-  {/each}
-</AppRail>
+        <Navigation.TriggerText class="wrap-break-word">{route.label}</Navigation.TriggerText>
+      </Navigation.TriggerAnchor>
+    {/each}
+  </Navigation.Menu>
+</Navigation>

@@ -1,5 +1,7 @@
 import { expect, type Locator, type Page } from '@playwright/test';
 
+type SortOption = 'A-Z' | 'Z-A' | 'Best' | 'Recently Added' | 'Recently Updated';
+
 export class JournalPage {
   constructor(private readonly page: Page) {}
 
@@ -15,7 +17,7 @@ export class JournalPage {
     return this.page.getByRole('button', { name: `${button} page`, exact: true });
   }
 
-  getSortOption(option: 'A-Z' | 'Z-A' | 'Best' | 'Recently Added' | 'Recently Updated'): Locator {
+  getSortOption(option: SortOption): Locator {
     return this.page.getByRole('option', { name: option });
   }
 
@@ -56,9 +58,16 @@ export class JournalPage {
     await expect(this.page.getByRole('option', { name: 'Recently Added' })).toBeVisible();
   }
 
-  async clickSortOption(
-    option: 'A-Z' | 'Z-A' | 'Best' | 'Recently Added' | 'Recently Updated',
-  ): Promise<void> {
+  // The listbox keeps focus itself and highlights options (type-ahead); Enter selects.
+  async selectSortOptionWithKeyboard(option: SortOption): Promise<void> {
+    const listbox = this.page.getByRole('listbox');
+    await listbox.focus();
+    await listbox.pressSequentially(option);
+    await expect(this.getSortOption(option)).toHaveAttribute('data-highlighted');
+    await listbox.press('Enter');
+  }
+
+  async clickSortOption(option: SortOption): Promise<void> {
     await this.page.getByRole('option', { name: option }).click();
   }
 

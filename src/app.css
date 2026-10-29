@@ -1,11 +1,410 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-@tailwind variants;
+@import 'tailwindcss';
+@import '@skeletonlabs/skeleton';
+@import '@skeletonlabs/skeleton-svelte';
+@import './themes/coffee.css';
+
+@plugin '@tailwindcss/forms';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+
+  /* Field placeholders in v2's colour, the forms plugin's gray-500 in both modes, instead of
+     Skeleton's surface-700-300. */
+  .input::placeholder,
+  .textarea::placeholder,
+  .ig-input::placeholder,
+  [data-scope='combobox'][data-part='input']::placeholder,
+  [data-scope='tags-input'][data-part='input']::placeholder {
+    color: var(--color-gray-500);
+  }
+
+  /* Plain <hr>s in the colour of Skeleton's hr and vr (v2 styled bare <hr>s, v4 doesn't). */
+  hr {
+    border-color: var(--color-surface-200-800);
+  }
+}
+
+/* Form field outlines: thicker than v4's 1px, and in the stronger surface-400-600 pairing, as the
+   theme's surface-200-800 outline is barely visible against the cards and field backgrounds. Only the
+   variables the outlines use are redefined on the fields, so focus rings and other surface-200-800
+   uses stay as they are. Fields get a surface 200 / 700 background, off the surface 100 / 800 cards (v4's
+   fields are transparent), like v2's fields stood off its cards, and 9px vertical padding, so they
+   are 42px tall like buttons (v4 has 0.25rem). */
+@layer components {
+  .input,
+  .textarea,
+  .select,
+  .input-group,
+  [data-scope='combobox'][data-part='input'],
+  [data-scope='tags-input'][data-part='control'],
+  [data-scope='file-upload'][data-part='dropzone'],
+  [data-scope='radio-group'][data-part='control'] {
+    --default-ring-width: 3px;
+    --color-surface-200-800: var(--color-surface-400-600);
+    background-color: var(--coffee-field-background);
+  }
+
+  [data-scope='file-upload'][data-part='dropzone'],
+  [data-scope='radio-group'][data-part='control'] {
+    border-width: 3px;
+  }
+
+  /* Switches that are off on a surface 400 / 500 track. v4's surface-200-800 barely shows on the
+     cards (and not at all in dark mode); v2's dark 700 isn't much better on the 800 cards. */
+  [data-scope='switch'][data-part='control']:not([data-state='checked']) {
+    background-color: light-dark(var(--color-surface-400), var(--color-surface-500));
+  }
+
+  /* Segmented controls in v2's RadioGroup spacing. Their items are buttons and would otherwise get the
+     buttons' v2 padding inside v4's 8px control padding (64px tall). */
+  [data-scope='radio-group'][data-part='control'] {
+    gap: --spacing(1);
+    padding: --spacing(1);
+  }
+
+  [data-scope='radio-group'][data-part='item'] {
+    padding: --spacing(1) --spacing(4);
+  }
+
+  /* The navigation rail in v2's geometry: 80px wide, 4px padding and gaps, 72px tiles. v4's is
+     100px with 8px spacing, and its tiles are buttons that got the buttons' v2 padding. */
+  [data-scope='navigation'][data-part='root'][data-layout='rail'] {
+    width: --spacing(20);
+    padding: --spacing(1);
+  }
+
+  [data-scope='navigation'][data-part='menu'][data-layout='rail'] {
+    gap: --spacing(1);
+  }
+
+  [data-scope='navigation'][data-part='trigger-anchor'][data-layout='rail'] {
+    max-width: none;
+    padding: --spacing(1);
+  }
+
+  /* Sliders in the primary colour (v4: surface-950-50), on the off switches' track colour, which
+     shows on the cards in dark mode too. */
+  [data-scope='slider'][data-part='track'] {
+    background: light-dark(var(--color-surface-400), var(--color-surface-500));
+  }
+
+  [data-scope='slider'][data-part='range'] {
+    background: var(--color-primary-500);
+  }
+
+  /* The thumb light in both modes, like the switches' (v4: surface-50-950). */
+  [data-scope='slider'][data-part='thumb'] {
+    background: var(--color-surface-50);
+    box-shadow: inset 0 0 0 2px var(--color-primary-500);
+
+    &:focus-visible {
+      outline-color: var(--color-primary-500);
+    }
+  }
+
+  [data-scope='combobox'][data-part='input'] {
+    padding-block: 9px;
+  }
+}
+
+/* Skeleton's field utilities set their own background and padding, which beat the components layer
+   above. Tailwind merges these into them. */
+@utility input {
+  background-color: var(--coffee-field-background);
+  padding-block: 9px;
+}
+@utility select {
+  background-color: var(--coffee-field-background);
+  padding-block: 9px;
+}
+@utility textarea {
+  background-color: var(--coffee-field-background);
+  padding-block: 9px;
+}
+
+/* Input groups show focus on the group's outline, around all its cells, instead of a 1px ring (from
+   the forms plugin) on the focused child. The outline is drawn on ::after, above the cells, as the
+   cells' divider borders would otherwise cut through it. */
+@utility input-group {
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    /* Tailwind registers --tw-ring-color as non-inheriting. */
+    --tw-ring-color: inherit;
+    box-shadow: inset 0 0 0 var(--default-ring-width) var(--tw-ring-color);
+  }
+
+  &:focus-within {
+    --tw-ring-color: var(--color-primary-500);
+  }
+}
+@utility ig-input {
+  padding-block: 9px;
+
+  &:focus {
+    box-shadow: none;
+  }
+}
+@utility ig-select {
+  padding-block: 9px;
+
+  &:focus {
+    box-shadow: none;
+  }
+}
+
+/* Invalid form fields, on .input and .input-group (v2's input-error, in its colours for both modes;
+   v4 has no input states). The input group's cells inherit the text colour. */
+@utility input-error {
+  --coffee-field-background: var(--color-error-200);
+  --tw-ring-color: var(--color-error-500);
+  color: var(--color-error-500);
+
+  /* The ring stays red on focus, where the fields turn it primary. */
+  &:focus,
+  &:focus-within {
+    --tw-ring-color: var(--color-error-500);
+  }
+
+  /* The input group's dividers. */
+  & > * + * {
+    border-color: var(--color-error-500);
+  }
+
+  &::placeholder,
+  & ::placeholder {
+    color: var(--color-error-500);
+  }
+}
+
+/* Tables as in v2: bold headers on surface 200 / 700, the colour of the alternating rows too, and
+   roomier cells (v4: normal weight, no header background, 0.5rem padding). */
+@utility table {
+  & thead,
+  & tbody tr:nth-child(2n) {
+    background-color: light-dark(var(--color-surface-200), var(--color-surface-700));
+  }
+
+  /* Skeleton's surface-700-300 header text, but white in dark mode. */
+  & thead {
+    color: light-dark(var(--color-surface-700), white);
+  }
+
+  & th {
+    font-weight: bold;
+  }
+
+  & th,
+  & td {
+    padding: --spacing(4) --spacing(3);
+  }
+}
+
+/* Clickable table rows, as v2's table-interactive (v4 has none): pointer and a primary tint on
+   hover. The tint is on the cells, over the row's own background, so striped rows are tinted too
+   and it can fade like the list items' hover. */
+@utility table-interactive {
+  & tbody tr {
+    cursor: pointer;
+  }
+
+  & tbody td {
+    transition: background-color var(--default-transition-duration) ease-out;
+  }
+
+  & tbody tr:hover > td {
+    background-color: color-mix(in oklab, var(--color-primary-500) 10%, transparent);
+  }
+}
+
+/* Tonal presets in light mode in v2's soft colours: a 20% tint of the 400 shade with 700 text.
+   v4's light 50 background is barely off the cards. Dark mode keeps v4's colours. */
+@utility preset-tonal-primary {
+  background-color: light-dark(
+    color-mix(in oklab, var(--color-primary-400) 20%, transparent),
+    var(--color-primary-950)
+  );
+  color: light-dark(var(--color-primary-700), var(--color-primary-50));
+}
+@utility preset-tonal-secondary {
+  background-color: light-dark(
+    color-mix(in oklab, var(--color-secondary-400) 20%, transparent),
+    var(--color-secondary-950)
+  );
+  color: light-dark(var(--color-secondary-700), var(--color-secondary-50));
+}
+@utility preset-tonal-tertiary {
+  background-color: light-dark(
+    color-mix(in oklab, var(--color-tertiary-400) 20%, transparent),
+    var(--color-tertiary-950)
+  );
+  color: light-dark(var(--color-tertiary-700), var(--color-tertiary-50));
+}
+@utility preset-tonal-error {
+  background-color: light-dark(
+    color-mix(in oklab, var(--color-error-400) 20%, transparent),
+    var(--color-error-950)
+  );
+  color: light-dark(var(--color-error-700), var(--color-error-50));
+}
+
+/* Loading placeholders in surface 300 / 500. v4's surface-200-800 is the colour of the light table
+   stripes and the dark cards, so the bars vanished there; v2's dark 600 barely shows on the 700
+   stripes. */
+@utility placeholder {
+  background-color: light-dark(var(--color-surface-300), var(--color-surface-500));
+}
+@utility placeholder-circle {
+  background-color: light-dark(var(--color-surface-300), var(--color-surface-500));
+}
+
+/* Headings in v2's sizes, one step smaller than v4's (e.g. h2: 1.5rem, 2.25rem from md; v4:
+   1.875rem, 2.25rem). */
+@utility h1 {
+  font-size: var(--text-3xl);
+  line-height: var(--text-3xl--line-height);
+
+  @variant md {
+    font-size: var(--text-5xl);
+    line-height: var(--text-5xl--line-height);
+  }
+}
+@utility h2 {
+  font-size: var(--text-2xl);
+  line-height: var(--text-2xl--line-height);
+
+  @variant md {
+    font-size: var(--text-4xl);
+    line-height: var(--text-4xl--line-height);
+  }
+}
+@utility h3 {
+  font-size: var(--text-xl);
+  line-height: var(--text-xl--line-height);
+
+  @variant md {
+    font-size: var(--text-2xl);
+    line-height: var(--text-2xl--line-height);
+  }
+}
+@utility h4 {
+  font-size: var(--text-lg);
+  line-height: var(--text-lg--line-height);
+
+  @variant md {
+    font-size: var(--text-xl);
+    line-height: var(--text-xl--line-height);
+  }
+}
+@utility h5 {
+  font-size: var(--text-base);
+  line-height: var(--text-base--line-height);
+
+  @variant md {
+    font-size: var(--text-lg);
+    line-height: var(--text-lg--line-height);
+  }
+}
+@utility h6 {
+  font-size: var(--text-sm);
+  line-height: var(--text-sm--line-height);
+
+  @variant md {
+    font-size: var(--text-base);
+    line-height: var(--text-base--line-height);
+  }
+}
+
+/* Buttons in v2's sizes (v4's are smaller: 32px tall buttons, 24/32/44px icon buttons) and v2's
+   press animation. Icon buttons are fixed squares, as in v2; 42px (v2: 43px) like buttons and
+   fields. */
+@utility btn {
+  padding: 9px --spacing(5);
+
+  /* Pressed buttons shrink a little, as in v2. */
+  &:not(:disabled):active {
+    scale: 95%;
+  }
+}
+@utility btn-icon {
+  box-sizing: border-box;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+
+  &:not(:disabled):active {
+    scale: 95%;
+  }
+}
+/* Only used for the buttons inside 40px fields, which v2's 33px nearly filled. */
+@utility btn-icon-sm {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+}
+@utility btn-icon-lg {
+  width: 53px;
+  height: 53px;
+  padding: 0;
+}
+
+/* Icon buttons fade on hover like .btn (Skeleton's btn-icon has no transition). Tailwind merges this
+   into Skeleton's btn-icon. */
+@utility btn-icon {
+  transition-property:
+    color,
+    background-color,
+    border-color,
+    outline-color,
+    text-decoration-color,
+    fill,
+    stroke,
+    --tw-gradient-from,
+    --tw-gradient-via,
+    --tw-gradient-to,
+    opacity,
+    box-shadow,
+    transform,
+    translate,
+    scale,
+    rotate,
+    filter,
+    -webkit-backdrop-filter,
+    backdrop-filter,
+    display,
+    content-visibility,
+    overlay,
+    pointer-events;
+  transition-timing-function: var(--default-transition-timing-function);
+  transition-duration: var(--default-transition-duration);
+}
 
 /* Global variables */
 :root {
   --coffee-view-transition-duration: 100ms;
+  /* Surface 200 in light mode and 700 in dark mode (as in v2), which isn't one of the theme's pairings. */
+  --coffee-field-background: light-dark(var(--color-surface-200), var(--color-surface-700));
 }
 
 /* Theme overrides */
@@ -26,7 +425,9 @@
 }
 
 /* Mesh generator: https://csshero.org/mesher/ */
-[data-theme='coffee'] {
+/* On body, since Skeleton's base styles give body the theme background, which would hide a mesh
+   on <html>. */
+[data-theme='coffee'] body {
   background-color: hsla(224, 20%, 88%, 1);
   background-image:
     radial-gradient(at 27% 15%, hsla(182, 96%, 18%, 0.3) 0px, transparent 50%),
@@ -40,7 +441,7 @@
   background-size: cover;
 }
 
-.dark [data-theme='coffee'] {
+.dark[data-theme='coffee'] body {
   background-color: hsla(223, 73%, 16%, 1);
   background-image:
     radial-gradient(at 27% 15%, hsla(182, 96%, 18%, 0.3) 0px, transparent 50%),

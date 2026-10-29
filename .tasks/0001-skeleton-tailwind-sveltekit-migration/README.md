@@ -114,11 +114,11 @@ Decision 2026-10-23: Claude works on the phase branch and stops only at the Huma
 | 10  | [List and navigation wrappers](10-list-navigation-wrappers.md)               | Claude | M    | 07, 08         | Done   |
 | 11  | [Stylesheet preparation](11-stylesheet-preparation.md)                       | Claude | M    | 06, 08, 09, 10 | Done   |
 | 12  | [Merge phase 1 and check production data](12-merge-phase-1.md)               | Human  | S    | 11             | Done   |
-| 13  | [Tailwind v4 and Skeleton codemods](13-tailwind-v4-and-codemods.md)          | Claude | L    | 11             | Todo   |
-| 14  | [Coffee theme for Skeleton v4](14-coffee-theme-v4.md)                        | Claude | M    | 13             | Todo   |
-| 15  | [Form control wrappers on v4](15-form-controls-v4.md)                        | Claude | M    | 13             | Todo   |
-| 16  | [Overlays, lists and navigation on v4](16-overlays-navigation-v4.md)         | Claude | L    | 13             | Todo   |
-| 17  | [Skeleton v4 cleanup and PR](17-v4-cleanup.md)                               | Claude | M    | 14, 15, 16     | Todo   |
+| 13  | [Tailwind v4 and Skeleton codemods](13-tailwind-v4-and-codemods.md)          | Claude | L    | 11             | Done   |
+| 14  | [Coffee theme for Skeleton v4](14-coffee-theme-v4.md)                        | Claude | M    | 13             | Done   |
+| 15  | [Form control wrappers on v4](15-form-controls-v4.md)                        | Claude | M    | 13             | Done   |
+| 16  | [Overlays, lists and navigation on v4](16-overlays-navigation-v4.md)         | Claude | L    | 13             | Done   |
+| 17  | [Skeleton v4 cleanup and PR](17-v4-cleanup.md)                               | Claude | M    | 14, 15, 16     | Done   |
 | 18  | [Checkpoint: approve v4 and ship](18-checkpoint-v4.md)                       | Human  | S    | 12, 17         | Todo   |
 | 19  | [Skeleton v5 upgrade](19-skeleton-v5.md)                                     | Claude | M    | 18             | Todo   |
 | 20  | [Checkpoint: approve v5 and test PWA on device](20-checkpoint-v5-and-pwa.md) | Human  | M    | 19             | Todo   |
@@ -214,6 +214,7 @@ flowchart TD
   - Once 12 is merged, Claude transplants phase 2 onto `main`: `git rebase --onto origin/main <PHASE1_TIP> migration/2-skeleton-v4`, where `<PHASE1_TIP>` is the merged PR's head SHA (`gh pr view <PR> --json headRefOid`), not the branch name (it may be deleted). Then Claude re-runs the phase 2 gate, pushes with `--force-with-lease` and changes the PR base to `main` (`gh pr edit <PR> --base main`). Expected conflicts are small (`package.json` version from the release commit, `pnpm-lock.yaml` → regenerate with `pnpm install`).
 - `PersistedState`'s `syncTabs` stays at its default (`true`). Syncing settings across open tabs is an acceptable small behaviour change.
 - Target versions are the latest stable releases at the time each phase starts: Skeleton 4.15.2 for phase 2, latest 5.x for phase 3, latest Tailwind 4.x, latest SvelteKit 3.x, latest TypeScript 6.x (not 7.x, which doesn't work with the toolchain yet; decision 2026-10-25).
+- **Tests coupled to v2 markup (decision 2026-10-28, phase 2):** page objects and the interaction lines of test bodies may be adapted to the v4 markup (e.g. a keyboard helper instead of `fill` on a `div[role=slider]`). Assertions stay unchanged. Every such change is listed in its commit, the story's "As built" and PROGRESS.md.
 - The visual baseline covers the phone viewport used by the existing e2e tests (576×768) plus one desktop viewport (1280×800). Tablet sizes aren't captured.
 
 ## Definition of done

@@ -259,3 +259,141 @@ Gates: `pnpm verify:strict` green (see the commit).
 PR #188 was squash-merged into `main` as `ed2b27a`, and semantic-release cut `0.32.93` (`67f9a69`), deployed to production. The human confirmed all runbook checks: the preview, CI and the Test workflow, the app update on the phone, settings and sync connection unchanged, and a successful sync.
 
 The app now runs on Skeleton v2 only behind `src/lib/components/shared/ui/` and `src/lib/services/ui/`. Next is phase 2: `migration/2-skeleton-v4` is branched from `main` (phase 1 is merged, so no stacking or rebase is needed). It covers stories 13–17, up to checkpoint 18.
+
+## 2026-10-27 — Story 13: Tailwind v4 and Skeleton codemods (Done)
+
+Phase 2 starts on `migration/2-skeleton-v4`, branched from `main` (phase 1 is merged, so nothing is stacked). Tailwind 4.3.3 runs through `@tailwindcss/vite`. `@skeletonlabs/skeleton` and `@skeletonlabs/skeleton-svelte` are pinned to 4.15.2, with the cerberus preset until story 14. Following the archived v2 → v4 guide, Tailwind came first, then the codemods. Both used Skeleton CLI 5.0.1 on `src/` only, each in its own commit. The two codemod commits skip the hooks (approved by the human), because the dropped v2 imports fail ESLint until the placeholders land. Details are in the story's "As built".
+
+**Status:** `tailwind-v3` 1 (`theme.ts`, story 14), `skeleton-v2-imports-total` 0, `v2-classes` 11 (input groups in 3 files, story 17), `migration-placeholders` 15.
+
+**Gates:** `check`, `lint`, `build` and `test:unit` (194) green. E2e: 110 passed, 14 failed. Visual: not run, since it's a judgment check in phase 2.
+
+**Failing e2e tests (the to-do list for 14–17):**
+
+- `SegmentedControl` (story 15), 8 tests: `settings.spec` appearence system/light/dark, units metric/imperial, and "appearence radio group marks one option". `appShell.spec` phone: settings with an unknown colour scheme / invalid JSON fall back to the defaults. All of them read the checked option through the v2 markup.
+- `FileUpload` (story 15), 1 test: `settings.spec` backup import "imports journal and coffee entries". The native file input's accessible name contains "import", so `getByRole('button', { name: 'Import' })` matches two elements.
+- `Combobox` (story 16), 1 test: `journal.spec` "brew method autocomplete selects with arrow down and enter". There's no keyboard navigation yet.
+- `Listbox` (story 16), 1 test: `journal.spec` "sort list box selects with the keyboard".
+- `Pagination` (story 16), 1 test: `journal.spec` "paginator". The buttons are named "First"/"Last", not "First page"/….
+- `ModalHost` (story 16), 1 test: `appShell.spec` phone "modal traps focus".
+- `ToastHost` (story 16), 1 test: `appShell.spec` phone "toast after deleting an entry can be dismissed". The dismiss button is named "Dismiss", not "Dismiss toast".
+
+Everything else passes, including persistence, legacy data, scroll restoration, view transitions, drawer navigation and the other overlay tests.
+
+## 2026-10-27 — Story 14: Coffee theme for Skeleton v4 (Done)
+
+`src/themes/coffee.css` replaces `theme.ts` and the cerberus preset. `<html data-theme="coffee">` is set, and the mesh background is now on `body`. Two new e2e tests pin the v2 palette (all seven 500 shades) and the mesh in light and dark.
+
+**Status:** `tailwind-v3` 0. Remaining phase 2 categories: `v2-classes` 11 and `migration-placeholders` 15.
+
+**Gates:** `check`, `lint`, `build` and `test:unit` (194) green. E2e: 113 passed and the same 14 failures as story 13; the list didn't grow. A11y: no new violations.
+
+**Visual review (72 diffs against the v2 baseline, all expected):** the hues match on every screen in both schemes. That covers the teal primary (active rail and menu item, FAB, focus ring), the brown secondary/tertiary (icon buttons, ratio badges, suggestion chips, rating stars), the red error, the mesh and the navy dark surfaces. Per screen:
+
+- **All screens:** page titles are larger (v4 heading scale), and headings and labels are lighter. Wrapped controls show their placeholders (radios, checkbox, range, plain pagination buttons, unstyled rail, app bar without its own background).
+- **Lists (journal, my coffees):** `card` has no surface background in v4, so the list floats on the mesh (story 16/17). The empty-list hint has the same issue.
+- **Forms (journal/coffee new and entry):** plain inputs take v4's `.input` look. Input groups (`MeasurementInput`, `UrlInput`, Estimation) are white native fields, which stand out in dark mode (story 17, input groups → `ig-*`). Error inputs lose v2's red tint (`input-error` has no v4 equivalent; story 17).
+- **Calculator, drip counter:** chips and the tap/reset buttons keep their colours. The input groups behave as in the forms.
+- **Settings:** the segmented controls are native radios, and the file upload is a native input (story 15).
+- **Overlays:** the confirm modal and the suggestion lists keep their position and colours. The app menu drawer is a plain list (story 16), and the toast uses the placeholder markup.
+
+## 2026-10-28 — Story 15: Form control wrappers on v4 (Done)
+
+`Switch`, `SegmentedControl`, `Slider`, `RatingGroup`, `TagsInput` and `FileUpload` are built on `@skeletonlabs/skeleton-svelte` 4.15.2, one commit each. Their props are unchanged and no call site changed. Details are in the story's "As built".
+
+**Decision (human, 2026-10-28):** tests coupled to v2 markup may have their page objects and interaction lines adapted; assertions stay unchanged (see the epic's Assumptions). Changes in this story:
+
+- `settings.page.ts`: `getCheckedRadio` returns the label around the checked radio.
+- `calculator.page.ts`: `iceRatioRange` is the hidden form input; there's a new `iceRatioThumb` and a new `setIceRatio()`. `calculator.spec.ts` uses them for the slider interactions, and `states.visual.ts` waits for the thumb.
+- `journalEntryDetail.page.ts` and `myCoffeesEntryDetail.page.ts`: `getRatingStar` uses role `radio`.
+- `myCoffeesEntryDetail.page.ts`: `addAroma` waits for the cleared input. `myCoffees.spec.ts`: the fade-in recorder selects `button`, and the Escape test waits a frame before blurring.
+
+**Status:** `migration-placeholders` 9, `v2-classes` 11.
+
+**Gates:** `check`, `lint`, `build` and `test:unit` (194) green. E2e: 121 passed, 6 failed (was 14). A11y: no new violations.
+
+**Failing e2e tests (to-do list for 16):**
+
+- `Combobox`, 1 test: `journal.spec` "brew method autocomplete selects with arrow down and enter".
+- `Listbox`, 1 test: `journal.spec` "sort list box selects with the keyboard".
+- `Pagination`, 2 tests: `journal.spec` "paginator", and `settings.spec` backup import "imports journal and coffee entries" (it now gets past the upload and needs "Last page").
+- `ModalHost`, 1 test: `appShell.spec` phone "modal traps focus".
+- `ToastHost`, 1 test: `appShell.spec` phone "toast after deleting an entry can be dismissed".
+
+## 2026-10-28 — Story 16: Overlays, lists and navigation on v4 (Done)
+
+`AppBar`, `NavRail`, `Pagination`, `Listbox`, `Popover`, `Combobox`, `ModalHost`, `DrawerHost` and `ToastHost` are built on `@skeletonlabs/skeleton-svelte` 4.15.2. Service APIs and wrapper props are unchanged, and `@floating-ui/dom` is removed. Details are in the story's "As built".
+
+**Notable:** Zag sets up Escape and outside-click handling for an overlay only after it has opened, and input that arrives earlier is lost. The modal, drawer and popover therefore close on Escape, backdrop and outside clicks themselves. After that, the overlay specs were stable over 3 repetitions under load. Also, 4.15.2's pagination first/last triggers lack their data attributes and disabled state; the wrapper sets both.
+
+**Test change (phase 2 rule):** `journal.page.ts` has a new `selectSortOptionWithKeyboard` (type-ahead + Enter), used by "sort list box selects with the keyboard".
+
+**Status:** `migration-placeholders` 0. `v2-classes` 11 (input groups, story 17).
+
+**Gates:** `pnpm verify` green: 194 unit, 127 e2e, 0 failing (the failing-test list is empty). A11y: no new violations.
+
+**Visual review (72 diffs against the v2 baseline):** the hues match everywhere. The rail, app bar, pagination, sort popup, combobox list, confirm dialog, drawer and toast show the v4 look and work in both schemes. Remaining differences belong to story 17:
+
+- **Input groups (priority):** in dark mode the v2 `input-group` fields (`MeasurementInput`, `UrlInput`, Estimation's drip rate) are white with white text, so their values are unreadable. The drip rate's "dpm" addon is also misaligned.
+- `card` has no surface background in v4: the lists and the calculator/drip-counter sections float on the mesh.
+- Error inputs have no red tint (`input-error`), and the Temperature Converter fields look like plain text in light mode.
+
+Next is story 17 (cleanup, input groups, PR).
+
+## 2026-10-28 — Story 17: Skeleton v4 cleanup (implementation done, PR pending)
+
+Input groups are on `ig-*`, and the leftover v2 classes are replaced (`divider-vertical`, `list-nav`, `list-dl`, plus an app-level `input-error`). Cards have a surface again. The a11y baseline for Settings is shrunk, and `pnpm visual:review` builds the review page. Details are in the story's "As built".
+
+**Status:** `pnpm migration:status --phase 2` exits 0. `skeleton-v4-only` 12 is the `ig-*` classes, which story 19 renames.
+
+**Gates:** `pnpm verify` green: 194 unit, 127 e2e. A11y: no new violations, and Settings is down from 6 violations to 0 per scheme. Visual: 71 of 72 screens differ from the v2 baseline (`journal-list-empty-dark` stays within the threshold). The baseline isn't updated before checkpoint 18.
+
+**Visual review (every diff, light and dark, phone and desktop):**
+
+| Screen                                                                        | Verdict                                                                                                                                     |
+| ----------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| calculator, calculator-sections                                               | OK – intended: v4 inputs and input groups, Skeleton switch and slider (smaller "Ice Ratio" label), vertical dividers kept, larger headings. |
+| drip-counter (outside/within target)                                          | OK – intended: same tap/reset colours, badges in the theme colours, "dpm" cell aligned in the input group.                                  |
+| journal-list, my-coffees-list (phone list, desktop table), journal-list-empty | OK – intended: card surface again, v4 pagination (page numbers instead of "1-3 of 3"), tonal ratio badges.                                  |
+| journal-search-active                                                         | OK – intended: the search header card keeps its surface, and the clear button is in the error colour.                                       |
+| journal-entry, journal-new, my-coffees-entry, my-coffees-new                  | OK – intended: v4 inputs (thin outline instead of v2's filled fields), Skeleton stars, aroma tags as coloured delete buttons.               |
+| coffee-validation-errors, journal-entry-validation-errors                     | OK – fixed in this story: the error ring and tint come back through the app-level `input-error`.                                            |
+| brew-method-suggestions (open/filtered), coffee-type-suggestions-open         | OK – intended: v4 combobox list in the surface colour, positioned under the input.                                                          |
+| sort-popup-open                                                               | OK – intended: v4 listbox in the popover, check icon on the selected option.                                                                |
+| dangerous-confirm-modal-open                                                  | OK – intended: v4 dialog, Cancel tonal and Confirm in the error colour, dimmed backdrop.                                                    |
+| app-menu-open                                                                 | OK – fixed in this story: menu links have padding, rounding and hover again (replacing `list-nav`).                                         |
+| toast-visible                                                                 | OK – intended: v4 toast at the bottom centre in the surface colour (v2: primary), clear of the menu button.                                 |
+| settings                                                                      | OK – intended: v4 segmented controls, file upload dropzone, switch.                                                                         |
+
+**Known difference for checkpoint 18 (resolved below):** in dark mode, field outlines (`surface-800`) were faint on cards (`surface-950`).
+
+**Next:** step 4 of story 17, updating the PR and marking it ready. Waiting for the human's go-ahead; no PR exists for phase 2 yet.
+
+## 2026-10-28 — Story 17: follow-ups from the human's review
+
+- **Field outlines:** 2px, and `surface-400` in dark mode, set only on form fields in `app.css`.
+- **Popover:** seven unused props removed.
+- **Combobox focus bug fixed:** a controlled `open` made Zag refocus the input after it closed, so text for later fields ended up in the brew method or coffee type. The combobox is now uncontrolled, and Escape closes it through the API. Suggestions no longer open on focus alone. Two journal page-object helpers wait one frame for Zag's own refocus (phase 2 rule).
+
+**Gates:** `pnpm verify` green (194 unit, 127 e2e). Journal and app shell specs passed 5× in a row (270 runs).
+
+**Next:** the PR for phase 2 (step 4 of story 17), once the human gives the go-ahead.
+
+## 2026-10-29 — Story 17: human's review, PR #189 (Done)
+
+The human went through the app screen by screen (desktop and iPhone PWA) and named each difference from v2; every one was fixed in its own commit, with `pnpm verify` green before each. Details per item are in the story's "As built".
+
+- **Fields:** card-contrasting backgrounds (surface 200 / 700), 3px `surface-400-600` outlines, v2 error colours (also on the combobox), v2 placeholder colour, 42px tall like buttons, input groups outlined as a whole on focus without dividers cutting through.
+- **Shell and type:** v2 dark shades (header and cards 800, sidebar 900), header shadow, 80px rail with the coffee icon over the rail icons, plain `<hr>`s in the divider colour; the theme's 1.067 text scaling (never in v2) removed and headings back to v2's sizes.
+- **Buttons and controls:** v2 button and icon sizes, press animation, `btn-icon` alone on icon buttons; pagination, segmented control and rail tiles no longer take the button padding; tonal presets in v2's soft colours (light mode); visible switch track; primary slider; trail buttons 28px.
+- **Tables and lists:** bold headers on the stripe colour, white header text in dark mode, row hover (fading), visible loading placeholders, list placeholders laid out as rows again (they relied on `list-dl`).
+- **Motion:** popovers, combobox suggestions and the drawer fade or slide as in v2.
+- **Bugs:** iOS scrolled the whole app to focused fields (hidden inputs outside `#page`'s positioning made `<html>` taller than the viewport; `#page` is now `relative`); pagination overflowed on phones; toasts stacked their actions under the message on phones; the URL scheme's arrow covered the text.
+
+**One slip:** one commit (`d1e4048`) was pushed after a `verify` run with a flaky failure, because the command chain checked the output filter's exit code. The test passed 8/8 on its own and a rerun of `verify` was green; from then on commits ran only on `verify`'s own exit code.
+
+**Status:** `pnpm migration:status --phase 2` exits 0 (`main`: `tailwind-v3` 10, `skeleton-v2-imports-total` 15, `v2-classes` 72). `skeleton-v4-only` 15 is the `ig-*` classes for story 19.
+
+**Gates:** `pnpm verify` green: 194 unit, 127 e2e. A11y: no new violations. The visual baseline is still v2's (updated after checkpoint 18).
+
+**PR:** [#189](https://github.com/Robin-w151/coffee-pal/pull/189) `feat: move to Tailwind v4 and Skeleton v4 (migration phase 2)`, ready for review. Story 17 is done; next is checkpoint 18 (Human): approve v4 and ship.

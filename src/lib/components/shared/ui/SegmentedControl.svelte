@@ -1,6 +1,6 @@
 <script lang="ts" generics="TValue extends string">
-  // Maps to Skeleton v4/v5 `SegmentedControl`. Phase 1: wraps v2 `RadioGroup`/`RadioItem`.
-  import { RadioGroup, RadioItem } from '@skeletonlabs/skeleton';
+  // Maps to Skeleton v4/v5 `SegmentedControl`.
+  import { SegmentedControl } from '@skeletonlabs/skeleton-svelte';
 
   interface Props {
     value: TValue;
@@ -9,10 +9,23 @@
   }
 
   let { value = $bindable(), options, name }: Props = $props();
+
+  function handleValueChange(details: { value: string | null }): void {
+    const option = options.find((candidate) => candidate.value === details.value);
+    if (option) {
+      value = option.value;
+    }
+  }
 </script>
 
-<RadioGroup flexDirection="flex-col sm:flex-row" class="sm:min-w-[24rem]">
-  {#each options as option (option.value)}
-    <RadioItem {name} value={option.value} bind:group={value}>{option.label}</RadioItem>
-  {/each}
-</RadioGroup>
+<SegmentedControl class="sm:min-w-96" {name} {value} onValueChange={handleValueChange}>
+  <SegmentedControl.Control>
+    <SegmentedControl.Indicator />
+    {#each options as option (option.value)}
+      <SegmentedControl.Item value={option.value}>
+        <SegmentedControl.ItemText>{option.label}</SegmentedControl.ItemText>
+        <SegmentedControl.ItemHiddenInput />
+      </SegmentedControl.Item>
+    {/each}
+  </SegmentedControl.Control>
+</SegmentedControl>

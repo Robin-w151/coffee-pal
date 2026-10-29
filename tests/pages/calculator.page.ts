@@ -31,12 +31,25 @@ export class CalculatorPage {
     return this.page.getByRole('switch', { name: 'Toggle Iced Coffee' });
   }
 
+  /** The slider's form value (a hidden input). Use `iceRatioThumb` to interact with it. */
   get iceRatioRange(): Locator {
-    return this.page.getByLabel('Ice Ratio');
+    return this.page.locator('input[name="ice-ratio"]');
+  }
+
+  get iceRatioThumb(): Locator {
+    return this.page.getByRole('slider', { name: /^Ice Ratio/ });
   }
 
   get iceRatioValue(): Locator {
     return this.page.getByText(/^\d+ %$/);
+  }
+
+  // The thumb is a div[role=slider], which `fill` can't set, so the value is set by keyboard.
+  async setIceRatio(percent: number): Promise<void> {
+    await this.iceRatioThumb.press('Home');
+    for (let i = 0; i < percent; i++) {
+      await this.iceRatioThumb.press('ArrowRight');
+    }
   }
 
   get brewWaterAmountInput(): Locator {

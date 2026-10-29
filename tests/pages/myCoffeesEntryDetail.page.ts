@@ -1,4 +1,4 @@
-import type { Locator, Page } from '@playwright/test';
+import { expect, type Locator, type Page } from '@playwright/test';
 
 export class MyCoffeesEntryDetailPage {
   constructor(private readonly page: Page) {}
@@ -56,12 +56,14 @@ export class MyCoffeesEntryDetailPage {
   }
 
   getRatingStar(star: number): Locator {
-    return this.rating.getByRole('button').nth(star - 1);
+    return this.rating.getByRole('radio').nth(star - 1);
   }
 
   async addAroma(aroma: string): Promise<void> {
     await this.aromasInput.fill(aroma);
     await this.aromasInput.press('Enter');
+    // The tags input clears itself a frame after Enter; typing before that would be cleared too.
+    await expect(this.aromasInput).toHaveValue('');
   }
 
   async clickSaveButton(): Promise<void> {

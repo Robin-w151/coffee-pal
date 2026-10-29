@@ -1,84 +1,61 @@
 <script lang="ts">
-  // Phase 1: shows the service's current modal with Skeleton v2's modal store.
-  import { modal, type ModalRequest } from '$lib/services/ui/modal.svelte';
-  import {
-    Modal,
-    getModalStore,
-    initializeStores,
-    type ModalSettings,
-  } from '@skeletonlabs/skeleton';
-  import { untrack } from 'svelte';
-  import { get } from 'svelte/store';
+  // Shows the head of the modal service's queue in a Skeleton v4 `Dialog`.
+  import { modal } from '$lib/services/ui/modal.svelte';
+  import { Dialog, Portal } from '@skeletonlabs/skeleton-svelte';
 
-  // Each host sets up the v2 stores for its own subtree.
-  initializeStores();
-  const modalStore = getModalStore();
-  let shownId: string | undefined;
+  const request = $derived(modal.current);
 
-  const dangerous = $derived(
-    modal.current?.kind === 'confirm' && modal.current.options.dangerous === true,
-  );
-
-  $effect(() => {
-    const request = modal.current;
-    if (request?.id === shownId) {
-      return;
+  // Closing is handled here, not by the Dialog: it reacts to Escape and outside clicks only once
+  // it has set itself up after opening, so early input would be lost. Backdrop and Escape respond
+  // with undefined, Cancel with false.
+  function handleKeydown(event: KeyboardEvent): void {
+    if (request && event.key === 'Escape') {
+      modal.close();
     }
-
-    // The store is read untracked: only service changes drive this effect.
-    untrack(() => {
-      // The service closed the shown modal (e.g. a custom modal called `close`).
-      if (shownId !== undefined && get(modalStore).length > 0) {
-        modalStore.close();
-      }
-
-      shownId = request?.id;
-      if (request) {
-        modalStore.trigger(toModalSettings(request));
-      }
-    });
-  });
-
-  function toModalSettings(request: ModalRequest): ModalSettings {
-    // Backdrop and Escape respond with undefined, Cancel with false.
-    const response = (result: unknown) => {
-      if (modal.current?.id === request.id) {
-        modal.close(result);
-      }
-    };
-
-    if (request.kind === 'confirm') {
-      const { title, body, confirmLabel, cancelLabel } = request.options;
-      return {
-        type: 'confirm',
-        title,
-        body,
-        buttonTextConfirm: confirmLabel,
-        buttonTextCancel: cancelLabel,
-        response,
-      };
-    }
-
-    return {
-      type: 'component',
-      component: {
-        ref: request.component,
-        props: { ...request.props, close: (result?: unknown) => response(result) },
-      },
-      response,
-    };
   }
 </script>
 
-<Modal
-  regionBackdrop="overflow-hidden"
-  buttonNeutral={dangerous ? 'variant-ghost-surface' : 'variant-ghost-primary'}
-  buttonPositive={dangerous ? 'variant-filled-error' : 'variant-filled-primary'}
-/>
+<svelte:window onkeydown={handleKeydown} />
 
-<style>
-  /* v2 renders this layer with h-fit; the extra class outranks it regardless of CSS order. */
-  :global(.modal-backdrop .modal-transition) {
-    height: 100%;
-  }
-</style>
+<Dialog open={!!request} closeOnEscape={false} closeOnInteractOutside={false}>
+  <Portal>
+    <Dialog.Backdrop
+      class="pointer-events-auto fixed inset-0 z-50 bg-surface-950/50"
+      onclick={() => modal.close()}
+    />
+    <!-- Covers the backdrop, so a click beside the card lands here. The Dialog disables pointer
+         events on <body> while open; backdrop and positioner take them back. -->
+    <Dialog.Positioner
+      class="pointer-events-auto fixed inset-0 z-50 flex items-center justify-center p-4"
+      onclick={(event) => event.target === event.currentTarget && modal.close()}
+    >
+      {#if request?.kind === 'confirm'}
+        {@const { title, body, confirmLabel, cancelLabel, dangerous } = request.options}
+        <Dialog.Content
+          class="card flex flex-col gap-4 w-full max-w-lg p-4 bg-surface-100 dark:bg-surface-800"
+        >
+          <Dialog.Title class="text-2xl font-bold">{title}</Dialog.Title>
+          <Dialog.Description>{body}</Dialog.Description>
+          <footer class="flex justify-end gap-2">
+            <button type="button" class="btn preset-tonal" onclick={() => modal.close(false)}>
+              {cancelLabel ?? 'Cancel'}
+            </button>
+            <button
+              type="button"
+              class="btn {dangerous ? 'preset-filled-error-500' : 'preset-filled-primary-500'}"
+              onclick={() => modal.close(true)}
+            >
+              {confirmLabel ?? 'Confirm'}
+            </button>
+          </footer>
+        </Dialog.Content>
+      {:else if request}
+        {@const Component = request.component}
+        <!-- Custom modals bring their own card. -->
+        <Dialog.Content class="flex justify-center w-full">
+          <Component {...request.props} close={(result?: unknown) => modal.close(result)} />
+        </Dialog.Content>
+      {/if}
+    </Dialog.Positioner>
+  </Portal>
+</Dialog>

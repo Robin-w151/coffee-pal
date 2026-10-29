@@ -4,6 +4,8 @@
   export interface ComboboxOption<T> {
     value: T;
     label: string;
+    /** Identifies the option when labels can repeat, e.g. two coffees of the same name. Default: label. */
+    id?: string;
     /** Extra words the `contains` filter matches, e.g. synonyms. */
     keywords?: string;
   }
@@ -17,11 +19,13 @@
 </script>
 
 <script lang="ts" generics="T">
-  // Maps to Skeleton v4/v5 `Combobox`. Phase 1: an input with v2 `Autocomplete` in a Popover.
+  // Maps to Skeleton v4/v5 `Combobox`. Free text is allowed: the input text is the value, and
+  // choosing an option is reported through onSelect. `open` stays uncontrolled: when controlled, v4
+  // refocuses the input a frame after every close, even after the user has moved to another field.
   import InputWithButton from '$lib/components/shared/elements/form/InputWithButton.svelte';
-  import { Autocomplete, type AutocompleteOption } from '@skeletonlabs/skeleton';
+  import { Combobox, Portal, useCombobox, useListCollection } from '@skeletonlabs/skeleton-svelte';
   import { Icon } from 'svelte-awesome';
-  import Popover from './Popover.svelte';
+  import { fade } from 'svelte/transition';
 
   interface Props {
     value?: string;
@@ -51,64 +55,80 @@
     onOpenChange,
   }: Props = $props();
 
-  let inputElement = $state<HTMLInputElement>();
+  const shownOptions = $derived(
+    filter === 'contains'
+      ? options.filter(({ label, keywords }) =>
+          `${label} ${keywords ?? ''}`.toLowerCase().includes((value ?? '').toLowerCase()),
+        )
+      : options,
+  );
 
-  function handleSelection({ detail }: CustomEvent<AutocompleteOption<T>>): void {
-    onSelect(detail as ComboboxOption<T>);
-    inputElement?.focus();
+  const collection = $derived(
+    useListCollection<ComboboxOption<T>>({
+      items: shownOptions,
+      itemToValue: optionId,
+      itemToString: (option) => option.label,
+    }),
+  );
+
+  function optionId(option: ComboboxOption<T>): string {
+    return option.id ?? option.label;
   }
 
-  // Escape closes the list (the popup listens in the capture phase) and must go no further,
-  // e.g. not to the page's back handling.
+  const id = $props.id();
+  const combobox = useCombobox(() => ({
+    id,
+    collection,
+    invalid,
+    inputValue: value ?? '',
+    allowCustomValue: true,
+    openOnClick: true,
+    positioning: { sameWidth: true },
+    onOpenChange: (details) => onOpenChange?.(details.open),
+    onInputValueChange: handleInputValueChange,
+    onValueChange: handleValueChange,
+  }));
+
+  // Selecting an option also replaces the input text; only typing is reported as an input change.
+  function handleInputValueChange(details: { inputValue: string; reason?: string }): void {
+    value = details.inputValue;
+    if (details.reason === 'input-change') {
+      onInputChange?.(details.inputValue);
+    }
+  }
+
+  function handleValueChange(details: { items: Array<ComboboxOption<T>> }): void {
+    const [option] = details.items;
+    if (option) {
+      onSelect(option);
+    }
+  }
+
+  // Escape closes the list and must go no further, e.g. not to the page's back handling. Closed here
+  // too: v4 closes on Escape through a layer it sets up only after opening, so an early Escape
+  // would be lost.
   function handleKeydown(event: KeyboardEvent): void {
     if (event.key === 'Escape') {
       event.stopPropagation();
+      if (combobox().open) {
+        combobox().setOpen(false);
+      }
     }
   }
 </script>
 
-<Popover
-  openOn="focus-click"
-  matchWidth
-  portal
-  trapFocus
-  contentClass="card z-10 p-4 max-h-48 bg-surface-200-700-token overflow-y-auto shadow-xl"
-  {onOpenChange}
->
-  {#snippet content()}
-    {#if filter === 'contains'}
-      <Autocomplete
-        {options}
-        input={value}
-        transitions={false}
-        regionButton="w-full text-start"
-        on:selection={handleSelection}
-      />
-    {:else}
-      <Autocomplete
-        {options}
-        filter={() => [...options]}
-        transitions={false}
-        regionButton="w-full text-start"
-        on:selection={handleSelection}
-      />
-    {/if}
-  {/snippet}
-  {#snippet trigger(triggerProps)}
-    {#snippet input()}
-      <input
-        class="input autocomplete"
-        class:input-error={invalid}
-        type="text"
-        {placeholder}
-        bind:this={inputElement}
-        bind:value
-        {...triggerProps}
-        oninput={() => onInputChange?.(value ?? '')}
-        onblur={onBlur}
-        onkeydown={handleKeydown}
-      />
-    {/snippet}
+<!-- Rendered inside Combobox.Control below; declared here so it isn't a prop of the control. -->
+{#snippet input()}
+  <Combobox.Input
+    class={invalid ? 'input-error' : ''}
+    {placeholder}
+    onblur={onBlur}
+    onkeydown={handleKeydown}
+  />
+{/snippet}
+
+<Combobox.Provider value={combobox}>
+  <Combobox.Control>
     {#if trailLink}
       <InputWithButton title={trailLink.title} visible={trailLink.visible} href={trailLink.href}>
         {@render input()}
@@ -119,5 +139,24 @@
     {:else}
       {@render input()}
     {/if}
-  {/snippet}
-</Popover>
+  </Combobox.Control>
+  <Portal>
+    <Combobox.Positioner>
+      <!-- Rendered only while open, to fade in and out as v2's popups did (150ms). v4 hides closed
+           content at once, so `hidden` is kept off while it fades out. -->
+      <Combobox.Content class="max-h-48 overflow-y-auto">
+        {#snippet element(attributes)}
+          {#if combobox().open}
+            <ul {...attributes} hidden={false} transition:fade={{ duration: 150 }}>
+              {#each collection.items as option (optionId(option))}
+                <Combobox.Item item={option}>
+                  <Combobox.ItemText>{option.label}</Combobox.ItemText>
+                </Combobox.Item>
+              {/each}
+            </ul>
+          {/if}
+        {/snippet}
+      </Combobox.Content>
+    </Combobox.Positioner>
+  </Portal>
+</Combobox.Provider>

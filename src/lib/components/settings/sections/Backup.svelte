@@ -88,13 +88,13 @@
     />
     <div class="flex justify-end gap-2">
       <button
-        class="btn variant-ghost-primary"
+        class="btn preset-tonal-primary border border-primary-500"
         type="button"
         title="Export Data"
         onclick={handleExportClick}>Export</button
       >
       <button
-        class="btn variant-filled-primary"
+        class="btn preset-filled-primary-500"
         title="Import Data"
         disabled={!fileSelected}
         onclick={handleImportClick}>Import</button
