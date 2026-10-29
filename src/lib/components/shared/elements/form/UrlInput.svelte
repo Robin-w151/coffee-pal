@@ -58,7 +58,7 @@
       <Icon data={schemeIcon} class="overflow-visible" />
     </div>
   {:else}
-    <select class="ig-select px-3" bind:value={scheme}>
+    <select class="ig-select" bind:value={scheme}>
       {#each availableSchemes as availableScheme (availableScheme)}
         <option value={availableScheme}>{availableScheme}//</option>
       {/each}
