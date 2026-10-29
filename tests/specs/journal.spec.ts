@@ -1,5 +1,5 @@
 import { expect } from '@playwright/test';
-import { isShown, testJournalEntries } from '../features/app.feature';
+import { isShown, testCoffeeEntries, testJournalEntries } from '../features/app.feature';
 import { test } from '../fixtures';
 import type { JournalPage } from '../pages/journal.page';
 
@@ -310,6 +310,31 @@ test.describe('form controls', () => {
 
     await expect(journalEntryDetailPage.coffeeTypeInput).toHaveValue('Wiedner Mischung (Alt Wien)');
     await expect(page.getByRole('link', { name: 'Open coffee entry' })).toBeVisible();
+  });
+
+  test('coffee type autocomplete tells coffees with the same label apart', async ({
+    page,
+    appPage,
+    journalPage,
+    journalEntryDetailPage,
+  }) => {
+    const original = testCoffeeEntries.find((entry) => entry.name === 'Wiedner Mischung')!;
+    const twin = { ...original, id: '0f3bb076-7346-44fb-8c1d-d74a8c691442' };
+    await appPage.addCoffeeEntries([twin]);
+    await journalPage.goto();
+    await journalPage.clickAddButton();
+    const options = journalEntryDetailPage.getAutocompleteOption(/Wiedner Mischung/);
+    const link = page.getByRole('link', { name: 'Open coffee entry' });
+
+    const hrefs = [];
+    for (const index of [0, 1]) {
+      await journalEntryDetailPage.coffeeTypeInput.fill('Wied');
+      await expect(options).toHaveCount(2);
+      await options.nth(index).click();
+      hrefs.push(await link.getAttribute('href'));
+    }
+
+    expect(hrefs.toSorted()).toEqual([`/my-coffees/${original.id}`, `/my-coffees/${twin.id}`]);
   });
 
   test('sort list box marks the selected option', async ({ journalPage }) => {

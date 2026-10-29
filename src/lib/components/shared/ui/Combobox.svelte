@@ -4,6 +4,8 @@
   export interface ComboboxOption<T> {
     value: T;
     label: string;
+    /** Identifies the option when labels can repeat, e.g. two coffees of the same name. Default: label. */
+    id?: string;
     /** Extra words the `contains` filter matches, e.g. synonyms. */
     keywords?: string;
   }
@@ -64,10 +66,14 @@
   const collection = $derived(
     useListCollection<ComboboxOption<T>>({
       items: shownOptions,
-      itemToValue: (option) => option.label,
+      itemToValue: optionId,
       itemToString: (option) => option.label,
     }),
   );
+
+  function optionId(option: ComboboxOption<T>): string {
+    return option.id ?? option.label;
+  }
 
   const id = $props.id();
   const combobox = useCombobox(() => ({
@@ -142,7 +148,7 @@
         {#snippet element(attributes)}
           {#if combobox().open}
             <ul {...attributes} hidden={false} transition:fade={{ duration: 150 }}>
-              {#each collection.items as option (option.label)}
+              {#each collection.items as option (optionId(option))}
                 <Combobox.Item item={option}>
                   <Combobox.ItemText>{option.label}</Combobox.ItemText>
                 </Combobox.Item>
