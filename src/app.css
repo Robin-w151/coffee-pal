@@ -286,9 +286,10 @@
     scale: 95%;
   }
 }
+/* Only used for the buttons inside 40px fields, which v2's 33px nearly filled. */
 @utility btn-icon-sm {
-  width: 33px;
-  height: 33px;
+  width: 28px;
+  height: 28px;
   padding: 0;
 }
 @utility btn-icon-lg {
