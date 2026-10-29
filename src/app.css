@@ -65,6 +65,12 @@
     border-width: 3px;
   }
 
+  /* Switches that are off on a surface 400 / 500 track. v4's surface-200-800 barely shows on the
+     cards (and not at all in dark mode); v2's dark 700 isn't much better on the 800 cards. */
+  [data-scope='switch'][data-part='control']:not([data-state='checked']) {
+    background-color: light-dark(var(--color-surface-400), var(--color-surface-500));
+  }
+
   [data-scope='combobox'][data-part='input'] {
     padding-block: --spacing(2);
   }
