@@ -98,9 +98,12 @@
       <AppRail />
     </nav>
   </aside>
+  <!-- relative: absolutely positioned content (e.g. v4's hidden inputs) is placed and clipped in
+       here. Otherwise it stretches <html>, which iOS then scrolls to show a focused field, moving
+       the whole app up. -->
   <main
     id="page"
-    class="overflow-y-auto overflow-x-hidden outline-offset-[-3px]"
+    class="relative overflow-y-auto overflow-x-hidden outline-offset-[-3px]"
     style:scrollbar-gutter="stable"
     onscroll={handlePageScroll}
   >
