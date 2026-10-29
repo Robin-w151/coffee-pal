@@ -2,7 +2,7 @@
 
 **Epic:** [0001 Migrate to Skeleton v5, Tailwind v4 and SvelteKit 3](README.md)
 **Owner:** Claude
-**Status:** In progress
+**Status:** Done
 **Depends on:** 14, 15, 16
 **Size:** M — search-and-fix work across ~37 files plus 4 input groups; small individually, but many visual spots to check.
 
@@ -29,7 +29,7 @@ As Claude, I want no v2 classes or placeholders left and a reviewable PR with a 
 - [x] `pnpm migration:status --phase 2` exits 0 (`v2-classes`, `migration-placeholders`, `skeleton-v2-imports-total`, `tailwind-v3` all 0).
 - [x] `pnpm verify` green; a11y no new violations.
 - [x] Every visual diff has been reviewed; PROGRESS.md lists per screen "OK – intended" or the fix made.
-- [ ] The PR is ready for review, with the description above.
+- [x] The PR is ready for review, with the description above.
 
 ## Technical notes
 
@@ -78,7 +78,7 @@ As Claude, I want no v2 classes or placeholders left and a reviewable PR with a 
 - **Popover:** the unused props (`openOn`, `placement`, `matchWidth`, `portal`, `trapFocus`, `contentClass`, `onOpenChange`) are removed; PageSearch only passes `trigger` and `content`.
 - **Combobox focus bug (found while verifying the above):** with the `open` state controlled (story 16), Zag's `CONTROLLED.CLOSE` lost the `restoreFocus: false` of an outside interaction and refocused the input a frame later, even after the user had moved on. Text typed into the next field then landed in the brew method or coffee type ("Tovolea Classic98"), and "entry add" failed about 1 in 5. `open` is now uncontrolled (`useCombobox` + `Combobox.Provider`), and Escape closes through the API, because Zag's own Escape handling is a layer it sets up only after opening. Suggestions open on click and typing, no longer on focus alone. _Test change:_ `JournalEntryDetailPage.closeSuggestions` and `fillCombobox` wait one frame for Zag's own refocus of the input (after opening or Escape) before the test types into the next field, which no human could do that fast. After this, the journal and app shell specs passed 5× in a row (270 runs).
 - **Icon buttons (human's finding, 2026-10-28):** v4's `btn` and `btn-icon` are separate utilities, so using both mixed `btn`'s padding, line-height and gap into icon buttons. Icon-only buttons now use `btn-icon` alone (AppBar, AppMenu, PageHeader, PageActions, PageSearch, InputWithButton). `ResponsiveButton`, which hides its label below `lg`, uses `lg:btn max-lg:btn-icon`. `app.css` gives `btn-icon` the same hover transition as `btn` (a second `@utility btn-icon` that Tailwind merges into Skeleton's).
-- **PR (step 4):** stopped before it. In batch mode PRs need the human's explicit go-ahead.
+- **PR (step 4):** after the human's review follow-ups (2026-10-28/29) and their go-ahead, [PR #189](https://github.com/Robin-w151/coffee-pal/pull/189) was opened ready for review, titled `feat: move to Tailwind v4 and Skeleton v4 (migration phase 2)`, with the summary of 13–17, story table, PROGRESS.md link, known differences and `pnpm visual:review`. There was no draft PR before; this one is new.
 
 ## Testing
 

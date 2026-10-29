@@ -378,3 +378,22 @@ Input groups are on `ig-*`, and the leftover v2 classes are replaced (`divider-v
 **Gates:** `pnpm verify` green (194 unit, 127 e2e). Journal and app shell specs passed 5× in a row (270 runs).
 
 **Next:** the PR for phase 2 (step 4 of story 17), once the human gives the go-ahead.
+
+## 2026-10-29 — Story 17: human's review, PR #189 (Done)
+
+The human went through the app screen by screen (desktop and iPhone PWA) and named each difference from v2; every one was fixed in its own commit, with `pnpm verify` green before each. Details per item are in the story's "As built".
+
+- **Fields:** card-contrasting backgrounds (surface 200 / 700), 3px `surface-400-600` outlines, v2 error colours (also on the combobox), v2 placeholder colour, 42px tall like buttons, input groups outlined as a whole on focus without dividers cutting through.
+- **Shell and type:** v2 dark shades (header and cards 800, sidebar 900), header shadow, 80px rail with the coffee icon over the rail icons, plain `<hr>`s in the divider colour; the theme's 1.067 text scaling (never in v2) removed and headings back to v2's sizes.
+- **Buttons and controls:** v2 button and icon sizes, press animation, `btn-icon` alone on icon buttons; pagination, segmented control and rail tiles no longer take the button padding; tonal presets in v2's soft colours (light mode); visible switch track; primary slider; trail buttons 28px.
+- **Tables and lists:** bold headers on the stripe colour, white header text in dark mode, row hover (fading), visible loading placeholders, list placeholders laid out as rows again (they relied on `list-dl`).
+- **Motion:** popovers, combobox suggestions and the drawer fade or slide as in v2.
+- **Bugs:** iOS scrolled the whole app to focused fields (hidden inputs outside `#page`'s positioning made `<html>` taller than the viewport; `#page` is now `relative`); pagination overflowed on phones; toasts stacked their actions under the message on phones; the URL scheme's arrow covered the text.
+
+**One slip:** one commit (`d1e4048`) was pushed after a `verify` run with a flaky failure, because the command chain checked the output filter's exit code. The test passed 8/8 on its own and a rerun of `verify` was green; from then on commits ran only on `verify`'s own exit code.
+
+**Status:** `pnpm migration:status --phase 2` exits 0 (`main`: `tailwind-v3` 10, `skeleton-v2-imports-total` 15, `v2-classes` 72). `skeleton-v4-only` 15 is the `ig-*` classes for story 19.
+
+**Gates:** `pnpm verify` green: 194 unit, 127 e2e. A11y: no new violations. The visual baseline is still v2's (updated after checkpoint 18).
+
+**PR:** [#189](https://github.com/Robin-w151/coffee-pal/pull/189) `feat: move to Tailwind v4 and Skeleton v4 (migration phase 2)`, ready for review. Story 17 is done; next is checkpoint 18 (Human): approve v4 and ship.
