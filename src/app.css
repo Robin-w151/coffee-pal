@@ -266,16 +266,25 @@
   }
 }
 
-/* Buttons in v2's sizes (v4's are smaller: 32px tall buttons, 24/32/44px icon buttons). Icon buttons
-   are fixed squares, as in v2. */
+/* Buttons in v2's sizes (v4's are smaller: 32px tall buttons, 24/32/44px icon buttons) and v2's
+   press animation. Icon buttons are fixed squares, as in v2. */
 @utility btn {
   padding: 9px --spacing(5);
+
+  /* Pressed buttons shrink a little, as in v2. */
+  &:not(:disabled):active {
+    scale: 95%;
+  }
 }
 @utility btn-icon {
   box-sizing: border-box;
   width: 43px;
   height: 43px;
   padding: 0;
+
+  &:not(:disabled):active {
+    scale: 95%;
+  }
 }
 @utility btn-icon-sm {
   width: 33px;
