@@ -168,6 +168,37 @@
   }
 }
 
+/* Tonal presets in light mode in v2's soft colours: a 20% tint of the 400 shade with 700 text.
+   v4's light 50 background is barely off the cards. Dark mode keeps v4's colours. */
+@utility preset-tonal-primary {
+  background-color: light-dark(
+    color-mix(in oklab, var(--color-primary-400) 20%, transparent),
+    var(--color-primary-950)
+  );
+  color: light-dark(var(--color-primary-700), var(--color-primary-50));
+}
+@utility preset-tonal-secondary {
+  background-color: light-dark(
+    color-mix(in oklab, var(--color-secondary-400) 20%, transparent),
+    var(--color-secondary-950)
+  );
+  color: light-dark(var(--color-secondary-700), var(--color-secondary-50));
+}
+@utility preset-tonal-tertiary {
+  background-color: light-dark(
+    color-mix(in oklab, var(--color-tertiary-400) 20%, transparent),
+    var(--color-tertiary-950)
+  );
+  color: light-dark(var(--color-tertiary-700), var(--color-tertiary-50));
+}
+@utility preset-tonal-error {
+  background-color: light-dark(
+    color-mix(in oklab, var(--color-error-400) 20%, transparent),
+    var(--color-error-950)
+  );
+  color: light-dark(var(--color-error-700), var(--color-error-50));
+}
+
 /* Loading placeholders in surface 300 / 500. v4's surface-200-800 is the colour of the light table
    stripes and the dark cards, so the bars vanished there; v2's dark 600 barely shows on the 700
    stripes. */
