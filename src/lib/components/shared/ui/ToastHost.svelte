@@ -46,8 +46,9 @@
 <Toast.Group {toaster}>
   {#snippet children(options)}
     <!-- role="alert" as with v2; v4 announces toasts as role="status". -->
-    <Toast toast={options} role="alert" class="flex-col sm:flex-row">
-      <Toast.Message>
+    <!-- A row on all widths, as in v2: the message takes the room left and wraps. -->
+    <Toast toast={options} role="alert">
+      <Toast.Message class="flex-1 min-w-0">
         <Toast.Description>{options.description}</Toast.Description>
       </Toast.Message>
       {#if options.action}
