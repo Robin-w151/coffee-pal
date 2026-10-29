@@ -84,7 +84,7 @@
           placeholder="Target drip rate, e.g. 60dpm"
           bind:value={targetDropsPerMinute}
         />
-        <div class="ig-cell">dpm</div>
+        <div class="ig-cell justify-start px-3 text-base">dpm</div>
       </div>
     </Label>
   </Form>
