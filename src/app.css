@@ -44,8 +44,8 @@
    theme's surface-200-800 outline is barely visible against the cards and field backgrounds. Only the
    variables the outlines use are redefined on the fields, so focus rings and other surface-200-800
    uses stay as they are. Fields get a surface 200 / 700 background, off the surface 100 / 800 cards (v4's
-   fields are transparent), like v2's fields stood off its cards, and v2's 0.5rem vertical padding
-   (v4 has 0.25rem). */
+   fields are transparent), like v2's fields stood off its cards, and 9px vertical padding, so they
+   are 42px tall like buttons (v4 has 0.25rem). */
 @layer components {
   .input,
   .textarea,
@@ -72,7 +72,7 @@
   }
 
   [data-scope='combobox'][data-part='input'] {
-    padding-block: --spacing(2);
+    padding-block: 9px;
   }
 }
 
@@ -80,15 +80,15 @@
    above. Tailwind merges these into them. */
 @utility input {
   background-color: var(--coffee-field-background);
-  padding-block: --spacing(2);
+  padding-block: 9px;
 }
 @utility select {
   background-color: var(--coffee-field-background);
-  padding-block: --spacing(2);
+  padding-block: 9px;
 }
 @utility textarea {
   background-color: var(--coffee-field-background);
-  padding-block: --spacing(2);
+  padding-block: 9px;
 }
 
 /* Input groups show focus on the group's outline, around all its cells, instead of a 1px ring (from
@@ -113,14 +113,14 @@
   }
 }
 @utility ig-input {
-  padding-block: --spacing(2);
+  padding-block: 9px;
 
   &:focus {
     box-shadow: none;
   }
 }
 @utility ig-select {
-  padding-block: --spacing(2);
+  padding-block: 9px;
 
   &:focus {
     box-shadow: none;
@@ -267,7 +267,8 @@
 }
 
 /* Buttons in v2's sizes (v4's are smaller: 32px tall buttons, 24/32/44px icon buttons) and v2's
-   press animation. Icon buttons are fixed squares, as in v2. */
+   press animation. Icon buttons are fixed squares, as in v2; 42px (v2: 43px) like buttons and
+   fields. */
 @utility btn {
   padding: 9px --spacing(5);
 
@@ -278,8 +279,8 @@
 }
 @utility btn-icon {
   box-sizing: border-box;
-  width: 43px;
-  height: 43px;
+  width: 42px;
+  height: 42px;
   padding: 0;
 
   &:not(:disabled):active {
