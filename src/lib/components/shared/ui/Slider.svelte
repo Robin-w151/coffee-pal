@@ -20,8 +20,9 @@
 </script>
 
 <Slider {name} {min} {max} value={[value]} onValueChange={handleValueChange}>
-  <!-- The header row labels the thumb, as v2's label around the range input did. -->
-  <Slider.Label>{@render children?.()}</Slider.Label>
+  <!-- The header row labels the thumb, as v2's label around the range input did. In the size and
+       weight of the other field labels (v4's are extra small and medium). -->
+  <Slider.Label class="text-base font-normal">{@render children?.()}</Slider.Label>
   <Slider.Control>
     <Slider.Track>
       <Slider.Range />
