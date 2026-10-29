@@ -180,15 +180,19 @@
 }
 
 /* Clickable table rows, as v2's table-interactive (v4 has none): pointer and a primary tint on
-   hover, laid over the row's own background so striped rows are tinted too. */
+   hover. The tint is on the cells, over the row's own background, so striped rows are tinted too
+   and it can fade like the list items' hover. */
 @utility table-interactive {
   & tbody tr {
     cursor: pointer;
   }
 
-  & tbody tr:hover {
-    --hover-tint: color-mix(in oklab, var(--color-primary-500) 10%, transparent);
-    background-image: linear-gradient(var(--hover-tint), var(--hover-tint));
+  & tbody td {
+    transition: background-color var(--default-transition-duration) ease-out;
+  }
+
+  & tbody tr:hover > td {
+    background-color: color-mix(in oklab, var(--color-primary-500) 10%, transparent);
   }
 }
 
