@@ -2,7 +2,7 @@
 
 **Epic:** [0001 Migrate to Skeleton v5, Tailwind v4 and SvelteKit 3](README.md)
 **Owner:** Claude
-**Status:** Todo
+**Status:** Done
 **Depends on:** 18
 **Size:** M — an official codemod plus a short list of manual changes (Field Groups, icon sizes, theme tokens); the wrappers keep the blast radius small.
 
@@ -30,16 +30,25 @@ Follow the [v4 → v5 guide](https://www.skeleton.dev/docs/svelte/get-started/mi
 
 ## Acceptance criteria
 
-- [ ] `@skeletonlabs/skeleton` and `@skeletonlabs/skeleton-svelte` are on the latest 5.x.
-- [ ] `pnpm migration:status --phase 3` exits 0.
-- [ ] `pnpm verify:strict` is green with the new baseline, 3 consecutive runs.
-- [ ] No new a11y violations.
-- [ ] The PR is ready for review with a v4 → v5 differences list in its description and PROGRESS.md.
+- [x] `@skeletonlabs/skeleton` and `@skeletonlabs/skeleton-svelte` are on the latest 5.x.
+- [x] `pnpm migration:status --phase 3` exits 0.
+- [x] `pnpm verify:strict` is green with the new baseline, 3 consecutive runs.
+- [x] No new a11y violations.
+- [x] The PR is ready for review with a v4 → v5 differences list in its description and PROGRESS.md.
 
 ## Technical notes
 
 - The codemod is the same CLI as in story 13 (`skeleton@latest migrate`), with the `skeleton-5` task.
 - The wrappers' props don't change; only `ui/` internals, `coffee.css` and markup classes.
+
+### As built (2026-11-01)
+
+- **Codemod:** `skeleton@5.0.1 migrate skeleton-5` (pinned; the auto-mode classifier refused `@latest`) only changed `package.json` (set to the exact `5.0.1`). A second run on `src/` was refused too, so its mappings (read from the CLI source: token renames, `input-group`/`ig-*` → `field-group`/`input`/`select`, removed and added tokens) were applied by hand. Nothing in the app used `card-hover`, `btn-icon-fab` or `@variant theme-*`.
+- **Theme:** `--typo-*` and `--color-root-bg-*` tokens, `--default-divide-width` dropped, the new tokens with the codemod's defaults: `--corner-shape-*: initial` keeps round corners, `--color-brand-*` is coffee primary (checkbox, switch, slider and filled accents unchanged).
+- **Field groups:** cells are `input`, `select` and `label` (the plain cells); `label` cells get the fields' background and outline; `input-error` colours every cell. The `min-width` selectors target `.input`, `.select` and `.label`.
+- **Sizes:** v5 sizes fields, buttons and chips from one variable with a line as tall as the text. Fields and buttons keep 42px with a 24px line. Icon buttons keep 42/28/53px through `--btn-size` (22/15/27.5px), so their icons follow v5's automatic sizing and the manual `scale` props in buttons are gone; there are no `size-elem-*` utilities in 5.0.1. Chips keep v4's `text-xs` through `--chip-size`. Blocks that only set custom properties land after Skeleton's rules, so these don't depend on rule order (the old fixed `btn-icon` sizes lost to v5's).
+- **Placeholders:** v5 colours them through `--field-placeholder`, now gray-500 in `:root`.
+- **Gates:** `migration:status --phase 3` exits 0; `pnpm verify:strict` green 3× (194 unit, 128 e2e incl. a11y, 72 visual); new baseline `7f3fb95`. PR [#192](https://github.com/Robin-w151/coffee-pal/pull/192).
 
 ## Testing
 

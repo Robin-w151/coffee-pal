@@ -421,3 +421,25 @@ PR #189 squash-merged as `7236764`; release `0.33.0` (`5620aee`) deployed to pro
 **Open issue:** checkpoints 20 and 23 expect the Test workflow on the production deploy. While it's disabled, Claude runs the suite against production locally instead, unless the human re-enables it.
 
 **Next:** story 19 (Claude): Skeleton v5 upgrade, on a new branch from `main`.
+
+## 2026-11-01 — Story 19: Skeleton v5 (Done)
+
+Branch `migration/3-skeleton-v5` from `main`; Skeleton and skeleton-svelte 5.0.1.
+
+- **Codemod:** `skeleton@5.0.1 migrate skeleton-5` ran but only touched `package.json`; the auto-mode classifier refused a second run on `src/`, so the codemod's mappings (read from its source) were applied by hand. `pnpm check` had no errors after the bump: the wrappers' Skeleton APIs are unchanged.
+- **Commits:** `9af3b5f` deps, `431de4a` theme tokens, `12555a0` field groups, sizes and placeholders, `7f3fb95` v5 baseline.
+
+**v4 → v5 differences** (the rest matches the v4 baseline within 1%):
+
+- **Field groups:** separate cells with a 4px gap and their own outlines; focus rings the focused cell; invalid groups turn every cell red.
+- **Icons in icon buttons:** v5's automatic sizing, 22px in 42px buttons (v4: 16px search/sort, 24px menu), 27.5px in the floating actions (v4: 24px plus, 20px sync), 15px in the trail buttons.
+- **Chips:** 8px between name and ratio.
+- **Field text:** 1px further left (v5's inline padding).
+
+Kept from v4 through v5's own variables: 42px fields and buttons, 42/28/53px icon buttons, xs chips, gray-500 placeholders, round corners (no squircles), coffee primary as brand colour.
+
+**Status:** `pnpm migration:status --phase 3` exits 0 (`skeleton-v4-only` 0).
+
+**Gates:** before the baseline update, 11 of 72 screenshots differed from v4 beyond the tolerance, all reviewed (list above). `pnpm verify:strict` green 3 runs in a row: 194 unit, 128 e2e (a11y: no new violations), 72 visual.
+
+**PR:** [#192](https://github.com/Robin-w151/coffee-pal/pull/192) `feat: move to Skeleton v5 (migration phase 3)`, ready for review. Next is checkpoint 20 (Human): approve v5 and test the PWA on the phone. The Test workflow is still disabled, so Claude runs the suite against the production deploy locally (see story 18).
