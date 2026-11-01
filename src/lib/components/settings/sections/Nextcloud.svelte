@@ -123,7 +123,7 @@
     <div class="flex justify-end gap-2">
       {#if connected}
         <button
-          class="btn variant-filled-error"
+          class="btn preset-filled-error-500"
           type="button"
           title="Disconnect Nextcloud Sync"
           onclick={handleDisconnectClick}
@@ -131,18 +131,22 @@
           Disconnect
         </button>
         <button
-          class="btn variant-filled-primary"
+          class="btn preset-filled-primary-500"
           title="Synchronize data{lastSyncText ? `\n${lastSyncText}` : ''}"
           disabled={!syncAvailabilityStore.isAvailable}
           onclick={handleSyncClick}>Sync</button
         >
       {:else if showSpinner}
-        <button class="btn variant-filled-error" title="Cancel Setup" onclick={handleCancelClick}>
+        <button
+          class="btn preset-filled-error-500"
+          title="Cancel Setup"
+          onclick={handleCancelClick}
+        >
           Cancel
         </button>
       {:else}
         <button
-          class="btn variant-filled-primary"
+          class="btn preset-filled-primary-500"
           title="Enable Sync via Nextcloud"
           disabled={!hostValid}
           onclick={handleConnectClick}

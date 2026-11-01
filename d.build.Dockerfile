@@ -8,7 +8,7 @@ COPY package.json pnpm-lock.yaml /app/
 
 RUN bun install
 
-COPY .env postcss.config.js svelte.config.js tailwind.config.ts theme.ts tsconfig.json vite.config.ts /app/
+COPY .env svelte.config.js tsconfig.json vite.config.ts /app/
 COPY src/ /app/src/
 COPY static/ /app/static/
 COPY .git/ /app/.git/

@@ -42,7 +42,7 @@
   const isChangeSortOrderButtonDisabled = $derived(!!search);
   const headerSearchActiveClass = $derived(
     isSearchActive
-      ? 'card flex-col !items-start px-4 py-4 h-auto transition ease-out duration-250'
+      ? 'card bg-surface-100 dark:bg-surface-800 flex-col items-start! px-4 py-4 h-auto transition ease-out duration-250'
       : '',
   );
   const changeSortOrderButtonTitle = $derived(
@@ -111,7 +111,7 @@
       </InputWithButton>
     {:else}
       <button
-        class="btn btn-icon variant-ghost-secondary"
+        class="btn-icon preset-tonal-secondary border border-secondary-500"
         title="Search"
         onclick={handleSearchClick}
         in:fade={{ duration: 250 }}
@@ -123,9 +123,9 @@
       <Popover content={popupContent}>
         {#snippet trigger(triggerProps)}
           <button
-            class="btn btn-icon {isSearchActive
-              ? 'variant-filled-primary'
-              : 'variant-ghost-secondary'}"
+            class="btn-icon {isSearchActive
+              ? 'preset-filled-primary-500'
+              : 'preset-tonal-secondary border border-secondary-500'}"
             title={changeSortOrderButtonTitle}
             disabled={isChangeSortOrderButtonDisabled}
             {...triggerProps}
@@ -136,7 +136,9 @@
       </Popover>
     {:else}
       <button
-        class="btn btn-icon {isSearchActive ? 'variant-filled-primary' : 'variant-ghost-secondary'}"
+        class="btn-icon {isSearchActive
+          ? 'preset-filled-primary-500'
+          : 'preset-tonal-secondary border border-secondary-500'}"
         title={changeSortOrderButtonTitle}
         disabled={isChangeSortOrderButtonDisabled}
         onclick={handleSortClick}

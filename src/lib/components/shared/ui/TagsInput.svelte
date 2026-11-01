@@ -1,6 +1,8 @@
 <script lang="ts">
-  // Maps to Skeleton v4/v5 `TagsInput`. Phase 1: wraps v2 `InputChip`, which rejects duplicates.
-  import { InputChip } from '@skeletonlabs/skeleton';
+  // Maps to Skeleton v4/v5 `TagsInput`. Duplicates are rejected, as with v2.
+  import { faXmark } from '@fortawesome/free-solid-svg-icons';
+  import { TagsInput } from '@skeletonlabs/skeleton-svelte';
+  import { Icon } from 'svelte-awesome';
 
   interface Props {
     value?: Array<string>;
@@ -12,38 +14,8 @@
 
   let { value = $bindable(), name, placeholder, tagColors }: Props = $props();
 
-  let root = $state<HTMLDivElement>();
-
-  // v2 renders the tags itself, so the colours are applied to its markup.
-  $effect(() => {
-    const tags = value ?? [];
-    if (!root || !tagColors) {
-      return;
-    }
-
-    for (const tagElement of root.querySelectorAll<HTMLButtonElement>('button.chip')) {
-      const tag = tagElement.querySelector('span')?.textContent ?? '';
-      if (tags.includes(tag)) {
-        applyColors(tagElement, tagColors(tag));
-      }
-    }
-  });
-
-  // v2 tags transition all properties, so a new tag would fade from the theme colour to its own.
-  // The colours are applied with transitions off and committed by a layout read.
-  function applyColors(
-    tagElement: HTMLElement,
-    { color, backgroundColor }: { color: string; backgroundColor: string },
-  ): void {
-    if (tagElement.style.backgroundColor === backgroundColor && tagElement.style.color === color) {
-      return;
-    }
-
-    tagElement.style.transition = 'none';
-    tagElement.style.color = color;
-    tagElement.style.backgroundColor = backgroundColor;
-    tagElement.getBoundingClientRect(); // commits the colours before transitions come back
-    tagElement.style.transition = '';
+  function isNew({ inputValue, value }: { inputValue: string; value: Array<string> }): boolean {
+    return !value.includes(inputValue);
   }
 
   // Escape belongs to the input while it's focused (e.g. not to the page's back handling).
@@ -55,17 +27,35 @@
 </script>
 
 <!-- svelte-ignore a11y_no_static_element_interactions -->
-<div bind:this={root} onkeydown={handleKeydown}>
-  <InputChip
+<div onkeydown={handleKeydown}>
+  <TagsInput
     {name}
-    {placeholder}
-    padding="px-3 py-2"
-    regionInput="focus:!outline-none"
-    bind:value={
-      () => value ?? [],
-      // v2 mutates the array in place and assigns it back; a copy makes the change visible
-      // (e.g. to the colour effect) even when the array isn't reactive state.
-      (tags) => (value = [...tags])
-    }
-  />
+    value={value ?? []}
+    editable={false}
+    validate={isNew}
+    onValueChange={(details) => (value = [...details.value])}
+  >
+    <TagsInput.Control>
+      {#each value ?? [] as tag, index (tag)}
+        {@const colors = tagColors?.(tag)}
+        <TagsInput.Item value={tag} {index}>
+          <TagsInput.ItemPreview>
+            <!-- The whole tag deletes it on click, as v2's chips did. -->
+            <!-- "Remove", since v4's "Delete tag …" would also match the page's Delete button. -->
+            <TagsInput.ItemDeleteTrigger
+              aria-label="Remove {tag}"
+              class="flex items-center gap-2 rounded-base"
+              style={colors &&
+                `color: ${colors.color}; background-color: ${colors.backgroundColor}`}
+            >
+              <span>{tag}</span>
+              <Icon data={faXmark} />
+            </TagsInput.ItemDeleteTrigger>
+          </TagsInput.ItemPreview>
+        </TagsInput.Item>
+      {/each}
+      <TagsInput.Input class="flex-1" {placeholder} />
+    </TagsInput.Control>
+    <TagsInput.HiddenInput />
+  </TagsInput>
 </div>

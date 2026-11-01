@@ -122,7 +122,7 @@ for (const colorScheme of colorSchemes) {
       await showWholePage(page);
       await calculatorPage.icedCoffeeToggle.check();
       await calculatorPage.temperatureConverterToggle.check();
-      await expect(calculatorPage.iceRatioRange).toBeVisible();
+      await expect(calculatorPage.iceRatioThumb).toBeVisible();
       await expect(calculatorPage.temperatureCelsiusInput).toBeVisible();
 
       await expectScreenshot(page, 'calculator-sections', colorScheme);

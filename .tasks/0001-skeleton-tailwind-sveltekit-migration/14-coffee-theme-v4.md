@@ -2,7 +2,7 @@
 
 **Epic:** [0001 Migrate to Skeleton v5, Tailwind v4 and SvelteKit 3](README.md)
 **Owner:** Claude
-**Status:** Todo
+**Status:** Done
 **Depends on:** 13
 **Size:** M — a hand conversion of ~90 theme properties into the new format, plus dark-mode and contrast tuning. Some uncertainty about how v4 names its contrast tokens.
 
@@ -28,16 +28,29 @@ Convert [theme.ts](../../theme.ts) **by hand** (decision 2026-10-23) into a v4 C
 
 ## Acceptance criteria
 
-- [ ] `theme.ts` deleted; `src/themes/coffee.css` exists and is the only theme loaded.
-- [ ] For each palette (primary, secondary, tertiary, success, warning, error, surface), `getComputedStyle(document.documentElement).getPropertyValue('--color-<palette>-500')` resolves to the v2 value from `theme.ts` (e.g. primary `rgb(1 99 103)`), checked in an e2e test in `appShell.spec.ts`.
-- [ ] Given light and dark mode, when the journal list renders, then primary/secondary colours visibly match the old palette (Claude compares old v2 screenshots with new ones; differences are only in component shapes, not hues).
-- [ ] The mesh background is shown in light and dark: `getComputedStyle(document.body).backgroundImage` contains `radial-gradient` in both schemes, and the journal list screenshot shows it.
-- [ ] The a11y spec reports no new `color-contrast` violations compared with the baseline.
-- [ ] `pnpm check`, `lint`, `build`, `test:unit` green; the e2e failure list doesn't grow.
+- [x] `theme.ts` deleted; `src/themes/coffee.css` exists and is the only theme loaded.
+- [x] For each palette (primary, secondary, tertiary, success, warning, error, surface), `getComputedStyle(document.documentElement).getPropertyValue('--color-<palette>-500')` resolves to the v2 value from `theme.ts` (e.g. primary `rgb(1 99 103)`), checked in an e2e test in `appShell.spec.ts`.
+- [x] Given light and dark mode, when the journal list renders, then primary/secondary colours visibly match the old palette (Claude compares old v2 screenshots with new ones; differences are only in component shapes, not hues).
+- [x] The mesh background is shown in light and dark: `getComputedStyle(document.body).backgroundImage` contains `radial-gradient` in both schemes, and the journal list screenshot shows it.
+- [x] The a11y spec reports no new `color-contrast` violations compared with the baseline.
+- [x] `pnpm check`, `lint`, `build`, `test:unit` green; the e2e failure list doesn't grow.
 
 ## Technical notes
 
 - Keep a comment at the top of `coffee.css` with the v2 → v4 token mapping table, so story 19 can apply the v5 renames (`--typo-*`, `--color-root-bg-*`) reliably.
+
+### As built (2026-10-27)
+
+- `src/themes/coffee.css` was generated from `theme.ts` by a one-off script, so no colour was retyped by hand. The template is `node_modules/@skeletonlabs/skeleton/src/themes/cerberus.css`; v4 ships its themes under `src/`, not `dist/`. The mapping table is at the top of the file.
+- **950 shades:** 900 with each channel × 0.9.
+- **Contrast tokens:** `contrast-light` is white for every palette. `contrast-dark` is the palette's 950, except success and warning, which use black as v2's `--on-*` did. White starts at shade 500 for primary, secondary, tertiary, error and surface, and at 800 for success and warning.
+- **Typography and shape:** `--base-font-color` is `surface-900`, and `--base-font-color-dark` is white. Heading weight is bold. The radii are 16px and `--default-border-width` is 3px. Divide and ring widths stay at 1px.
+- **Mesh background:** it moved to `[data-theme='coffee'] body` and `.dark[data-theme='coffee'] body`. The unlayered rule beats Skeleton's `@layer base` body background. Story 11 had removed the separate `body` background rule, so there was nothing else to port.
+- **Dark variant:** v4's `light-dark()` pairings depend on `color-scheme`, which Skeleton switches with the `dark` variant on `:root`. That's why story 13 widened the variant to `&:where(.dark, .dark *)`.
+- **Also fixed:** `tsconfig.json` and `d.build.Dockerfile` still referenced the deleted `tailwind.config.ts`, `postcss.config.js` and `theme.ts`. Those references are a story 13 regression for the Dockerfile.
+- **E2e:** new tests "coffee theme keeps the v2 palette" and "mesh background is shown in light/dark mode". The palette test resolves each variable through a probe element's computed colour, because the build minifies the theme to hex. Result: 113 passed, and the same 14 failures as story 13.
+- **A11y:** no new violations in either scheme. `settings` even has fewer (`label`, `nested-interactive`) thanks to the native placeholders. The baseline is kept as is until checkpoint 18.
+- Visual review notes are in PROGRESS.md.
 
 ## Testing
 

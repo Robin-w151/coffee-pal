@@ -199,7 +199,7 @@ test('a new aroma tag shows its colour without fading in', async ({
     (window as TagColorRecorder).__tagColors = recorded;
     const record = () => {
       document
-        .querySelectorAll('[data-testid=aromas] button.chip')
+        .querySelectorAll('[data-testid=aromas] button')
         .forEach((tag) => recorded.push(getComputedStyle(tag).backgroundColor));
       if (recorded.length < 20) {
         requestAnimationFrame(record);
@@ -279,6 +279,8 @@ test.describe('aromas', () => {
     await myCoffeesEntryDetailPage.aromasInput.press('Escape');
     expect(await escapes()).toBe(0);
 
+    // The tags input refocuses itself one frame after it gains focus; blur after that.
+    await page.evaluate(() => new Promise(requestAnimationFrame));
     await myCoffeesEntryDetailPage.aromasInput.blur();
     await page.keyboard.press('Escape');
     expect(await escapes()).toBe(1);

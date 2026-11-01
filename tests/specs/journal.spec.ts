@@ -1,5 +1,5 @@
 import { expect } from '@playwright/test';
-import { isShown, testJournalEntries } from '../features/app.feature';
+import { isShown, testCoffeeEntries, testJournalEntries } from '../features/app.feature';
 import { test } from '../fixtures';
 import type { JournalPage } from '../pages/journal.page';
 
@@ -95,9 +95,9 @@ test('entry add', async ({ journalPage, journalEntryDetailPage }) => {
   await expect(journalEntryDetailPage.header).toBeVisible();
 
   await journalEntryDetailPage.methodInput.fill('Chemex');
-  await journalEntryDetailPage.methodInput.press('Escape');
+  await journalEntryDetailPage.closeSuggestions(journalEntryDetailPage.methodInput);
   await journalEntryDetailPage.coffeeTypeInput.fill('Tovolea Classic');
-  await journalEntryDetailPage.coffeeTypeInput.press('Escape');
+  await journalEntryDetailPage.closeSuggestions(journalEntryDetailPage.coffeeTypeInput);
   await journalEntryDetailPage.waterInput.fill('510');
   await journalEntryDetailPage.coffeeInput.fill('30');
   await journalEntryDetailPage.waterTemperatureInput.fill('98');
@@ -251,7 +251,7 @@ test('entry add new entry and navigate to calculator', async ({
   await page.waitForTimeout(500);
 
   await journalPage.clickAddButton();
-  await journalEntryDetailPage.methodInput.fill('V60');
+  await journalEntryDetailPage.fillCombobox(journalEntryDetailPage.methodInput, 'V60');
   await journalEntryDetailPage.waterInput.fill('250');
   await journalEntryDetailPage.coffeeInput.fill('16.67');
   await journalEntryDetailPage.clickSaveButton();
@@ -312,6 +312,31 @@ test.describe('form controls', () => {
     await expect(page.getByRole('link', { name: 'Open coffee entry' })).toBeVisible();
   });
 
+  test('coffee type autocomplete tells coffees with the same label apart', async ({
+    page,
+    appPage,
+    journalPage,
+    journalEntryDetailPage,
+  }) => {
+    const original = testCoffeeEntries.find((entry) => entry.name === 'Wiedner Mischung')!;
+    const twin = { ...original, id: '0f3bb076-7346-44fb-8c1d-d74a8c691442' };
+    await appPage.addCoffeeEntries([twin]);
+    await journalPage.goto();
+    await journalPage.clickAddButton();
+    const options = journalEntryDetailPage.getAutocompleteOption(/Wiedner Mischung/);
+    const link = page.getByRole('link', { name: 'Open coffee entry' });
+
+    const hrefs = [];
+    for (const index of [0, 1]) {
+      await journalEntryDetailPage.coffeeTypeInput.fill('Wied');
+      await expect(options).toHaveCount(2);
+      await options.nth(index).click();
+      hrefs.push(await link.getAttribute('href'));
+    }
+
+    expect(hrefs.toSorted()).toEqual([`/my-coffees/${original.id}`, `/my-coffees/${twin.id}`]);
+  });
+
   test('sort list box marks the selected option', async ({ journalPage }) => {
     await journalPage.clickSortButton();
     await expect(journalPage.getSortOption('Recently Updated')).toHaveAttribute(
@@ -332,7 +357,7 @@ test.describe('form controls', () => {
 
   test('sort list box selects with the keyboard', async ({ journalPage }) => {
     await journalPage.clickSortButton();
-    await journalPage.getSortOption('Best').press('Enter');
+    await journalPage.selectSortOptionWithKeyboard('Best');
 
     await expect(journalPage.getJournalEntryTitle(0)).toHaveText('V60 Switch - Honeymoon');
     await journalPage.clickSortButton();

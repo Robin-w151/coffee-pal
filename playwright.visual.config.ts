@@ -11,7 +11,12 @@ export default defineConfig({
   testMatch: '**/*.visual.ts',
   snapshotPathTemplate: '{testDir}/__screenshots__/{projectName}/{arg}{ext}',
   fullyParallel: true,
-  reporter: [['html', { open: 'never' }], ['list']],
+  // The JSON report tells scripts/visual-review.js which tests failed before their screenshot.
+  reporter: [
+    ['html', { open: 'never' }],
+    ['list'],
+    ['json', { outputFile: 'test-results/visual-results.json' }],
+  ],
   use: {
     baseURL,
     locale: 'en-US',

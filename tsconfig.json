@@ -18,11 +18,9 @@
     "./src/**/*.js",
     "./src/**/*.ts",
     "./src/**/*.svelte",
-    "./tailwind.config.ts",
     "./tests/**/*.js",
     "./tests/**/*.ts",
     "./tests/**/*.svelte",
-    "./theme.ts",
     "./vite.config.ts"
   ],
   "exclude": [

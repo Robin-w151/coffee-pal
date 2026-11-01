@@ -17,7 +17,7 @@
   }
 </script>
 
-<dl class="list-dl">
+<dl>
   {#if isLoading && !hasEntries(entries)}
     {#each { length: 3 }}
       <CoffeeEntryPlaceholder />

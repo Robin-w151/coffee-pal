@@ -71,6 +71,7 @@
       return {
         label: option,
         value: entry,
+        id: entry.id,
       };
     });
   }

@@ -12,11 +12,11 @@
 <PageHeader title="Settings" />
 <PageCard display="grid grid-cols-1 lg:grid-cols-[1fr_auto_1fr] gap-4">
   <Appearance />
-  <hr class="lg:divider-vertical lg:h-full" />
+  <hr class="lg:vr lg:border-t-0" />
   <Units />
   <hr class="col-span-full" />
   <Nextcloud />
-  <hr class="lg:divider-vertical lg:h-full" />
+  <hr class="lg:vr lg:border-t-0" />
   <Backup />
   <hr class="col-span-full" />
   <Info cardClass="col-span-full" />

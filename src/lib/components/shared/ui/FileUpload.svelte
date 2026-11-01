@@ -1,7 +1,7 @@
 <script lang="ts">
-  // Maps to Skeleton v4/v5 `FileUpload`. Phase 1: wraps v2 `FileDropzone`.
+  // Maps to Skeleton v4/v5 `FileUpload`, with a single file.
   import { faFileArrowUp } from '@fortawesome/free-solid-svg-icons';
-  import { FileDropzone } from '@skeletonlabs/skeleton';
+  import { FileUpload, useFileUpload } from '@skeletonlabs/skeleton-svelte';
   import { Icon } from 'svelte-awesome';
 
   interface Props {
@@ -14,27 +14,30 @@
 
   let { file = $bindable(), name, accept, hint }: Props = $props();
 
-  let files = $state<FileList>();
+  const id = $props.id();
+  const fileUpload = useFileUpload(() => ({
+    id,
+    name,
+    accept,
+    maxFiles: 1,
+    onFileChange: (details) => (file = details.acceptedFiles[0]),
+  }));
+
+  // v4 can't control its files, so a file the caller clears (e.g. after an import) is cleared here.
+  $effect(() => {
+    if (!file && fileUpload().acceptedFiles.length > 0) {
+      fileUpload().clearFiles();
+    }
+  });
 </script>
 
-<FileDropzone
-  {name}
-  {accept}
-  bind:files={
-    () => (file ? files : undefined),
-    (newFiles) => {
-      files = newFiles;
-      file = newFiles?.[0];
-    }
-  }
->
-  {#snippet lead()}
+<FileUpload.Provider value={fileUpload}>
+  <FileUpload.Dropzone>
     <Icon data={faFileArrowUp} scale={1.5} />
-  {/snippet}
-  {#snippet message()}
     <span>{file ? file.name : 'Click to select file or drag and drop'}</span>
-  {/snippet}
-  {#snippet meta()}
-    {hint}
-  {/snippet}
-</FileDropzone>
+    {#if hint}
+      <span class="text-xs">{hint}</span>
+    {/if}
+  </FileUpload.Dropzone>
+  <FileUpload.HiddenInput />
+</FileUpload.Provider>

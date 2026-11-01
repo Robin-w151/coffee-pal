@@ -2,7 +2,7 @@
 
 **Epic:** [0001 Migrate to Skeleton v5, Tailwind v4 and SvelteKit 3](README.md)
 **Owner:** Human
-**Status:** Todo
+**Status:** In progress
 **Depends on:** 12, 17
 **Size:** S — look-and-feel review and one merge. It's the first visible change for users, but rollback is an instant Vercel rollback plus a revert.
 
@@ -18,9 +18,9 @@ Only you can judge whether the new look is acceptable. Shipping is a release.
 
 #### Prerequisites
 
-- [ ] Story 12 is done (phase 1 merged), and Claude has rebased `migration/2-skeleton-v4` onto `main`, so its PR targets `main` and contains only phase 2 commits.
-- [ ] Story 17 is done; the PR is ready for review and CI is green.
-- [ ] Local checkout on macOS for the side-by-side page.
+- [x] Story 12 is done (phase 1 merged), and Claude has rebased `migration/2-skeleton-v4` onto `main`, so its PR targets `main` and contains only phase 2 commits.
+- [x] Story 17 is done; the PR is ready for review and CI is green.
+- [x] Local checkout on macOS for the side-by-side page.
 
 #### Steps
 
@@ -65,7 +65,7 @@ User data isn't affected (no data format changes in phase 2).
 ## Acceptance criteria
 
 - [ ] Given the merged PR, when production is opened, then it runs Tailwind v4 + Skeleton 4.15.2 (check `package.json` on `main`) and the Test workflow is green.
-- [ ] The human approved the look (PR approval or chat confirmation).
+- [x] The human approved the look (PR approval or chat confirmation).
 
 ## Technical notes
 

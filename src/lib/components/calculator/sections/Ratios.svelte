@@ -45,7 +45,7 @@
     <div class="flex flex-wrap gap-2">
       {#each presets as preset (preset.label)}
         <button
-          class="chip variant-soft-secondary hover:variant-filled-secondary"
+          class="chip preset-tonal-secondary hover:preset-filled-secondary-500"
           onclick={() => handlePresetClick(preset)}
         >
           <span class="font-normal">{preset.label}</span>

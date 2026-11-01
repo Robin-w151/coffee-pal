@@ -18,7 +18,7 @@
     label,
     title,
     type,
-    variant = 'variant-filled',
+    variant = 'preset-filled',
     disabled = false,
     class: clazz,
     iconContent,
@@ -27,7 +27,7 @@
 </script>
 
 <button
-  class="btn max-lg:btn-icon {variant} {clazz ?? ''}"
+  class="lg:btn max-lg:btn-icon {variant} {clazz ?? ''}"
   {type}
   {disabled}
   title={title || label}

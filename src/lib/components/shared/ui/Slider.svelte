@@ -1,6 +1,6 @@
 <script lang="ts">
-  // Maps to Skeleton v4/v5 `Slider`. Phase 1: wraps v2 `RangeSlider`.
-  import { RangeSlider } from '@skeletonlabs/skeleton';
+  // Maps to Skeleton v4/v5 `Slider`. v4 works with arrays of values; this wrapper has one thumb.
+  import { Slider } from '@skeletonlabs/skeleton-svelte';
   import type { Snippet } from 'svelte';
 
   interface Props {
@@ -13,8 +13,22 @@
   }
 
   let { value = $bindable(), min, max, name, children }: Props = $props();
+
+  function handleValueChange(details: { value: Array<number> }): void {
+    value = details.value[0];
+  }
 </script>
 
-<RangeSlider {name} {min} {max} accent="accent-primary-500 dark:accent-primary-600" bind:value>
-  {@render children?.()}
-</RangeSlider>
+<Slider {name} {min} {max} value={[value]} onValueChange={handleValueChange}>
+  <!-- The header row labels the thumb, as v2's label around the range input did. In the size and
+       weight of the other field labels (v4's are extra small and medium). -->
+  <Slider.Label class="text-base font-normal">{@render children?.()}</Slider.Label>
+  <Slider.Control>
+    <Slider.Track>
+      <Slider.Range />
+    </Slider.Track>
+    <Slider.Thumb index={0}>
+      <Slider.HiddenInput />
+    </Slider.Thumb>
+  </Slider.Control>
+</Slider>
