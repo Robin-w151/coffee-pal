@@ -411,3 +411,13 @@ The human went through the app screen by screen (desktop and iPhone PWA) and nam
 **Baseline:** `pnpm test:visual:update` on `migration/2-skeleton-v4`: 61 of 72 screenshots changed (the rest were within the tolerance already); a second `pnpm test:visual:run` passes 72/72 against it. `pnpm verify` green: 194 unit, 128 e2e.
 
 **Next:** the human squash-merges #189 (runbook step 5), checks the release and production deploy, and smoke-tests the PWA (step 6).
+
+## 2026-11-01 — Story 18: v4 shipped (Done)
+
+PR #189 squash-merged as `7236764`; release `0.33.0` (`5620aee`) deployed to production. `main` runs Tailwind 4.3.3 and Skeleton 4.15.2, with the v4 screenshot baseline.
+
+**Production check:** the Test workflow is disabled by the human to stay within the Vercel usage limit, so it didn't run on the deploy. The same Playwright suite, run locally against `https://coffee-pal.vercel.app`: 127 passed.
+
+**Open issue:** checkpoints 20 and 23 expect the Test workflow on the production deploy. While it's disabled, Claude runs the suite against production locally instead, unless the human re-enables it.
+
+**Next:** story 19 (Claude): Skeleton v5 upgrade, on a new branch from `main`.

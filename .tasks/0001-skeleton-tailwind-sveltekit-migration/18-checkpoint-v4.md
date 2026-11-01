@@ -2,7 +2,7 @@
 
 **Epic:** [0001 Migrate to Skeleton v5, Tailwind v4 and SvelteKit 3](README.md)
 **Owner:** Human
-**Status:** In progress
+**Status:** Done
 **Depends on:** 12, 17
 **Size:** S — look-and-feel review and one merge. It's the first visible change for users, but rollback is an instant Vercel rollback plus a revert.
 
@@ -64,8 +64,14 @@ User data isn't affected (no data format changes in phase 2).
 
 ## Acceptance criteria
 
-- [ ] Given the merged PR, when production is opened, then it runs Tailwind v4 + Skeleton 4.15.2 (check `package.json` on `main`) and the Test workflow is green.
+- [x] Given the merged PR, when production is opened, then it runs Tailwind v4 + Skeleton 4.15.2 (check `package.json` on `main`) and the Test workflow is green. (The workflow is disabled; the same suite was run locally against production instead, see Result.)
 - [x] The human approved the look (PR approval or chat confirmation).
+
+### Result (2026-11-01)
+
+The human approved the v4 look in chat; the v4 screenshot baseline was committed on the branch (`9ee08c8`) and CI was green. PR #189 was squash-merged as `7236764` (`feat: move to Tailwind v4 and Skeleton v4 (migration phase 2)`), and semantic-release cut `0.33.0` (`5620aee`), which Vercel deployed to production. `package.json` on `main`: `tailwindcss` 4.3.3, `@skeletonlabs/skeleton` and `@skeletonlabs/skeleton-svelte` 4.15.2. The human confirmed it's shipped.
+
+The Test workflow is disabled by the human to stay within the Vercel usage limit, so it didn't run on the production deploy. Instead Claude ran the same suite locally against production (`TEST_BASE_URL=https://coffee-pal.vercel.app npx playwright test`): 127 passed (the 128th test is local-preview only); production serves the v4 stylesheet.
 
 ## Technical notes
 
