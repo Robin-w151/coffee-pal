@@ -84,7 +84,7 @@
           placeholder="Target drip rate, e.g. 60dpm"
           bind:value={targetDropsPerMinute}
         />
-        <div class="label justify-start text-base">dpm</div>
+        <div class="label text-base">dpm</div>
       </div>
     </Label>
   </Form>

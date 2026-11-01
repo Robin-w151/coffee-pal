@@ -156,6 +156,14 @@
   line-height: var(--text-base--line-height);
 }
 
+/* Plain field-group cells start their text at the left, like the units in the selects next to
+   them (v5 centres them). Icon and link cells fit their content, so this doesn't move them. */
+@utility field-group {
+  & > .label {
+    justify-content: flex-start;
+  }
+}
+
 /* Invalid form fields, on .input and .field-group (v2's input-error, in its colours for both modes;
    Skeleton has no input states). */
 @utility input-error {
