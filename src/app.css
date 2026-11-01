@@ -353,11 +353,6 @@
   --btn-size: 27.5px;
 }
 
-/* Chips in v4's extra small size (v5: small). */
-@utility chip {
-  --chip-size: var(--text-xs);
-}
-
 /* Global variables */
 :root {
   --coffee-view-transition-duration: 100ms;
