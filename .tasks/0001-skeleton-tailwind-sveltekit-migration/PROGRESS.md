@@ -470,3 +470,60 @@ The human approved the v5 look and baseline; preview touch test and installed-PW
 **Production check:** CI green on the merge commit. With the Test workflow still disabled, the suite ran locally against `https://coffee-pal.vercel.app`: 128 passed.
 
 **Next:** phase 4 (SvelteKit 3) waits for the human's go; story 21 (readiness check) starts when asked.
+
+## 2026-11-01 — Story 21: SvelteKit 3 readiness
+
+Branch `migration/4-sveltekit-3` from `main` (includes the unpushed docs commit `40d94f2` for story 20).
+
+### Compatibility matrix (npm registry, 2026-11-01)
+
+| Package                         | Current | Target | Kit 3 compatible | Limiting peer range / note                                                                                                                                                                                                                                                                    |
+| ------------------------------- | ------- | ------ | ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `@sveltejs/kit`                 | 2.70.3  | 3.1.1  | yes              | latest 3.x; needs `vite ^8.0.12`, `svelte ^5.57.1`, `typescript ^6.0.0`, `@sveltejs/vite-plugin-svelte ^7.0.0`, Node ≥ 22.17 (repo: 24.22)                                                                                                                                                    |
+| `svelte`                        | 5.56.8  | 5.57.3 | yes              | latest; floor `^5.57.1` from kit, no package caps it                                                                                                                                                                                                                                          |
+| `vite`                          | 7.3.6   | 8.3.5  | yes              | latest 8.x; floor `^8.0.12` from kit; every other plugin accepts `^8`                                                                                                                                                                                                                         |
+| `typescript`                    | 5.9.3   | 6.0.3  | yes              | latest 6.x; `typescript-eslint` caps at `<6.1.0`; nothing requires 7.x                                                                                                                                                                                                                        |
+| `@sveltejs/vite-plugin-svelte`  | 6.2.4   | 7.3.1  | yes              | `vite ^8`, `svelte ^5.46.4`                                                                                                                                                                                                                                                                   |
+| `@sveltejs/adapter-auto`        | 7.0.1   | 8.0.0  | yes              | `@sveltejs/kit ^3`                                                                                                                                                                                                                                                                            |
+| `svelte-adapter-bun`            | 1.0.1   | –      | **no**           | latest 1.0.2 (2026-10-20) still peers `@sveltejs/kit ^2.4.0`, `typescript ^5`. [#87](https://github.com/gornostay25/svelte-adapter-bun/issues/87) was closed pointing to the official adapter; [#90](https://github.com/gornostay25/svelte-adapter-bun/pull/90) proposes a deprecation notice |
+| `@vite-pwa/sveltekit`           | 1.1.0   | 2.0.0  | yes, but fresh   | 1.1.0 peers `kit ^1.3.1 \|\| ^2.0.1`. [2.0.0](https://github.com/vite-pwa/sveltekit/releases/tag/v2.0.0) (released 2026-11-01, `kit ^3`) is a rewrite on `@unplugin-pwa/vite` 0.0.3; 2.0.1 is already in review (#117)                                                                        |
+| `vite-plugin-pwa`               | 1.3.0   | remove | n/a              | 1.3.0 accepts `vite ^8`, but `@vite-pwa/sveltekit` 2 no longer uses it                                                                                                                                                                                                                        |
+| `vitest`, `@vitest/coverage-v8` | 4.1.10  | 4.1.10 | yes              | `vite ^6 \|\| ^7 \|\| ^8`; 5.x isn't needed                                                                                                                                                                                                                                                   |
+| `svelte-check`                  | 4.7.4   | 4.7.4  | yes              | `typescript ^5 \|\| ^6`                                                                                                                                                                                                                                                                       |
+| `eslint-plugin-svelte`          | 3.22.0  | 3.22.0 | yes              | `svelte ^5`                                                                                                                                                                                                                                                                                   |
+| `typescript-eslint`             | 8.65.0  | 8.65.0 | yes              | `typescript <6.1.0`                                                                                                                                                                                                                                                                           |
+| `prettier-plugin-svelte`        | 3.5.2   | 3.5.2  | yes              | `svelte ^5`                                                                                                                                                                                                                                                                                   |
+| `@tailwindcss/vite`             | 4.3.3   | 4.3.3  | yes              | `vite ^8`                                                                                                                                                                                                                                                                                     |
+| `@skeletonlabs/skeleton-svelte` | 5.0.1   | 5.0.1  | yes              | `svelte ^5.40`                                                                                                                                                                                                                                                                                |
+| `runed`                         | 0.38.0  | 0.38.0 | yes              | optional peer `@sveltejs/kit ^3.0.0` (so it matches better after the upgrade)                                                                                                                                                                                                                 |
+| `@playwright/test`              | 1.62.0  | 1.62.0 | yes              | no peers                                                                                                                                                                                                                                                                                      |
+
+Alternatives to `svelte-adapter-bun`: the official [`@sveltejs/adapter-bun`](https://github.com/sveltejs/kit/tree/version-3/packages/adapter-bun) 1.0.0 (2026-10-01, `kit ^3`, Bun ≥ 1.4; the Docker image uses `oven/bun:debian`), or `@sveltejs/adapter-node` 6.0.1 run with Bun.
+
+### Breaking changes that apply ([guide](https://svelte.dev/docs/kit/migrating-to-sveltekit-3))
+
+- **`svelte.config.js` removed:** adapter switch, `$assets`/`$lib` aliases, `vitePlugin.inspector`, `onwarn`, `preprocess` move into the Vite plugin; [eslint.config.js](../../eslint.config.js) and [vitest.config.ts](../../vitest.config.ts) import it. Correction to story 22: `$assets` **is** used, in [Calculator.svelte](../../src/lib/components/calculator/Calculator.svelte) and [Ratios.svelte](../../src/lib/components/calculator/sections/Ratios.svelte) (`presets.json`), so it needs a `#assets` import entry or relative imports.
+- **`$lib` → `#lib` with file extensions:** 304 imports in 104 files (`src` and `tests`); `package.json` gets `imports`.
+- **`$app/environment` → `$app/env`:** 10 files. **`$env/static/public`** is deprecated in favour of `$app/env/public`: [Info.svelte](../../src/lib/components/settings/sections/Info.svelte) (`PUBLIC_APP_MODE`).
+- **`$app/stores` removed:** done in this story (5 files now use `$app/state`).
+- **`goto` options:** `replaceState` → `replace` in [JournalEntryDetail.svelte](../../src/lib/components/journal/JournalEntryDetail.svelte), [CoffeeEntryDetail.svelte](../../src/lib/components/myCoffees/CoffeeEntryDetail.svelte), [Calculator.svelte](../../src/lib/components/calculator/Calculator.svelte) (it's renamed, not replaced by shallow routing). `goto` now rejects URLs outside the app: the two detail pages' `beforeNavigate` re-navigates to `to.url` after the unsaved-changes dialog, so this needs a check for external targets.
+- **`$app/paths` `resolve`:** pathnames lose the leading `/`, route IDs keep it. [JournalEntryItem.svelte](../../src/lib/components/journal/table/JournalEntryItem.svelte) passes a pathname (`/journal/${id}`), [Calculator.svelte](../../src/lib/components/calculator/Calculator.svelte) passes `/calculator?`; 12 files import `resolve`, all checked by `pnpm check` after the bump.
+- **`tsconfig.json`:** extend `$app/tsconfig` with own `include`/`exclude`; the service worker becomes its own TS project (`src/service-worker/tsconfig.json`).
+- **Service worker / PWA:** SvelteKit registers the service worker as a module. With `@vite-pwa/sveltekit` 2: `SvelteKitPWA()` → `withPwa(kitOptions, pwaOptions)` (it wraps `sveltekit()`), `injectManifest` → `buildSW`, `workbox-precaching` → `@vite-pwa/workbox-swkit/precaching` in [src/service-worker.ts](../../src/service-worker.ts), `vite-plugin-pwa/info` types → `@unplugin-pwa/core/info` ([AppLayout.svelte](../../src/lib/components/shared/app/AppLayout.svelte) uses `virtual:pwa-info`).
+- **`version.pollInterval` now defaults to 1 hour:** harmless; the app's update prompt comes from the service worker ([updateListener.ts](../../src/lib/services/updates/updateListener.ts)), not `updated`.
+- **Not applicable:** hooks/`handleError` (no `src/hooks*`), `$service-worker`, param matchers, server-only dirs, cookies, CSRF, form actions, `data-sveltekit-*="off"`, `preloadData`, navigation `delta`, shallow routing.
+
+### 2.x preparation
+
+`@sveltejs/kit` 2.70.2 → 2.70.3 (latest 2.x); `$app/stores` → `$app/state` in AppLayout, AppMenu, AppRail and the two `[id]` pages. `pnpm dev` and `pnpm build` print no deprecation warnings.
+
+**Gates:** `pnpm verify:strict` green: svelte-check 0 errors/0 warnings, 194 unit, 129 e2e (a11y: no new violations), 72 visual against the v5 baseline.
+
+### Go/no-go
+
+**No-go for now.** One package blocks, and one needs a judgement call:
+
+1. **Bun adapter (blocking):** `svelte-adapter-bun` doesn't support Kit 3. Proposal: switch to the official `@sveltejs/adapter-bun`; the human decides.
+2. **`@vite-pwa/sveltekit` 2.0.0:** the only release that supports Kit 3 came out today, as a rewrite on 0.0.x packages, with 2.0.1 already pending. Proposal: wait about two weeks for patch releases before story 22; the human decides.
+
+Story 22 waits for both decisions.

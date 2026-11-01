@@ -2,7 +2,7 @@
 
 **Epic:** [0001 Migrate to Skeleton v5, Tailwind v4 and SvelteKit 3](README.md)
 **Owner:** Claude
-**Status:** Todo
+**Status:** Done
 **Depends on:** 20
 **Size:** S — research and a short report, plus deprecation fixes on 2.x; the outcome may be "wait".
 
@@ -25,11 +25,17 @@ Branch: `migration/4-sveltekit-3` from `main`.
 
 ## Acceptance criteria
 
-- [ ] PROGRESS.md contains the compatibility matrix and the list of breaking changes with affected files.
-- [ ] PROGRESS.md names the chosen target versions for `@sveltejs/kit`, `svelte` and `vite`, with the peer range that limits each, and confirms every package accepts TypeScript 6.x (any package that requires 7.x is a blocker).
-- [ ] `$app/stores` usage = 0; no SvelteKit deprecation warnings in `pnpm dev`/`pnpm build` output.
-- [ ] `pnpm verify:strict` green on latest SvelteKit 2.x.
-- [ ] A clear go/no-go is recorded.
+- [x] PROGRESS.md contains the compatibility matrix and the list of breaking changes with affected files.
+- [x] PROGRESS.md names the chosen target versions for `@sveltejs/kit`, `svelte` and `vite`, with the peer range that limits each, and confirms every package accepts TypeScript 6.x (any package that requires 7.x is a blocker).
+- [x] `$app/stores` usage = 0; no SvelteKit deprecation warnings in `pnpm dev`/`pnpm build` output.
+- [x] `pnpm verify:strict` green on latest SvelteKit 2.x.
+- [x] A clear go/no-go is recorded.
+
+## Result (2026-11-01)
+
+**No-go for now** (details and matrix in [PROGRESS.md](PROGRESS.md)). Targets: `@sveltejs/kit` 3.1.1, `svelte` 5.57.3, `vite` 8.3.5, `typescript` 6.0.3 (`typescript-eslint` caps at `<6.1.0`; nothing needs 7.x). Blocking: `svelte-adapter-bun` has no Kit 3 support (proposal: official `@sveltejs/adapter-bun`). Judgement call: `@vite-pwa/sveltekit` 2.0.0, the only Kit 3 release, came out on 2026-11-01 as a rewrite (proposal: wait about two weeks). Both are the human's decisions; story 22 waits.
+
+2.x preparation: Kit 2.70.3, `$app/stores` → `$app/state` (5 files); `pnpm verify:strict` green.
 
 ## Technical notes
 

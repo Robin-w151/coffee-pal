@@ -2,9 +2,13 @@
 
 **Epic:** [0001 Migrate to Skeleton v5, Tailwind v4 and SvelteKit 3](README.md)
 **Owner:** Claude
-**Status:** Todo
+**Status:** Blocked
 **Depends on:** 21
 **Size:** L — a cross-cutting change (config, every `$lib` import, service worker, toolchain bumps to Vite 8 and TypeScript 6) on a freshly released major, with the PWA as the main risk.
+
+## Blocked
+
+Story 21 recorded a no-go (2026-11-01): `svelte-adapter-bun` has no Kit 3 support, and `@vite-pwa/sveltekit` 2.0.0 (the only Kit 3 release) is a day-old rewrite. Unblocked when the human picks the Bun adapter (proposal: official `@sveltejs/adapter-bun`) and says when to take the PWA plugin. The plugin's v2 API changes (`withPwa`, `buildSW`, `@vite-pwa/workbox-swkit`) are listed in [PROGRESS.md](PROGRESS.md).
 
 ## User story
 
@@ -16,7 +20,7 @@ Continue on `migration/4-sveltekit-3`.
 
 1. `pnpm dlx sv migrate sveltekit-3` → review → commit. Check the TODO list it prints and copy it into PROGRESS.md.
 2. **Toolchain:** bump `vite`, `svelte` and the other packages to the targets chosen in the story 21 matrix, and `typescript` to the latest 6.x (not 7.x; decision 2026-10-25). One commit for the bumps, then fix type errors.
-3. **Config:** move [svelte.config.js](../../svelte.config.js) into `sveltekit({...})` in [vite.config.ts](../../vite.config.ts): adapter switch (`USE_ADAPTER_BUN`), aliases (`$assets` has no usages; drop the alias instead of migrating it. `$lib` → `#lib` is step 4), `onwarn` (ignore `state_referenced_locally`), `vitePlugin.inspector`, `vitePreprocess`. Delete `svelte.config.js`. Then fix the two known dependents: [eslint.config.js](../../eslint.config.js) imports `./svelte.config.js` for `eslint-plugin-svelte`; pass the equivalent options (or none, if the plugin no longer needs them with SvelteKit 3) instead. [vitest.config.ts](../../vitest.config.ts) gets its own `sveltekit()` in story 06; make it reuse the Vite config (`mergeConfig(viteConfig, defineConfig({ test: … }))`, or move the `test` block into `vite.config.ts`) so the inlined kit options apply to tests too. Check `prettier-plugin-svelte` the same way.
+3. **Config:** move [svelte.config.js](../../svelte.config.js) into `sveltekit({...})` in [vite.config.ts](../../vite.config.ts): adapter switch (`USE_ADAPTER_BUN`), aliases (`$assets` is used by `Calculator.svelte` and `Ratios.svelte` for `presets.json` (story 21); give it a `#assets` entry in `imports` or use relative imports. `$lib` → `#lib` is step 4), `onwarn` (ignore `state_referenced_locally`), `vitePlugin.inspector`, `vitePreprocess`. Delete `svelte.config.js`. Then fix the two known dependents: [eslint.config.js](../../eslint.config.js) imports `./svelte.config.js` for `eslint-plugin-svelte`; pass the equivalent options (or none, if the plugin no longer needs them with SvelteKit 3) instead. [vitest.config.ts](../../vitest.config.ts) gets its own `sveltekit()` in story 06; make it reuse the Vite config (`mergeConfig(viteConfig, defineConfig({ test: … }))`, or move the `test` block into `vite.config.ts`) so the inlined kit options apply to tests too. Check `prettier-plugin-svelte` the same way.
 4. **Imports:** `$lib/...` → `#lib/...` with explicit file paths (`#lib/utils/index.ts` instead of `$lib/utils`); `package.json` gets the `imports` field the guide prescribes. The codemod should do this; fix the rest. Update [tsconfig.json](../../tsconfig.json) if needed.
 5. **Service worker:** [src/service-worker.ts](../../src/service-worker.ts) uses no SvelteKit modules; only check that `@vite-pwa/sveltekit` with `injectManifest` still injects `self.__WB_MANIFEST`. Gates: the PWA e2e test (story 02) and the generated `service-worker.js` with its precache list in the build output.
 6. **Errors:** there are no `src/hooks*` files; check that the default error page still renders for an unknown route (e.g. `/does-not-exist`) and an unknown entry id.
