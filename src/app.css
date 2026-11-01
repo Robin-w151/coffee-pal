@@ -353,6 +353,15 @@
   --btn-size: 27.5px;
 }
 
+/* Chips and badges in v4's extra small text (v5: small chips, badges at 80% of extra small, which
+   made the journal's ratio badges hard to read). */
+@utility chip {
+  --chip-size: var(--text-xs);
+}
+@utility badge {
+  --badge-size: var(--text-xs);
+}
+
 /* Global variables */
 :root {
   --coffee-view-transition-duration: 100ms;
