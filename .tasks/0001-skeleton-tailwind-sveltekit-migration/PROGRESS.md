@@ -433,7 +433,7 @@ Branch `migration/3-skeleton-v5` from `main`; Skeleton and skeleton-svelte 5.0.1
 
 - **Field groups:** separate cells with a 4px gap and their own outlines; focus rings the focused cell; invalid groups turn every cell red.
 - **Icons in icon buttons:** v5's automatic sizing, 22px in 42px buttons (v4: 16px search/sort, 24px menu), 27.5px in the floating actions (v4: 24px plus, 20px sync), 15px in the trail buttons.
-- **Chips:** v5's text-sm (v4: xs), 8px between name and ratio.
+- **Chips and badges:** v4's text-xs kept; chips have 8px between name and ratio, badges are bold pills.
 - **Field text:** 1px further left (v5's inline padding).
 
 Kept from v4 through v5's own variables: 42px fields and buttons, 42/28/53px icon buttons, gray-500 placeholders, round corners (no squircles), coffee primary as brand colour.
@@ -449,7 +449,7 @@ Kept from v4 through v5's own variables: 42px fields and buttons, 42/28/53px ico
 The human named three issues in the v5 build, each fixed in its own commit:
 
 - **Outlined buttons too thick:** v5 makes `--default-border-width` the width of Tailwind's `border`, so the theme's 3px (from v2, unused in v4) applied. The theme sets 1px.
-- **Chip text too small:** the `--chip-size: text-xs` override is gone; chips use v5's text-sm.
+- **Chip text too small:** first read as the calculator's chips (override removed, then text-base). The human meant the journal's ratio **badges** (v5: 80% of text-xs); `--badge-size` is text-xs again, and the chips stay at v4's text-xs.
 - **Tags input (aromas) broken:** v5's 12px delete trigger squeezed the wrapper's tags (the trigger holds the whole tag), so they overlapped. The trigger sizes to its content at v5's small button height, and the preview drops its button padding. The e2e tests hadn't caught it: they check the tags' text and colours, not their size.
 
 `pnpm verify` green (194 unit, 128 e2e); baseline regenerated, 72/72.
