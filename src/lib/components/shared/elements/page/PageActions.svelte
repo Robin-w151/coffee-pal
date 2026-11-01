@@ -54,7 +54,7 @@
       {#if isSynchronizing}
         <Spinner class="text-white" />
       {:else}
-        <Icon data={faRotate} scale={1.25} />
+        <Icon data={faRotate} />
         <span class="sr-only"
           >Synchronize data, {#if lastSyncText}
             {lastSyncText}
@@ -68,7 +68,7 @@
     title="Add new entry"
     onclick={handleAddClick}
   >
-    <Icon data={faPlus} scale={1.5} />
+    <Icon data={faPlus} />
     <span class="sr-only">Add new entry</span>
   </button>
 </div>

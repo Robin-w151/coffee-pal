@@ -337,6 +337,20 @@ test.describe('form controls', () => {
     expect(hrefs.toSorted()).toEqual([`/my-coffees/${original.id}`, `/my-coffees/${twin.id}`]);
   });
 
+  test('coffee type autocomplete says when no coffee matches', async ({
+    page,
+    journalPage,
+    journalEntryDetailPage,
+  }) => {
+    await journalPage.clickAddButton();
+    await journalEntryDetailPage.coffeeTypeInput.fill('Unknown roast');
+
+    const options = page.getByRole('listbox').getByRole('option');
+    await expect(options).toHaveCount(1);
+    await expect(options).toHaveText('No results found');
+    await expect(options).toHaveAttribute('aria-disabled', 'true');
+  });
+
   test('sort list box marks the selected option', async ({ journalPage }) => {
     await journalPage.clickSortButton();
     await expect(journalPage.getSortOption('Recently Updated')).toHaveAttribute(

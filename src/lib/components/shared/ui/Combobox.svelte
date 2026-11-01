@@ -152,6 +152,18 @@
                 <Combobox.Item item={option}>
                   <Combobox.ItemText>{option.label}</Combobox.ItemText>
                 </Combobox.Item>
+              {:else}
+                <!-- No options for the typed text: say so, as v2 did, instead of an empty popup. A
+                     disabled option, as a listbox needs options; it isn't one of Zag's items, so it
+                     can't be highlighted or selected. -->
+                <li
+                  role="option"
+                  aria-disabled="true"
+                  aria-selected="false"
+                  class="px-2 py-1 opacity-60"
+                >
+                  No results found
+                </li>
               {/each}
             </ul>
           {/if}

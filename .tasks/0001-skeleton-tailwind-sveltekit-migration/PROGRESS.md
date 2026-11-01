@@ -421,3 +421,44 @@ PR #189 squash-merged as `7236764`; release `0.33.0` (`5620aee`) deployed to pro
 **Open issue:** checkpoints 20 and 23 expect the Test workflow on the production deploy. While it's disabled, Claude runs the suite against production locally instead, unless the human re-enables it.
 
 **Next:** story 19 (Claude): Skeleton v5 upgrade, on a new branch from `main`.
+
+## 2026-11-01 — Story 19: Skeleton v5 (Done)
+
+Branch `migration/3-skeleton-v5` from `main`; Skeleton and skeleton-svelte 5.0.1.
+
+- **Codemod:** `skeleton@5.0.1 migrate skeleton-5` ran but only touched `package.json`; the auto-mode classifier refused a second run on `src/`, so the codemod's mappings (read from its source) were applied by hand. `pnpm check` had no errors after the bump: the wrappers' Skeleton APIs are unchanged.
+- **Commits:** `9af3b5f` deps, `431de4a` theme tokens, `12555a0` field groups, sizes and placeholders, `7f3fb95` v5 baseline.
+
+**v4 → v5 differences** (the rest matches the v4 baseline within 1%):
+
+- **Field groups:** separate cells with a 4px gap and their own outlines; focus rings the focused cell; invalid groups turn every cell red.
+- **Icons in icon buttons:** v5's automatic sizing, 22px in 42px buttons (v4: 16px search/sort, 24px menu), 27.5px in the floating actions (v4: 24px plus, 20px sync), 15px in the trail buttons.
+- **Chips and badges:** v4's text-xs kept; chips have 8px between name and ratio, badges are bold pills.
+- **Field text:** 1px further left (v5's inline padding).
+
+Kept from v4 through v5's own variables: 42px fields and buttons, 42/28/53px icon buttons, gray-500 placeholders, round corners (no squircles), coffee primary as brand colour.
+
+**Status:** `pnpm migration:status --phase 3` exits 0 (`skeleton-v4-only` 0).
+
+**Gates:** before the baseline update, 11 of 72 screenshots differed from v4 beyond the tolerance, all reviewed (list above). `pnpm verify:strict` green 3 runs in a row: 194 unit, 128 e2e (a11y: no new violations), 72 visual.
+
+**PR:** [#192](https://github.com/Robin-w151/coffee-pal/pull/192) `feat: move to Skeleton v5 (migration phase 3)`, ready for review. Next is checkpoint 20 (Human): approve v5 and test the PWA on the phone. The Test workflow is still disabled, so Claude runs the suite against the production deploy locally (see story 18).
+
+## 2026-11-01 — Story 19: human review fixes
+
+The human named three issues in the v5 build, each fixed in its own commit:
+
+- **Outlined buttons too thick:** v5 makes `--default-border-width` the width of Tailwind's `border`, so the theme's 3px (from v2, unused in v4) applied. The theme sets 1px.
+- **Chip text too small:** first read as the calculator's chips (override removed, then text-base). The human meant the journal's ratio **badges** (v5: 80% of text-xs); `--badge-size` is text-xs again, and the chips stay at v4's text-xs.
+- **Tags input (aromas) broken:** v5's 12px delete trigger squeezed the wrapper's tags (the trigger holds the whole tag), so they overlapped. The trigger sizes to its content at v5's small button height, and the preview drops its button padding. The e2e tests hadn't caught it: they check the tags' text and colours, not their size.
+
+`pnpm verify` green (194 unit, 128 e2e); baseline regenerated, 72/72.
+
+## 2026-11-01 — Story 19: field cells and combobox empty state
+
+Two more issues from the human's review, one commit each:
+
+- **Fixed units centred:** v5 centres plain field-group cells, so the drip counter's "dpm" sat in the middle while select units start at the left. `field-group` label cells are left-aligned (icon and link cells fit their content, unchanged).
+- **Empty combobox popup:** typing a coffee with no match opened an empty popup. It now shows "No results found" as a disabled option, as v2's autocomplete did. A presentational item would have added an axe `aria-required-children` violation (a listbox needs options); the disabled option keeps axe clean. New e2e test (fails without the fix).
+
+`pnpm verify` green (194 unit, 129 e2e); baseline regenerated, 72/72.

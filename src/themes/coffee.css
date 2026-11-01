@@ -1,64 +1,111 @@
 /*
-  Coffee theme for Skeleton v4, converted by hand from the v2 `theme.ts` (story 14).
+  Coffee theme for Skeleton v5, converted by hand from the v2 `theme.ts` (story 14) and moved to
+  the v5 token names with the `skeleton-5` codemod's mapping (story 19).
 
-  v2 token                                   → v4 token
-  --theme-font-family-base: system-ui         → --base-font-family
-  --theme-font-family-heading: system-ui      → --heading-font-family
-  --theme-font-color-base: surface-900        → --base-font-color
-  --theme-font-color-dark: 255 255 255        → --base-font-color-dark
+  v2 token                                   → v5 token
+  --theme-font-family-base: system-ui         → --typo-base--font-family
+  --theme-font-family-heading: system-ui      → --typo-heading--font-family
+  --theme-font-color-base: surface-900        → --typo-base--color-light
+  --theme-font-color-dark: 255 255 255        → --typo-base--color-dark
   --theme-rounded-base: 16px                  → --radius-base
   --theme-rounded-container: 16px             → --radius-container
-  --theme-border-base: 3px                    → --default-border-width
+  --theme-border-base: 3px                    → --default-border-width: 1px (v5 makes it the width of
+                                                Tailwind's `border`; the fields' 3px is in app.css)
   --color-<name>-<shade>: R G B               → --color-<name>-<shade>: rgb(R G B)
   (no 950 shade in v2)                        → --color-<name>-950: 900 darkened by 10%
   --on-<name>: 255 255 255 | 0 0 0            → --color-<name>-contrast-light | -dark, mapped per
                                                 shade in --color-<name>-contrast-<shade>
-  h1–h6/a/button bold (app.css)               → --heading-font-weight: bold (app.css rule stays)
+  h1–h6/a/button bold (app.css)               → --typo-heading--font-weight: bold (app.css rule stays)
+
+  v5 tokens without a v4 counterpart use the codemod's defaults. `--corner-shape-*: initial` keeps
+  the round corners instead of v5's squircles, and the brand colour (the accent of checkboxes,
+  switches, sliders and filled presets) is coffee primary.
 
   Contrast: white (`contrast-light`) from shade 500 for primary, secondary, tertiary, error and
   surface, as v2's white `--on-*`; black from 50–700 for success and warning, as v2's black.
   Lighter shades of the white-text palettes use the palette's 950 for text.
-
-  Story 19 (v5) renames typography and background tokens (`--typo-*`, `--color-root-bg-*`);
-  this table is the starting point.
 */
 
 [data-theme='coffee'] {
   --spacing: 0.25rem;
   --text-scaling: 1;
-  --base-font-color: var(--color-surface-900);
-  --base-font-color-dark: rgb(255 255 255);
-  --base-font-family: system-ui;
-  --base-font-size: inherit;
-  --base-line-height: inherit;
-  --base-font-weight: normal;
-  --base-font-style: normal;
-  --base-letter-spacing: 0em;
-  --heading-font-color: inherit;
-  --heading-font-color-dark: inherit;
-  --heading-font-family: system-ui;
-  --heading-font-weight: bold;
-  --heading-font-style: normal;
-  --heading-letter-spacing: inherit;
-  --anchor-font-color: var(--color-primary-500);
-  --anchor-font-color-dark: var(--color-primary-400);
-  --anchor-font-family: inherit;
-  --anchor-font-size: inherit;
-  --anchor-line-height: inherit;
-  --anchor-font-weight: inherit;
-  --anchor-font-style: inherit;
-  --anchor-letter-spacing: inherit;
-  --anchor-text-decoration: none;
-  --anchor-text-decoration-hover: underline;
-  --anchor-text-decoration-active: none;
-  --anchor-text-decoration-focus: none;
-  --body-background-color: var(--color-surface-50);
-  --body-background-color-dark: var(--color-surface-950);
+  --typo-base--color-light: var(--color-surface-900);
+  --typo-base--color-dark: rgb(255 255 255);
+  --typo-base--font-family: system-ui;
+  --typo-base--font-size: inherit;
+  --typo-base--line-height: inherit;
+  --typo-base--font-weight: normal;
+  --typo-base--font-style: normal;
+  --typo-base--letter-spacing: 0em;
+  --typo-base--font-stretch: inherit;
+  --typo-base--font-kerning: inherit;
+  --typo-base--text-shadow: inherit;
+  --typo-base--word-spacing: inherit;
+  --typo-base--hyphens: inherit;
+  --typo-base--text-transform: inherit;
+  --typo-heading--font-family: system-ui;
+  --typo-heading--color-light: inherit;
+  --typo-heading--color-dark: inherit;
+  --typo-heading--font-weight: bold;
+  --typo-heading--font-style: normal;
+  --typo-heading--letter-spacing: inherit;
+  --typo-heading--font-stretch: inherit;
+  --typo-heading--font-kerning: inherit;
+  --typo-heading--text-shadow: inherit;
+  --typo-heading--word-spacing: inherit;
+  --typo-heading--hyphens: inherit;
+  --typo-heading--text-transform: inherit;
+  --typo-anchor--color-light: var(--color-primary-500);
+  --typo-anchor--color-dark: var(--color-primary-400);
+  --typo-anchor--font-family: inherit;
+  --typo-anchor--font-size: inherit;
+  --typo-anchor--line-height: inherit;
+  --typo-anchor--font-weight: inherit;
+  --typo-anchor--font-style: inherit;
+  --typo-anchor--letter-spacing: inherit;
+  --typo-anchor--font-stretch: inherit;
+  --typo-anchor--font-kerning: inherit;
+  --typo-anchor--text-shadow: inherit;
+  --typo-anchor--word-spacing: inherit;
+  --typo-anchor--hyphens: inherit;
+  --typo-anchor--text-transform: inherit;
+  --typo-anchor--text-decoration-line: none;
+  --typo-anchor--text-decoration-color: inherit;
+  --typo-anchor--text-decoration-style: inherit;
+  --typo-anchor--text-decoration-thickness: inherit;
+  --typo-anchor--text-underline-offset: inherit;
+  --typo-anchor--text-underline-position: inherit;
+  --typo-anchor--hover--text-decoration-line: underline;
+  --typo-anchor--hover--text-decoration-color: inherit;
+  --typo-anchor--hover--text-decoration-style: inherit;
+  --typo-anchor--hover--text-decoration-thickness: inherit;
+  --typo-anchor--hover--text-underline-offset: inherit;
+  --typo-anchor--hover--text-underline-position: inherit;
+  --typo-anchor--active--text-decoration-line: none;
+  --typo-anchor--active--text-decoration-color: inherit;
+  --typo-anchor--active--text-decoration-style: inherit;
+  --typo-anchor--active--text-decoration-thickness: inherit;
+  --typo-anchor--active--text-underline-offset: inherit;
+  --typo-anchor--active--text-underline-position: inherit;
+  --typo-anchor--focus--text-decoration-line: none;
+  --typo-anchor--focus--text-decoration-color: inherit;
+  --typo-anchor--focus--text-decoration-style: inherit;
+  --typo-anchor--focus--text-decoration-thickness: inherit;
+  --typo-anchor--focus--text-underline-offset: inherit;
+  --typo-anchor--focus--text-underline-position: inherit;
+  --color-root-bg-light: var(--color-surface-50);
+  --color-root-bg-dark: var(--color-surface-950);
+  --color-brand-light: var(--color-primary-500);
+  --color-brand-contrast-light: var(--color-primary-contrast-500);
+  --color-brand-dark: var(--color-primary-500);
+  --color-brand-contrast-dark: var(--color-primary-contrast-500);
   --radius-base: 16px;
   --radius-container: 16px;
-  --default-border-width: 3px;
-  --default-divide-width: 1px;
+  --default-border-width: 1px;
+  --default-outline-width: 1px;
   --default-ring-width: 1px;
+  --corner-shape-base: initial;
+  --corner-shape-container: initial;
 
   --color-primary-50: rgb(217 232 232);
   --color-primary-100: rgb(204 224 225);

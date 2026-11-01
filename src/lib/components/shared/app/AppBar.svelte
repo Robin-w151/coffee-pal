@@ -18,7 +18,7 @@
       title="App menu"
       onclick={handleMenuClick}
     >
-      <Icon data={faBars} scale={1.5} />
+      <Icon data={faBars} />
       <span class="sr-only">App menu</span>
     </button>
   {/snippet}

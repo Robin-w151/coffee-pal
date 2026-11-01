@@ -120,7 +120,7 @@ Decision 2026-10-23: Claude works on the phase branch and stops only at the Huma
 | 16  | [Overlays, lists and navigation on v4](16-overlays-navigation-v4.md)         | Claude | L    | 13             | Done   |
 | 17  | [Skeleton v4 cleanup and PR](17-v4-cleanup.md)                               | Claude | M    | 14, 15, 16     | Done   |
 | 18  | [Checkpoint: approve v4 and ship](18-checkpoint-v4.md)                       | Human  | S    | 12, 17         | Done   |
-| 19  | [Skeleton v5 upgrade](19-skeleton-v5.md)                                     | Claude | M    | 18             | Todo   |
+| 19  | [Skeleton v5 upgrade](19-skeleton-v5.md)                                     | Claude | M    | 18             | Done   |
 | 20  | [Checkpoint: approve v5 and test PWA on device](20-checkpoint-v5-and-pwa.md) | Human  | M    | 19             | Todo   |
 | 21  | [SvelteKit 3 readiness check](21-sveltekit-3-readiness.md)                   | Claude | S    | 20             | Todo   |
 | 22  | [SvelteKit 3 migration](22-sveltekit-3-migration.md)                         | Claude | L    | 21             | Todo   |

@@ -25,10 +25,7 @@
   }
 
   /* Field placeholders in v2's colour, the forms plugin's gray-500 in both modes, instead of
-     Skeleton's surface-700-300. */
-  .input::placeholder,
-  .textarea::placeholder,
-  .ig-input::placeholder,
+     Skeleton's surface-700-300. The field utilities take it from --field-placeholder (below). */
   [data-scope='combobox'][data-part='input']::placeholder,
   [data-scope='tags-input'][data-part='input']::placeholder {
     color: var(--color-gray-500);
@@ -52,13 +49,12 @@
    colour is set where Skeleton sets it: on the ring of the field utilities (below) and of the
    combobox and tags input (base layer, below), and on the border of the dropzone and segmented
    control (here). Fields get a surface 200 / 700 background, off the surface 100 / 800 cards (v4's
-   fields are transparent), like v2's fields stood off its cards, and 9px vertical padding, so they
-   are 42px tall like buttons (v4 has 0.25rem). */
+   fields are transparent), like v2's fields stood off its cards, and 9px vertical padding with a
+   24px line, so they are 42px tall like buttons (v5: 0.4375rem and a 16px line). */
 @layer components {
   .input,
   .textarea,
   .select,
-  .input-group,
   [data-scope='combobox'][data-part='input'],
   [data-scope='tags-input'][data-part='control'],
   [data-scope='file-upload'][data-part='dropzone'],
@@ -67,10 +63,12 @@
     background-color: var(--coffee-field-background);
   }
 
-  /* Input groups take the pairing from a variable: Skeleton's ring and divider rules for them come
-     after any override of their colours, and so would beat input-error too. */
-  .input-group {
-    --color-surface-200-800: var(--color-surface-400-600);
+  /* The plain cells of field groups (units, icons, links) look like the fields next to them (v5's
+     have no background or outline). */
+  .field-group > .label {
+    --tw-ring-color: var(--color-surface-400-600);
+    background-color: var(--coffee-field-background);
+    box-shadow: inset 0 0 0 3px var(--tw-ring-color);
   }
 
   [data-scope='file-upload'][data-part='dropzone'],
@@ -143,56 +141,31 @@
   --tw-ring-color: var(--color-surface-400-600);
   background-color: var(--coffee-field-background);
   padding-block: 9px;
+  line-height: var(--text-base--line-height);
 }
 @utility select {
   --tw-ring-color: var(--color-surface-400-600);
   background-color: var(--coffee-field-background);
   padding-block: 9px;
+  line-height: var(--text-base--line-height);
 }
 @utility textarea {
   --tw-ring-color: var(--color-surface-400-600);
   background-color: var(--coffee-field-background);
   padding-block: 9px;
+  line-height: var(--text-base--line-height);
 }
 
-/* Input groups show focus on the group's outline, around all its cells, instead of a 1px ring (from
-   the forms plugin) on the focused child. The outline is drawn on ::after, above the cells, as the
-   cells' divider borders would otherwise cut through it. */
-@utility input-group {
-  position: relative;
-
-  &::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    pointer-events: none;
-    /* Tailwind registers --tw-ring-color as non-inheriting. */
-    --tw-ring-color: inherit;
-    box-shadow: inset 0 0 0 var(--default-ring-width) var(--tw-ring-color);
-  }
-
-  &:focus-within {
-    --tw-ring-color: var(--color-primary-500);
-  }
-}
-@utility ig-input {
-  padding-block: 9px;
-
-  &:focus {
-    box-shadow: none;
-  }
-}
-@utility ig-select {
-  padding-block: 9px;
-
-  &:focus {
-    box-shadow: none;
+/* Plain field-group cells start their text at the left, like the units in the selects next to
+   them (v5 centres them). Icon and link cells fit their content, so this doesn't move them. */
+@utility field-group {
+  & > .label {
+    justify-content: flex-start;
   }
 }
 
-/* Invalid form fields, on .input and .input-group (v2's input-error, in its colours for both modes;
-   v4 has no input states). The input group's cells inherit the text colour. */
+/* Invalid form fields, on .input and .field-group (v2's input-error, in its colours for both modes;
+   Skeleton has no input states). */
 @utility input-error {
   --coffee-field-background: var(--color-error-200);
   --tw-ring-color: var(--color-error-500);
@@ -204,9 +177,14 @@
     --tw-ring-color: var(--color-error-500);
   }
 
-  /* The input group's dividers. */
-  & > * + * {
-    border-color: var(--color-error-500);
+  /* The field group's cells, which set their own ring and text colour. */
+  & > .input,
+  & > .select,
+  & > .label,
+  & > .input:focus,
+  & > .select:focus {
+    --tw-ring-color: var(--color-error-500);
+    color: var(--color-error-500);
   }
 
   &::placeholder,
@@ -353,73 +331,49 @@
   }
 }
 
-/* Buttons in v2's sizes (v4's are smaller: 32px tall buttons, 24/32/44px icon buttons) and v2's
-   press animation. Icon buttons are fixed squares, as in v2; 42px (v2: 43px) like buttons and
-   fields. */
+/* Buttons in v2's sizes (v5's are smaller: 30px tall buttons, 30/34px icon buttons) and v2's
+   press animation. */
 @utility btn {
   padding: 9px --spacing(5);
+  line-height: var(--text-base--line-height);
 
   /* Pressed buttons shrink a little, as in v2. */
   &:not(:disabled):active {
     scale: 95%;
   }
 }
+
+/* Icon buttons as v2's fixed squares, 42px (v2: 43px) like buttons and fields. v5 derives the square
+   (2 × size − 2px) and the icon (size × size) from --btn-size. */
 @utility btn-icon {
-  box-sizing: border-box;
-  width: 42px;
-  height: 42px;
-  padding: 0;
+  --btn-size: 22px;
 
   &:not(:disabled):active {
     scale: 95%;
   }
 }
-/* Only used for the buttons inside 40px fields, which v2's 33px nearly filled. */
+/* 28px, only used for the buttons inside 42px fields, which v2's 33px nearly filled. */
 @utility btn-icon-sm {
-  width: 28px;
-  height: 28px;
-  padding: 0;
+  --btn-size: 15px;
 }
+/* 53px, the floating page actions. */
 @utility btn-icon-lg {
-  width: 53px;
-  height: 53px;
-  padding: 0;
+  --btn-size: 27.5px;
 }
 
-/* Icon buttons fade on hover like .btn (Skeleton's btn-icon has no transition). Tailwind merges this
-   into Skeleton's btn-icon. */
-@utility btn-icon {
-  transition-property:
-    color,
-    background-color,
-    border-color,
-    outline-color,
-    text-decoration-color,
-    fill,
-    stroke,
-    --tw-gradient-from,
-    --tw-gradient-via,
-    --tw-gradient-to,
-    opacity,
-    box-shadow,
-    transform,
-    translate,
-    scale,
-    rotate,
-    filter,
-    -webkit-backdrop-filter,
-    backdrop-filter,
-    display,
-    content-visibility,
-    overlay,
-    pointer-events;
-  transition-timing-function: var(--default-transition-timing-function);
-  transition-duration: var(--default-transition-duration);
+/* Chips and badges in v4's extra small text (v5: small chips, badges at 80% of extra small, which
+   made the journal's ratio badges hard to read). */
+@utility chip {
+  --chip-size: var(--text-xs);
+}
+@utility badge {
+  --badge-size: var(--text-xs);
 }
 
 /* Global variables */
 :root {
   --coffee-view-transition-duration: 100ms;
+  --field-placeholder: var(--color-gray-500);
   /* Surface 200 in light mode and 700 in dark mode (as in v2), which isn't one of the theme's pairings. */
   --coffee-field-background: light-dark(var(--color-surface-200), var(--color-surface-700));
 }

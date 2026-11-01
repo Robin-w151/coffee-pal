@@ -77,14 +77,14 @@
       <MeasurementInput {units} bind:measurement={waterMeasurement} />
     </Label>
     <Label text="Target drip rate">
-      <div class="input-group grid-cols-[1fr_auto] [&_.ig-input]:min-w-40 [&_.ig-cell]:min-w-24">
+      <div class="field-group grid-cols-[1fr_auto] [&_.input]:min-w-40 [&_.label]:min-w-24">
         <input
-          class="ig-input"
+          class="input"
           type="number"
           placeholder="Target drip rate, e.g. 60dpm"
           bind:value={targetDropsPerMinute}
         />
-        <div class="ig-cell justify-start px-3 text-base">dpm</div>
+        <div class="label text-base">dpm</div>
       </div>
     </Label>
   </Form>
