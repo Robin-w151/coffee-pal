@@ -8,6 +8,7 @@ const RESULTS_DIR = 'test-results';
 const OUTPUT_FILE = join(RESULTS_DIR, 'visual-review.html');
 // Written by the JSON reporter in playwright.visual.config.ts.
 const TEST_RESULTS_FILE = join(RESULTS_DIR, 'visual-results.json');
+const GIT_OPTIONS = { stdio: ['ignore', 'pipe', 'inherit'], maxBuffer: 64 * 1024 * 1024 };
 
 /**
  * Builds test-results/visual-review.html.
@@ -78,14 +79,9 @@ function findActual(baseline) {
 
 // Git errors (e.g. an unknown ref) end the script, rather than reporting every screenshot as new.
 function compareWithRef(ref, baselines) {
-  try {
-    git(['rev-parse', '--verify', '--quiet', `${ref}^{commit}`]);
-  } catch {
-    console.error(`Unknown git ref: ${ref}`);
-    process.exit(1);
-  }
+  const commit = resolveCommit(ref);
   const refPaths = new Set(
-    git(['ls-tree', '-r', '--name-only', ref, '--', SCREENSHOTS_DIR])
+    git(['ls-tree', '-r', '--name-only', commit, '--', SCREENSHOTS_DIR])
       .toString()
       .split('\n')
       .filter((path) => path.endsWith('.png')),
@@ -101,7 +97,7 @@ function compareWithRef(ref, baselines) {
         path,
         status: 'removed',
         images: [
-          [ref, dataSrc(git(['show', `${ref}:${path}`]))],
+          [ref, dataSrc(git(['show', `${commit}:${path}`]))],
           ['Working tree', null],
         ],
       };
@@ -120,7 +116,7 @@ function compareWithRef(ref, baselines) {
       };
     }
 
-    const previous = git(['show', `${ref}:${baseline.path}`]);
+    const previous = git(['show', `${commit}:${baseline.path}`]);
     if (previous.equals(current)) {
       return { ...baseline, status: 'unchanged', images: [['Working tree', dataSrc(current)]] };
     }
@@ -139,12 +135,28 @@ function compareWithRef(ref, baselines) {
   );
 }
 
+// The ref comes from the command line: only its commit hash is passed on to git, so it can't add
+// options to the later commands.
+function resolveCommit(ref) {
+  let commit = '';
+  if (!ref.startsWith('-')) {
+    try {
+      commit = git(['rev-parse', '--verify', '--quiet', '--end-of-options', `${ref}^{commit}`])
+        .toString()
+        .trim();
+    } catch {
+      // Not a commit: reported below.
+    }
+  }
+  if (!/^[0-9a-f]{40,64}$/.test(commit)) {
+    console.error(`Unknown git ref: ${ref}`);
+    process.exit(1);
+  }
+  return commit;
+}
+
 function git(args) {
-  // NOSONAR: dev script, git from PATH
-  return execFileSync('git', args, {
-    stdio: ['ignore', 'pipe', 'inherit'],
-    maxBuffer: 64 * 1024 * 1024,
-  });
+  return execFileSync('git', args, GIT_OPTIONS); // NOSONAR: dev script, the developer's git from PATH
 }
 
 // Failed tests without an -actual.png never compared their screenshot, so its baseline would wrongly
