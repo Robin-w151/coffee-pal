@@ -9,7 +9,8 @@
   --theme-font-color-dark: 255 255 255        → --typo-base--color-dark
   --theme-rounded-base: 16px                  → --radius-base
   --theme-rounded-container: 16px             → --radius-container
-  --theme-border-base: 3px                    → --default-border-width
+  --theme-border-base: 3px                    → --default-border-width: 1px (v5 makes it the width of
+                                                Tailwind's `border`; the fields' 3px is in app.css)
   --color-<name>-<shade>: R G B               → --color-<name>-<shade>: rgb(R G B)
   (no 950 shade in v2)                        → --color-<name>-950: 900 darkened by 10%
   --on-<name>: 255 255 255 | 0 0 0            → --color-<name>-contrast-light | -dark, mapped per
@@ -100,7 +101,7 @@
   --color-brand-contrast-dark: var(--color-primary-contrast-500);
   --radius-base: 16px;
   --radius-container: 16px;
-  --default-border-width: 3px;
+  --default-border-width: 1px;
   --default-outline-width: 1px;
   --default-ring-width: 1px;
   --corner-shape-base: initial;
