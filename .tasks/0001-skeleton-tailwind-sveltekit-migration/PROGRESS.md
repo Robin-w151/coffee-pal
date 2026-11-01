@@ -462,3 +462,11 @@ Two more issues from the human's review, one commit each:
 - **Empty combobox popup:** typing a coffee with no match opened an empty popup. It now shows "No results found" as a disabled option, as v2's autocomplete did. A presentational item would have added an axe `aria-required-children` violation (a listbox needs options); the disabled option keeps axe clean. New e2e test (fails without the fix).
 
 `pnpm verify` green (194 unit, 129 e2e); baseline regenerated, 72/72.
+
+## 2026-11-01 — Story 20: v5 approved and shipped (Done)
+
+The human approved the v5 look and baseline; preview touch test and installed-PWA checks (update, settings and sync unchanged, offline reload, back online) passed. PR #192 squash-merged as `8682872`; release `0.34.0` (`a2f650c`) deployed to production. `main` runs Skeleton 5.0.1 with the v5 screenshot baseline, so `pnpm verify:strict` is the gate from here.
+
+**Production check:** CI green on the merge commit. With the Test workflow still disabled, the suite ran locally against `https://coffee-pal.vercel.app`: 128 passed.
+
+**Next:** phase 4 (SvelteKit 3) waits for the human's go; story 21 (readiness check) starts when asked.

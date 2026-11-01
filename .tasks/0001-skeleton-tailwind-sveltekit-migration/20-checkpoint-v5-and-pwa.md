@@ -2,7 +2,7 @@
 
 **Epic:** [0001 Migrate to Skeleton v5, Tailwind v4 and SvelteKit 3](README.md)
 **Owner:** Human
-**Status:** Todo
+**Status:** Done
 **Depends on:** 19
 **Size:** M — a look review, a release, and a real-device PWA test (install, offline, update), which Claude can't do.
 
@@ -18,9 +18,9 @@ Look approval and real-device testing need you. This also approves the new scree
 
 #### Prerequisites
 
-- [ ] Story 19 done; PR `migration/3-skeleton-v5` ready; CI green.
-- [ ] Your phone with Coffee Pal installed as a PWA (home screen), with real data.
-- [ ] A desktop browser for a quick check.
+- [x] Story 19 done; PR `migration/3-skeleton-v5` ready; CI green.
+- [x] Your phone with Coffee Pal installed as a PWA (home screen), with real data.
+- [x] A desktop browser for a quick check.
 
 #### Steps
 
@@ -67,9 +67,17 @@ No data format changes in phase 3.
 
 ## Acceptance criteria
 
-- [ ] Given the PR preview, when it's used with touch on the human's phone, then the step 3 flow works.
-- [ ] Given the v5 release, when the installed PWA is used on the human's phone, then device checks 6.1–6.4 pass.
-- [ ] The new screenshot baseline is merged to `main` and approved.
+- [x] Given the PR preview, when it's used with touch on the human's phone, then the step 3 flow works.
+- [x] Given the v5 release, when the installed PWA is used on the human's phone, then device checks 6.1–6.4 pass.
+- [x] The new screenshot baseline is merged to `main` and approved.
+
+### Result (2026-11-01)
+
+The human approved the v5 look and baseline, and reported the preview touch test and the installed-PWA checks 6.1–6.4 as passed. PR #192 was squash-merged as `8682872` (`feat: move to Skeleton v5 (migration phase 3)`); CI was green on the merge commit, and semantic-release cut `0.34.0` (`a2f650c`), which Vercel deployed to production. `package.json` on `main`: `@skeletonlabs/skeleton` and `@skeletonlabs/skeleton-svelte` 5.0.1; production serves the v5 stylesheet.
+
+The Test workflow is still disabled (Vercel usage limit), so Claude ran the suite locally against production (`TEST_BASE_URL=https://coffee-pal.vercel.app npx playwright test`): 128 passed (the 129th test is local-preview only).
+
+Phase 4: not yet; the human decides when story 21 starts.
 
 ## Technical notes
 
