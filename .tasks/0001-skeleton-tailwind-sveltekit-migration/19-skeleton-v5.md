@@ -49,6 +49,8 @@ Follow the [v4 → v5 guide](https://www.skeleton.dev/docs/svelte/get-started/mi
 - **Sizes:** v5 sizes fields, buttons and chips from one variable with a line as tall as the text. Fields and buttons keep 42px with a 24px line. Icon buttons keep 42/28/53px through `--btn-size` (22/15/27.5px), so their icons follow v5's automatic sizing and the manual `scale` props in buttons are gone; there are no `size-elem-*` utilities in 5.0.1. Chips and badges keep v4's `text-xs` through `--chip-size` and `--badge-size` (v5's badges at 9.6px made the journal ratios hard to read). Blocks that only set custom properties land after Skeleton's rules, so these don't depend on rule order (the old fixed `btn-icon` sizes lost to v5's).
 - **Borders:** the theme's `--default-border-width` is 1px: v5 makes it the width of Tailwind's `border` (3px made outlined buttons thick).
 - **Tags input:** v5's delete trigger is a fixed 12px; the wrapper's trigger holds the whole tag, so it gets `size-auto` and padding, and the preview drops its button padding.
+- **Field-group cells:** plain (`label`) cells are left-aligned like the select units; v5 centres them.
+- **Combobox:** with no matching option, the popup shows "No results found" as a disabled option (v2's empty state; a listbox needs option children).
 - **Placeholders:** v5 colours them through `--field-placeholder`, now gray-500 in `:root`.
 - **Gates:** `migration:status --phase 3` exits 0; `pnpm verify:strict` green 3× (194 unit, 128 e2e incl. a11y, 72 visual); new baseline `7f3fb95`. PR [#192](https://github.com/Robin-w151/coffee-pal/pull/192).
 

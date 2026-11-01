@@ -453,3 +453,12 @@ The human named three issues in the v5 build, each fixed in its own commit:
 - **Tags input (aromas) broken:** v5's 12px delete trigger squeezed the wrapper's tags (the trigger holds the whole tag), so they overlapped. The trigger sizes to its content at v5's small button height, and the preview drops its button padding. The e2e tests hadn't caught it: they check the tags' text and colours, not their size.
 
 `pnpm verify` green (194 unit, 128 e2e); baseline regenerated, 72/72.
+
+## 2026-11-01 — Story 19: field cells and combobox empty state
+
+Two more issues from the human's review, one commit each:
+
+- **Fixed units centred:** v5 centres plain field-group cells, so the drip counter's "dpm" sat in the middle while select units start at the left. `field-group` label cells are left-aligned (icon and link cells fit their content, unchanged).
+- **Empty combobox popup:** typing a coffee with no match opened an empty popup. It now shows "No results found" as a disabled option, as v2's autocomplete did. A presentational item would have added an axe `aria-required-children` violation (a listbox needs options); the disabled option keeps axe clean. New e2e test (fails without the fix).
+
+`pnpm verify` green (194 unit, 129 e2e); baseline regenerated, 72/72.
