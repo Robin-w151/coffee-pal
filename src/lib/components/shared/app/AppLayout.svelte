@@ -1,6 +1,6 @@
 <script lang="ts">
   import { afterNavigate, onNavigate } from '$app/navigation';
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
   import AppBar from '$lib/components/shared/app/AppBar.svelte';
   import AppMenu from '$lib/components/shared/app/AppMenu.svelte';
   import AppRail from '$lib/components/shared/app/AppRail.svelte';
@@ -63,7 +63,7 @@
   });
 
   function handlePageScroll(event: Event & { currentTarget: HTMLElement }): void {
-    rememberScrollPosition($page.url.pathname, event.currentTarget.scrollTop);
+    rememberScrollPosition(page.url.pathname, event.currentTarget.scrollTop);
   }
 </script>
 
