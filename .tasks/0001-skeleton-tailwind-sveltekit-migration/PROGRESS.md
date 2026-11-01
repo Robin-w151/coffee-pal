@@ -397,3 +397,17 @@ The human went through the app screen by screen (desktop and iPhone PWA) and nam
 **Gates:** `pnpm verify` green: 194 unit, 127 e2e. A11y: no new violations. The visual baseline is still v2's (updated after checkpoint 18).
 
 **PR:** [#189](https://github.com/Robin-w151/coffee-pal/pull/189) `feat: move to Tailwind v4 and Skeleton v4 (migration phase 2)`, ready for review. Story 17 is done; next is checkpoint 18 (Human): approve v4 and ship.
+
+## 2026-11-01 — Story 18: PR review fixes, v4 approved, v4 baseline
+
+**PR review fixes** on [#189](https://github.com/Robin-w151/coffee-pal/pull/189), one commit each:
+
+- **Sonar:** `input-error` without `!important` (it sets the field background and ring variables, with its own `:focus` rule); the journal sort options as a type alias; the visual review passes only a resolved commit hash to git (`--base` could have added git options) and has `NOSONAR` on the `execFileSync` line itself. The 18 `css:S8776` issues (`&` inside `@utility`) were marked false positive by the human in SonarCloud.
+- **CodeRabbit:** combobox options take an optional `id` as key and value: two coffees with the same name and roaster broke the suggestion list (duplicate each key), new e2e test. The visual review lists tests that failed before their screenshot (JSON reporter), shows screenshots removed since `--base`, and stops on git errors instead of marking everything new.
+- **Human's comments:** field outlines set their colour where Skeleton does (ring or border) instead of redefining `surface-200-800`; only input groups keep the variable, as Skeleton's group rules come after any override and would beat `input-error`. All 72 visual screens unchanged. `md:border-t-0` on the calculator's `<hr>`/`vr` explained (the `<hr>`'s own top border), no change.
+
+**Approval:** the human accepted the v4 look in chat.
+
+**Baseline:** `pnpm test:visual:update` on `migration/2-skeleton-v4`: 61 of 72 screenshots changed (the rest were within the tolerance already); a second `pnpm test:visual:run` passes 72/72 against it. `pnpm verify` green: 194 unit, 128 e2e.
+
+**Next:** the human squash-merges #189 (runbook step 5), checks the release and production deploy, and smoke-tests the PWA (step 6).
