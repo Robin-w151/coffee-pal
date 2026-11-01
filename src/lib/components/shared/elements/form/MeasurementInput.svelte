@@ -76,11 +76,10 @@
 </script>
 
 <div
-  class="input-group grid-cols-[1fr_auto] [&_.ig-input]:min-w-40 [&_.ig-select]:min-w-24 {clazz ??
-    ''}"
+  class="field-group grid-cols-[1fr_auto] [&_.input]:min-w-40 [&_.select]:min-w-24 {clazz ?? ''}"
 >
   <input
-    class="ig-input"
+    class="input"
     type="number"
     step="0.1"
     {placeholder}
@@ -93,7 +92,7 @@
     {onkeydown}
     {onkeyup}
   />
-  <select class="ig-select" bind:value={measurement.unit}>
+  <select class="select" bind:value={measurement.unit}>
     {#each units as unit (unit.label)}
       <option value={unit}>{unit.label}</option>
     {/each}
