@@ -433,13 +433,23 @@ Branch `migration/3-skeleton-v5` from `main`; Skeleton and skeleton-svelte 5.0.1
 
 - **Field groups:** separate cells with a 4px gap and their own outlines; focus rings the focused cell; invalid groups turn every cell red.
 - **Icons in icon buttons:** v5's automatic sizing, 22px in 42px buttons (v4: 16px search/sort, 24px menu), 27.5px in the floating actions (v4: 24px plus, 20px sync), 15px in the trail buttons.
-- **Chips:** 8px between name and ratio.
+- **Chips:** v5's text-sm (v4: xs), 8px between name and ratio.
 - **Field text:** 1px further left (v5's inline padding).
 
-Kept from v4 through v5's own variables: 42px fields and buttons, 42/28/53px icon buttons, xs chips, gray-500 placeholders, round corners (no squircles), coffee primary as brand colour.
+Kept from v4 through v5's own variables: 42px fields and buttons, 42/28/53px icon buttons, gray-500 placeholders, round corners (no squircles), coffee primary as brand colour.
 
 **Status:** `pnpm migration:status --phase 3` exits 0 (`skeleton-v4-only` 0).
 
 **Gates:** before the baseline update, 11 of 72 screenshots differed from v4 beyond the tolerance, all reviewed (list above). `pnpm verify:strict` green 3 runs in a row: 194 unit, 128 e2e (a11y: no new violations), 72 visual.
 
 **PR:** [#192](https://github.com/Robin-w151/coffee-pal/pull/192) `feat: move to Skeleton v5 (migration phase 3)`, ready for review. Next is checkpoint 20 (Human): approve v5 and test the PWA on the phone. The Test workflow is still disabled, so Claude runs the suite against the production deploy locally (see story 18).
+
+## 2026-11-01 — Story 19: human review fixes
+
+The human named three issues in the v5 build, each fixed in its own commit:
+
+- **Outlined buttons too thick:** v5 makes `--default-border-width` the width of Tailwind's `border`, so the theme's 3px (from v2, unused in v4) applied. The theme sets 1px.
+- **Chip text too small:** the `--chip-size: text-xs` override is gone; chips use v5's text-sm.
+- **Tags input (aromas) broken:** v5's 12px delete trigger squeezed the wrapper's tags (the trigger holds the whole tag), so they overlapped. The trigger sizes to its content at v5's small button height, and the preview drops its button padding. The e2e tests hadn't caught it: they check the tags' text and colours, not their size.
+
+`pnpm verify` green (194 unit, 128 e2e); baseline regenerated, 72/72.
