@@ -20,7 +20,7 @@ Merging releases to production, and the device/Docker checks are outside Claude'
 
 - [ ] Story 22 done; PR `migration/4-sveltekit-3` ready; CI green.
 - [ ] Phone with the installed PWA.
-- [ ] (If you use the Bun Docker image) Docker running locally, or access to wherever [image.yaml](../../.github/workflows/image.yaml) publishes.
+- [ ] (If you use the Docker image) Docker running locally, or access to wherever [image.yaml](../../.github/workflows/image.yaml) publishes.
 
 #### Steps
 
@@ -34,7 +34,7 @@ Merging releases to production, and the device/Docker checks are outside Claude'
    ```sh
    docker build -f d.build.Dockerfile -t coffee-pal:sk3 . && docker run --rm -p 3000:3000 coffee-pal:sk3
    ```
-   Open http://localhost:3000 (the Dockerfile has `EXPOSE 3000` and `CMD ["bun", "index.js"]`).
+   Open http://localhost:3000 (the Dockerfile has `EXPOSE 3000` and `CMD ["node", "build"]`; since story 22 the image runs on `node:24-slim` instead of Bun).
    **Expected:** the app loads.
    If you publish the image: GitHub → `Actions → Image → Run workflow` (it builds the latest version tag, i.e. this release; it never runs on its own).
    **Expected:** the workflow is green and the image is pushed.

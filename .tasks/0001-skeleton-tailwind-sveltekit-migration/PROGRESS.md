@@ -528,7 +528,7 @@ Alternatives to `svelte-adapter-bun`: the official [`@sveltejs/adapter-bun`](htt
 
 Story 22 waits for both decisions.
 
-## 2026-11-04 — Story 22: SvelteKit 3 migration (in progress, Docker blocked)
+## 2026-11-04 — Story 22: SvelteKit 3 migration
 
 The human decided story 21's open points: official `@sveltejs/adapter-bun`, and `@vite-pwa/sveltekit` 2.0.0 is ready.
 
@@ -539,4 +539,6 @@ The human decided story 21's open points: official `@sveltejs/adapter-bun`, and 
 
 **Gates:** `pnpm migration:status --phase 4` exits 0 (`sveltekit-2` 0). `pnpm verify:strict` green: svelte-check 0/0, 194 unit, 129 e2e (PWA test included), 72 visual identical to the v5 baseline. Build: `service-worker.js` with 73 precached entries. `pnpm dev`: pages, inspector module and the default 404 page work.
 
-**Blocked: Docker build with the Bun adapter.** `@sveltejs/adapter-bun` requires the whole build to run under Bun (`bun run --bun build`), and `@vite-pwa/sveltekit` 2.0.0 imports `findPackageJSON` from `node:module`, which Bun 1.4.4 doesn't implement: `docker build -f d.build.Dockerfile .` fails while loading `vite.config.ts`. The Dockerfile change (no `svelte.config.js`, `bun run --bun build`) is left uncommitted until the human decides. Production (Vercel, adapter-auto) is not affected.
+**Docker: Bun adapter dropped for adapter-node.** `@sveltejs/adapter-bun` requires the whole build to run under Bun (`bun run --bun build`), and `@vite-pwa/sveltekit` 2.0.0 imports `findPackageJSON` from `node:module`, which Bun 1.4.4 doesn't implement, so `docker build` failed while loading `vite.config.ts`. The human chose `@sveltejs/adapter-node` 6.0.1 and no Bun in the image (`adapter-static` was considered: it would need an SPA fallback for the four routes that aren't prerendered and would lose real 404s). [d.build.Dockerfile](../../d.build.Dockerfile) now uses `node:24-slim`, `pnpm install --frozen-lockfile` (pnpm via corepack, `HUSKY=0`), `USE_ADAPTER_NODE=true pnpm build`, and runs `node build`. All packages are devDependencies and get bundled, so the run stage only needs `build/` and `package.json` (for `"type": "module"`). Check: the image builds (73 precache entries), and the container answers 200 for `/`, `/calculator`, `/journal/new`, `/journal/abc`, `/my-coffees/xyz`, `/service-worker.js` and `/manifest.webmanifest`, and 404 for `/does-not-exist`. Production (Vercel, adapter-auto) is not affected. `.vscode/launch.json` still has a "Dev (bun)" launch entry; it is left alone, as it isn't part of the image.
+
+**Final gates (`90ba027`):** `pnpm verify:strict` green 3 runs in a row (svelte-check 0/0, 194 unit, 129 e2e, 72 visual identical); `pnpm migration:status --phase 4` exits 0; Docker image builds and serves. PR [#193](https://github.com/Robin-w151/coffee-pal/pull/193) is open and ready, titled `chore(deps): upgrade to SvelteKit 3 (migration phase 4)`. Story 22 done; story 23 (human checkpoint) is next.
