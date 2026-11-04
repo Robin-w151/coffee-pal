@@ -100,31 +100,31 @@ Decision 2026-10-23: Claude works on the phase branch and stops only at the Huma
 
 ## Stories
 
-| #   | Story                                                                        | Owner  | Size | Depends on     | Status  |
-| --- | ---------------------------------------------------------------------------- | ------ | ---- | -------------- | ------- |
-| 01  | [Verify and migration-status scripts](01-verify-and-status-scripts.md)       | Claude | S    | –              | Done    |
-| 02  | [E2e tests for app shell and overlays](02-app-shell-e2e-tests.md)            | Claude | M    | 01             | Done    |
-| 03  | [E2e tests for form controls](03-form-control-e2e-tests.md)                  | Claude | M    | 01             | Done    |
-| 04  | [Visual and accessibility baseline](04-visual-and-a11y-baseline.md)          | Claude | M    | 01             | Done    |
-| 05  | [Checkpoint: approve safety net](05-checkpoint-safety-net.md)                | Human  | S    | 02, 03, 04     | Done    |
-| 06  | [Persisted state with runed](06-persisted-state-runed.md)                    | Claude | M    | 05             | Done    |
-| 07  | [Own app layout instead of AppShell](07-own-app-layout.md)                   | Claude | M    | 05             | Done    |
-| 08  | [Overlay services and hosts](08-overlay-services.md)                         | Claude | L    | 05             | Done    |
-| 09  | [Form control wrappers](09-form-control-wrappers.md)                         | Claude | M    | 05             | Done    |
-| 10  | [List and navigation wrappers](10-list-navigation-wrappers.md)               | Claude | M    | 07, 08         | Done    |
-| 11  | [Stylesheet preparation](11-stylesheet-preparation.md)                       | Claude | M    | 06, 08, 09, 10 | Done    |
-| 12  | [Merge phase 1 and check production data](12-merge-phase-1.md)               | Human  | S    | 11             | Done    |
-| 13  | [Tailwind v4 and Skeleton codemods](13-tailwind-v4-and-codemods.md)          | Claude | L    | 11             | Done    |
-| 14  | [Coffee theme for Skeleton v4](14-coffee-theme-v4.md)                        | Claude | M    | 13             | Done    |
-| 15  | [Form control wrappers on v4](15-form-controls-v4.md)                        | Claude | M    | 13             | Done    |
-| 16  | [Overlays, lists and navigation on v4](16-overlays-navigation-v4.md)         | Claude | L    | 13             | Done    |
-| 17  | [Skeleton v4 cleanup and PR](17-v4-cleanup.md)                               | Claude | M    | 14, 15, 16     | Done    |
-| 18  | [Checkpoint: approve v4 and ship](18-checkpoint-v4.md)                       | Human  | S    | 12, 17         | Done    |
-| 19  | [Skeleton v5 upgrade](19-skeleton-v5.md)                                     | Claude | M    | 18             | Done    |
-| 20  | [Checkpoint: approve v5 and test PWA on device](20-checkpoint-v5-and-pwa.md) | Human  | M    | 19             | Done    |
-| 21  | [SvelteKit 3 readiness check](21-sveltekit-3-readiness.md)                   | Claude | S    | 20             | Done    |
-| 22  | [SvelteKit 3 migration](22-sveltekit-3-migration.md)                         | Claude | L    | 21             | Blocked |
-| 23  | [Checkpoint: approve SvelteKit 3 and ship](23-checkpoint-sveltekit-3.md)     | Human  | S    | 22             | Todo    |
+| #   | Story                                                                        | Owner  | Size | Depends on     | Status      |
+| --- | ---------------------------------------------------------------------------- | ------ | ---- | -------------- | ----------- |
+| 01  | [Verify and migration-status scripts](01-verify-and-status-scripts.md)       | Claude | S    | –              | Done        |
+| 02  | [E2e tests for app shell and overlays](02-app-shell-e2e-tests.md)            | Claude | M    | 01             | Done        |
+| 03  | [E2e tests for form controls](03-form-control-e2e-tests.md)                  | Claude | M    | 01             | Done        |
+| 04  | [Visual and accessibility baseline](04-visual-and-a11y-baseline.md)          | Claude | M    | 01             | Done        |
+| 05  | [Checkpoint: approve safety net](05-checkpoint-safety-net.md)                | Human  | S    | 02, 03, 04     | Done        |
+| 06  | [Persisted state with runed](06-persisted-state-runed.md)                    | Claude | M    | 05             | Done        |
+| 07  | [Own app layout instead of AppShell](07-own-app-layout.md)                   | Claude | M    | 05             | Done        |
+| 08  | [Overlay services and hosts](08-overlay-services.md)                         | Claude | L    | 05             | Done        |
+| 09  | [Form control wrappers](09-form-control-wrappers.md)                         | Claude | M    | 05             | Done        |
+| 10  | [List and navigation wrappers](10-list-navigation-wrappers.md)               | Claude | M    | 07, 08         | Done        |
+| 11  | [Stylesheet preparation](11-stylesheet-preparation.md)                       | Claude | M    | 06, 08, 09, 10 | Done        |
+| 12  | [Merge phase 1 and check production data](12-merge-phase-1.md)               | Human  | S    | 11             | Done        |
+| 13  | [Tailwind v4 and Skeleton codemods](13-tailwind-v4-and-codemods.md)          | Claude | L    | 11             | Done        |
+| 14  | [Coffee theme for Skeleton v4](14-coffee-theme-v4.md)                        | Claude | M    | 13             | Done        |
+| 15  | [Form control wrappers on v4](15-form-controls-v4.md)                        | Claude | M    | 13             | Done        |
+| 16  | [Overlays, lists and navigation on v4](16-overlays-navigation-v4.md)         | Claude | L    | 13             | Done        |
+| 17  | [Skeleton v4 cleanup and PR](17-v4-cleanup.md)                               | Claude | M    | 14, 15, 16     | Done        |
+| 18  | [Checkpoint: approve v4 and ship](18-checkpoint-v4.md)                       | Human  | S    | 12, 17         | Done        |
+| 19  | [Skeleton v5 upgrade](19-skeleton-v5.md)                                     | Claude | M    | 18             | Done        |
+| 20  | [Checkpoint: approve v5 and test PWA on device](20-checkpoint-v5-and-pwa.md) | Human  | M    | 19             | Done        |
+| 21  | [SvelteKit 3 readiness check](21-sveltekit-3-readiness.md)                   | Claude | S    | 20             | Done        |
+| 22  | [SvelteKit 3 migration](22-sveltekit-3-migration.md)                         | Claude | L    | 21             | In progress |
+| 23  | [Checkpoint: approve SvelteKit 3 and ship](23-checkpoint-sveltekit-3.md)     | Human  | S    | 22             | Todo        |
 
 **Size overview:** 6×S, 13×M, 4×L. Claude: 2×S, 12×M, 4×L. Human: 4×S, 1×M. Largest risks: 08 (overlay services, since v4 drops the store-based modal/toast/drawer model), 13 (Tailwind v4 + two codemods at once, the moment the app breaks), 16 (rewriting the most interactive components on Zag.js-based v4 components), 22 (SvelteKit 3 plus the PWA tooling).
 
@@ -200,7 +200,7 @@ flowchart TD
 - **`*-token` classes.** The v2 → v4 guide doesn't say whether the `skeleton-3` codemod rewrites `*-token` classes (e.g. `bg-surface-50-900-token`). Story 13 measures what's left; story 17 removes the rest by hand.
 - **Codemods on wrapped code.** The codemods are written for typical v2 apps; output on the `ui/` wrappers may need hand fixes. Each run is a separate commit, so it's easy to revert.
 - **Screenshot determinism.** Visual tests need stable data, fonts and animations. They run only locally on macOS (Playwright stores per-platform snapshots) and never in GitHub Actions. If they're flaky, story 04 increases masking and thresholds before the baseline is approved.
-- **PWA tooling for SvelteKit 3.** `@vite-pwa/sveltekit` and `svelte-adapter-bun` may lag behind. Story 21 is a go/no-go gate; phase 4 waits if they're not ready. **2026-11-01 (story 21): no-go.** `svelte-adapter-bun` 1.0.2 still peers `@sveltejs/kit ^2` ([#87](https://github.com/gornostay25/svelte-adapter-bun/issues/87)); proposal: switch to the official `@sveltejs/adapter-bun`. `@vite-pwa/sveltekit` supports Kit 3 only from 2.0.0, released 2026-11-01 as a rewrite on `@unplugin-pwa` 0.0.x; proposal: wait about two weeks for patch releases. Both are the human's call.
+- **PWA tooling for SvelteKit 3.** `@vite-pwa/sveltekit` and `svelte-adapter-bun` may lag behind. Story 21 is a go/no-go gate; phase 4 waits if they're not ready. **2026-11-01 (story 21): no-go.** `svelte-adapter-bun` 1.0.2 still peers `@sveltejs/kit ^2` ([#87](https://github.com/gornostay25/svelte-adapter-bun/issues/87)); proposal: switch to the official `@sveltejs/adapter-bun`. `@vite-pwa/sveltekit` supports Kit 3 only from 2.0.0, released 2026-11-01 as a rewrite on `@unplugin-pwa` 0.0.x; proposal: wait about two weeks for patch releases. Both are the human's call. **Decided 2026-11-04:** use the official `@sveltejs/adapter-bun`; `@vite-pwa/sveltekit` 2.0.0 is ready.
 - **Data compatibility.** `PersistedState` must read the existing `settings`/`sync` values written by `localStorageStore`. So must the inline script in [src/app.html](../../src/app.html), which reads `settings.colorScheme` before hydration to avoid a light flash; it must keep working unchanged. This is covered by unit tests in 06 and a production check in 12.
 - **Vercel preview deployments for branches.** Confirmed: [scripts/trigger-new-build.js](../../scripts/trigger-new-build.js) lets Vercel build every non-`main` branch, so pushes to `migration/*` create previews and trigger the Test workflow (`deployment_status`) against them. Test runs against `migration/2-skeleton-v4` previews will be red during 13–16 by design (placeholders); they're expected to be green again from 17. Claude ignores them until then; the human can too.
 - **Dependabot.** [.github/dependabot.yaml](../../.github/dependabot.yaml) already ignores all major updates, so it never proposes the migration targets. Its monthly grouped minor/patch PR would conflict with phase branches in `pnpm-lock.yaml`. Decision 2026-10-24: the human doesn't merge Dependabot PRs until the epic is done; no config change. If a security fix must be merged meanwhile, Claude rebases the open phase branch afterwards and regenerates the lockfile.
