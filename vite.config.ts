@@ -1,5 +1,5 @@
 import adapterAuto from '@sveltejs/adapter-auto';
-import adapterBun from '@sveltejs/adapter-bun';
+import adapterNode from '@sveltejs/adapter-node';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 import tailwindcss from '@tailwindcss/vite';
 import { withPwa } from '@vite-pwa/sveltekit';
@@ -10,7 +10,7 @@ import manifest from './src/assets/manifest.ts';
 
 dotenv.config({ silent: true });
 
-const useAdapterBun = process.env['USE_ADAPTER_BUN'] === 'true';
+const useAdapterNode = process.env['USE_ADAPTER_NODE'] === 'true';
 
 export default defineConfig({
   define: {
@@ -23,7 +23,7 @@ export default defineConfig({
     // withPwa wraps sveltekit(): the first argument is the SvelteKit (and vite-plugin-svelte) config.
     withPwa(
       {
-        adapter: useAdapterBun ? adapterBun() : adapterAuto(),
+        adapter: useAdapterNode ? adapterNode() : adapterAuto(),
         preprocess: vitePreprocess(),
         inspector: true,
         onwarn: (warning, handler) => {
