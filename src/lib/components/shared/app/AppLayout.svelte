@@ -85,7 +85,7 @@
   {/snippet}
 </DrawerHost>
 
-<!-- Same geometry and region classes as the Skeleton v2 app shell; #page is the only scroll container. -->
+<!-- #page is the only scroll container. -->
 <div
   class="grid h-full w-full grid-cols-[auto_minmax(0,1fr)] grid-rows-[auto_minmax(0,1fr)] overflow-hidden"
 >
@@ -97,7 +97,7 @@
       <AppRail />
     </nav>
   </aside>
-  <!-- relative: absolutely positioned content (e.g. v4's hidden inputs) is placed and clipped in
+  <!-- relative: absolutely positioned content (e.g. Skeleton's hidden inputs) is placed and clipped in
        here. Otherwise it stretches <html>, which iOS then scrolls to show a focused field, moving
        the whole app up. -->
   <main

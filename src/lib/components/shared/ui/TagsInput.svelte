@@ -1,5 +1,5 @@
 <script lang="ts">
-  // Maps to Skeleton v4/v5 `TagsInput`. Duplicates are rejected, as with v2.
+  // Wraps Skeleton's `TagsInput`. Duplicates are rejected.
   import { faXmark } from '@fortawesome/free-solid-svg-icons';
   import { TagsInput } from '@skeletonlabs/skeleton-svelte';
   import { Icon } from 'svelte-awesome';
@@ -39,10 +39,10 @@
       {#each value ?? [] as tag, index (tag)}
         {@const colors = tagColors?.(tag)}
         <TagsInput.Item value={tag} {index}>
-          <!-- The trigger carries the tag's padding and colour, so the preview drops v5's button padding. -->
+          <!-- The trigger carries the tag's padding and colour, so the preview drops Skeleton's button padding. -->
           <TagsInput.ItemPreview class="p-0">
-            <!-- The whole tag deletes it on click, as v2's chips did. -->
-            <!-- "Remove", since v4's "Delete tag …" would also match the page's Delete button. -->
+            <!-- The whole tag deletes it on click. -->
+            <!-- "Remove", since Skeleton's "Delete tag …" would also match the page's Delete button. -->
             <TagsInput.ItemDeleteTrigger
               aria-label="Remove {tag}"
               class="flex size-auto items-center gap-2 rounded-base px-2 py-1.5 leading-none"

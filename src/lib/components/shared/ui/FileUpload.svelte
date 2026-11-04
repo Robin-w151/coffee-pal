@@ -1,5 +1,5 @@
 <script lang="ts">
-  // Maps to Skeleton v4/v5 `FileUpload`, with a single file.
+  // Wraps Skeleton's `FileUpload`, with a single file.
   import { faFileArrowUp } from '@fortawesome/free-solid-svg-icons';
   import { FileUpload, useFileUpload } from '@skeletonlabs/skeleton-svelte';
   import { Icon } from 'svelte-awesome';
@@ -23,7 +23,7 @@
     onFileChange: (details) => (file = details.acceptedFiles[0]),
   }));
 
-  // v4 can't control its files, so a file the caller clears (e.g. after an import) is cleared here.
+  // Skeleton can't control its files, so a file the caller clears (e.g. after an import) is cleared here.
   $effect(() => {
     if (!file && fileUpload().acceptedFiles.length > 0) {
       fileUpload().clearFiles();

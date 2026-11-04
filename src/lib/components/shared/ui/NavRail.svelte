@@ -1,5 +1,5 @@
 <script lang="ts">
-  // Maps to Skeleton v4/v5 `Navigation` with `layout="rail"`.
+  // Wraps Skeleton's `Navigation` with `layout="rail"`.
   import type { Route } from '#lib/models/route.ts';
   import { Navigation } from '@skeletonlabs/skeleton-svelte';
   import { Icon } from 'svelte-awesome';
@@ -17,7 +17,7 @@
 </script>
 
 <Navigation layout="rail">
-  <!-- Top-aligned like v2's rail; v4 centres the menu vertically. -->
+  <!-- Top-aligned; Skeleton centres the menu vertically. -->
   <Navigation.Menu class="justify-start">
     {#each items as route (route.href)}
       <Navigation.TriggerAnchor

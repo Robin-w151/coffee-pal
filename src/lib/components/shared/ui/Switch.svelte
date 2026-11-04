@@ -1,5 +1,5 @@
 <script lang="ts">
-  // Maps to Skeleton v4/v5 `Switch`.
+  // Wraps Skeleton's `Switch`.
   import { Switch } from '@skeletonlabs/skeleton-svelte';
 
   interface Props {
@@ -26,7 +26,7 @@
     <Switch.Thumb />
   </Switch.Control>
   <Switch.Label class="sr-only">{label}</Switch.Label>
-  <!-- v4 renders a 1px checkbox; the role keeps v2's switch semantics. Stretched transparently over
+  <!-- Skeleton renders a 1px checkbox; the role gives it switch semantics. Stretched transparently over
        the root, it receives clicks itself instead of sitting under the control. -->
   <Switch.HiddenInput role="switch" style={STRETCHED_INPUT} />
 </Switch>

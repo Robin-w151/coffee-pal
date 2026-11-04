@@ -1,4 +1,4 @@
-// Mirrors Tailwind's default breakpoints (v4 has no config file; app.css doesn't override them).
+// Mirrors Tailwind's default breakpoints for scripts (app.css doesn't override them).
 export const screens = {
   sm: '640px',
   md: '768px',

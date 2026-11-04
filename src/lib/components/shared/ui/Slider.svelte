@@ -1,5 +1,5 @@
 <script lang="ts">
-  // Maps to Skeleton v4/v5 `Slider`. v4 works with arrays of values; this wrapper has one thumb.
+  // Wraps Skeleton's `Slider`. Skeleton works with arrays of values; this wrapper has one thumb.
   import { Slider } from '@skeletonlabs/skeleton-svelte';
   import type { Snippet } from 'svelte';
 
@@ -20,8 +20,8 @@
 </script>
 
 <Slider {name} {min} {max} value={[value]} onValueChange={handleValueChange}>
-  <!-- The header row labels the thumb, as v2's label around the range input did. In the size and
-       weight of the other field labels (v4's are extra small and medium). -->
+  <!-- The header row labels the thumb, in the size and weight of the other field labels
+       (Skeleton's are extra small and medium). -->
   <Slider.Label class="text-base font-normal">{@render children?.()}</Slider.Label>
   <Slider.Control>
     <Slider.Track>

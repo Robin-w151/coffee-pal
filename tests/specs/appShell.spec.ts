@@ -340,7 +340,7 @@ test.describe('phone', () => {
       return colors;
     });
 
-    // The 500 shades of the v2 theme.ts.
+    // The theme's 500 shades.
     expect(Object.fromEntries(palette)).toEqual({
       primary: 'rgb(1, 99, 103)',
       secondary: 'rgb(142, 52, 18)',
@@ -429,7 +429,6 @@ async function reloadReady(page: Page): Promise<void> {
   await expect(page.locator('html')).toHaveAttribute('data-test', 'ready');
 }
 
-// Skeleton v2 autocompletes open on focus, so a focused input has to be blurred to reopen it.
 async function refocus(input: Locator): Promise<void> {
   await input.blur();
   await input.click();
@@ -473,10 +472,7 @@ function getScrollTop(locator: Locator): Promise<number> {
 }
 
 function autocompleteOption(page: Page, name: string | RegExp): Locator {
-  // Skeleton v2 renders autocomplete options as buttons; later versions use the option role.
-  return page
-    .getByRole('button', { name, exact: true })
-    .or(page.getByRole('option', { name, exact: true }));
+  return page.getByRole('option', { name, exact: true });
 }
 
 async function openClearIndexedDbDialog(page: Page, dialog: Locator): Promise<void> {

@@ -1,5 +1,5 @@
 <script lang="ts">
-  // Shows the head of the modal service's queue in a Skeleton v4 `Dialog`.
+  // Shows the head of the modal service's queue in a Skeleton `Dialog`.
   import { modal } from '#lib/services/ui/modal.svelte.ts';
   import { Dialog, Portal } from '@skeletonlabs/skeleton-svelte';
 
