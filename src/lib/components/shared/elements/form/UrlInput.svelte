@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { HOST_REGEXP } from '$lib/config/regexp';
-  import type { Scheme, UrlInputChange } from '$lib/models/urlInput';
+  import { HOST_REGEXP } from '#lib/config/regexp.js';
+  import type { Scheme, UrlInputChange } from '#lib/models/urlInput.js';
   import { faArrowUpRightFromSquare, faLock, faLockOpen } from '@fortawesome/free-solid-svg-icons';
   import { untrack } from 'svelte';
   import { Icon } from 'svelte-awesome';

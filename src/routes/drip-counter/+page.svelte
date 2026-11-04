@@ -1,5 +1,5 @@
 <script lang="ts">
-  import DripCounter from '$lib/components/dripCounter/DripCounter.svelte';
+  import DripCounter from '#lib/components/dripCounter/DripCounter.svelte';
 </script>
 
 <svelte:head>

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { CustomModalProps } from '$lib/services/ui/modal.svelte';
+  import type { CustomModalProps } from '#lib/services/ui/modal.svelte.js';
 
   interface Props extends CustomModalProps<boolean> {
     loginUrl: string;

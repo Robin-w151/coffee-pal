@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { ActiveCoffeeEntry } from '$lib/models/myCoffees';
+  import type { ActiveCoffeeEntry } from '#lib/models/myCoffees.js';
   import { faFaceSadCry } from '@fortawesome/free-solid-svg-icons';
   import { Icon } from 'svelte-awesome';
   import CoffeeEntryItem from './CoffeeEntryItem.svelte';

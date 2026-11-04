@@ -1,6 +1,6 @@
 <script lang="ts">
   // Renders the toast service's toasts with Skeleton v4's toaster.
-  import { toast } from '$lib/services/ui/toast.svelte';
+  import { toast } from '#lib/services/ui/toast.svelte.js';
   import { Toast, createToaster } from '@skeletonlabs/skeleton-svelte';
 
   const toaster = createToaster({ placement: 'bottom', overlap: false });

@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { browser } from '$app/environment';
-  import type { ColorScheme } from '$lib/models/settings';
-  import { getSettingsStore } from '$lib/stores/settings.svelte';
+  import { browser } from '$app/env';
+  import type { ColorScheme } from '#lib/models/settings.js';
+  import { getSettingsStore } from '#lib/stores/settings.svelte.js';
   import { onDestroy, onMount } from 'svelte';
 
   const settingsStore = getSettingsStore();

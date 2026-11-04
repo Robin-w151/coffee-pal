@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { ActiveJournalEntry } from '$lib/models/journal';
+  import type { ActiveJournalEntry } from '#lib/models/journal.js';
   import { faFaceSadCry } from '@fortawesome/free-solid-svg-icons';
   import { Icon } from 'svelte-awesome';
   import JournalEntryItem from './JournalEntryItem.svelte';

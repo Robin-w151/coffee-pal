@@ -1,8 +1,8 @@
 <script lang="ts">
   import { resolve } from '$app/paths';
-  import { getCoffeeLabel, type ActiveCoffeeEntry } from '$lib/models/myCoffees';
-  import { getDisplayValue, getPreferredLengthUnit } from '$lib/shared/units';
-  import { getSettingsStore } from '$lib/stores/settings.svelte';
+  import { getCoffeeLabel, type ActiveCoffeeEntry } from '#lib/models/myCoffees.js';
+  import { getDisplayValue, getPreferredLengthUnit } from '#lib/shared/units.js';
+  import { getSettingsStore } from '#lib/stores/settings.svelte.js';
 
   const settingsStore = getSettingsStore();
 

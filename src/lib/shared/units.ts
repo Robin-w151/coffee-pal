@@ -5,8 +5,8 @@ import {
   LENGTH_UNITS,
   TEMPERATURE_UNITS,
   WEIGHT_UNITS,
-} from '$lib/config/units';
-import type { MeasurementSystem, Unit } from '$lib/models/measurement';
+} from '#lib/config/units.js';
+import type { MeasurementSystem, Unit } from '#lib/models/measurement.js';
 import { round } from './math';
 
 export function getPreferredUnit(units: Array<Unit>, system: MeasurementSystem): Unit | undefined {

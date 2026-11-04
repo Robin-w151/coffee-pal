@@ -1,6 +1,6 @@
 <script lang="ts">
   // Maps to Skeleton v4/v5 `Navigation` with `layout="rail"`.
-  import type { Route } from '$lib/models/route';
+  import type { Route } from '#lib/models/route.js';
   import { Navigation } from '@skeletonlabs/skeleton-svelte';
   import { Icon } from 'svelte-awesome';
 

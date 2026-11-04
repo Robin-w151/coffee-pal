@@ -1,9 +1,9 @@
 <script lang="ts">
   import presets from '$assets/presets.json';
-  import Card from '$lib/components/shared/elements/Card.svelte';
-  import Label from '$lib/components/shared/elements/form/Label.svelte';
-  import type { Preset } from '$lib/models/preset';
-  import type { Ratio } from '$lib/models/ratio';
+  import Card from '#lib/components/shared/elements/Card.svelte';
+  import Label from '#lib/components/shared/elements/form/Label.svelte';
+  import type { Preset } from '#lib/models/preset.js';
+  import type { Ratio } from '#lib/models/ratio.js';
 
   interface Props {
     ratio: Ratio | undefined;

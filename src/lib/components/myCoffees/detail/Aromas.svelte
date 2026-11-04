@@ -1,7 +1,7 @@
 <script lang="ts">
-  import Label from '$lib/components/shared/elements/form/Label.svelte';
-  import TagsInput from '$lib/components/shared/ui/TagsInput.svelte';
-  import { getAromaColor } from '$lib/services/myCoffees/colors/colors';
+  import Label from '#lib/components/shared/elements/form/Label.svelte';
+  import TagsInput from '#lib/components/shared/ui/TagsInput.svelte';
+  import { getAromaColor } from '#lib/services/myCoffees/colors/colors.js';
 
   interface Props {
     aromas?: Array<string>;

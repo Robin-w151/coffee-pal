@@ -1,4 +1,4 @@
-import type { Credentials, LoginPoll } from '$lib/models/nextcloud';
+import type { Credentials, LoginPoll } from '#lib/models/nextcloud.js';
 import {
   isActiveSyncableEntry,
   isDeletedSyncableEntry,
@@ -9,9 +9,9 @@ import {
   type SyncResult,
   type Syncable,
   type SyncableName,
-} from '$lib/models/sync';
-import { merge } from '$lib/services/sync/merge';
-import { isPresent } from '$lib/shared/observables';
+} from '#lib/models/sync.js';
+import { merge } from '#lib/services/sync/merge.js';
+import { isPresent } from '#lib/shared/observables.js';
 import {
   catchError,
   filter,

@@ -1,14 +1,14 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
-  import type { ActiveJournalEntry } from '$lib/models/journal';
-  import { getSettingsStore } from '$lib/stores/settings.svelte';
+  import type { ActiveJournalEntry } from '#lib/models/journal.js';
+  import { getSettingsStore } from '#lib/stores/settings.svelte.js';
   import {
     getDisplayValue,
     getPreferredTemperatureUnit,
     getPreferredWeightUnit,
-  } from '$lib/shared/units';
-  import { getCoffeeLabel } from '$lib/models/myCoffees';
-  import { calculateRatio } from '$lib/shared/math';
+  } from '#lib/shared/units.js';
+  import { getCoffeeLabel } from '#lib/models/myCoffees.js';
+  import { calculateRatio } from '#lib/shared/math.js';
   import { resolve } from '$app/paths';
 
   const settingsStore = getSettingsStore();

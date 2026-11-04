@@ -1,4 +1,4 @@
-import type { ScheduledTask, Scheduler, Task } from '$lib/models/scheduler';
+import type { ScheduledTask, Scheduler, Task } from '#lib/models/scheduler.js';
 
 const DEFAULT_TASK_TIMEOUT = 5_000;
 

@@ -1,4 +1,4 @@
-import type { SyncState } from '$lib/models/sync';
+import type { SyncState } from '#lib/models/sync.js';
 import { Subject } from 'rxjs';
 
 export interface SyncStateStore extends SyncState {

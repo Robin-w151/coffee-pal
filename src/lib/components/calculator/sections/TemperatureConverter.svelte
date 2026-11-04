@@ -1,9 +1,9 @@
 <script lang="ts">
-  import Card from '$lib/components/shared/elements/Card.svelte';
-  import ToggleableSection from '$lib/components/shared/elements/ToggleableSection.svelte';
-  import Label from '$lib/components/shared/elements/form/Label.svelte';
-  import { UNIT_FAHRENHEIT } from '$lib/config/units';
-  import { round } from '$lib/shared/math';
+  import Card from '#lib/components/shared/elements/Card.svelte';
+  import ToggleableSection from '#lib/components/shared/elements/ToggleableSection.svelte';
+  import Label from '#lib/components/shared/elements/form/Label.svelte';
+  import { UNIT_FAHRENHEIT } from '#lib/config/units.js';
+  import { round } from '#lib/shared/math.js';
 
   interface Props {
     temperatureConverter?: boolean;

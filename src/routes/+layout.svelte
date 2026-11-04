@@ -1,5 +1,5 @@
 <script lang="ts">
-  import AppLayout from '$lib/components/shared/app/AppLayout.svelte';
+  import AppLayout from '#lib/components/shared/app/AppLayout.svelte';
   import type { Snippet } from 'svelte';
 
   interface Props {

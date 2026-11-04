@@ -1,27 +1,26 @@
 <script lang="ts">
-  import { afterNavigate, onNavigate } from '$app/navigation';
+  import { afterNavigate, onNavigate, type AfterNavigate } from '$app/navigation';
   import { page } from '$app/state';
-  import AppBar from '$lib/components/shared/app/AppBar.svelte';
-  import AppMenu from '$lib/components/shared/app/AppMenu.svelte';
-  import AppRail from '$lib/components/shared/app/AppRail.svelte';
-  import EnableColorSchemes from '$lib/components/shared/app/EnableColorSchemes.svelte';
-  import DrawerHost from '$lib/components/shared/ui/DrawerHost.svelte';
-  import ModalHost from '$lib/components/shared/ui/ModalHost.svelte';
-  import ToastHost from '$lib/components/shared/ui/ToastHost.svelte';
-  import { initScheduledSync, scheduleSync } from '$lib/services/sync/sync';
-  import { rememberScrollPosition, scrollToLastKnownPosition } from '$lib/shared/ui/scroll';
-  import '$lib/stores/app.svelte';
-  import { setSettingsStore } from '$lib/stores/settings.svelte';
-  import { setSyncStore } from '$lib/stores/sync.svelte';
-  import { setSyncAvailabilityStore } from '$lib/stores/syncAvailability.svelte';
-  import type { AfterNavigate } from '@sveltejs/kit';
+  import AppBar from '#lib/components/shared/app/AppBar.svelte';
+  import AppMenu from '#lib/components/shared/app/AppMenu.svelte';
+  import AppRail from '#lib/components/shared/app/AppRail.svelte';
+  import EnableColorSchemes from '#lib/components/shared/app/EnableColorSchemes.svelte';
+  import DrawerHost from '#lib/components/shared/ui/DrawerHost.svelte';
+  import ModalHost from '#lib/components/shared/ui/ModalHost.svelte';
+  import ToastHost from '#lib/components/shared/ui/ToastHost.svelte';
+  import { initScheduledSync, scheduleSync } from '#lib/services/sync/sync.js';
+  import { rememberScrollPosition, scrollToLastKnownPosition } from '#lib/shared/ui/scroll.js';
+  import '#lib/stores/app.svelte.js';
+  import { setSettingsStore } from '#lib/stores/settings.svelte.js';
+  import { setSyncStore } from '#lib/stores/sync.svelte.js';
+  import { setSyncAvailabilityStore } from '#lib/stores/syncAvailability.svelte.js';
   import { DateTime } from 'luxon';
   import { onMount, type Snippet } from 'svelte';
   import { pwaInfo } from 'virtual:pwa-info';
   import '../../../../app.css';
   import EnableShortcuts from './EnableShortcuts.svelte';
   import EnableUpdateListener from './EnableUpdateListener.svelte';
-  import { runViewTransition } from '$lib/shared/viewTransition';
+  import { runViewTransition } from '#lib/shared/viewTransition.js';
 
   interface Props {
     children?: Snippet;

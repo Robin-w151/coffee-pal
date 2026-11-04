@@ -22,7 +22,7 @@
   // Maps to Skeleton v4/v5 `Combobox`. Free text is allowed: the input text is the value, and
   // choosing an option is reported through onSelect. `open` stays uncontrolled: when controlled, v4
   // refocuses the input a frame after every close, even after the user has moved to another field.
-  import InputWithButton from '$lib/components/shared/elements/form/InputWithButton.svelte';
+  import InputWithButton from '#lib/components/shared/elements/form/InputWithButton.svelte';
   import { Combobox, Portal, useCombobox, useListCollection } from '@skeletonlabs/skeleton-svelte';
   import { Icon } from 'svelte-awesome';
   import { fade } from 'svelte/transition';

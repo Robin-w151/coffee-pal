@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { DRIP_INSTANTS_COUNT } from '$lib/config/dripCounter';
-  import { calculateDripRate } from '$lib/services/dripCounter/dripRate';
+  import { DRIP_INSTANTS_COUNT } from '#lib/config/dripCounter.js';
+  import { calculateDripRate } from '#lib/services/dripCounter/dripRate.js';
   import Card from '../shared/elements/Card.svelte';
 
   interface Props {

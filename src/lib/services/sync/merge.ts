@@ -5,7 +5,7 @@ import {
   type SyncMergeResult,
   isActiveSyncableEntry,
   isDeletedSyncableEntry,
-} from '$lib/models/sync';
+} from '#lib/models/sync.js';
 import { DateTime } from 'luxon';
 
 export function merge<A extends ActiveSyncableEntry, D extends DeletedSyncableEntry>(

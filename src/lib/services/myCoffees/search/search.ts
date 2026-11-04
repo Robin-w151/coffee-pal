@@ -3,8 +3,8 @@ import type {
   MyCoffeesSearchState,
   MyCoffeesSort,
   MyCoffeesSortDirection,
-} from '$lib/models/myCoffees';
-import { buildFuseQuery } from '$lib/services/search/fuzzy';
+} from '#lib/models/myCoffees.js';
+import { buildFuseQuery } from '#lib/services/search/fuzzy.js';
 import Fuse, { type IFuseOptions } from 'fuse.js';
 
 const FUSE_OPTIONS = {

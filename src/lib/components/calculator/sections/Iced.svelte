@@ -1,15 +1,15 @@
 <script lang="ts">
-  import Card from '$lib/components/shared/elements/Card.svelte';
-  import ToggleableSection from '$lib/components/shared/elements/ToggleableSection.svelte';
-  import Form from '$lib/components/shared/elements/form/Form.svelte';
-  import Label from '$lib/components/shared/elements/form/Label.svelte';
-  import MeasurementInput from '$lib/components/shared/elements/form/MeasurementInput.svelte';
-  import Slider from '$lib/components/shared/ui/Slider.svelte';
-  import { WEIGHT_UNITS } from '$lib/config/units';
-  import type { Measurement } from '$lib/models/measurement';
-  import { sanitize } from '$lib/shared/math';
-  import { getPreferredWeightUnit } from '$lib/shared/units';
-  import { getSettingsStore } from '$lib/stores/settings.svelte';
+  import Card from '#lib/components/shared/elements/Card.svelte';
+  import ToggleableSection from '#lib/components/shared/elements/ToggleableSection.svelte';
+  import Form from '#lib/components/shared/elements/form/Form.svelte';
+  import Label from '#lib/components/shared/elements/form/Label.svelte';
+  import MeasurementInput from '#lib/components/shared/elements/form/MeasurementInput.svelte';
+  import Slider from '#lib/components/shared/ui/Slider.svelte';
+  import { WEIGHT_UNITS } from '#lib/config/units.js';
+  import type { Measurement } from '#lib/models/measurement.js';
+  import { sanitize } from '#lib/shared/math.js';
+  import { getPreferredWeightUnit } from '#lib/shared/units.js';
+  import { getSettingsStore } from '#lib/stores/settings.svelte.js';
   import { untrack } from 'svelte';
 
   const settingsStore = getSettingsStore();

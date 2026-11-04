@@ -47,9 +47,10 @@
     "@semantic-release/git": "10.0.1",
     "@skeletonlabs/skeleton": "5.0.1",
     "@skeletonlabs/skeleton-svelte": "5.0.1",
-    "@sveltejs/adapter-auto": "7.0.1",
-    "@sveltejs/kit": "2.70.3",
-    "@sveltejs/vite-plugin-svelte": "6.2.4",
+    "@sveltejs/adapter-auto": "^8.0.0",
+    "@sveltejs/kit": "^3.0.0",
+    "@sveltejs/load-config": "^0.2.2",
+    "@sveltejs/vite-plugin-svelte": "^7.0.0",
     "@tailwindcss/forms": "0.5.11",
     "@tailwindcss/vite": "4.3.3",
     "@types/chance": "1.1.8",
@@ -85,16 +86,16 @@
     "scroll-into-view-if-needed": "3.1.0",
     "semantic-release": "25.0.8",
     "source-map-explorer": "2.5.3",
-    "svelte": "5.56.8",
+    "svelte": "^5.57.2",
     "svelte-adapter-bun": "1.0.1",
     "svelte-awesome": "3.3.5",
-    "svelte-check": "4.7.4",
+    "svelte-check": "^4.7.5",
     "tailwindcss": "4.3.3",
     "tslib": "2.8.1",
-    "typescript": "5.9.3",
+    "typescript": "^6.0.0",
     "typescript-eslint": "8.65.0",
     "uuid": "14.0.1",
-    "vite": "7.3.6",
+    "vite": "^8.0.12",
     "vite-plugin-pwa": "1.3.0",
     "vitest": "4.1.10",
     "webdav": "5.10.0",
@@ -105,5 +106,9 @@
     "node": "24.x"
   },
   "type": "module",
-  "packageManager": "pnpm@11.18.0+sha512.33d83c77da82f49fba836925c6f1b841181ec3132b670639bd012f7075f5c7cf634c5f870147c19aae7478fac01df09d8892e880454896edd23ee9b33757563c"
+  "packageManager": "pnpm@11.18.0+sha512.33d83c77da82f49fba836925c6f1b841181ec3132b670639bd012f7075f5c7cf634c5f870147c19aae7478fac01df09d8892e880454896edd23ee9b33757563c",
+  "imports": {
+    "#lib": "./src/lib/index.js",
+    "#lib/*": "./src/lib/*"
+  }
 }

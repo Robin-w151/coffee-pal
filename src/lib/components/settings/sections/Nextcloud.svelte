@@ -1,14 +1,14 @@
 <script lang="ts">
-  import Card from '$lib/components/shared/elements/Card.svelte';
-  import type { Credentials } from '$lib/models/nextcloud';
-  import type { UrlInputChange } from '$lib/models/urlInput';
-  import { NextcloudLoginClient } from '$lib/services/sync/nextcloud';
-  import { sync } from '$lib/services/sync/sync';
-  import { modal } from '$lib/services/ui/modal.svelte';
-  import { toast } from '$lib/services/ui/toast.svelte';
-  import { getSyncStore } from '$lib/stores/sync.svelte';
-  import { getSyncAvailabilityStore } from '$lib/stores/syncAvailability.svelte';
-  import { syncStateStore } from '$lib/stores/syncState.svelte';
+  import Card from '#lib/components/shared/elements/Card.svelte';
+  import type { Credentials } from '#lib/models/nextcloud.js';
+  import type { UrlInputChange } from '#lib/models/urlInput.js';
+  import { NextcloudLoginClient } from '#lib/services/sync/nextcloud.js';
+  import { sync } from '#lib/services/sync/sync.js';
+  import { modal } from '#lib/services/ui/modal.svelte.js';
+  import { toast } from '#lib/services/ui/toast.svelte.js';
+  import { getSyncStore } from '#lib/stores/sync.svelte.js';
+  import { getSyncAvailabilityStore } from '#lib/stores/syncAvailability.svelte.js';
+  import { syncStateStore } from '#lib/stores/syncState.svelte.js';
   import { catchError, finalize, of, tap, type Subscription } from 'rxjs';
   import { onDestroy } from 'svelte';
   import Spinner from '../../shared/elements/Spinner.svelte';

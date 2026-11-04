@@ -1,11 +1,11 @@
-import { browser } from '$app/environment';
-import type { MeasurementSystem } from '$lib/models/measurement';
+import { browser } from '$app/env';
+import type { MeasurementSystem } from '#lib/models/measurement.js';
 import {
   isColorScheme,
   type ColorScheme,
   type Settings,
   isMeasurementSystem,
-} from '$lib/models/settings';
+} from '#lib/models/settings.js';
 import { PersistedState } from 'runed';
 import { getContext, setContext } from 'svelte';
 import { JSON_SERIALIZER, updatePersistedState } from './persisted';

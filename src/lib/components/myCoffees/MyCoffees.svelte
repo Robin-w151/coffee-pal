@@ -1,5 +1,5 @@
 <script lang="ts" module>
-  import { screens } from '$lib/config/screens';
+  import { screens } from '#lib/config/screens.js';
 
   interface SortOption {
     label: string;
@@ -13,13 +13,13 @@
 
 <script lang="ts">
   import { goto } from '$app/navigation';
-  import { MY_COFFEES_PAGE_SIZE } from '$lib/config/myCoffees';
-  import type { MyCoffeesSort, MyCoffeesSortDirection } from '$lib/models/myCoffees';
-  import { sync } from '$lib/services/sync/sync';
-  import { myCoffeesSearchStore, myCoffeesStore } from '$lib/stores/myCoffees';
-  import { getSyncAvailabilityStore } from '$lib/stores/syncAvailability.svelte';
-  import { syncStateStore } from '$lib/stores/syncState.svelte';
-  import { scrollToTop } from '$lib/shared/ui/scroll';
+  import { MY_COFFEES_PAGE_SIZE } from '#lib/config/myCoffees.js';
+  import type { MyCoffeesSort, MyCoffeesSortDirection } from '#lib/models/myCoffees.js';
+  import { sync } from '#lib/services/sync/sync.js';
+  import { myCoffeesSearchStore, myCoffeesStore } from '#lib/stores/myCoffees.js';
+  import { getSyncAvailabilityStore } from '#lib/stores/syncAvailability.svelte.js';
+  import { syncStateStore } from '#lib/stores/syncState.svelte.js';
+  import { scrollToTop } from '#lib/shared/ui/scroll.js';
   import {
     faArrowUp19,
     faArrowUp91,
@@ -29,14 +29,14 @@
     faStar,
     type IconDefinition,
   } from '@fortawesome/free-solid-svg-icons';
-  import Listbox from '$lib/components/shared/ui/Listbox.svelte';
-  import Pagination from '$lib/components/shared/ui/Pagination.svelte';
+  import Listbox from '#lib/components/shared/ui/Listbox.svelte';
+  import Pagination from '#lib/components/shared/ui/Pagination.svelte';
   import PageActions from '../shared/elements/page/PageActions.svelte';
   import PageCard from '../shared/elements/page/PageCard.svelte';
   import PageSearch from '../shared/elements/page/PageSearch.svelte';
   import CoffeeEntries from './list/CoffeeEntries.svelte';
   import CoffeeEntriesTable from './table/CoffeeEntriesTable.svelte';
-  import { getSyncStore } from '$lib/stores/sync.svelte';
+  import { getSyncStore } from '#lib/stores/sync.svelte.js';
   import { resolve } from '$app/paths';
 
   const syncStore = getSyncStore();

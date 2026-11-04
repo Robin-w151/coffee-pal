@@ -1,10 +1,10 @@
 <script lang="ts">
   import { afterNavigate, goto } from '$app/navigation';
   import presets from '$assets/presets.json';
-  import type { Preset } from '$lib/models/preset';
-  import type { Ratio } from '$lib/models/ratio';
-  import type { Recipe as IRecipe } from '$lib/models/recipe';
-  import { round, sanitize } from '$lib/shared/math';
+  import type { Preset } from '#lib/models/preset.js';
+  import type { Ratio } from '#lib/models/ratio.js';
+  import type { Recipe as IRecipe } from '#lib/models/recipe.js';
+  import { round, sanitize } from '#lib/shared/math.js';
   import { untrack } from 'svelte';
   import PageCard from '../shared/elements/page/PageCard.svelte';
   import PageHeader from '../shared/elements/page/PageHeader.svelte';

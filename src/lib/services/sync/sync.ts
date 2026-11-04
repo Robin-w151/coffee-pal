@@ -3,23 +3,23 @@ import {
   type ActiveJournalEntry,
   type DeletedJournalEntry,
   type JournalEntry,
-} from '$lib/models/journal';
+} from '#lib/models/journal.js';
 import {
   MyCoffees,
   type ActiveCoffeeEntry,
   type CoffeeEntry,
   type DeletedCoffeeEntry,
-} from '$lib/models/myCoffees';
-import type { Connection, SyncClient, SyncResult } from '$lib/models/sync';
-import { journalStore } from '$lib/stores/journal';
-import { myCoffeesStore } from '$lib/stores/myCoffees';
-import { onlineStore } from '$lib/stores/svelte-legos/online';
-import type { SyncStoreInterface } from '$lib/stores/sync.svelte';
-import { syncStateStore } from '$lib/stores/syncState.svelte';
+} from '#lib/models/myCoffees.js';
+import type { Connection, SyncClient, SyncResult } from '#lib/models/sync.js';
+import { journalStore } from '#lib/stores/journal.js';
+import { myCoffeesStore } from '#lib/stores/myCoffees.js';
+import { onlineStore } from '#lib/stores/svelte-legos/online.js';
+import type { SyncStoreInterface } from '#lib/stores/sync.svelte.js';
+import { syncStateStore } from '#lib/stores/syncState.svelte.js';
 import { get } from 'svelte/store';
 import { setupScheduledTask } from '../scheduler/scheduler';
 import { NextcloudSyncClient } from './nextcloud';
-import { toast } from '$lib/services/ui/toast.svelte';
+import { toast } from '#lib/services/ui/toast.svelte.js';
 
 const SYNC = Symbol('sync');
 const isOnline = onlineStore();

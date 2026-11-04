@@ -1,6 +1,6 @@
 <script lang="ts">
-  import Label from '$lib/components/shared/elements/form/Label.svelte';
-  import Rating from '$lib/components/shared/elements/form/Rating.svelte';
+  import Label from '#lib/components/shared/elements/form/Label.svelte';
+  import Rating from '#lib/components/shared/elements/form/Rating.svelte';
 
   interface Props {
     rating?: number;

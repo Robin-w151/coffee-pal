@@ -1,10 +1,10 @@
 <script lang="ts">
-  import Label from '$lib/components/shared/elements/form/Label.svelte';
-  import MeasurementInput from '$lib/components/shared/elements/form/MeasurementInput.svelte';
-  import { TEMPERATURE_UNITS } from '$lib/config/units';
-  import type { Measurement } from '$lib/models/measurement';
-  import { getSettingsStore } from '$lib/stores/settings.svelte';
-  import { getPreferredTemperatureUnit } from '$lib/shared/units';
+  import Label from '#lib/components/shared/elements/form/Label.svelte';
+  import MeasurementInput from '#lib/components/shared/elements/form/MeasurementInput.svelte';
+  import { TEMPERATURE_UNITS } from '#lib/config/units.js';
+  import type { Measurement } from '#lib/models/measurement.js';
+  import { getSettingsStore } from '#lib/stores/settings.svelte.js';
+  import { getPreferredTemperatureUnit } from '#lib/shared/units.js';
   import { untrack } from 'svelte';
 
   const settingsStore = getSettingsStore();
