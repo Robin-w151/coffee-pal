@@ -2,7 +2,7 @@
 
 **Epic:** [0001 Migrate to Skeleton v5, Tailwind v4 and SvelteKit 3](README.md)
 **Owner:** Human
-**Status:** Todo
+**Status:** Done
 **Depends on:** 22
 **Size:** S — PR review, merge, a short device smoke test and, if used, a Docker image check.
 
@@ -18,9 +18,9 @@ Merging releases to production, and the device/Docker checks are outside Claude'
 
 #### Prerequisites
 
-- [ ] Story 22 done; PR `migration/4-sveltekit-3` ready; CI green.
-- [ ] Phone with the installed PWA.
-- [ ] (If you use the Docker image) Docker running locally, or access to wherever [image.yaml](../../.github/workflows/image.yaml) publishes.
+- [x] Story 22 done; PR `migration/4-sveltekit-3` ready; CI green.
+- [x] Phone with the installed PWA.
+- [x] (If you use the Docker image) Docker running locally, or access to wherever [image.yaml](../../.github/workflows/image.yaml) publishes.
 
 #### Steps
 
@@ -62,8 +62,8 @@ No data format changes.
 
 ## Acceptance criteria
 
-- [ ] Given the merged PR, when production and the installed PWA are used, then they work online and offline.
-- [ ] CI and Test workflows green (and the Image workflow, if you ran it).
+- [x] Given the merged PR, when production and the installed PWA are used, then they work online and offline.
+- [x] CI and Test workflows green (and the Image workflow, if you ran it).
 
 ## Technical notes
 

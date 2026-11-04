@@ -1,6 +1,6 @@
 # Epic 0001: Migrate to Skeleton v5, Tailwind v4 and SvelteKit 3
 
-**Status:** In progress
+**Status:** Done
 **Created:** 2026-10-23
 
 ## Summary
@@ -124,7 +124,7 @@ Decision 2026-10-23: Claude works on the phase branch and stops only at the Huma
 | 20  | [Checkpoint: approve v5 and test PWA on device](20-checkpoint-v5-and-pwa.md) | Human  | M    | 19             | Done   |
 | 21  | [SvelteKit 3 readiness check](21-sveltekit-3-readiness.md)                   | Claude | S    | 20             | Done   |
 | 22  | [SvelteKit 3 migration](22-sveltekit-3-migration.md)                         | Claude | L    | 21             | Done   |
-| 23  | [Checkpoint: approve SvelteKit 3 and ship](23-checkpoint-sveltekit-3.md)     | Human  | S    | 22             | Todo   |
+| 23  | [Checkpoint: approve SvelteKit 3 and ship](23-checkpoint-sveltekit-3.md)     | Human  | S    | 22             | Done   |
 
 **Size overview:** 6×S, 13×M, 4×L. Claude: 2×S, 12×M, 4×L. Human: 4×S, 1×M. Largest risks: 08 (overlay services, since v4 drops the store-based modal/toast/drawer model), 13 (Tailwind v4 + two codemods at once, the moment the app breaks), 16 (rewriting the most interactive components on Zag.js-based v4 components), 22 (SvelteKit 3 plus the PWA tooling).
 
