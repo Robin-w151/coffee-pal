@@ -1,4 +1,4 @@
-import type { Unit } from '#lib/models/measurement.js';
+import type { Unit } from '#lib/models/measurement.ts';
 
 export const UNIT_GRAM = {
   label: 'g',

@@ -1,10 +1,10 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
-  import type { ActiveCoffeeEntry } from '#lib/models/myCoffees.js';
-  import { getAromaColor } from '#lib/services/myCoffees/colors/colors.js';
-  import { getDisplayValue, getPreferredLengthUnit } from '#lib/shared/units.js';
-  import { getSettingsStore } from '#lib/stores/settings.svelte.js';
+  import type { ActiveCoffeeEntry } from '#lib/models/myCoffees.ts';
+  import { getAromaColor } from '#lib/services/myCoffees/colors/colors.ts';
+  import { getDisplayValue, getPreferredLengthUnit } from '#lib/shared/units.ts';
+  import { getSettingsStore } from '#lib/stores/settings.svelte.ts';
 
   const settingsStore = getSettingsStore();
 

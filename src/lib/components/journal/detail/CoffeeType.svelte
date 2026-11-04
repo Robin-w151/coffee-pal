@@ -1,8 +1,8 @@
 <script lang="ts">
   import Label from '#lib/components/shared/elements/form/Label.svelte';
   import Combobox, { type ComboboxOption } from '#lib/components/shared/ui/Combobox.svelte';
-  import { getCoffeeLabel, type ActiveCoffeeEntry } from '#lib/models/myCoffees.js';
-  import { myCoffeesStore } from '#lib/stores/myCoffees.js';
+  import { getCoffeeLabel, type ActiveCoffeeEntry } from '#lib/models/myCoffees.ts';
+  import { myCoffeesStore } from '#lib/stores/myCoffees.ts';
   import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
   import { BehaviorSubject, debounceTime, map, switchMap, tap } from 'rxjs';
   import { onDestroy, onMount, untrack } from 'svelte';

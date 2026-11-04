@@ -1,4 +1,4 @@
-import type { ActiveJournalEntry, JournalSort, JournalSortDirection } from '#lib/models/journal.js';
+import type { ActiveJournalEntry, JournalSort, JournalSortDirection } from '#lib/models/journal.ts';
 import { describe, expect, test } from 'vitest';
 import { search, sort, sortOrSearch } from './search';
 

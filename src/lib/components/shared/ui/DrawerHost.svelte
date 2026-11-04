@@ -1,6 +1,6 @@
 <script lang="ts">
   // Shows the drawer service's drawer as a Skeleton v4 `Dialog` on the left side.
-  import { drawer, type DrawerId } from '#lib/services/ui/drawer.svelte.js';
+  import { drawer, type DrawerId } from '#lib/services/ui/drawer.svelte.ts';
   import { Dialog, Portal } from '@skeletonlabs/skeleton-svelte';
   import type { Snippet } from 'svelte';
   import { prefersReducedMotion } from 'svelte/motion';

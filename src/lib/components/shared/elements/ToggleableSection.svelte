@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { waitAndTick } from '#lib/shared/promise.js';
+  import { waitAndTick } from '#lib/shared/promise.ts';
   import Switch from '#lib/components/shared/ui/Switch.svelte';
   import scrollIntoView from 'scroll-into-view-if-needed';
   import { rollDown } from '../transitions/rollDown';

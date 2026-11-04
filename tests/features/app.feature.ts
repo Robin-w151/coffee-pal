@@ -1,5 +1,5 @@
-import type { ActiveJournalEntry } from '#lib/models/journal.js';
-import type { ActiveCoffeeEntry } from '#lib/models/myCoffees.js';
+import type { ActiveJournalEntry } from '#lib/models/journal.ts';
+import type { ActiveCoffeeEntry } from '#lib/models/myCoffees.ts';
 import type { Locator, Page } from '@playwright/test';
 
 export class AppPage {

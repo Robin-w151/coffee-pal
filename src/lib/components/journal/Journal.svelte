@@ -1,5 +1,5 @@
 <script lang="ts" module>
-  import { screens } from '#lib/config/screens.js';
+  import { screens } from '#lib/config/screens.ts';
 
   interface SortOption {
     label: string;
@@ -13,13 +13,13 @@
 
 <script lang="ts">
   import { goto } from '$app/navigation';
-  import { JOURNAL_PAGE_SIZE } from '#lib/config/journal.js';
-  import type { JournalSort, JournalSortDirection } from '#lib/models/journal.js';
-  import { sync } from '#lib/services/sync/sync.js';
-  import { journalSearchStore, journalStore } from '#lib/stores/journal.js';
-  import { getSyncAvailabilityStore } from '#lib/stores/syncAvailability.svelte.js';
-  import { syncStateStore } from '#lib/stores/syncState.svelte.js';
-  import { scrollToTop } from '#lib/shared/ui/scroll.js';
+  import { JOURNAL_PAGE_SIZE } from '#lib/config/journal.ts';
+  import type { JournalSort, JournalSortDirection } from '#lib/models/journal.ts';
+  import { sync } from '#lib/services/sync/sync.ts';
+  import { journalSearchStore, journalStore } from '#lib/stores/journal.ts';
+  import { getSyncAvailabilityStore } from '#lib/stores/syncAvailability.svelte.ts';
+  import { syncStateStore } from '#lib/stores/syncState.svelte.ts';
+  import { scrollToTop } from '#lib/shared/ui/scroll.ts';
   import {
     faArrowUpAZ,
     faArrowUpZA,
@@ -34,7 +34,7 @@
   import PageSearch from '../shared/elements/page/PageSearch.svelte';
   import JournalEntries from './list/JournalEntries.svelte';
   import JournalEntriesTable from './table/JournalEntriesTable.svelte';
-  import { getSyncStore } from '#lib/stores/sync.svelte.js';
+  import { getSyncStore } from '#lib/stores/sync.svelte.ts';
   import { resolve } from '$app/paths';
 
   const syncStore = getSyncStore();

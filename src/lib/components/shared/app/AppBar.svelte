@@ -1,9 +1,9 @@
 <script lang="ts">
   import { resolve } from '$app/paths';
-  import { mainRoute } from '#lib/config/routes.js';
+  import { mainRoute } from '#lib/config/routes.ts';
   import { faBars, faMugHot } from '@fortawesome/free-solid-svg-icons';
   import UiAppBar from '#lib/components/shared/ui/AppBar.svelte';
-  import { drawer } from '#lib/services/ui/drawer.svelte.js';
+  import { drawer } from '#lib/services/ui/drawer.svelte.ts';
   import { Icon } from 'svelte-awesome';
 
   function handleMenuClick(): void {

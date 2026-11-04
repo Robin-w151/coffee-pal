@@ -1,7 +1,7 @@
 <script lang="ts">
   import Label from '#lib/components/shared/elements/form/Label.svelte';
   import Combobox, { type ComboboxOption } from '#lib/components/shared/ui/Combobox.svelte';
-  import { methodOptions } from '#lib/config/brewMethods.js';
+  import { methodOptions } from '#lib/config/brewMethods.ts';
 
   interface Props {
     method?: string;

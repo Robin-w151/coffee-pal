@@ -1,4 +1,4 @@
-import type { Route } from '#lib/models/route.js';
+import type { Route } from '#lib/models/route.ts';
 import {
   faCalculator,
   faClipboardList,

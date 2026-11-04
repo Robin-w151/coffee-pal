@@ -1,12 +1,12 @@
-import type { CachedSearchResult } from '#lib/models/cachedSearch.js';
+import type { CachedSearchResult } from '#lib/models/cachedSearch.ts';
 import type {
   ActiveCoffeeEntry,
   MyCoffeesSearchState,
   MyCoffeesWorker,
-} from '#lib/models/myCoffees.js';
+} from '#lib/models/myCoffees.ts';
 import { expose } from 'comlink';
 import { sortOrSearch as sortOrSearchImpl } from './search';
-import { MY_COFFEES_PAGE_SIZE, MY_COFFEES_QUICK_SEARCH_SIZE } from '#lib/config/myCoffees.js';
+import { MY_COFFEES_PAGE_SIZE, MY_COFFEES_QUICK_SEARCH_SIZE } from '#lib/config/myCoffees.ts';
 
 let data: Array<ActiveCoffeeEntry> = [];
 

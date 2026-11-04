@@ -1,10 +1,10 @@
 <script lang="ts">
   import Label from '#lib/components/shared/elements/form/Label.svelte';
   import MeasurementInput from '#lib/components/shared/elements/form/MeasurementInput.svelte';
-  import { LENGTH_UNITS } from '#lib/config/units.js';
-  import type { Measurement } from '#lib/models/measurement.js';
-  import { getSettingsStore } from '#lib/stores/settings.svelte.js';
-  import { getPreferredLengthUnit } from '#lib/shared/units.js';
+  import { LENGTH_UNITS } from '#lib/config/units.ts';
+  import type { Measurement } from '#lib/models/measurement.ts';
+  import { getSettingsStore } from '#lib/stores/settings.svelte.ts';
+  import { getPreferredLengthUnit } from '#lib/shared/units.ts';
   import { untrack } from 'svelte';
 
   const settingsStore = getSettingsStore();

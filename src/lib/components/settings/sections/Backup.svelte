@@ -1,13 +1,13 @@
 <script lang="ts">
-  import { Backup } from '#lib/models/backup.js';
-  import type { ActiveJournalEntry, DeletedJournalEntry } from '#lib/models/journal.js';
-  import type { ActiveCoffeeEntry, DeletedCoffeeEntry } from '#lib/models/myCoffees.js';
-  import { merge } from '#lib/services/sync/merge.js';
-  import { isValid } from '#lib/services/validation/validation.js';
-  import { journalStore } from '#lib/stores/journal.js';
-  import { myCoffeesStore } from '#lib/stores/myCoffees.js';
-  import { readJsonFile, writeJsonFile } from '#lib/shared/file.js';
-  import { toast } from '#lib/services/ui/toast.svelte.js';
+  import { Backup } from '#lib/models/backup.ts';
+  import type { ActiveJournalEntry, DeletedJournalEntry } from '#lib/models/journal.ts';
+  import type { ActiveCoffeeEntry, DeletedCoffeeEntry } from '#lib/models/myCoffees.ts';
+  import { merge } from '#lib/services/sync/merge.ts';
+  import { isValid } from '#lib/services/validation/validation.ts';
+  import { journalStore } from '#lib/stores/journal.ts';
+  import { myCoffeesStore } from '#lib/stores/myCoffees.ts';
+  import { readJsonFile, writeJsonFile } from '#lib/shared/file.ts';
+  import { toast } from '#lib/services/ui/toast.svelte.ts';
   import { DateTime } from 'luxon';
   import Spinner from '../../shared/elements/Spinner.svelte';
   import Form from '../../shared/elements/form/Form.svelte';

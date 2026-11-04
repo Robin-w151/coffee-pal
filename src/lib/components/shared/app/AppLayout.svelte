@@ -8,19 +8,19 @@
   import DrawerHost from '#lib/components/shared/ui/DrawerHost.svelte';
   import ModalHost from '#lib/components/shared/ui/ModalHost.svelte';
   import ToastHost from '#lib/components/shared/ui/ToastHost.svelte';
-  import { initScheduledSync, scheduleSync } from '#lib/services/sync/sync.js';
-  import { rememberScrollPosition, scrollToLastKnownPosition } from '#lib/shared/ui/scroll.js';
-  import '#lib/stores/app.svelte.js';
-  import { setSettingsStore } from '#lib/stores/settings.svelte.js';
-  import { setSyncStore } from '#lib/stores/sync.svelte.js';
-  import { setSyncAvailabilityStore } from '#lib/stores/syncAvailability.svelte.js';
+  import { initScheduledSync, scheduleSync } from '#lib/services/sync/sync.ts';
+  import { rememberScrollPosition, scrollToLastKnownPosition } from '#lib/shared/ui/scroll.ts';
+  import '#lib/stores/app.svelte.ts';
+  import { setSettingsStore } from '#lib/stores/settings.svelte.ts';
+  import { setSyncStore } from '#lib/stores/sync.svelte.ts';
+  import { setSyncAvailabilityStore } from '#lib/stores/syncAvailability.svelte.ts';
   import { DateTime } from 'luxon';
   import { onMount, type Snippet } from 'svelte';
   import { pwaInfo } from 'virtual:pwa-info';
   import '../../../../app.css';
   import EnableShortcuts from './EnableShortcuts.svelte';
   import EnableUpdateListener from './EnableUpdateListener.svelte';
-  import { runViewTransition } from '#lib/shared/viewTransition.js';
+  import { runViewTransition } from '#lib/shared/viewTransition.ts';
 
   interface Props {
     children?: Snippet;

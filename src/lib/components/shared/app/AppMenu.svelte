@@ -1,9 +1,9 @@
 <script lang="ts">
   import { resolve } from '$app/paths';
   import { page } from '$app/state';
-  import { routes } from '#lib/config/routes.js';
-  import type { Route } from '#lib/models/route.js';
-  import { drawer } from '#lib/services/ui/drawer.svelte.js';
+  import { routes } from '#lib/config/routes.ts';
+  import type { Route } from '#lib/models/route.ts';
+  import { drawer } from '#lib/services/ui/drawer.svelte.ts';
   import { faClose } from '@fortawesome/free-solid-svg-icons';
   import { Icon } from 'svelte-awesome';
 

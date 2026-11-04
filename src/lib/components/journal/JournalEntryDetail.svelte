@@ -1,17 +1,17 @@
 <script lang="ts">
   import { beforeNavigate, goto } from '$app/navigation';
-  import { type ActiveJournalEntry } from '#lib/models/journal.js';
-  import { getCoffeeLabel } from '#lib/models/myCoffees.js';
+  import { type ActiveJournalEntry } from '#lib/models/journal.ts';
+  import { getCoffeeLabel } from '#lib/models/myCoffees.ts';
   import {
     pauseScheduledSync,
     resumeScheduledSync,
     scheduleSync,
-  } from '#lib/services/sync/sync.js';
-  import { isEqualJournalEntry } from '#lib/shared/compare.js';
-  import { modal } from '#lib/services/ui/modal.svelte.js';
-  import { toast } from '#lib/services/ui/toast.svelte.js';
-  import { journalStore } from '#lib/stores/journal.js';
-  import { syncStateEvents } from '#lib/stores/syncState.svelte.js';
+  } from '#lib/services/sync/sync.ts';
+  import { isEqualJournalEntry } from '#lib/shared/compare.ts';
+  import { modal } from '#lib/services/ui/modal.svelte.ts';
+  import { toast } from '#lib/services/ui/toast.svelte.ts';
+  import { journalStore } from '#lib/stores/journal.ts';
+  import { syncStateEvents } from '#lib/stores/syncState.svelte.ts';
   import { faCalculator, faFaceSadCry } from '@fortawesome/free-solid-svg-icons';
   import { Subject, takeUntil, tap } from 'rxjs';
   import { onDestroy, onMount, untrack } from 'svelte';

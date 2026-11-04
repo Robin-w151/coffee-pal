@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { calculateRatio } from '#lib/shared/math.js';
+  import { calculateRatio } from '#lib/shared/math.ts';
 
   interface Props {
     coffee?: number;

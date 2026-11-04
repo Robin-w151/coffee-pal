@@ -1,6 +1,6 @@
 import { browser } from '$app/env';
-import { JOURNAL_DB_NAME, JOURNAL_PAGE_SIZE } from '#lib/config/journal.js';
-import type { CachedSearchResult } from '#lib/models/cachedSearch.js';
+import { JOURNAL_DB_NAME, JOURNAL_PAGE_SIZE } from '#lib/config/journal.ts';
+import type { CachedSearchResult } from '#lib/models/cachedSearch.ts';
 import {
   isActiveJournalEntry,
   type ActiveJournalEntry,
@@ -10,10 +10,10 @@ import {
   type JournalSort,
   type JournalSortDirection,
   type JournalState,
-} from '#lib/models/journal.js';
-import type { ActiveCoffeeEntry } from '#lib/models/myCoffees.js';
-import type { SyncResult } from '#lib/models/sync.js';
-import { loadPage, sortOrSearch } from '#lib/services/journal/wrapper.js';
+} from '#lib/models/journal.ts';
+import type { ActiveCoffeeEntry } from '#lib/models/myCoffees.ts';
+import type { SyncResult } from '#lib/models/sync.ts';
+import { loadPage, sortOrSearch } from '#lib/services/journal/wrapper.ts';
 import Dexie, { liveQuery, type Observable as DxObservable, type Table } from 'dexie';
 import { DateTime } from 'luxon';
 import { BehaviorSubject, debounceTime, switchMap, tap, type Observable } from 'rxjs';

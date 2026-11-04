@@ -1,7 +1,7 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
-  import { routes } from '#lib/config/routes.js';
+  import { routes } from '#lib/config/routes.ts';
 
   function handleKeyDown(event: KeyboardEvent): void {
     const num = parseInt(event.key);

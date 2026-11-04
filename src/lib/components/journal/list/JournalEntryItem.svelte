@@ -1,13 +1,13 @@
 <script lang="ts">
-  import type { ActiveJournalEntry } from '#lib/models/journal.js';
-  import { getSettingsStore } from '#lib/stores/settings.svelte.js';
-  import { calculateRatio } from '#lib/shared/math.js';
+  import type { ActiveJournalEntry } from '#lib/models/journal.ts';
+  import { getSettingsStore } from '#lib/stores/settings.svelte.ts';
+  import { calculateRatio } from '#lib/shared/math.ts';
   import {
     getDisplayValue,
     getPreferredTemperatureUnit,
     getPreferredWeightUnit,
-  } from '#lib/shared/units.js';
-  import { getCoffeeLabel } from '#lib/models/myCoffees.js';
+  } from '#lib/shared/units.ts';
+  import { getCoffeeLabel } from '#lib/models/myCoffees.ts';
   import { resolve } from '$app/paths';
 
   const settingsStore = getSettingsStore();

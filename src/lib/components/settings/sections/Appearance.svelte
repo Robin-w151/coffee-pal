@@ -1,6 +1,6 @@
 <script lang="ts">
-  import type { ColorScheme } from '#lib/models/settings.js';
-  import { getSettingsStore } from '#lib/stores/settings.svelte.js';
+  import type { ColorScheme } from '#lib/models/settings.ts';
+  import { getSettingsStore } from '#lib/stores/settings.svelte.ts';
   import Label from '../../shared/elements/form/Label.svelte';
   import Card from '#lib/components/shared/elements/Card.svelte';
   import SegmentedControl from '#lib/components/shared/ui/SegmentedControl.svelte';

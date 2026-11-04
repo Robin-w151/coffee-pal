@@ -1,5 +1,5 @@
 <script lang="ts" module>
-  import { screens } from '#lib/config/screens.js';
+  import { screens } from '#lib/config/screens.ts';
 
   interface SortOption {
     label: string;
@@ -13,13 +13,13 @@
 
 <script lang="ts">
   import { goto } from '$app/navigation';
-  import { MY_COFFEES_PAGE_SIZE } from '#lib/config/myCoffees.js';
-  import type { MyCoffeesSort, MyCoffeesSortDirection } from '#lib/models/myCoffees.js';
-  import { sync } from '#lib/services/sync/sync.js';
-  import { myCoffeesSearchStore, myCoffeesStore } from '#lib/stores/myCoffees.js';
-  import { getSyncAvailabilityStore } from '#lib/stores/syncAvailability.svelte.js';
-  import { syncStateStore } from '#lib/stores/syncState.svelte.js';
-  import { scrollToTop } from '#lib/shared/ui/scroll.js';
+  import { MY_COFFEES_PAGE_SIZE } from '#lib/config/myCoffees.ts';
+  import type { MyCoffeesSort, MyCoffeesSortDirection } from '#lib/models/myCoffees.ts';
+  import { sync } from '#lib/services/sync/sync.ts';
+  import { myCoffeesSearchStore, myCoffeesStore } from '#lib/stores/myCoffees.ts';
+  import { getSyncAvailabilityStore } from '#lib/stores/syncAvailability.svelte.ts';
+  import { syncStateStore } from '#lib/stores/syncState.svelte.ts';
+  import { scrollToTop } from '#lib/shared/ui/scroll.ts';
   import {
     faArrowUp19,
     faArrowUp91,
@@ -36,7 +36,7 @@
   import PageSearch from '../shared/elements/page/PageSearch.svelte';
   import CoffeeEntries from './list/CoffeeEntries.svelte';
   import CoffeeEntriesTable from './table/CoffeeEntriesTable.svelte';
-  import { getSyncStore } from '#lib/stores/sync.svelte.js';
+  import { getSyncStore } from '#lib/stores/sync.svelte.ts';
   import { resolve } from '$app/paths';
 
   const syncStore = getSyncStore();

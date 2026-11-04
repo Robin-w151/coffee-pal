@@ -1,4 +1,4 @@
-import { round } from '#lib/shared/math.js';
+import { round } from '#lib/shared/math.ts';
 
 export function calculateDripRate(timestamps: Array<number>): number {
   if (timestamps.length < 2) {

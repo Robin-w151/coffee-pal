@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { pauseScheduledSync } from '#lib/services/sync/sync.js';
-  import { listenForUpdates } from '#lib/services/updates/updateListener.js';
-  import { toast } from '#lib/services/ui/toast.svelte.js';
+  import { pauseScheduledSync } from '#lib/services/sync/sync.ts';
+  import { listenForUpdates } from '#lib/services/updates/updateListener.ts';
+  import { toast } from '#lib/services/ui/toast.svelte.ts';
   import { onMount } from 'svelte';
 
   let isRestarting = $state(false);

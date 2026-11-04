@@ -6,7 +6,7 @@
     faAnglesLeft,
     faAnglesRight,
   } from '@fortawesome/free-solid-svg-icons';
-  import { screens } from '#lib/config/screens.js';
+  import { screens } from '#lib/config/screens.ts';
   import { Pagination } from '@skeletonlabs/skeleton-svelte';
   import { MediaQuery } from 'svelte/reactivity';
   import { Icon } from 'svelte-awesome';

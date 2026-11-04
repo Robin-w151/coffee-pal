@@ -1,8 +1,8 @@
-import type { CachedSearchResult } from '#lib/models/cachedSearch.js';
-import type { ActiveJournalEntry, JournalSearchState, JournalWorker } from '#lib/models/journal.js';
+import type { CachedSearchResult } from '#lib/models/cachedSearch.ts';
+import type { ActiveJournalEntry, JournalSearchState, JournalWorker } from '#lib/models/journal.ts';
 import { expose } from 'comlink';
 import { sortOrSearch as sortOrSearchImpl } from './search';
-import { JOURNAL_PAGE_SIZE } from '#lib/config/journal.js';
+import { JOURNAL_PAGE_SIZE } from '#lib/config/journal.ts';
 
 let data: Array<ActiveJournalEntry> = [];
 

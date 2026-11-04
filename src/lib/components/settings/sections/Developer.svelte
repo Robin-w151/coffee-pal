@@ -2,10 +2,10 @@
   import { browser } from '$app/env';
   import Card from '#lib/components/shared/elements/Card.svelte';
   import ToggleableSection from '#lib/components/shared/elements/ToggleableSection.svelte';
-  import { JOURNAL_DB_NAME } from '#lib/config/journal.js';
-  import { MY_COFFEES_DB_NAME } from '#lib/config/myCoffees.js';
-  import { humanReadableMemorySize } from '#lib/shared/ui/formatting.js';
-  import { modal } from '#lib/services/ui/modal.svelte.js';
+  import { JOURNAL_DB_NAME } from '#lib/config/journal.ts';
+  import { MY_COFFEES_DB_NAME } from '#lib/config/myCoffees.ts';
+  import { humanReadableMemorySize } from '#lib/shared/ui/formatting.ts';
+  import { modal } from '#lib/services/ui/modal.svelte.ts';
   import { onDestroy, onMount } from 'svelte';
 
   interface Props {
