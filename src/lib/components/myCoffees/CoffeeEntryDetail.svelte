@@ -132,6 +132,8 @@
         if (shouldGoBack) {
           history.back();
         } else {
+          // to.url comes from SvelteKit's own navigation, so it is resolved already.
+          // eslint-disable-next-line svelte/no-navigation-without-resolve
           goto(`${to.url.pathname}${to.url.search}`);
         }
       } else {
