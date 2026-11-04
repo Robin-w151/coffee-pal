@@ -4,7 +4,7 @@ import type {
   ActiveCoffeeEntry,
   MyCoffeesSort,
   MyCoffeesSortDirection,
-} from '$lib/models/myCoffees';
+} from '#lib/models/myCoffees.ts';
 
 export const testCoffeeEntries: Array<ActiveCoffeeEntry> = [
   {

@@ -1,14 +1,14 @@
 <script lang="ts">
-  import Card from '$lib/components/shared/elements/Card.svelte';
-  import Form from '$lib/components/shared/elements/form/Form.svelte';
-  import Label from '$lib/components/shared/elements/form/Label.svelte';
-  import MeasurementInput from '$lib/components/shared/elements/form/MeasurementInput.svelte';
-  import Switch from '$lib/components/shared/ui/Switch.svelte';
-  import { WEIGHT_UNITS, WEIGHT_UNITS_COFFEE } from '$lib/config/units';
-  import type { Measurement } from '$lib/models/measurement';
-  import type { Recipe } from '$lib/models/recipe';
-  import { getPreferredWeightUnit } from '$lib/shared/units';
-  import { getSettingsStore } from '$lib/stores/settings.svelte';
+  import Card from '#lib/components/shared/elements/Card.svelte';
+  import Form from '#lib/components/shared/elements/form/Form.svelte';
+  import Label from '#lib/components/shared/elements/form/Label.svelte';
+  import MeasurementInput from '#lib/components/shared/elements/form/MeasurementInput.svelte';
+  import Switch from '#lib/components/shared/ui/Switch.svelte';
+  import { WEIGHT_UNITS, WEIGHT_UNITS_COFFEE } from '#lib/config/units.ts';
+  import type { Measurement } from '#lib/models/measurement.ts';
+  import type { Recipe } from '#lib/models/recipe.ts';
+  import { getPreferredWeightUnit } from '#lib/shared/units.ts';
+  import { getSettingsStore } from '#lib/stores/settings.svelte.ts';
   import { untrack } from 'svelte';
 
   const settingsStore = getSettingsStore();

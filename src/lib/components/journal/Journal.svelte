@@ -1,5 +1,5 @@
 <script lang="ts" module>
-  import { screens } from '$lib/config/screens';
+  import { screens } from '#lib/config/screens.ts';
 
   interface SortOption {
     label: string;
@@ -13,13 +13,13 @@
 
 <script lang="ts">
   import { goto } from '$app/navigation';
-  import { JOURNAL_PAGE_SIZE } from '$lib/config/journal';
-  import type { JournalSort, JournalSortDirection } from '$lib/models/journal';
-  import { sync } from '$lib/services/sync/sync';
-  import { journalSearchStore, journalStore } from '$lib/stores/journal';
-  import { getSyncAvailabilityStore } from '$lib/stores/syncAvailability.svelte';
-  import { syncStateStore } from '$lib/stores/syncState.svelte';
-  import { scrollToTop } from '$lib/shared/ui/scroll';
+  import { JOURNAL_PAGE_SIZE } from '#lib/config/journal.ts';
+  import type { JournalSort, JournalSortDirection } from '#lib/models/journal.ts';
+  import { sync } from '#lib/services/sync/sync.ts';
+  import { journalSearchStore, journalStore } from '#lib/stores/journal.ts';
+  import { getSyncAvailabilityStore } from '#lib/stores/syncAvailability.svelte.ts';
+  import { syncStateStore } from '#lib/stores/syncState.svelte.ts';
+  import { scrollToTop } from '#lib/shared/ui/scroll.ts';
   import {
     faArrowUpAZ,
     faArrowUpZA,
@@ -27,14 +27,14 @@
     faStar,
     type IconDefinition,
   } from '@fortawesome/free-solid-svg-icons';
-  import Listbox from '$lib/components/shared/ui/Listbox.svelte';
-  import Pagination from '$lib/components/shared/ui/Pagination.svelte';
+  import Listbox from '#lib/components/shared/ui/Listbox.svelte';
+  import Pagination from '#lib/components/shared/ui/Pagination.svelte';
   import PageActions from '../shared/elements/page/PageActions.svelte';
   import PageCard from '../shared/elements/page/PageCard.svelte';
   import PageSearch from '../shared/elements/page/PageSearch.svelte';
   import JournalEntries from './list/JournalEntries.svelte';
   import JournalEntriesTable from './table/JournalEntriesTable.svelte';
-  import { getSyncStore } from '$lib/stores/sync.svelte';
+  import { getSyncStore } from '#lib/stores/sync.svelte.ts';
   import { resolve } from '$app/paths';
 
   const syncStore = getSyncStore();
@@ -106,7 +106,7 @@
   }
 
   function handleAddClick(): void {
-    goto(resolve('/journal/new', {}));
+    goto(resolve('/journal/new'));
   }
 
   function handleSyncClick(): void {

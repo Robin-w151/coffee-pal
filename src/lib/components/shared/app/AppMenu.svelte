@@ -1,14 +1,14 @@
 <script lang="ts">
   import { resolve } from '$app/paths';
-  import { page } from '$app/stores';
-  import { routes } from '$lib/config/routes';
-  import type { Route } from '$lib/models/route';
-  import { drawer } from '$lib/services/ui/drawer.svelte';
+  import { page } from '$app/state';
+  import { routes } from '#lib/config/routes.ts';
+  import type { Route } from '#lib/models/route.ts';
+  import { drawer } from '#lib/services/ui/drawer.svelte.ts';
   import { faClose } from '@fortawesome/free-solid-svg-icons';
   import { Icon } from 'svelte-awesome';
 
   const routeActiveClass = $derived((route: Route) =>
-    isSelected(route, $page.url.pathname)
+    isSelected(route, page.url.pathname)
       ? 'preset-filled-primary-500'
       : 'hover:preset-tonal-primary',
   );
@@ -42,8 +42,8 @@
             class="grid grid-cols-[1.25rem_1fr] items-center gap-4 px-4 py-2 rounded-base {routeActiveClass(
               route,
             )}"
-            href={resolve(route.href, {})}
-            aria-current={isSelected(route, $page.url.pathname) ? 'page' : undefined}
+            href={resolve(route.href)}
+            aria-current={isSelected(route, page.url.pathname) ? 'page' : undefined}
             onclick={handleClick}
           >
             <span class="flex items-center justify-self-center">

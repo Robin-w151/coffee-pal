@@ -1,6 +1,6 @@
-import { browser } from '$app/environment';
-import type { CachedSearchResult } from '$lib/models/cachedSearch';
-import type { ActiveJournalEntry, JournalSearchState } from '$lib/models/journal';
+import { browser } from '$app/env';
+import type { CachedSearchResult } from '#lib/models/cachedSearch.ts';
+import type { ActiveJournalEntry, JournalSearchState } from '#lib/models/journal.ts';
 import { wrap } from 'comlink';
 
 /**

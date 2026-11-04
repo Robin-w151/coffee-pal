@@ -1,5 +1,5 @@
 <script lang="ts">
-  import ResponsiveButton from '$lib/components/shared/elements/form/ResponsiveButton.svelte';
+  import ResponsiveButton from '#lib/components/shared/elements/form/ResponsiveButton.svelte';
   import { faClone, faSave, faTrash } from '@fortawesome/free-solid-svg-icons';
   import type { Snippet } from 'svelte';
   import { Icon } from 'svelte-awesome';

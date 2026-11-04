@@ -1,14 +1,14 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
-  import type { ActiveJournalEntry } from '$lib/models/journal';
-  import { getSettingsStore } from '$lib/stores/settings.svelte';
+  import type { ActiveJournalEntry } from '#lib/models/journal.ts';
+  import { getSettingsStore } from '#lib/stores/settings.svelte.ts';
   import {
     getDisplayValue,
     getPreferredTemperatureUnit,
     getPreferredWeightUnit,
-  } from '$lib/shared/units';
-  import { getCoffeeLabel } from '$lib/models/myCoffees';
-  import { calculateRatio } from '$lib/shared/math';
+  } from '#lib/shared/units.ts';
+  import { getCoffeeLabel } from '#lib/models/myCoffees.ts';
+  import { calculateRatio } from '#lib/shared/math.ts';
   import { resolve } from '$app/paths';
 
   const settingsStore = getSettingsStore();
@@ -38,7 +38,7 @@
   }
 
   function gotoDetail(): void {
-    goto(resolve(`/journal/${entry.id}`, {}));
+    goto(resolve('/journal/[id]', { id: entry.id }));
   }
 
   function waterDisplayValue(water: number): string {

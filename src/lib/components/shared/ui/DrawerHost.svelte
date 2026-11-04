@@ -1,6 +1,6 @@
 <script lang="ts">
-  // Shows the drawer service's drawer as a Skeleton v4 `Dialog` on the left side.
-  import { drawer, type DrawerId } from '$lib/services/ui/drawer.svelte';
+  // Shows the drawer service's drawer as a Skeleton `Dialog` on the left side.
+  import { drawer, type DrawerId } from '#lib/services/ui/drawer.svelte.ts';
   import { Dialog, Portal } from '@skeletonlabs/skeleton-svelte';
   import type { Snippet } from 'svelte';
   import { prefersReducedMotion } from 'svelte/motion';
@@ -12,7 +12,7 @@
 
   let { content }: Props = $props();
 
-  // The drawer slides in from the left and the backdrop fades, as in v2 (200ms, off for reduced
+  // The drawer slides in from the left and the backdrop fades (200ms, off for reduced
   // motion). The last opened drawer stays rendered while it slides out.
   const duration = $derived(prefersReducedMotion.current ? 0 : 200);
   let shownId = $state<DrawerId>();
@@ -37,7 +37,7 @@
 
 <Dialog open={!!drawer.current} closeOnEscape={false} closeOnInteractOutside={false}>
   <Portal>
-    <!-- v4 hides closed parts at once, so `hidden` is kept off while they animate out. -->
+    <!-- Skeleton hides closed parts at once, so `hidden` is kept off while they animate out. -->
     <Dialog.Backdrop
       class="pointer-events-auto fixed inset-0 z-50 bg-surface-950/50"
       onclick={drawer.close}

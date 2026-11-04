@@ -1,6 +1,6 @@
 <script lang="ts">
-  import Label from '$lib/components/shared/elements/form/Label.svelte';
-  import { defaultTextAreaRows } from '$lib/shared/ui/styles';
+  import Label from '#lib/components/shared/elements/form/Label.svelte';
+  import { defaultTextAreaRows } from '#lib/shared/ui/styles.ts';
 
   interface Props {
     description?: string;

@@ -1,12 +1,16 @@
-import { sveltekit } from '@sveltejs/kit/vite';
+import adapterAuto from '@sveltejs/adapter-auto';
+import adapterNode from '@sveltejs/adapter-node';
+import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 import tailwindcss from '@tailwindcss/vite';
-import { SvelteKitPWA } from '@vite-pwa/sveltekit';
+import { withPwa } from '@vite-pwa/sveltekit';
 import dotenv from 'dotenv-flow';
 import { execSync } from 'node:child_process';
 import { defineConfig } from 'vite';
-import manifest from './src/assets/manifest';
+import manifest from './src/assets/manifest.ts';
 
 dotenv.config({ silent: true });
+
+const useAdapterNode = process.env['USE_ADAPTER_NODE'] === 'true';
 
 export default defineConfig({
   define: {
@@ -16,18 +20,35 @@ export default defineConfig({
   },
   plugins: [
     tailwindcss(),
-    sveltekit(),
-    SvelteKitPWA({
-      strategies: 'injectManifest',
-      manifest,
-      minify: false,
-      devOptions: {
-        enabled: true,
-        suppressWarnings: process.env.SUPPRESS_WARNING === 'true',
-        type: 'module',
-        navigateFallback: '/',
+    // withPwa wraps sveltekit(): the first argument is the SvelteKit (and vite-plugin-svelte) config.
+    withPwa(
+      {
+        adapter: useAdapterNode ? adapterNode() : adapterAuto(),
+        preprocess: vitePreprocess(),
+        inspector: true,
+        onwarn: (warning, handler) => {
+          if (warning.code === 'state_referenced_locally') {
+            return;
+          }
+
+          handler(warning);
+        },
       },
-    }),
+      {
+        strategies: 'buildSW',
+        // SvelteKit registers src/service-worker.ts itself, as before.
+        injectRegister: false,
+        buildSW: { swSrc: 'src/service-worker.ts' },
+        manifest,
+        minify: false,
+        devOptions: {
+          enabled: true,
+          suppressWarnings: process.env.SUPPRESS_WARNING === 'true',
+          type: 'module',
+          navigateFallback: '/',
+        },
+      },
+    ),
   ],
   build: {
     sourcemap: true,

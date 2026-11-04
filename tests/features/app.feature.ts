@@ -1,5 +1,5 @@
-import type { ActiveJournalEntry } from '$lib/models/journal';
-import type { ActiveCoffeeEntry } from '$lib/models/myCoffees';
+import type { ActiveJournalEntry } from '#lib/models/journal.ts';
+import type { ActiveCoffeeEntry } from '#lib/models/myCoffees.ts';
 import type { Locator, Page } from '@playwright/test';
 
 export class AppPage {
@@ -228,7 +228,7 @@ export const testCoffeeEntries: Array<ActiveCoffeeEntry> = [
 
 /**
  * Whether the element is rendered and can be seen and used. Unlike `toBeVisible()`, this treats
- * transparent and inert elements as not shown (Skeleton v2 popups close via `opacity: 0` + `inert`).
+ * transparent and inert elements as not shown.
  */
 export async function isShown(locator: Locator): Promise<boolean> {
   if ((await locator.count()) === 0) {

@@ -1,5 +1,5 @@
 <script lang="ts" module>
-  import { screens } from '$lib/config/screens';
+  import { screens } from '#lib/config/screens.ts';
 
   interface SortOption {
     label: string;
@@ -13,13 +13,13 @@
 
 <script lang="ts">
   import { goto } from '$app/navigation';
-  import { MY_COFFEES_PAGE_SIZE } from '$lib/config/myCoffees';
-  import type { MyCoffeesSort, MyCoffeesSortDirection } from '$lib/models/myCoffees';
-  import { sync } from '$lib/services/sync/sync';
-  import { myCoffeesSearchStore, myCoffeesStore } from '$lib/stores/myCoffees';
-  import { getSyncAvailabilityStore } from '$lib/stores/syncAvailability.svelte';
-  import { syncStateStore } from '$lib/stores/syncState.svelte';
-  import { scrollToTop } from '$lib/shared/ui/scroll';
+  import { MY_COFFEES_PAGE_SIZE } from '#lib/config/myCoffees.ts';
+  import type { MyCoffeesSort, MyCoffeesSortDirection } from '#lib/models/myCoffees.ts';
+  import { sync } from '#lib/services/sync/sync.ts';
+  import { myCoffeesSearchStore, myCoffeesStore } from '#lib/stores/myCoffees.ts';
+  import { getSyncAvailabilityStore } from '#lib/stores/syncAvailability.svelte.ts';
+  import { syncStateStore } from '#lib/stores/syncState.svelte.ts';
+  import { scrollToTop } from '#lib/shared/ui/scroll.ts';
   import {
     faArrowUp19,
     faArrowUp91,
@@ -29,14 +29,14 @@
     faStar,
     type IconDefinition,
   } from '@fortawesome/free-solid-svg-icons';
-  import Listbox from '$lib/components/shared/ui/Listbox.svelte';
-  import Pagination from '$lib/components/shared/ui/Pagination.svelte';
+  import Listbox from '#lib/components/shared/ui/Listbox.svelte';
+  import Pagination from '#lib/components/shared/ui/Pagination.svelte';
   import PageActions from '../shared/elements/page/PageActions.svelte';
   import PageCard from '../shared/elements/page/PageCard.svelte';
   import PageSearch from '../shared/elements/page/PageSearch.svelte';
   import CoffeeEntries from './list/CoffeeEntries.svelte';
   import CoffeeEntriesTable from './table/CoffeeEntriesTable.svelte';
-  import { getSyncStore } from '$lib/stores/sync.svelte';
+  import { getSyncStore } from '#lib/stores/sync.svelte.ts';
   import { resolve } from '$app/paths';
 
   const syncStore = getSyncStore();
@@ -121,7 +121,7 @@
   }
 
   function handleAddClick(): void {
-    goto(resolve('/my-coffees/new', {}));
+    goto(resolve('/my-coffees/new'));
   }
 
   function handleSyncClick(): void {

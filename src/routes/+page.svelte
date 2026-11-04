@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Journal from '$lib/components/journal/Journal.svelte';
+  import Journal from '#lib/components/journal/Journal.svelte';
 </script>
 
 <svelte:head>

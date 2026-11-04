@@ -7,14 +7,8 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-/*
-  The default border color has changed to `currentcolor` in Tailwind CSS v4,
-  so we've added these compatibility styles to make sure everything still
-  looks the same as it did with Tailwind CSS v3.
-
-  If we ever want to remove these styles, we need to add an explicit border
-  color utility to any element that depends on these defaults.
-*/
+/* Borders default to gray-200 instead of Tailwind's currentcolor. Without this rule, every element
+   that relies on it needs an explicit border colour. */
 @layer base {
   *,
   ::after,
@@ -24,7 +18,7 @@
     border-color: var(--color-gray-200, currentcolor);
   }
 
-  /* Field placeholders in v2's colour, the forms plugin's gray-500 in both modes, instead of
+  /* Field placeholders in the forms plugin's gray-500 in both modes, instead of
      Skeleton's surface-700-300. The field utilities take it from --field-placeholder (below). */
   [data-scope='combobox'][data-part='input']::placeholder,
   [data-scope='tags-input'][data-part='input']::placeholder {
@@ -38,19 +32,19 @@
     --tw-ring-color: var(--color-surface-400-600);
   }
 
-  /* Plain <hr>s in the colour of Skeleton's hr and vr (v2 styled bare <hr>s, v4 doesn't). */
+  /* Plain <hr>s in the colour of Skeleton's hr and vr, which it doesn't apply to bare <hr>s. */
   hr {
     border-color: var(--color-surface-200-800);
   }
 }
 
-/* Form field outlines: thicker than v4's 1px, and in the stronger surface-400-600 pairing, as the
+/* Form field outlines: thicker than Skeleton's 1px, and in the stronger surface-400-600 pairing, as the
    theme's surface-200-800 outline is barely visible against the cards and field backgrounds. The
    colour is set where Skeleton sets it: on the ring of the field utilities (below) and of the
    combobox and tags input (base layer, below), and on the border of the dropzone and segmented
-   control (here). Fields get a surface 200 / 700 background, off the surface 100 / 800 cards (v4's
-   fields are transparent), like v2's fields stood off its cards, and 9px vertical padding with a
-   24px line, so they are 42px tall like buttons (v5: 0.4375rem and a 16px line). */
+   control (here). Fields get a surface 200 / 700 background, off the surface 100 / 800 cards (Skeleton's
+   fields are transparent), and 9px vertical padding with a 24px line, so they are 42px tall like
+   buttons. */
 @layer components {
   .input,
   .textarea,
@@ -63,7 +57,7 @@
     background-color: var(--coffee-field-background);
   }
 
-  /* The plain cells of field groups (units, icons, links) look like the fields next to them (v5's
+  /* The plain cells of field groups (units, icons, links) look like the fields next to them (Skeleton's
      have no background or outline). */
   .field-group > .label {
     --tw-ring-color: var(--color-surface-400-600);
@@ -77,14 +71,14 @@
     border-color: var(--color-surface-400-600);
   }
 
-  /* Switches that are off on a surface 400 / 500 track. v4's surface-200-800 barely shows on the
-     cards (and not at all in dark mode); v2's dark 700 isn't much better on the 800 cards. */
+  /* Switches that are off on a surface 400 / 500 track. Skeleton's surface-200-800 barely shows on
+     the cards (and not at all in dark mode). */
   [data-scope='switch'][data-part='control']:not([data-state='checked']) {
     background-color: light-dark(var(--color-surface-400), var(--color-surface-500));
   }
 
-  /* Segmented controls in v2's RadioGroup spacing. Their items are buttons and would otherwise get the
-     buttons' v2 padding inside v4's 8px control padding (64px tall). */
+  /* Segmented controls with 4px padding and gaps. Their items are buttons and would otherwise get
+     the buttons' padding inside Skeleton's 8px control padding (64px tall). */
   [data-scope='radio-group'][data-part='control'] {
     gap: --spacing(1);
     padding: --spacing(1);
@@ -94,8 +88,8 @@
     padding: --spacing(1) --spacing(4);
   }
 
-  /* The navigation rail in v2's geometry: 80px wide, 4px padding and gaps, 72px tiles. v4's is
-     100px with 8px spacing, and its tiles are buttons that got the buttons' v2 padding. */
+  /* The navigation rail: 80px wide, 4px padding and gaps, 72px tiles. Skeleton's is 100px with 8px
+     spacing, and its tiles are buttons that would get the buttons' padding. */
   [data-scope='navigation'][data-part='root'][data-layout='rail'] {
     width: --spacing(20);
     padding: --spacing(1);
@@ -110,7 +104,7 @@
     padding: --spacing(1);
   }
 
-  /* Sliders in the primary colour (v4: surface-950-50), on the off switches' track colour, which
+  /* Sliders in the primary colour (Skeleton: surface-950-50), on the off switches' track colour, which
      shows on the cards in dark mode too. */
   [data-scope='slider'][data-part='track'] {
     background: light-dark(var(--color-surface-400), var(--color-surface-500));
@@ -120,7 +114,7 @@
     background: var(--color-primary-500);
   }
 
-  /* The thumb light in both modes, like the switches' (v4: surface-50-950). */
+  /* The thumb light in both modes, like the switches' (Skeleton: surface-50-950). */
   [data-scope='slider'][data-part='thumb'] {
     background: var(--color-surface-50);
     box-shadow: inset 0 0 0 2px var(--color-primary-500);
@@ -157,15 +151,14 @@
 }
 
 /* Plain field-group cells start their text at the left, like the units in the selects next to
-   them (v5 centres them). Icon and link cells fit their content, so this doesn't move them. */
+   them (Skeleton centres them). Icon and link cells fit their content, so this doesn't move them. */
 @utility field-group {
   & > .label {
     justify-content: flex-start;
   }
 }
 
-/* Invalid form fields, on .input and .field-group (v2's input-error, in its colours for both modes;
-   Skeleton has no input states). */
+/* Invalid form fields, on .input and .field-group (Skeleton has no input states). */
 @utility input-error {
   --coffee-field-background: var(--color-error-200);
   --tw-ring-color: var(--color-error-500);
@@ -193,8 +186,8 @@
   }
 }
 
-/* Tables as in v2: bold headers on surface 200 / 700, the colour of the alternating rows too, and
-   roomier cells (v4: normal weight, no header background, 0.5rem padding). */
+/* Tables: bold headers on surface 200 / 700, the colour of the alternating rows too, and roomier
+   cells (Skeleton: normal weight, no header background, 0.5rem padding). */
 @utility table {
   & thead,
   & tbody tr:nth-child(2n) {
@@ -216,7 +209,7 @@
   }
 }
 
-/* Clickable table rows, as v2's table-interactive (v4 has none): pointer and a primary tint on
+/* Clickable table rows (Skeleton has no style for them): pointer and a primary tint on
    hover. The tint is on the cells, over the row's own background, so striped rows are tinted too
    and it can fade like the list items' hover. */
 @utility table-interactive {
@@ -233,8 +226,8 @@
   }
 }
 
-/* Tonal presets in light mode in v2's soft colours: a 20% tint of the 400 shade with 700 text.
-   v4's light 50 background is barely off the cards. Dark mode keeps v4's colours. */
+/* Tonal presets in light mode in soft colours: a 20% tint of the 400 shade with 700 text.
+   Skeleton's light 50 background is barely off the cards. Dark mode keeps Skeleton's colours. */
 @utility preset-tonal-primary {
   background-color: light-dark(
     color-mix(in oklab, var(--color-primary-400) 20%, transparent),
@@ -264,9 +257,8 @@
   color: light-dark(var(--color-error-700), var(--color-error-50));
 }
 
-/* Loading placeholders in surface 300 / 500. v4's surface-200-800 is the colour of the light table
-   stripes and the dark cards, so the bars vanished there; v2's dark 600 barely shows on the 700
-   stripes. */
+/* Loading placeholders in surface 300 / 500. Skeleton's surface-200-800 is the colour of the light
+   table stripes and the dark cards, so the bars would vanish there. */
 @utility placeholder {
   background-color: light-dark(var(--color-surface-300), var(--color-surface-500));
 }
@@ -274,7 +266,7 @@
   background-color: light-dark(var(--color-surface-300), var(--color-surface-500));
 }
 
-/* Headings in v2's sizes, one step smaller than v4's (e.g. h2: 1.5rem, 2.25rem from md; v4:
+/* Headings one step smaller than Skeleton's (e.g. h2: 1.5rem, 2.25rem from md; Skeleton:
    1.875rem, 2.25rem). */
 @utility h1 {
   font-size: var(--text-3xl);
@@ -331,19 +323,19 @@
   }
 }
 
-/* Buttons in v2's sizes (v5's are smaller: 30px tall buttons, 30/34px icon buttons) and v2's
-   press animation. */
+/* Buttons 42px tall (Skeleton's are smaller: 30px tall buttons, 30/34px icon buttons), with a press
+   animation. */
 @utility btn {
   padding: 9px --spacing(5);
   line-height: var(--text-base--line-height);
 
-  /* Pressed buttons shrink a little, as in v2. */
+  /* Pressed buttons shrink a little. */
   &:not(:disabled):active {
     scale: 95%;
   }
 }
 
-/* Icon buttons as v2's fixed squares, 42px (v2: 43px) like buttons and fields. v5 derives the square
+/* Icon buttons as fixed squares, 42px like buttons and fields. Skeleton derives the square
    (2 × size − 2px) and the icon (size × size) from --btn-size. */
 @utility btn-icon {
   --btn-size: 22px;
@@ -352,7 +344,7 @@
     scale: 95%;
   }
 }
-/* 28px, only used for the buttons inside 42px fields, which v2's 33px nearly filled. */
+/* 28px, only used for the buttons inside 42px fields. */
 @utility btn-icon-sm {
   --btn-size: 15px;
 }
@@ -361,8 +353,8 @@
   --btn-size: 27.5px;
 }
 
-/* Chips and badges in v4's extra small text (v5: small chips, badges at 80% of extra small, which
-   made the journal's ratio badges hard to read). */
+/* Chips and badges in extra small text (Skeleton: small chips, badges at 80% of extra small, which
+   makes the journal's ratio badges hard to read). */
 @utility chip {
   --chip-size: var(--text-xs);
 }
@@ -374,7 +366,7 @@
 :root {
   --coffee-view-transition-duration: 100ms;
   --field-placeholder: var(--color-gray-500);
-  /* Surface 200 in light mode and 700 in dark mode (as in v2), which isn't one of the theme's pairings. */
+  /* Surface 200 in light mode and 700 in dark mode , which isn't one of the theme's pairings. */
   --coffee-field-background: light-dark(var(--color-surface-200), var(--color-surface-700));
 }
 

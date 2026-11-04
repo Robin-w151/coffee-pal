@@ -1,12 +1,12 @@
 <script lang="ts">
-  // Maps to Skeleton v4/v5 `Pagination`. The app counts pages from 0, v4 from 1.
+  // Wraps Skeleton's `Pagination`. The app counts pages from 0, Skeleton from 1.
   import {
     faAngleLeft,
     faAngleRight,
     faAnglesLeft,
     faAnglesRight,
   } from '@fortawesome/free-solid-svg-icons';
-  import { screens } from '$lib/config/screens';
+  import { screens } from '#lib/config/screens.ts';
   import { Pagination } from '@skeletonlabs/skeleton-svelte';
   import { MediaQuery } from 'svelte/reactivity';
   import { Icon } from 'svelte-awesome';
@@ -39,7 +39,7 @@
     page={page + 1}
     onPageChange={(details) => onPageChange(details.page - 1)}
   >
-    <!-- v4 4.15.2 labels only previous/next (in lower case), and its first/last triggers have no
+    <!-- Skeleton labels only previous/next (in lower case), and its first/last triggers have no
        disabled state and lack the data attributes its own styles select. -->
     <Pagination.FirstTrigger
       class="{triggerClass} max-[360px]:hidden"

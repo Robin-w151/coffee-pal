@@ -19,10 +19,10 @@
 </script>
 
 <script lang="ts" generics="T">
-  // Maps to Skeleton v4/v5 `Combobox`. Free text is allowed: the input text is the value, and
-  // choosing an option is reported through onSelect. `open` stays uncontrolled: when controlled, v4
+  // Wraps Skeleton's `Combobox`. Free text is allowed: the input text is the value, and
+  // choosing an option is reported through onSelect. `open` stays uncontrolled: when controlled, Skeleton
   // refocuses the input a frame after every close, even after the user has moved to another field.
-  import InputWithButton from '$lib/components/shared/elements/form/InputWithButton.svelte';
+  import InputWithButton from '#lib/components/shared/elements/form/InputWithButton.svelte';
   import { Combobox, Portal, useCombobox, useListCollection } from '@skeletonlabs/skeleton-svelte';
   import { Icon } from 'svelte-awesome';
   import { fade } from 'svelte/transition';
@@ -105,7 +105,7 @@
   }
 
   // Escape closes the list and must go no further, e.g. not to the page's back handling. Closed here
-  // too: v4 closes on Escape through a layer it sets up only after opening, so an early Escape
+  // too: Skeleton closes on Escape through a layer it sets up only after opening, so an early Escape
   // would be lost.
   function handleKeydown(event: KeyboardEvent): void {
     if (event.key === 'Escape') {
@@ -142,7 +142,7 @@
   </Combobox.Control>
   <Portal>
     <Combobox.Positioner>
-      <!-- Rendered only while open, to fade in and out as v2's popups did (150ms). v4 hides closed
+      <!-- Rendered only while open, to fade in and out (150ms). Skeleton hides closed
            content at once, so `hidden` is kept off while it fades out. -->
       <Combobox.Content class="max-h-48 overflow-y-auto">
         {#snippet element(attributes)}
@@ -153,7 +153,7 @@
                   <Combobox.ItemText>{option.label}</Combobox.ItemText>
                 </Combobox.Item>
               {:else}
-                <!-- No options for the typed text: say so, as v2 did, instead of an empty popup. A
+                <!-- No options for the typed text: say so instead of showing an empty popup. A
                      disabled option, as a listbox needs options; it isn't one of Zag's items, so it
                      can't be highlighted or selected. -->
                 <li

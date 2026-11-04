@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { ButtonType } from '$lib/models/html';
+  import type { ButtonType } from '#lib/models/html.ts';
   import type { Snippet } from 'svelte';
   import type { MouseEventHandler } from 'svelte/elements';
 

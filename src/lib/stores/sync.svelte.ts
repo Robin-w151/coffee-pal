@@ -1,4 +1,4 @@
-import type { Connection, Sync } from '$lib/models/sync';
+import type { Connection, Sync } from '#lib/models/sync.ts';
 import { DateTime } from 'luxon';
 import { PersistedState } from 'runed';
 import { getContext, setContext } from 'svelte';

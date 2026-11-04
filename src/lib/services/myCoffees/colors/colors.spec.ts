@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { getAromaColor } from './colors';
-import type { ColorPair } from '$lib/models/color';
+import type { ColorPair } from '#lib/models/color.ts';
 
 describe('getAromaColor', () => {
   it('should return the correct color pair for exact aroma matches', () => {

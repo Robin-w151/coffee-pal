@@ -1,27 +1,26 @@
 <script lang="ts">
-  import { afterNavigate, onNavigate } from '$app/navigation';
-  import { page } from '$app/stores';
-  import AppBar from '$lib/components/shared/app/AppBar.svelte';
-  import AppMenu from '$lib/components/shared/app/AppMenu.svelte';
-  import AppRail from '$lib/components/shared/app/AppRail.svelte';
-  import EnableColorSchemes from '$lib/components/shared/app/EnableColorSchemes.svelte';
-  import DrawerHost from '$lib/components/shared/ui/DrawerHost.svelte';
-  import ModalHost from '$lib/components/shared/ui/ModalHost.svelte';
-  import ToastHost from '$lib/components/shared/ui/ToastHost.svelte';
-  import { initScheduledSync, scheduleSync } from '$lib/services/sync/sync';
-  import { rememberScrollPosition, scrollToLastKnownPosition } from '$lib/shared/ui/scroll';
-  import '$lib/stores/app.svelte';
-  import { setSettingsStore } from '$lib/stores/settings.svelte';
-  import { setSyncStore } from '$lib/stores/sync.svelte';
-  import { setSyncAvailabilityStore } from '$lib/stores/syncAvailability.svelte';
-  import type { AfterNavigate } from '@sveltejs/kit';
+  import { afterNavigate, onNavigate, type AfterNavigate } from '$app/navigation';
+  import { page } from '$app/state';
+  import AppBar from '#lib/components/shared/app/AppBar.svelte';
+  import AppMenu from '#lib/components/shared/app/AppMenu.svelte';
+  import AppRail from '#lib/components/shared/app/AppRail.svelte';
+  import EnableColorSchemes from '#lib/components/shared/app/EnableColorSchemes.svelte';
+  import DrawerHost from '#lib/components/shared/ui/DrawerHost.svelte';
+  import ModalHost from '#lib/components/shared/ui/ModalHost.svelte';
+  import ToastHost from '#lib/components/shared/ui/ToastHost.svelte';
+  import { initScheduledSync, scheduleSync } from '#lib/services/sync/sync.ts';
+  import { rememberScrollPosition, scrollToLastKnownPosition } from '#lib/shared/ui/scroll.ts';
+  import '#lib/stores/app.svelte.ts';
+  import { setSettingsStore } from '#lib/stores/settings.svelte.ts';
+  import { setSyncStore } from '#lib/stores/sync.svelte.ts';
+  import { setSyncAvailabilityStore } from '#lib/stores/syncAvailability.svelte.ts';
   import { DateTime } from 'luxon';
   import { onMount, type Snippet } from 'svelte';
   import { pwaInfo } from 'virtual:pwa-info';
   import '../../../../app.css';
   import EnableShortcuts from './EnableShortcuts.svelte';
   import EnableUpdateListener from './EnableUpdateListener.svelte';
-  import { runViewTransition } from '$lib/shared/viewTransition';
+  import { runViewTransition } from '#lib/shared/viewTransition.ts';
 
   interface Props {
     children?: Snippet;
@@ -63,7 +62,7 @@
   });
 
   function handlePageScroll(event: Event & { currentTarget: HTMLElement }): void {
-    rememberScrollPosition($page.url.pathname, event.currentTarget.scrollTop);
+    rememberScrollPosition(page.url.pathname, event.currentTarget.scrollTop);
   }
 </script>
 
@@ -86,7 +85,7 @@
   {/snippet}
 </DrawerHost>
 
-<!-- Same geometry and region classes as the Skeleton v2 app shell; #page is the only scroll container. -->
+<!-- #page is the only scroll container. -->
 <div
   class="grid h-full w-full grid-cols-[auto_minmax(0,1fr)] grid-rows-[auto_minmax(0,1fr)] overflow-hidden"
 >
@@ -98,7 +97,7 @@
       <AppRail />
     </nav>
   </aside>
-  <!-- relative: absolutely positioned content (e.g. v4's hidden inputs) is placed and clipped in
+  <!-- relative: absolutely positioned content (e.g. Skeleton's hidden inputs) is placed and clipped in
        here. Otherwise it stretches <html>, which iOS then scrolls to show a focused field, moving
        the whole app up. -->
   <main

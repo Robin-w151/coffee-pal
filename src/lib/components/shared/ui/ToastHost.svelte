@@ -1,6 +1,6 @@
 <script lang="ts">
-  // Renders the toast service's toasts with Skeleton v4's toaster.
-  import { toast } from '$lib/services/ui/toast.svelte';
+  // Renders the toast service's toasts with Skeleton's toaster.
+  import { toast } from '#lib/services/ui/toast.svelte.ts';
   import { Toast, createToaster } from '@skeletonlabs/skeleton-svelte';
 
   const toaster = createToaster({ placement: 'bottom', overlap: false });
@@ -45,8 +45,8 @@
 
 <Toast.Group {toaster}>
   {#snippet children(options)}
-    <!-- role="alert" as with v2; v4 announces toasts as role="status". -->
-    <!-- A row on all widths, as in v2: the message takes the room left and wraps. -->
+    <!-- role="alert": Skeleton announces toasts as role="status". -->
+    <!-- A row on all widths: the message takes the room left and wraps. -->
     <Toast toast={options} role="alert">
       <Toast.Message class="flex-1 min-w-0">
         <Toast.Description>{options.description}</Toast.Description>

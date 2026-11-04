@@ -1,12 +1,16 @@
 <script lang="ts">
   import { beforeNavigate, goto } from '$app/navigation';
-  import { getCoffeeLabel, type ActiveCoffeeEntry } from '$lib/models/myCoffees';
-  import { pauseScheduledSync, resumeScheduledSync, scheduleSync } from '$lib/services/sync/sync';
-  import { isEqualCoffeeEntry } from '$lib/shared/compare';
-  import { modal } from '$lib/services/ui/modal.svelte';
-  import { toast } from '$lib/services/ui/toast.svelte';
-  import { myCoffeesStore } from '$lib/stores/myCoffees';
-  import { syncStateEvents } from '$lib/stores/syncState.svelte';
+  import { getCoffeeLabel, type ActiveCoffeeEntry } from '#lib/models/myCoffees.ts';
+  import {
+    pauseScheduledSync,
+    resumeScheduledSync,
+    scheduleSync,
+  } from '#lib/services/sync/sync.ts';
+  import { isEqualCoffeeEntry } from '#lib/shared/compare.ts';
+  import { modal } from '#lib/services/ui/modal.svelte.ts';
+  import { toast } from '#lib/services/ui/toast.svelte.ts';
+  import { myCoffeesStore } from '#lib/stores/myCoffees.ts';
+  import { syncStateEvents } from '#lib/stores/syncState.svelte.ts';
   import { faFaceSadCry } from '@fortawesome/free-solid-svg-icons';
   import { Subject, takeUntil, tap } from 'rxjs';
   import { onDestroy, onMount, untrack } from 'svelte';
@@ -229,7 +233,7 @@
   }
 
   function goToEntry(id: string): void {
-    goto(resolve('/my-coffees/[id]', { id }), { replaceState: true });
+    goto(resolve('/my-coffees/[id]', { id }), { replace: true });
   }
 
   function getTitle(unknown: boolean, entry?: Partial<ActiveCoffeeEntry>): string {
@@ -258,7 +262,7 @@
         <Icon data={faFaceSadCry} />
       </span>
       <span
-        >Could not find any entry! Go back to the <a href={resolve('/my-coffees', {})}>overview</a
+        >Could not find any entry! Go back to the <a href={resolve('/my-coffees')}>overview</a
         ></span
       >
     </p>

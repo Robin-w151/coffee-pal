@@ -1,5 +1,5 @@
 <script lang="ts">
-  // Maps to Skeleton v4/v5 `RatingGroup`.
+  // Wraps Skeleton's `RatingGroup`.
   import { RatingGroup } from '@skeletonlabs/skeleton-svelte';
 
   interface Props {
@@ -11,7 +11,7 @@
 
   let { value, max, onValueChange }: Props = $props();
 
-  // v4 reports changes only, so a click on the current star is reported here.
+  // Skeleton reports changes only, so a click on the current star is reported here.
   function handleItemClick(index: number): void {
     if (index === value) {
       onValueChange(index);
@@ -20,7 +20,7 @@
 </script>
 
 <RatingGroup count={max} {value} onValueChange={(details) => onValueChange(details.value)}>
-  <!-- v2's 2x star icons: a touch target of 2rem. -->
+  <!-- Star icons with a touch target of 2rem. -->
   <RatingGroup.Control class="[&_svg]:size-8">
     {#each { length: max }, i (i)}
       <RatingGroup.Item index={i + 1} onclick={() => handleItemClick(i + 1)} />

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { browser } from '$app/environment';
+  import { browser } from '$app/env';
   import { debounceTime, fromEvent, tap } from 'rxjs';
   import type { HasEventTargetAddRemove } from 'rxjs/internal/observable/fromEvent';
   import { onMount } from 'svelte';

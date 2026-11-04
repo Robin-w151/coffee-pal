@@ -1,13 +1,17 @@
 <script lang="ts">
   import { beforeNavigate, goto } from '$app/navigation';
-  import { type ActiveJournalEntry } from '$lib/models/journal';
-  import { getCoffeeLabel } from '$lib/models/myCoffees';
-  import { pauseScheduledSync, resumeScheduledSync, scheduleSync } from '$lib/services/sync/sync';
-  import { isEqualJournalEntry } from '$lib/shared/compare';
-  import { modal } from '$lib/services/ui/modal.svelte';
-  import { toast } from '$lib/services/ui/toast.svelte';
-  import { journalStore } from '$lib/stores/journal';
-  import { syncStateEvents } from '$lib/stores/syncState.svelte';
+  import { type ActiveJournalEntry } from '#lib/models/journal.ts';
+  import { getCoffeeLabel } from '#lib/models/myCoffees.ts';
+  import {
+    pauseScheduledSync,
+    resumeScheduledSync,
+    scheduleSync,
+  } from '#lib/services/sync/sync.ts';
+  import { isEqualJournalEntry } from '#lib/shared/compare.ts';
+  import { modal } from '#lib/services/ui/modal.svelte.ts';
+  import { toast } from '#lib/services/ui/toast.svelte.ts';
+  import { journalStore } from '#lib/stores/journal.ts';
+  import { syncStateEvents } from '#lib/stores/syncState.svelte.ts';
   import { faCalculator, faFaceSadCry } from '@fortawesome/free-solid-svg-icons';
   import { Subject, takeUntil, tap } from 'rxjs';
   import { onDestroy, onMount, untrack } from 'svelte';
@@ -244,7 +248,7 @@
   }
 
   function goToEntry(id: string): void {
-    goto(resolve('/journal/[id]', { id }), { replaceState: true });
+    goto(resolve('/journal/[id]', { id }), { replace: true });
   }
 
   function getTitle(unknown: boolean, entry?: Partial<ActiveJournalEntry>): string {
@@ -273,7 +277,7 @@
       <span class="flex items-center">
         <Icon data={faFaceSadCry} />
       </span>
-      <span>Could not find any entry! Go back to the <a href={resolve('/', {})}>overview</a></span>
+      <span>Could not find any entry! Go back to the <a href={resolve('/')}>overview</a></span>
     </p>
   {:else}
     <div class="@container">

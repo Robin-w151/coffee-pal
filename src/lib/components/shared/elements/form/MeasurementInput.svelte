@@ -1,6 +1,6 @@
 <script lang="ts">
-  import type { Measurement, Unit } from '$lib/models/measurement';
-  import { round } from '$lib/shared/math';
+  import type { Measurement, Unit } from '#lib/models/measurement.ts';
+  import { round } from '#lib/shared/math.ts';
   import { untrack } from 'svelte';
   import type {
     ChangeEventHandler,

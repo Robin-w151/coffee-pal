@@ -4,7 +4,7 @@
 </script>
 
 <script lang="ts">
-  // Maps to Skeleton v4/v5 `Popover`.
+  // Wraps Skeleton's `Popover`.
   import { Popover } from '@skeletonlabs/skeleton-svelte';
   import type { Snippet } from 'svelte';
   import { fade } from 'svelte/transition';
@@ -36,7 +36,7 @@
     }
   }
 
-  // Choosing something in the content (click or Enter) closes the popover, as v2's popups did.
+  // Choosing something in the content (click or Enter) closes the popover.
   function handleContentClick(event: MouseEvent): void {
     if (event.target !== event.currentTarget) {
       open = false;
@@ -65,7 +65,7 @@
     {/snippet}
   </Popover.Trigger>
   <Popover.Positioner>
-    <!-- Rendered only while open, to fade in and out as v2's popups did (150ms). v4 hides closed
+    <!-- Rendered only while open, to fade in and out (150ms). Skeleton hides closed
          content at once, so `hidden` is kept off while it fades out. -->
     <Popover.Content
       class="card p-4 bg-surface-200-800 shadow-xl z-10"

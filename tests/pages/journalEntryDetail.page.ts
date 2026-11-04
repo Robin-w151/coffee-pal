@@ -62,10 +62,7 @@ export class JournalEntryDetailPage {
   }
 
   getAutocompleteOption(name: string | RegExp): Locator {
-    // Skeleton v2 renders autocomplete options as buttons; later versions use the option role.
-    return this.page
-      .getByRole('button', { name, exact: true })
-      .or(this.page.getByRole('option', { name, exact: true }));
+    return this.page.getByRole('option', { name, exact: true });
   }
 
   private getUnitSelect(label: string): Locator {

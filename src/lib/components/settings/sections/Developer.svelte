@@ -1,11 +1,11 @@
 <script lang="ts">
-  import { browser } from '$app/environment';
-  import Card from '$lib/components/shared/elements/Card.svelte';
-  import ToggleableSection from '$lib/components/shared/elements/ToggleableSection.svelte';
-  import { JOURNAL_DB_NAME } from '$lib/config/journal';
-  import { MY_COFFEES_DB_NAME } from '$lib/config/myCoffees';
-  import { humanReadableMemorySize } from '$lib/shared/ui/formatting';
-  import { modal } from '$lib/services/ui/modal.svelte';
+  import { browser } from '$app/env';
+  import Card from '#lib/components/shared/elements/Card.svelte';
+  import ToggleableSection from '#lib/components/shared/elements/ToggleableSection.svelte';
+  import { JOURNAL_DB_NAME } from '#lib/config/journal.ts';
+  import { MY_COFFEES_DB_NAME } from '#lib/config/myCoffees.ts';
+  import { humanReadableMemorySize } from '#lib/shared/ui/formatting.ts';
+  import { modal } from '#lib/services/ui/modal.svelte.ts';
   import { onDestroy, onMount } from 'svelte';
 
   interface Props {

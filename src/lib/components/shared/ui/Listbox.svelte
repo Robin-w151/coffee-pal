@@ -1,5 +1,5 @@
 <script lang="ts" generics="TValue extends string">
-  // Maps to Skeleton v4/v5 `Listbox` (single selection).
+  // Wraps Skeleton's `Listbox` (single selection).
   import { faCheck, type IconDefinition } from '@fortawesome/free-solid-svg-icons';
   import { Listbox, useListCollection } from '@skeletonlabs/skeleton-svelte';
   import { Icon } from 'svelte-awesome';
@@ -29,7 +29,7 @@
 
   let highlightedValue = $state<string | null>(null);
 
-  // v4 reports changes only, and only after its own event handling (the popover around it may close
+  // Skeleton reports changes only, and only after its own event handling (the popover around it may close
   // first). Clicks and Enter select directly, so `value` and onSelect also see the current option.
   function handleValueChange(details: { value: Array<string> }): void {
     const option = options.find((candidate) => candidate.value === details.value[0]);

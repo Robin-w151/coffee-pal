@@ -1,18 +1,18 @@
 <script lang="ts">
-  import { Backup } from '$lib/models/backup';
-  import type { ActiveJournalEntry, DeletedJournalEntry } from '$lib/models/journal';
-  import type { ActiveCoffeeEntry, DeletedCoffeeEntry } from '$lib/models/myCoffees';
-  import { merge } from '$lib/services/sync/merge';
-  import { isValid } from '$lib/services/validation/validation';
-  import { journalStore } from '$lib/stores/journal';
-  import { myCoffeesStore } from '$lib/stores/myCoffees';
-  import { readJsonFile, writeJsonFile } from '$lib/shared/file';
-  import { toast } from '$lib/services/ui/toast.svelte';
+  import { Backup } from '#lib/models/backup.ts';
+  import type { ActiveJournalEntry, DeletedJournalEntry } from '#lib/models/journal.ts';
+  import type { ActiveCoffeeEntry, DeletedCoffeeEntry } from '#lib/models/myCoffees.ts';
+  import { merge } from '#lib/services/sync/merge.ts';
+  import { isValid } from '#lib/services/validation/validation.ts';
+  import { journalStore } from '#lib/stores/journal.ts';
+  import { myCoffeesStore } from '#lib/stores/myCoffees.ts';
+  import { readJsonFile, writeJsonFile } from '#lib/shared/file.ts';
+  import { toast } from '#lib/services/ui/toast.svelte.ts';
   import { DateTime } from 'luxon';
   import Spinner from '../../shared/elements/Spinner.svelte';
   import Form from '../../shared/elements/form/Form.svelte';
-  import Card from '$lib/components/shared/elements/Card.svelte';
-  import FileUpload from '$lib/components/shared/ui/FileUpload.svelte';
+  import Card from '#lib/components/shared/elements/Card.svelte';
+  import FileUpload from '#lib/components/shared/ui/FileUpload.svelte';
 
   let file: File | undefined = $state();
   let isImporting = $state(false);

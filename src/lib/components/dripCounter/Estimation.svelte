@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { WEIGHT_UNITS } from '$lib/config/units';
-  import type { Measurement } from '$lib/models/measurement';
-  import { round } from '$lib/shared/math';
-  import { getPreferredWeightUnit } from '$lib/shared/units';
-  import { getSettingsStore } from '$lib/stores/settings.svelte';
+  import { WEIGHT_UNITS } from '#lib/config/units.ts';
+  import type { Measurement } from '#lib/models/measurement.ts';
+  import { round } from '#lib/shared/math.ts';
+  import { getPreferredWeightUnit } from '#lib/shared/units.ts';
+  import { getSettingsStore } from '#lib/stores/settings.svelte.ts';
   import Card from '../shared/elements/Card.svelte';
   import Form from '../shared/elements/form/Form.svelte';
   import Label from '../shared/elements/form/Label.svelte';

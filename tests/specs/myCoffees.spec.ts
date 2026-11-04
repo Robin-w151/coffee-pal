@@ -1,4 +1,4 @@
-import { getAromaColor } from '$lib/services/myCoffees/colors/colors';
+import { getAromaColor } from '#lib/services/myCoffees/colors/colors.ts';
 import { expect } from '@playwright/test';
 import { testCoffeeEntries } from '../features/app.feature';
 import { test } from '../fixtures';

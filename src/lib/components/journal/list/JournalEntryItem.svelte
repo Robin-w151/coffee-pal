@@ -1,13 +1,13 @@
 <script lang="ts">
-  import type { ActiveJournalEntry } from '$lib/models/journal';
-  import { getSettingsStore } from '$lib/stores/settings.svelte';
-  import { calculateRatio } from '$lib/shared/math';
+  import type { ActiveJournalEntry } from '#lib/models/journal.ts';
+  import { getSettingsStore } from '#lib/stores/settings.svelte.ts';
+  import { calculateRatio } from '#lib/shared/math.ts';
   import {
     getDisplayValue,
     getPreferredTemperatureUnit,
     getPreferredWeightUnit,
-  } from '$lib/shared/units';
-  import { getCoffeeLabel } from '$lib/models/myCoffees';
+  } from '#lib/shared/units.ts';
+  import { getCoffeeLabel } from '#lib/models/myCoffees.ts';
   import { resolve } from '$app/paths';
 
   const settingsStore = getSettingsStore();
@@ -39,7 +39,7 @@
 
 <a
   class="flex items-center gap-4 px-3 sm:px-2 py-2 hover:bg-primary-500/10 rounded-md transition ease-out"
-  href={resolve(`/journal/${entry.id}`, {})}
+  href={resolve('/journal/[id]', { id: entry.id })}
 >
   <span class="max-sm:hidden badge preset-tonal-tertiary w-16">{ratio}</span>
   <span class="block min-w-0 flex-1 max-sm:ml-0!">

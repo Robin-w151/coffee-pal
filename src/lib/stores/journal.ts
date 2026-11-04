@@ -1,6 +1,6 @@
-import { browser } from '$app/environment';
-import { JOURNAL_DB_NAME, JOURNAL_PAGE_SIZE } from '$lib/config/journal';
-import type { CachedSearchResult } from '$lib/models/cachedSearch';
+import { browser } from '$app/env';
+import { JOURNAL_DB_NAME, JOURNAL_PAGE_SIZE } from '#lib/config/journal.ts';
+import type { CachedSearchResult } from '#lib/models/cachedSearch.ts';
 import {
   isActiveJournalEntry,
   type ActiveJournalEntry,
@@ -10,10 +10,10 @@ import {
   type JournalSort,
   type JournalSortDirection,
   type JournalState,
-} from '$lib/models/journal';
-import type { ActiveCoffeeEntry } from '$lib/models/myCoffees';
-import type { SyncResult } from '$lib/models/sync';
-import { loadPage, sortOrSearch } from '$lib/services/journal/wrapper';
+} from '#lib/models/journal.ts';
+import type { ActiveCoffeeEntry } from '#lib/models/myCoffees.ts';
+import type { SyncResult } from '#lib/models/sync.ts';
+import { loadPage, sortOrSearch } from '#lib/services/journal/wrapper.ts';
 import Dexie, { liveQuery, type Observable as DxObservable, type Table } from 'dexie';
 import { DateTime } from 'luxon';
 import { BehaviorSubject, debounceTime, switchMap, tap, type Observable } from 'rxjs';
@@ -90,6 +90,7 @@ function createJournalStore(journalSearchStore: JournalSearchStore): JournalStor
 
   if (browser) {
     const db = (journalDb = new JournalDb());
+
     journalSearchStore
       .pipe(
         tap(() => subject.next({ ...subject.value, isLoading: true })),

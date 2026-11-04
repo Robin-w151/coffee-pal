@@ -1,4 +1,4 @@
-import type { ColorPair } from '$lib/models/color';
+import type { ColorPair } from '#lib/models/color.ts';
 import Fuse from 'fuse.js';
 
 interface ColorMapping {

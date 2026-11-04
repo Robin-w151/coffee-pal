@@ -1,5 +1,5 @@
 <script lang="ts" generics="TValue extends string">
-  // Maps to Skeleton v4/v5 `SegmentedControl`.
+  // Wraps Skeleton's `SegmentedControl`.
   import { SegmentedControl } from '@skeletonlabs/skeleton-svelte';
 
   interface Props {

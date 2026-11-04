@@ -1,5 +1,5 @@
-import type { ActiveJournalEntry } from '$lib/models/journal';
-import type { ActiveCoffeeEntry } from '$lib/models/myCoffees';
+import type { ActiveJournalEntry } from '#lib/models/journal.ts';
+import type { ActiveCoffeeEntry } from '#lib/models/myCoffees.ts';
 import { isEqual } from 'lodash-es';
 
 export function isLooslyEqual<V>(value: V, other: V): boolean {

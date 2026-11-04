@@ -1,5 +1,5 @@
-import type { ManifestOptions } from 'vite-plugin-pwa';
-import { routes } from '../lib/config/routes';
+import type { ManifestOptions } from '@unplugin-pwa/core';
+import { routes } from '../lib/config/routes.ts';
 
 export default {
   name: 'Coffee Pal',

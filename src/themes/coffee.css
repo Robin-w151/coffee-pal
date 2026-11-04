@@ -1,29 +1,11 @@
 /*
-  Coffee theme for Skeleton v5, converted by hand from the v2 `theme.ts` (story 14) and moved to
-  the v5 token names with the `skeleton-5` codemod's mapping (story 19).
-
-  v2 token                                   → v5 token
-  --theme-font-family-base: system-ui         → --typo-base--font-family
-  --theme-font-family-heading: system-ui      → --typo-heading--font-family
-  --theme-font-color-base: surface-900        → --typo-base--color-light
-  --theme-font-color-dark: 255 255 255        → --typo-base--color-dark
-  --theme-rounded-base: 16px                  → --radius-base
-  --theme-rounded-container: 16px             → --radius-container
-  --theme-border-base: 3px                    → --default-border-width: 1px (v5 makes it the width of
-                                                Tailwind's `border`; the fields' 3px is in app.css)
-  --color-<name>-<shade>: R G B               → --color-<name>-<shade>: rgb(R G B)
-  (no 950 shade in v2)                        → --color-<name>-950: 900 darkened by 10%
-  --on-<name>: 255 255 255 | 0 0 0            → --color-<name>-contrast-light | -dark, mapped per
-                                                shade in --color-<name>-contrast-<shade>
-  h1–h6/a/button bold (app.css)               → --typo-heading--font-weight: bold (app.css rule stays)
-
-  v5 tokens without a v4 counterpart use the codemod's defaults. `--corner-shape-*: initial` keeps
-  the round corners instead of v5's squircles, and the brand colour (the accent of checkboxes,
-  switches, sliders and filled presets) is coffee primary.
+  Coffee theme. `--corner-shape-*: initial` keeps round corners instead of Skeleton's squircles, and
+  the brand colour (the accent of checkboxes, switches, sliders and filled presets) is coffee
+  primary. The fields' 3px border is in app.css.
 
   Contrast: white (`contrast-light`) from shade 500 for primary, secondary, tertiary, error and
-  surface, as v2's white `--on-*`; black from 50–700 for success and warning, as v2's black.
-  Lighter shades of the white-text palettes use the palette's 950 for text.
+  surface; black from 50–700 for success and warning. Lighter shades of the white-text palettes use
+  the palette's 950 for text.
 */
 
 [data-theme='coffee'] {

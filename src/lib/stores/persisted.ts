@@ -1,7 +1,7 @@
 import type { PersistedState } from 'runed';
 import { untrack } from 'svelte';
 
-// Pinned explicitly so the stored format stays plain JSON, as written by the Skeleton v2 store.
+// Pinned explicitly so the stored format stays the plain JSON that existing installs have stored.
 export const JSON_SERIALIZER = {
   serialize: JSON.stringify,
   deserialize: JSON.parse,

@@ -1,6 +1,6 @@
-import { browser } from '$app/environment';
-import type { CachedSearchResult } from '$lib/models/cachedSearch';
-import type { ActiveCoffeeEntry, MyCoffeesSearchState } from '$lib/models/myCoffees';
+import { browser } from '$app/env';
+import type { CachedSearchResult } from '#lib/models/cachedSearch.ts';
+import type { ActiveCoffeeEntry, MyCoffeesSearchState } from '#lib/models/myCoffees.ts';
 import { wrap } from 'comlink';
 
 /**

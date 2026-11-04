@@ -1,5 +1,5 @@
-import { browser } from '$app/environment';
-import type { App, InstallEvent } from '$lib/models/app';
+import { browser } from '$app/env';
+import type { App, InstallEvent } from '#lib/models/app.ts';
 
 export interface AppStore extends App {
   requestAppInstall: () => Promise<void>;

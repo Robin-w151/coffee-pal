@@ -1,4 +1,3 @@
-<!-- @migration-task Error while migrating Svelte code: $$props is used together with named props in a way that cannot be automatically migrated. -->
 <script lang="ts">
   import type { Snippet } from 'svelte';
 
@@ -17,7 +16,7 @@
   }: Props = $props();
 </script>
 
-<!-- v4's card has no background (v2's had one); 50-950 keeps v4's form outlines visible on it. -->
+<!-- Skeleton's card has no background; this one keeps the form outlines visible on it. -->
 <div class="card bg-surface-100 dark:bg-surface-800 {display} {padding} w-full {clazz ?? ''}">
   {@render children?.()}
 </div>

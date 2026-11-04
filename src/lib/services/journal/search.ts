@@ -3,9 +3,9 @@ import type {
   JournalSearchState,
   JournalSort,
   JournalSortDirection,
-} from '$lib/models/journal';
-import { getCoffeeLabel } from '$lib/models/myCoffees';
-import { buildFuseQuery } from '$lib/services/search/fuzzy';
+} from '#lib/models/journal.ts';
+import { getCoffeeLabel } from '#lib/models/myCoffees.ts';
+import { buildFuseQuery } from '#lib/services/search/fuzzy.ts';
 import Fuse, { type IFuseOptions } from 'fuse.js';
 
 const FUSE_OPTIONS = {

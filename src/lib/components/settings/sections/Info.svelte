@@ -1,8 +1,8 @@
 <script lang="ts">
-  import Card from '$lib/components/shared/elements/Card.svelte';
-  import { appStore } from '$lib/stores/app.svelte';
-  import { PUBLIC_APP_MODE } from '$env/static/public';
-  import Spinner from '$lib/components/shared/elements/Spinner.svelte';
+  import Card from '#lib/components/shared/elements/Card.svelte';
+  import { appStore } from '#lib/stores/app.svelte.ts';
+  import { PUBLIC_APP_MODE } from '$app/env/public';
+  import Spinner from '#lib/components/shared/elements/Spinner.svelte';
 
   interface Props {
     cardClass?: string;

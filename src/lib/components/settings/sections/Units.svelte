@@ -1,9 +1,9 @@
 <script lang="ts">
-  import type { MeasurementSystem } from '$lib/models/measurement';
-  import { getSettingsStore } from '$lib/stores/settings.svelte';
+  import type { MeasurementSystem } from '#lib/models/measurement.ts';
+  import { getSettingsStore } from '#lib/stores/settings.svelte.ts';
   import Label from '../../shared/elements/form/Label.svelte';
-  import Card from '$lib/components/shared/elements/Card.svelte';
-  import SegmentedControl from '$lib/components/shared/ui/SegmentedControl.svelte';
+  import Card from '#lib/components/shared/elements/Card.svelte';
+  import SegmentedControl from '#lib/components/shared/ui/SegmentedControl.svelte';
 
   const settingsStore = getSettingsStore();
   const unitOptions = [

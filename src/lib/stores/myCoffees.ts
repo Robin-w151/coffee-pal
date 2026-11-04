@@ -1,6 +1,6 @@
-import { browser } from '$app/environment';
-import { MY_COFFEES_DB_NAME, MY_COFFEES_PAGE_SIZE } from '$lib/config/myCoffees';
-import type { CachedSearchResult } from '$lib/models/cachedSearch';
+import { browser } from '$app/env';
+import { MY_COFFEES_DB_NAME, MY_COFFEES_PAGE_SIZE } from '#lib/config/myCoffees.ts';
+import type { CachedSearchResult } from '#lib/models/cachedSearch.ts';
 import {
   isActiveCoffeeEntry,
   type ActiveCoffeeEntry,
@@ -10,9 +10,9 @@ import {
   type MyCoffeesSort,
   type MyCoffeesSortDirection,
   type MyCoffeesState,
-} from '$lib/models/myCoffees';
-import type { SyncResult } from '$lib/models/sync';
-import { loadPage, quickSearch, sortOrSearch } from '$lib/services/myCoffees/search/wrapper';
+} from '#lib/models/myCoffees.ts';
+import type { SyncResult } from '#lib/models/sync.ts';
+import { loadPage, quickSearch, sortOrSearch } from '#lib/services/myCoffees/search/wrapper.ts';
 import Dexie, { liveQuery, type Observable as DxObservable, type Table } from 'dexie';
 import { DateTime } from 'luxon';
 import { BehaviorSubject, debounceTime, switchMap, tap, type Observable } from 'rxjs';
@@ -90,6 +90,7 @@ function createMyCoffeesStore(myCoffeesSearchStore: MyCoffeesSearchStore): MyCof
 
   if (browser) {
     const db = (myCoffeesDb = new MyCoffeesDb());
+
     myCoffeesSearchStore
       .pipe(
         tap(() => subject.next({ ...subject.value, isLoading: true })),

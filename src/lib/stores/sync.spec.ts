@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import type { Connection } from '$lib/models/sync';
+import type { Connection } from '#lib/models/sync.ts';
 import { DateTime } from 'luxon';
 import { beforeEach, describe, expect, test } from 'vitest';
 import { legacyStorage } from '../../../tests/fixtures/legacy-storage';
