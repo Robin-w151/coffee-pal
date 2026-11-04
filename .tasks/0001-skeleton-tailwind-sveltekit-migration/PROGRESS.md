@@ -527,3 +527,16 @@ Alternatives to `svelte-adapter-bun`: the official [`@sveltejs/adapter-bun`](htt
 2. **`@vite-pwa/sveltekit` 2.0.0:** the only release that supports Kit 3 came out today, as a rewrite on 0.0.x packages, with 2.0.1 already pending. Proposal: wait about two weeks for patch releases before story 22; the human decides.
 
 Story 22 waits for both decisions.
+
+## 2026-11-04 — Story 22: SvelteKit 3 migration (in progress, Docker blocked)
+
+The human decided story 21's open points: official `@sveltejs/adapter-bun`, and `@vite-pwa/sveltekit` 2.0.0 is ready.
+
+- **Codemod** (`sv@1.2.0 migrate sveltekit-3`, one task at a time): `c2cd55e`. svelte-config, package-json, tsconfig, environment, imports and lib-alias applied; paths, external-redirects, params and app-state changed nothing; shallow-routing was reverted (it adds "skip shallow navigations" guards to 4 hooks, and the app never shallow-routes).
+- **By hand** (`7c1076f`): exact version pins (Kit 3.1.1, Svelte 5.57.3, Vite 8.3.5, TypeScript 6.0.3); `inspector`/`onwarn` as plugin options; `$assets` → `#assets/*` (story 22 had wrongly said it was unused); official Bun adapter; `withPwa` with `buildSW` and `injectRegister: false`, so SvelteKit keeps registering `/service-worker.js`; `@vite-pwa/workbox-swkit` instead of `workbox-precaching`; `resolve()` calls fixed for Kit 3's stricter types; `goto` `replaceState` → `replace`; vitest reuses the Vite config; the pnpm override `@sveltejs/kit>cookie <1.0` removed (Kit 3 needs `cookie` 2, the build failed with `parseCookie is not a function`).
+- **Test change:** `myCoffees.spec.ts` imports `colors.ts` relatively. Playwright resolves `#lib` with Node, which doesn't map `.js` to `.ts`. Assertions unchanged.
+- **Codemod TODO list** (`MIGRATION_TASKS.md`, deleted after review): old `$app/paths` exports: none left; separate TS project for the service worker: not done, the worker stays excluded from type checking as before; `goto` destinations: all internal routes, except the unsaved-changes dialog re-navigating to `to.url`, which was already wrong for external targets on Kit 2 (none exist in same-tab navigation); `invalidateAll`: not used; dev CORS: not needed.
+
+**Gates:** `pnpm migration:status --phase 4` exits 0 (`sveltekit-2` 0). `pnpm verify:strict` green: svelte-check 0/0, 194 unit, 129 e2e (PWA test included), 72 visual identical to the v5 baseline. Build: `service-worker.js` with 73 precached entries. `pnpm dev`: pages, inspector module and the default 404 page work.
+
+**Blocked: Docker build with the Bun adapter.** `@sveltejs/adapter-bun` requires the whole build to run under Bun (`bun run --bun build`), and `@vite-pwa/sveltekit` 2.0.0 imports `findPackageJSON` from `node:module`, which Bun 1.4.4 doesn't implement: `docker build -f d.build.Dockerfile .` fails while loading `vite.config.ts`. The Dockerfile change (no `svelte.config.js`, `bun run --bun build`) is left uncommitted until the human decides. Production (Vercel, adapter-auto) is not affected.

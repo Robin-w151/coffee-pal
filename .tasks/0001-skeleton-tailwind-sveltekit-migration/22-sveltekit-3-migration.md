@@ -2,7 +2,7 @@
 
 **Epic:** [0001 Migrate to Skeleton v5, Tailwind v4 and SvelteKit 3](README.md)
 **Owner:** Claude
-**Status:** In progress
+**Status:** Blocked
 **Depends on:** 21
 **Size:** L — a cross-cutting change (config, every `$lib` import, service worker, toolchain bumps to Vite 8 and TypeScript 6) on a freshly released major, with the PWA as the main risk.
 
@@ -12,6 +12,10 @@ Story 21's no-go is resolved by the human:
 
 - **Bun adapter:** replace `svelte-adapter-bun` with the official `@sveltejs/adapter-bun` (Kit 3, Bun ≥ 1.4).
 - **PWA plugin:** `@vite-pwa/sveltekit` 2.0.0 is ready to use. Its v2 API (`withPwa`, `buildSW`, `@vite-pwa/workbox-swkit`) is listed in [PROGRESS.md](PROGRESS.md).
+
+## Blocked (2026-11-04)
+
+Everything but the Docker image is migrated and green (see PROGRESS.md). The official `@sveltejs/adapter-bun` only builds under Bun, and `@vite-pwa/sveltekit` 2.0.0 uses `findPackageJSON` from `node:module`, which Bun 1.4.4 lacks, so the image can't build. The human decides: `@sveltejs/adapter-node` built with Node and run with Bun, or wait for a fix in `@vite-pwa/sveltekit` or Bun.
 
 ## User story
 
