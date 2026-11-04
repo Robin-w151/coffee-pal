@@ -1,26 +1,16 @@
 import adapterAuto from '@sveltejs/adapter-auto';
-import adapterBun from 'svelte-adapter-bun';
+import adapterBun from '@sveltejs/adapter-bun';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
-import { resolve } from 'node:path';
-import { sveltekit } from '@sveltejs/kit/vite';
 import tailwindcss from '@tailwindcss/vite';
-import { SvelteKitPWA } from '@vite-pwa/sveltekit';
+import { withPwa } from '@vite-pwa/sveltekit';
 import dotenv from 'dotenv-flow';
 import { execSync } from 'node:child_process';
 import { defineConfig } from 'vite';
-import manifest from './src/assets/manifest';
+import manifest from './src/assets/manifest.ts';
 
 dotenv.config({ silent: true });
 
 const useAdapterBun = process.env['USE_ADAPTER_BUN'] === 'true';
-
-function getAdapter() {
-  if (useAdapterBun) {
-    return adapterBun();
-  }
-
-  return adapterAuto();
-}
 
 export default defineConfig({
   define: {
@@ -30,9 +20,11 @@ export default defineConfig({
   },
   plugins: [
     tailwindcss(),
-    sveltekit({
-      preprocess: vitePreprocess(),
-      vitePlugin: {
+    // withPwa wraps sveltekit(): the first argument is the SvelteKit (and vite-plugin-svelte) config.
+    withPwa(
+      {
+        adapter: useAdapterBun ? adapterBun() : adapterAuto(),
+        preprocess: vitePreprocess(),
         inspector: true,
         onwarn: (warning, handler) => {
           if (warning.code === 'state_referenced_locally') {
@@ -42,21 +34,21 @@ export default defineConfig({
           handler(warning);
         },
       },
-      adapter: getAdapter(),
-      alias: { $assets: resolve('./src/assets'), $lib: resolve('./src/lib') },
-    }),
-
-    SvelteKitPWA({
-      strategies: 'injectManifest',
-      manifest,
-      minify: false,
-      devOptions: {
-        enabled: true,
-        suppressWarnings: process.env.SUPPRESS_WARNING === 'true',
-        type: 'module',
-        navigateFallback: '/',
+      {
+        strategies: 'buildSW',
+        // SvelteKit registers src/service-worker.ts itself, as before.
+        injectRegister: false,
+        buildSW: { swSrc: 'src/service-worker.ts' },
+        manifest,
+        minify: false,
+        devOptions: {
+          enabled: true,
+          suppressWarnings: process.env.SUPPRESS_WARNING === 'true',
+          type: 'module',
+          navigateFallback: '/',
+        },
       },
-    }),
+    ),
   ],
   build: {
     sourcemap: true,

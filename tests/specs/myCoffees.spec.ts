@@ -1,4 +1,5 @@
-import { getAromaColor } from '#lib/services/myCoffees/colors/colors.js';
+// Relative: Playwright resolves #lib with Node, which doesn't map .js to .ts.
+import { getAromaColor } from '../../src/lib/services/myCoffees/colors/colors.js';
 import { expect } from '@playwright/test';
 import { testCoffeeEntries } from '../features/app.feature';
 import { test } from '../fixtures';

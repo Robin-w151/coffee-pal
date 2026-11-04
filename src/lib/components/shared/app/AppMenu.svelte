@@ -42,7 +42,7 @@
             class="grid grid-cols-[1.25rem_1fr] items-center gap-4 px-4 py-2 rounded-base {routeActiveClass(
               route,
             )}"
-            href={resolve(route.href, {})}
+            href={resolve(route.href)}
             aria-current={isSelected(route, page.url.pathname) ? 'page' : undefined}
             onclick={handleClick}
           >

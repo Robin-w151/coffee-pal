@@ -1,5 +1,5 @@
 <script lang="ts">
-  import presets from '$assets/presets.json';
+  import presets from '#assets/presets.json';
   import Card from '#lib/components/shared/elements/Card.svelte';
   import Label from '#lib/components/shared/elements/form/Label.svelte';
   import type { Preset } from '#lib/models/preset.js';

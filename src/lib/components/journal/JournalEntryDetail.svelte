@@ -248,7 +248,7 @@
   }
 
   function goToEntry(id: string): void {
-    goto(resolve('/journal/[id]', { id }), { replaceState: true });
+    goto(resolve('/journal/[id]', { id }), { replace: true });
   }
 
   function getTitle(unknown: boolean, entry?: Partial<ActiveJournalEntry>): string {
@@ -277,7 +277,7 @@
       <span class="flex items-center">
         <Icon data={faFaceSadCry} />
       </span>
-      <span>Could not find any entry! Go back to the <a href={resolve('/', {})}>overview</a></span>
+      <span>Could not find any entry! Go back to the <a href={resolve('/')}>overview</a></span>
     </p>
   {:else}
     <div class="@container">

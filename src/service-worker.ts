@@ -2,7 +2,7 @@
 /// <reference lib="esnext" />
 /// <reference lib="webworker" />
 
-import { precacheAndRoute } from 'workbox-precaching';
+import { precacheAndRoute } from '@vite-pwa/workbox-swkit/precaching';
 
 declare let self: ServiceWorkerGlobalScope;
 

@@ -11,7 +11,7 @@
       const route = routes[num - 1]?.href;
 
       if (route) {
-        goto(resolve(route, {}));
+        goto(resolve(route));
       }
     }
   }

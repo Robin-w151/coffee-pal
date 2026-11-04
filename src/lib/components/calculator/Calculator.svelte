@@ -1,6 +1,6 @@
 <script lang="ts">
   import { afterNavigate, goto } from '$app/navigation';
-  import presets from '$assets/presets.json';
+  import presets from '#assets/presets.json';
   import type { Preset } from '#lib/models/preset.js';
   import type { Ratio } from '#lib/models/ratio.js';
   import type { Recipe as IRecipe } from '#lib/models/recipe.js';
@@ -55,7 +55,7 @@
     fixedRatio = true;
     iceRatio = undefined;
 
-    goto(resolve(`/calculator?`, {}), { replaceState: true });
+    goto(resolve('/calculator'), { replace: true });
   });
 
   function handleBackClick(): void {

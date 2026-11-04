@@ -3,7 +3,7 @@
   "compilerOptions": {
     "sourceMap": true,
     "strict": true,
-    "types": ["$app/types", "vite/client", "vite-plugin-pwa/info"]
+    "types": ["$app/types", "vite/client", "@unplugin-pwa/core/info"]
   },
   "include": [
     ".svelte-kit/ambient.d.ts",
