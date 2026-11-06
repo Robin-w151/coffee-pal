@@ -32,9 +32,10 @@
     --tw-ring-color: var(--color-surface-400-600);
   }
 
-  /* Plain <hr>s in the colour of Skeleton's hr and vr, which it doesn't apply to bare <hr>s. */
+  /* Plain <hr>s in the colour of Skeleton's hr and vr (surface-300-700), which it doesn't apply to
+     bare <hr>s, so horizontal and vertical dividers match. */
   hr {
-    border-color: var(--color-surface-200-800);
+    border-color: var(--color-surface-300-700);
   }
 }
 
@@ -99,9 +100,16 @@
     gap: --spacing(1);
   }
 
+  /* Its icons 24px. The tiles are Skeleton buttons, which size their icons to --btn-size (16px), so
+     the Icon's scale has no effect. */
   [data-scope='navigation'][data-part='trigger-anchor'][data-layout='rail'] {
     max-width: none;
     padding: --spacing(1);
+
+    & > svg {
+      width: --spacing(6);
+      height: --spacing(6);
+    }
   }
 
   /* Sliders in the primary colour (Skeleton: surface-950-50), on the off switches' track colour, which
@@ -336,9 +344,23 @@
 }
 
 /* Icon buttons as fixed squares, 42px like buttons and fields. Skeleton derives the square
-   (2 × size − 2px) and the icon (size × size) from --btn-size. */
+   (2 × size − 2px) and the icon (size × size) from --btn-size. The default icon is 16px instead of
+   22px; the small and large ones keep Skeleton's size. These are set here with .btn-icon-sm/-lg
+   selectors: an extra property in those utilities would change Tailwind's order of same-named
+   utilities and let Skeleton's btn-icon-sm/-lg (--btn-size: text-sm/lg) win. */
 @utility btn-icon {
   --btn-size: 22px;
+
+  & > :where(svg) {
+    width: 16px;
+    height: 16px;
+  }
+
+  &.btn-icon-sm > :where(svg),
+  &.btn-icon-lg > :where(svg) {
+    width: var(--btn-size);
+    height: var(--btn-size);
+  }
 
   &:not(:disabled):active {
     scale: 95%;
@@ -351,6 +373,20 @@
 /* 53px, the floating page actions. */
 @utility btn-icon-lg {
   --btn-size: 27.5px;
+}
+
+/* iOS only (-webkit-touch-callout is only supported there): Safari 26+ blurs the content under the
+   status bar. A sticky strip at the top in the app bar's colour gives it something plain to blur
+   and moves the app bar out from under it. */
+@utility ios-top-strip {
+  display: none;
+
+  @supports (-webkit-touch-callout: none) {
+    display: block;
+    position: sticky;
+    top: 0;
+    height: --spacing(2);
+  }
 }
 
 /* Chips and badges in extra small text (Skeleton: small chips, badges at 80% of extra small, which

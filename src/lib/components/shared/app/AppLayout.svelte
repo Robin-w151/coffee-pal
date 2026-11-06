@@ -90,6 +90,8 @@
   class="grid h-full w-full grid-cols-[auto_minmax(0,1fr)] grid-rows-[auto_minmax(0,1fr)] overflow-hidden"
 >
   <header class="z-10 col-span-full">
+    <!-- The app bar's colours (Skeleton: surface-100-900, dark:bg-surface-800 in AppBar). -->
+    <div class="ios-top-strip bg-surface-100 dark:bg-surface-800" aria-hidden="true"></div>
     <AppBar />
   </header>
   <aside class="overflow-y-auto overflow-x-hidden">
