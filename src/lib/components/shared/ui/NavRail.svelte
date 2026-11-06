@@ -26,7 +26,7 @@
         title={route.label}
         aria-current={isSelected(route) ? 'page' : undefined}
       >
-        <Icon data={route.icon} scale={1.5} />
+        <Icon data={route.icon} />
         <Navigation.TriggerText class="wrap-break-word">{route.label}</Navigation.TriggerText>
       </Navigation.TriggerAnchor>
     {/each}
