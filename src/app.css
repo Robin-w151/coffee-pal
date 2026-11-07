@@ -345,9 +345,10 @@
 
 /* Icon buttons as fixed squares, 42px like buttons and fields. Skeleton derives the square
    (2 × size − 2px) and the icon (size × size) from --btn-size. The default icon is 16px instead of
-   22px; the small and large ones keep Skeleton's size. These are set here with .btn-icon-sm/-lg
-   selectors: an extra property in those utilities would change Tailwind's order of same-named
-   utilities and let Skeleton's btn-icon-sm/-lg (--btn-size: text-sm/lg) win. */
+   22px and the large one 20px instead of 27.5px; the small one keeps Skeleton's size. These are set
+   here with .btn-icon-sm/-lg selectors: an extra property in those utilities would change
+   Tailwind's order of same-named utilities and let Skeleton's btn-icon-sm/-lg (--btn-size:
+   text-sm/lg) win. */
 @utility btn-icon {
   --btn-size: 22px;
 
@@ -356,10 +357,14 @@
     height: 16px;
   }
 
-  &.btn-icon-sm > :where(svg),
-  &.btn-icon-lg > :where(svg) {
+  &.btn-icon-sm > :where(svg) {
     width: var(--btn-size);
     height: var(--btn-size);
+  }
+
+  &.btn-icon-lg > :where(svg) {
+    width: 20px;
+    height: 20px;
   }
 
   &:not(:disabled):active {
