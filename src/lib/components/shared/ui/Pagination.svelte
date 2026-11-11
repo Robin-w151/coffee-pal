@@ -24,15 +24,16 @@
   const lastPage = $derived(Math.max(Math.ceil(total / pageSize) - 1, 0));
 
   // Phones get a compact form, e.g. « ‹ 1 … 5 … 8 › », so it fits the card: one page around the
-  // current one and tighter spacing. Below 360px the first/last triggers go too (the first and
-  // last page are shown as numbers anyway).
+  // current one, smaller buttons and tighter spacing. Below 390px the first/last triggers go too
+  // (the first and last page are shown as numbers anyway). Buttons are at least as wide as they
+  // are high: 32px squares on phones, 40px from `sm`, wider only for long page numbers.
   const isWide = new MediaQuery(`min-width: ${screens.sm}`);
-  const triggerClass = 'px-2 sm:px-3';
+  const triggerClass = 'h-8 min-w-8 px-1 py-0 sm:h-10 sm:min-w-10 sm:px-2';
 </script>
 
 <div class="flex justify-center">
   <Pagination
-    class="gap-1 p-1 sm:gap-2 sm:p-2"
+    class="gap-0.5 p-1 sm:gap-2 sm:p-2"
     count={total}
     {pageSize}
     siblingCount={isWide.current ? 1 : 0}
@@ -42,7 +43,7 @@
     <!-- Skeleton labels only previous/next (in lower case), and its first/last triggers have no
        disabled state and lack the data attributes its own styles select. -->
     <Pagination.FirstTrigger
-      class="{triggerClass} max-[360px]:hidden"
+      class="{triggerClass} max-[390px]:hidden"
       data-scope="pagination"
       data-part="first-trigger"
       aria-label="First page"
@@ -68,7 +69,7 @@
       <Icon data={faAngleRight} />
     </Pagination.NextTrigger>
     <Pagination.LastTrigger
-      class="{triggerClass} max-[360px]:hidden"
+      class="{triggerClass} max-[390px]:hidden"
       data-scope="pagination"
       data-part="last-trigger"
       aria-label="Last page"
